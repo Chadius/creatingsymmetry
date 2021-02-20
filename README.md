@@ -23,26 +23,5 @@ Hyperbolic
 Color changing
 
 ### Research notes
-#### Saving a bytestream to an image:
-https://stackoverflow.com/questions/39927182/looking-for-better-way-to-save-an-in-memory-image-to-file
-
-f, err := os.Create("img.jpg")
-if err != nil {
-    panic(err)
-}
-defer f.Close()
-jpeg.Encode(f, target, nil)
-
-### Opening an image
-import	_ "image/jpeg"
-)
-
-reader, err := os.Open("testdata/video-001.q50.420.jpeg")
-if err != nil {
-     log.Fatal(err)
-}
-
-https://blog.golang.org/image
-
 ### Complex Math library
 https://golang.org/pkg/math/cmplx/#Abs
