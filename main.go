@@ -6,6 +6,8 @@ import (
 	"image/png"
 	_ "image/png"
 	"log"
+	"math"
+	"math/cmplx"
 	"os"
 )
 
@@ -21,14 +23,15 @@ func main() {
 		log.Fatal(err)
 	}
 	bounds := sourceImage.Bounds()
-	destinationImage := image.NewNRGBA(image.Rect(0, 0, bounds.Size().X, bounds.Size().Y))
+	destinationImage := image.NewNRGBA(image.Rect(0, 0, bounds.Size().X * 2, bounds.Size().Y * 2))
+	destinationBounds := destinationImage.Bounds()
 
-	for sourceY := bounds.Min.Y ; sourceY < bounds.Max.Y; sourceY++ {
-		for sourceX := bounds.Min.X ; sourceX < bounds.Max.X; sourceX++ {
-			r, g, b, a := calculateDestinationColor(sourceX, sourceY, sourceImage).RGBA()
+	for destinationY := destinationBounds.Min.Y ; destinationY < destinationBounds.Max.Y; destinationY++ {
+		for destinationX := destinationBounds.Min.X ; destinationX < destinationBounds.Max.X; destinationX++ {
+			r, g, b, a := calculateDestinationColor(destinationX, destinationY, sourceImage).RGBA()
 			destinationImage.Set(
-				sourceX,
-				sourceY,
+				destinationX,
+				destinationY,
 				color.NRGBA{
 					R: uint8(r>>8),
 					G: uint8(g>>8),
@@ -47,15 +50,27 @@ func main() {
 	png.Encode(outFile, destinationImage)
 }
 
-func calculateDestinationColor(sourceX, sourceY int, sourceImage image.Image) color.Color {
-	sourcePoint := complex(float64(sourceX), float64(sourceY))
-	destinationPoint := sourcePoint
+func addFunctionPart (sourceVector complex128, powerN, powerM int, scale float64) complex128 {
+	radius := math.Pow(real(sourceVector), float64(powerN - powerM)) * scale
+	angle := cmplx.Exp(complex(0, imag(sourceVector) * float64(powerN - powerM)))
+	return complex(radius, 0) * angle
+}
 
-	destinationX := real(destinationPoint)
-	destinationY := imag(destinationPoint)
+func addFunctionPart2 (sourceVector complex128, powerN, powerM int, scale float64) complex128 {
+	zRaised := cmplx.Pow(sourceVector, complex(float64(powerN - powerM), 0))
+	return complex(real(zRaised) * scale, imag(zRaised) * scale)
+}
+
+func calculateDestinationColor(destinationX, destinationY int, sourceImage image.Image) color.Color {
+	destinationVector := complex(float64(destinationX), float64(destinationY))
+	destinationPoint := addFunctionPart2(destinationVector, 4, 2, 0.001)
+	destinationPoint += addFunctionPart2(destinationVector, 2, 4, 1000)
+
+	sourceX := real(destinationPoint)
+	sourceY := imag(destinationPoint)
 
 	bounds := sourceImage.Bounds()
-	if (destinationX < 0 || destinationX > float64(bounds.Dx()) || destinationY < 0 || destinationY >= float64(bounds.Dy())) {
+	if (sourceX < 0 || sourceX > float64(bounds.Dx()) || sourceY < 0 || sourceY >= float64(bounds.Dy())) {
 		return color.NRGBA{
 			R: 0,
 			G: 0,
@@ -63,6 +78,5 @@ func calculateDestinationColor(sourceX, sourceY int, sourceImage image.Image) co
 			A: 255,
 		}
 	}
-
-	return sourceImage.At(int(destinationX), int(destinationY))
+	return sourceImage.At(int(sourceX), int(sourceY))
 }
