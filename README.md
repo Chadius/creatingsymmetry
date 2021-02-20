@@ -13,7 +13,6 @@ Give it a base image, tweak some parameters, wait for the image to render, keep 
 ## NOTES
 Types to support:
 
-Scribble
 Rosette
 Frieze
 17 wallpaper types
@@ -25,3 +24,6 @@ Color changing
 ### Research notes
 ### Complex Math library
 https://golang.org/pkg/math/cmplx/#Abs
+
+radius to the nth power
+e to the negative i * angle
