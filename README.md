@@ -22,8 +22,14 @@ Hyperbolic
 Color changing
 
 ### Research notes
-### Complex Math library
-https://golang.org/pkg/math/cmplx/#Abs
+#### Program min and max range
+After calculating the destination you need to
+- Calculate the min & max bounds
+- Interpolate against those ranges to pick from the color wheel
 
-radius to the nth power
-e to the negative i * angle
+#### Export preview pics
+Export to a 200x200 stamp that is quick to calculate
+Export with a rotating file name so you can look at old previews
+
+#### Formula stuff
+Make formula objects
