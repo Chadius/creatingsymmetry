@@ -4,11 +4,11 @@ import (
 	"image"
 	"image/color"
 	"image/png"
+	"wallpaper/entities/formula"
 
 	//"image/png"
 	_ "image/png"
 	"log"
-	"math/cmplx"
 	"os"
 	"wallpaper/entities/mathutility"
 )
@@ -26,18 +26,19 @@ func main() {
 	}
 
 	// Consider how to give a preview image? What's the picture ration
-	//destinationImage := image.NewNRGBA(image.Rect(0, 0, 400, 400))
-	destinationImage := image.NewNRGBA(image.Rect(0, 0, 2160, 2160))
+	destinationImage := image.NewNRGBA(image.Rect(0, 0, 800, 450))
+	//destinationImage := image.NewNRGBA(image.Rect(0, 0, 3840, 2160))
 	destinationBounds := destinationImage.Bounds()
 
 	destinationCoordinates := flattenCoordinates(destinationBounds)
 
-	size := float64(9000)
+	size := float64(1)
 	scaledCoordinates := scaleDestinationPixels(
 		destinationBounds,
 		destinationCoordinates,
-		complex(-1 * size, -1 * size),
-		complex(size, size),
+		//complex(-1 * size, -1 * size),
+		complex(-1.45 * size, -1 * size),
+		complex(1.45 * size, size),
 		//complex(-100, -100),
 		//complex(100, 100),
 		//complex(-100000, -100000),
@@ -59,8 +60,8 @@ func transformCoordinates(scaledCoordinates []complex128) []complex128 {
 	for _, complexCoordinate := range scaledCoordinates {
 		transformedCoordinate := complex(0, 0)
 		transformedCoordinate += addRaisedAndScaledVector(complexCoordinate, 5, 0, complex(1, 0))
-		transformedCoordinate += addRaisedAndScaledVector(complexCoordinate, 6, 1, complex(-9e-4, -1e-0))
-		transformedCoordinate += addRaisedAndScaledVector(complexCoordinate, 4, -6, complex(-9e-30, 0))
+		transformedCoordinate += addRaisedAndScaledVector(complexCoordinate, 6, 1, complex(-0.85, 1))
+		transformedCoordinate += addRaisedAndScaledVector(complexCoordinate, 4, -6, complex(0, 1))
 		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
 	}
 	return transformedCoordinates
@@ -135,47 +136,9 @@ func colorDestinationImage(destinationImage *image.NRGBA, sourceImage image.Imag
 	}
 }
 
-func interpolateCoordinatesToRange(x, y int, picture image.Image) complex128 {
-	xPercent := float64(x) / float64(picture.Bounds().Dx()) - 0.5
-	yPercent := float64(y) / float64(picture.Bounds().Dy()) - 0.5
-	return complex(xPercent, yPercent)
-}
-
-func interpolateRangeToCoordinates(point complex128, picture image.Image) image.Point {
-	xCoordinate := int(float64(picture.Bounds().Dx()) * (real(point) + 0.5))
-	yCoordinate := int(float64(picture.Bounds().Dy()) * (imag(point) + 0.5))
-	return image.Point{X: xCoordinate, Y:yCoordinate,}
-}
-
 func addRaisedAndScaledVector(sourceVector complex128, powerN, powerM int, scale complex128) complex128 {
-	zRaised := cmplx.Pow(sourceVector, complex(float64(powerN - powerM), 0))
-	zRaised += cmplx.Pow(sourceVector, complex(float64(powerM - powerN), 0))
-	return zRaised * scale
-}
-
-func calculateDestinationColor(destinationVector complex128, sourceImage image.Image) color.Color {
-	sourceColorVector := complex(0,0)
-
-	sourceColorVector += addRaisedAndScaledVector(destinationVector, 5, 0, complex(0.000001, 0))
-	//sourceColorVector += addRaisedAndScaledVector(destinationVector, 6, 1, complex(-0.5, -0))
-	//sourceColorVector += addRaisedAndScaledVector(destinationVector, 4, -6, complex(-1.5, 0))
-
-	sourcePoint := interpolateRangeToCoordinates(
-		sourceColorVector,
-		sourceImage)
-
-	sourceX := sourcePoint.X
-	sourceY := sourcePoint.Y
-
-	bounds := sourceImage.Bounds()
-
-	if (sourceX < 0 || sourceX > bounds.Dx() || sourceY < 0 || sourceY >= bounds.Dy()) {
-		return color.NRGBA{
-			R: 0,
-			G: 0,
-			B: 0,
-			A: 255,
-		}
-	}
-	return sourceImage.At(int(sourceX), int(sourceY))
+	sumOfParts :=
+		formula.CalculateExponentPairOnNumberAndConjugate(sourceVector, powerN, powerM) +
+		formula.CalculateExponentPairOnNumberAndConjugate(sourceVector, powerM, powerN)
+	return sumOfParts * scale
 }
