@@ -51,17 +51,12 @@ func main() {
 }
 
 func transformCoordinates(scaledCoordinates []complex128) []complex128 {
-	form := formula.SymmetryFormula{
-		PairedCoefficients : []*formula.CoefficientPairs{
+	form := formula.RecipeFormula{
+		Coefficients: []*formula.CoefficientPairs{
 			{
 				Scale: complex(1, 0),
 				PowerN: 5,
 				PowerM: 0,
-			},
-			{
-				Scale: complex(1, 0),
-				PowerN: 0,
-				PowerM: 5,
 			},
 			{
 				Scale: complex(-0.85, 1),
@@ -69,21 +64,12 @@ func transformCoordinates(scaledCoordinates []complex128) []complex128 {
 				PowerM: 1,
 			},
 			{
-				Scale: complex(-0.85, 1),
-				PowerN: 1,
-				PowerM: 6,
-			},
-			{
 				Scale: complex(0, 1),
 				PowerN: 4,
 				PowerM: -6,
 			},
-			{
-				Scale: complex(0, 1),
-				PowerN: -6,
-				PowerM: 4,
-			},
 		},
+		Relationships: []formula.CoefficientRelationship{formula.PlusNPlusM, formula.PlusMPlusN},
 	}
 
 	transformedCoordinates := []complex128{}
