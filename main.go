@@ -36,13 +36,8 @@ func main() {
 	scaledCoordinates := scaleDestinationPixels(
 		destinationBounds,
 		destinationCoordinates,
-		//complex(-1 * size, -1 * size),
 		complex(-1.45 * size, -1 * size),
 		complex(1.45 * size, size),
-		//complex(-100, -100),
-		//complex(100, 100),
-		//complex(-100000, -100000),
-		//complex(100000, 100000),
 	)
 	transformedCoordinates := transformCoordinates(scaledCoordinates)
 
@@ -56,12 +51,44 @@ func main() {
 }
 
 func transformCoordinates(scaledCoordinates []complex128) []complex128 {
+	form := formula.SymmetryFormula{
+		PairedCoefficients : []*formula.CoefficientPairs{
+			{
+				Scale: complex(1, 0),
+				PowerN: 5,
+				PowerM: 0,
+			},
+			{
+				Scale: complex(1, 0),
+				PowerN: 0,
+				PowerM: 5,
+			},
+			{
+				Scale: complex(-0.85, 1),
+				PowerN: 6,
+				PowerM: 1,
+			},
+			{
+				Scale: complex(-0.85, 1),
+				PowerN: 1,
+				PowerM: 6,
+			},
+			{
+				Scale: complex(0, 1),
+				PowerN: 4,
+				PowerM: -6,
+			},
+			{
+				Scale: complex(0, 1),
+				PowerN: -6,
+				PowerM: 4,
+			},
+		},
+	}
+
 	transformedCoordinates := []complex128{}
 	for _, complexCoordinate := range scaledCoordinates {
-		transformedCoordinate := complex(0, 0)
-		transformedCoordinate += addRaisedAndScaledVector(complexCoordinate, 5, 0, complex(1, 0))
-		transformedCoordinate += addRaisedAndScaledVector(complexCoordinate, 6, 1, complex(-0.85, 1))
-		transformedCoordinate += addRaisedAndScaledVector(complexCoordinate, 4, -6, complex(0, 1))
+		transformedCoordinate := form.Calculate(complexCoordinate)
 		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
 	}
 	return transformedCoordinates
@@ -134,11 +161,4 @@ func colorDestinationImage(destinationImage *image.NRGBA, sourceImage image.Imag
 			},
 		)
 	}
-}
-
-func addRaisedAndScaledVector(sourceVector complex128, powerN, powerM int, scale complex128) complex128 {
-	sumOfParts :=
-		formula.CalculateExponentPairOnNumberAndConjugate(sourceVector, powerN, powerM) +
-		formula.CalculateExponentPairOnNumberAndConjugate(sourceVector, powerM, powerN)
-	return sumOfParts * scale
 }
