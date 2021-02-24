@@ -31,4 +31,22 @@ var _ = Describe("Common formula formats", func() {
 			Expect(real(result)).To(BeNumerically("~", 12))
 			Expect(imag(result)).To(BeNumerically("~", 0))
 		})
+		It("Can calculate using z only", func() {
+			zOnlyFormula := formula.RecipeFormula{
+				Coefficients: []*formula.CoefficientPairs{
+					{
+						Scale: complex(3, 0),
+						PowerN: 1,
+						PowerM: 0,
+					},
+				},
+				Relationships: []formula.CoefficientRelationship{
+					formula.PlusNNoConjugate,
+					formula.PlusMNoConjugate,
+				},
+			}
+			result := zOnlyFormula.Calculate(complex(2,1))
+			Expect(real(result)).To(BeNumerically("~", 9))
+			Expect(imag(result)).To(BeNumerically("~", 3))
+		})
 })

@@ -1,8 +1,6 @@
 package formula
 
 import (
-	"fmt"
-	"log"
 	"math/cmplx"
 )
 
@@ -18,6 +16,10 @@ func CalculateExponentPairOnNumberAndConjugate(z complex128, n, m int) complex12
 	return zRaisedToN * complexConjugateRaisedToM
 }
 
+func calculateExponentOnNumber(z complex128, n int) complex128 {
+	return cmplx.Pow(z, complex(float64(n), 0))
+}
+
 // CoefficientPairs holds two coefficients n and m and a scale.
 type CoefficientPairs struct {
 	Scale complex128
@@ -31,8 +33,38 @@ type CoefficientRelationship string
 const (
 	PlusNPlusM CoefficientRelationship = "PlusNPlusM"
 	PlusMPlusN                         = "PlusMPlusN"
+	PlusNNoConjugate = "PlusNNoConjugate"
+	PlusMNoConjugate = "PlusMNoConjugate"
 )
 
+type CalculationInstruction struct {
+	firstExponentPower string
+	secondExponentPower string
+	useComplexConjugate bool
+}
+
+var instructionsByCoefficientRelationship = map[CoefficientRelationship]CalculationInstruction{
+	PlusNPlusM: {
+		firstExponentPower: "n",
+		secondExponentPower: "m",
+		useComplexConjugate: true,
+	},
+	PlusMPlusN: {
+		firstExponentPower: "m",
+		secondExponentPower: "n",
+		useComplexConjugate: true,
+	},
+	PlusNNoConjugate: {
+		firstExponentPower: "n",
+		secondExponentPower: "",
+		useComplexConjugate: false,
+	},
+	PlusMNoConjugate: {
+		firstExponentPower: "m",
+		secondExponentPower: "",
+		useComplexConjugate: false,
+	},
+}
 
 // RecipeFormula TODO
 type RecipeFormula struct {
@@ -46,24 +78,28 @@ func (f RecipeFormula) Calculate(z complex128) complex128 {
 	sum := complex(0,0)
 	for _, coeffs := range f.Coefficients {
 		for _, relationship := range f.Relationships {
-			firstPower, secondPower, err := changeCoefficientsBasedOnRelationship(coeffs.PowerN, coeffs.PowerM, relationship)
-			if err != nil {
-				log.Fatal(err)
+
+			instructions := instructionsByCoefficientRelationship[relationship]
+			firstPower := setCoefficientBasedOnInstruction(coeffs.PowerN, coeffs.PowerM, instructions.firstExponentPower)
+			secondPower := setCoefficientBasedOnInstruction(coeffs.PowerN, coeffs.PowerM, instructions.secondExponentPower)
+
+			if instructions.useComplexConjugate {
+				sum += CalculateExponentPairOnNumberAndConjugate(z, firstPower, secondPower) * coeffs.Scale
+			} else {
+				sum += calculateExponentOnNumber(z, firstPower) * coeffs.Scale
 			}
-			sum += CalculateExponentPairOnNumberAndConjugate(z, firstPower, secondPower) * coeffs.Scale
 		}
 	}
 	return sum
 }
 
-// changeCoefficientsBasedOnRelationship uses the relationship to determine how to calculate the given
-//   powers of n and m.
-func changeCoefficientsBasedOnRelationship(powerN, powerM int, relationship CoefficientRelationship) (int, int, error) {
-	switch relationship {
-	case PlusNPlusM:
-		return powerN, powerM, nil
-	case PlusMPlusN:
-		return powerM, powerN, nil
+func setCoefficientBasedOnInstruction(powerN, powerM int, exponentPowerSetting string) int {
+	switch exponentPowerSetting {
+	case "n":
+		return powerN
+	case "m":
+		return powerM
+	default:
+		return 0
 	}
-	return 0, 0, fmt.Errorf("unknown relationship %s", relationship)
 }

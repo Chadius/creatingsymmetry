@@ -26,20 +26,23 @@ func main() {
 	}
 
 	// Consider how to give a preview image? What's the picture ration
-	destinationImage := image.NewNRGBA(image.Rect(0, 0, 800, 450))
+	destinationImage := image.NewNRGBA(image.Rect(0, 0, 800, 800))
 	//destinationImage := image.NewNRGBA(image.Rect(0, 0, 3840, 2160))
 	destinationBounds := destinationImage.Bounds()
 
 	destinationCoordinates := flattenCoordinates(destinationBounds)
 
-	size := float64(1)
+	size := float64(1e5)
 	scaledCoordinates := scaleDestinationPixels(
 		destinationBounds,
 		destinationCoordinates,
-		complex(-1.45 * size, -1 * size),
-		complex(1.45 * size, size),
+		complex(-1 * size, -1 * size),
+		complex(1 * size, size),
 	)
 	transformedCoordinates := transformCoordinates(scaledCoordinates)
+	min, max := mathutility.GetBoundingBox(transformedCoordinates)
+	println(min)
+	println(max)
 
 	colorDestinationImage(destinationImage, sourceImage, destinationCoordinates, transformedCoordinates)
 	outFile, err := os.Create("exampleImage/newBrownie.png")
@@ -51,25 +54,53 @@ func main() {
 }
 
 func transformCoordinates(scaledCoordinates []complex128) []complex128 {
+	//form := formula.RecipeFormula{
+	//	Coefficients: []*formula.CoefficientPairs{
+	//		{
+	//			Scale: complex(1, 0),
+	//			PowerN: 5,
+	//			PowerM: 0,
+	//		},
+	//		{
+	//			Scale: complex(-0.85, 1),
+	//			PowerN: 6,
+	//			PowerM: 1,
+	//		},
+	//		{
+	//			Scale: complex(0, 1),
+	//			PowerN: 4,
+	//			PowerM: -6,
+	//		},
+	//	},
+	//	Relationships: []formula.CoefficientRelationship{formula.PlusNPlusM, formula.PlusMPlusN},
+	//}
 	form := formula.RecipeFormula{
 		Coefficients: []*formula.CoefficientPairs{
 			{
 				Scale: complex(1, 0),
-				PowerN: 5,
+				PowerN: 6,
 				PowerM: 0,
 			},
 			{
-				Scale: complex(-0.85, 1),
-				PowerN: 6,
-				PowerM: 1,
+				Scale: complex(1, 0),
+				PowerN: -6,
+				PowerM: 0,
 			},
 			{
-				Scale: complex(0, 1),
-				PowerN: 4,
-				PowerM: -6,
+				Scale: complex(0, -5e-30),
+				PowerN: 12,
+				PowerM: 0,
+			},
+			{
+				Scale: complex(0, -5e-30),
+				PowerN: -12,
+				PowerM: 0,
 			},
 		},
-		Relationships: []formula.CoefficientRelationship{formula.PlusNPlusM, formula.PlusMPlusN},
+		Relationships: []formula.CoefficientRelationship{
+			formula.PlusNNoConjugate,
+			formula.PlusMNoConjugate,
+		},
 	}
 
 	transformedCoordinates := []complex128{}
