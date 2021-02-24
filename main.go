@@ -4,53 +4,63 @@ import (
 	"image"
 	"image/color"
 	"image/png"
+	"log"
 	"wallpaper/entities/formula"
 
 	//"image/png"
 	_ "image/png"
-	"log"
 	"os"
 	"wallpaper/entities/mathutility"
 )
 
 func main() {
-	reader, err := os.Open("exampleImage/brownie.png")
+	sampleSpaceMin := complex(-1e-0, -1e-0)
+	sampleSpaceMax := complex(1e-0, 1e-0)
+	outputWidth := 800
+	outputHeight := 800
+	colorSourceFilename := "exampleImage/brownie.png"
+	outputFilename := "exampleImage/newBrownie.png"
+	colorValueBoundMin := complex(-1e3, -1e3)
+	colorValueBoundMax := complex(1e3, 1e3)
+
+	reader, err := os.Open(colorSourceFilename)
 	if err != nil {
-	    log.Fatal(err)
+	  log.Fatal(err)
 	}
 	defer reader.Close()
 
-	sourceImage, _, err := image.Decode(reader)
+	colorSourceImage, _, err := image.Decode(reader)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Consider how to give a preview image? What's the picture ration
-	destinationImage := image.NewNRGBA(image.Rect(0, 0, 800, 800))
-	//destinationImage := image.NewNRGBA(image.Rect(0, 0, 3840, 2160))
-	destinationBounds := destinationImage.Bounds()
-
+	destinationBounds := image.Rect(0,0, outputWidth, outputHeight)
 	destinationCoordinates := flattenCoordinates(destinationBounds)
 
-	size := float64(1e5)
 	scaledCoordinates := scaleDestinationPixels(
 		destinationBounds,
 		destinationCoordinates,
-		complex(-1 * size, -1 * size),
-		complex(1 * size, size),
+		sampleSpaceMin,
+		sampleSpaceMax,
 	)
-	transformedCoordinates := transformCoordinates(scaledCoordinates)
-	min, max := mathutility.GetBoundingBox(transformedCoordinates)
-	println(min)
-	println(max)
 
-	colorDestinationImage(destinationImage, sourceImage, destinationCoordinates, transformedCoordinates)
-	outFile, err := os.Create("exampleImage/newBrownie.png")
+	transformedCoordinates := transformCoordinates(scaledCoordinates)
+
+	// Consider how to give a preview image? What's the picture ration
+	outputImage := image.NewNRGBA(image.Rect(0, 0, outputWidth, outputHeight))
+	////outputImage := image.NewNRGBA(image.Rect(0, 0, 3840, 2160))
+	colorDestinationImage(outputImage, colorSourceImage, destinationCoordinates, transformedCoordinates, colorValueBoundMin, colorValueBoundMax)
+
+	outputToFile(outputFilename, outputImage)
+}
+
+func outputToFile(outputFilename string, outputImage image.Image) {
+	outputImageFile, err := os.Create(outputFilename)
 	if err != nil {
 		panic(err)
 	}
-	defer outFile.Close()
-	png.Encode(outFile, destinationImage)
+	defer outputImageFile.Close()
+	png.Encode(outputImageFile, outputImage)
 }
 
 func transformCoordinates(scaledCoordinates []complex128) []complex128 {
@@ -87,12 +97,12 @@ func transformCoordinates(scaledCoordinates []complex128) []complex128 {
 				PowerM: 0,
 			},
 			{
-				Scale: complex(0, -5e-30),
+				Scale: complex(-1e0, -1e-1),
 				PowerN: 12,
 				PowerM: 0,
 			},
 			{
-				Scale: complex(0, -5e-30),
+				Scale: complex(-1e0, -1e-1),
 				PowerN: -12,
 				PowerM: 0,
 			},
@@ -143,26 +153,40 @@ func scaleDestinationPixels(destinationBounds image.Rectangle, destinationCoordi
 	return scaledCoordinates
 }
 
-func colorDestinationImage(destinationImage *image.NRGBA, sourceImage image.Image, destinationCoordinates []complex128, transformedCoordinates []complex128) {
-	transformedBoundingBoxMin, transformedBoundingBoxMax := mathutility.GetBoundingBox(transformedCoordinates)
+func colorDestinationImage(
+	destinationImage *image.NRGBA,
+	sourceImage image.Image,
+	destinationCoordinates []complex128,
+	transformedCoordinates []complex128,
+	colorValueBoundMin complex128,
+	colorValueBoundMax complex128,
+	) {
 	sourceImageBounds := sourceImage.Bounds()
 	for index, transformedCoordinate := range transformedCoordinates {
-		sourceImagePixelX := int(mathutility.ScaleValueBetweenTwoRanges(
-			float64(real(transformedCoordinate)),
-			real(transformedBoundingBoxMin),
-			real(transformedBoundingBoxMax),
-			float64(sourceImageBounds.Min.X),
-			float64(sourceImageBounds.Max.X),
-		))
-		sourceImagePixelY := int(mathutility.ScaleValueBetweenTwoRanges(
-			float64(imag(transformedCoordinate)),
-			imag(transformedBoundingBoxMin),
-			imag(transformedBoundingBoxMax),
-			float64(sourceImageBounds.Min.Y),
-			float64(sourceImageBounds.Max.Y),
-		))
+		var sourceColorR, sourceColorG, sourceColorB, sourceColorA uint32
 
-		sourceColorR,sourceColorG,sourceColorB,sourceColorA := sourceImage.At(sourceImagePixelX, sourceImagePixelY).RGBA()
+		if real(transformedCoordinate) < real(colorValueBoundMin) ||
+			imag(transformedCoordinate) < imag(colorValueBoundMin) ||
+		real(transformedCoordinate) > real(colorValueBoundMax) ||
+			imag(transformedCoordinate) > imag(colorValueBoundMax) {
+			sourceColorR,sourceColorG,sourceColorB,sourceColorA = 0,0,0,0
+		} else {
+			sourceImagePixelX := int(mathutility.ScaleValueBetweenTwoRanges(
+				float64(real(transformedCoordinate)),
+				real(colorValueBoundMin),
+				real(colorValueBoundMax),
+				float64(sourceImageBounds.Min.X),
+				float64(sourceImageBounds.Max.X),
+			))
+			sourceImagePixelY := int(mathutility.ScaleValueBetweenTwoRanges(
+				float64(imag(transformedCoordinate)),
+				imag(colorValueBoundMin),
+				imag(colorValueBoundMax),
+				float64(sourceImageBounds.Min.Y),
+				float64(sourceImageBounds.Max.Y),
+			))
+			sourceColorR, sourceColorG, sourceColorB, sourceColorA = sourceImage.At(sourceImagePixelX, sourceImagePixelY).RGBA()
+		}
 
 		destinationPixelX := int(real(destinationCoordinates[index]))
 		destinationPixelY := int(imag(destinationCoordinates[index]))
