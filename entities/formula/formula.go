@@ -4,102 +4,87 @@ import (
 	"math/cmplx"
 )
 
-// CalculateExponentPairOnNumberAndConjugate calculates (z^n * ~z^m)
-//   where z is a complex number, ~z is the complex conjugate
-//   and n and m are integers.
-//   This computation is used in almost every symmetry calculation.
-func CalculateExponentPairOnNumberAndConjugate(z complex128, n, m int) complex128 {
-	complexConjugate := complex(real(z), -1 * imag(z))
-
-	zRaisedToN := cmplx.Pow(z, complex(float64(n), 0))
-	complexConjugateRaisedToM := cmplx.Pow(complexConjugate, complex(float64(m), 0))
-	return zRaisedToN * complexConjugateRaisedToM
-}
-
-func calculateExponentOnNumber(z complex128, n int) complex128 {
-	return cmplx.Pow(z, complex(float64(n), 0))
-}
-
-// CoefficientPairs holds two coefficients n and m and a scale.
-type CoefficientPairs struct {
-	Scale complex128
-	PowerN int
-	PowerM int
-}
-
-// CoefficientRelationship TODO
+// CoefficientRelationship relates how a pair of coordinates should be applied.
 type CoefficientRelationship string
 
 const (
+	// PlusNPlusM Apply N to the first and M to the second complex number.
 	PlusNPlusM CoefficientRelationship = "PlusNPlusM"
+	// PlusMPlusN Apply M to the first and N to the second complex number.
 	PlusMPlusN                         = "PlusMPlusN"
-	PlusNNoConjugate = "PlusNNoConjugate"
-	PlusMNoConjugate = "PlusMNoConjugate"
 )
 
-type CalculationInstruction struct {
-	firstExponentPower string
-	secondExponentPower string
-	useComplexConjugate bool
+// ZExponentialFormulaElement describes a formula of the form Scale * z^PowerN * zConjugate^PowerM.
+type ZExponentialFormulaElement struct {
+	Scale                  complex128
+	PowerN                 int
+	PowerM                 int
+	// IgnoreComplexConjugate will make sure zConjugate is not used in this calculation
+	//    (effectively setting it to 1 + 0i)
+	IgnoreComplexConjugate bool
+	// LockedCoefficientPairs will create similar terms to add to this one when calculating.
+	//    This is useful when trying to force symmetry by adding another term with swapped
+	//    PowerN & PowerM, or multiplying by -1.
+	LockedCoefficientPairs []*LockedCoefficientPair
 }
 
-var instructionsByCoefficientRelationship = map[CoefficientRelationship]CalculationInstruction{
-	PlusNPlusM: {
-		firstExponentPower: "n",
-		secondExponentPower: "m",
-		useComplexConjugate: true,
-	},
-	PlusMPlusN: {
-		firstExponentPower: "m",
-		secondExponentPower: "n",
-		useComplexConjugate: true,
-	},
-	PlusNNoConjugate: {
-		firstExponentPower: "n",
-		secondExponentPower: "",
-		useComplexConjugate: false,
-	},
-	PlusMNoConjugate: {
-		firstExponentPower: "m",
-		secondExponentPower: "",
-		useComplexConjugate: false,
-	},
-}
+// Calculate returns the result of using the formula on the given complex number.
+func (element ZExponentialFormulaElement) Calculate(z complex128) complex128 {
+	sum := CalculateExponentElement(z, element.PowerN, element.PowerM, element.Scale, element.IgnoreComplexConjugate)
 
-// RecipeFormula TODO
-type RecipeFormula struct {
-	Coefficients  []*CoefficientPairs
-	Relationships []CoefficientRelationship
-}
-
-// Calculate takes the complex number z and applies the formula to it,
-//     returning another complex number.
-func (f RecipeFormula) Calculate(z complex128) complex128 {
-	sum := complex(0,0)
-	for _, coeffs := range f.Coefficients {
-		for _, relationship := range f.Relationships {
-
-			instructions := instructionsByCoefficientRelationship[relationship]
-			firstPower := setCoefficientBasedOnInstruction(coeffs.PowerN, coeffs.PowerM, instructions.firstExponentPower)
-			secondPower := setCoefficientBasedOnInstruction(coeffs.PowerN, coeffs.PowerM, instructions.secondExponentPower)
-
-			if instructions.useComplexConjugate {
-				sum += CalculateExponentPairOnNumberAndConjugate(z, firstPower, secondPower) * coeffs.Scale
-			} else {
-				sum += calculateExponentOnNumber(z, firstPower) * coeffs.Scale
+	for _, pair := range element.LockedCoefficientPairs {
+		for _, relationship := range pair.OtherCoefficientRelationships {
+			var power1, power2 int
+			switch relationship {
+				case PlusNPlusM:
+					power1 = element.PowerN
+					power2 = element.PowerM
+				case PlusMPlusN:
+					power1 = element.PowerM
+					power2 = element.PowerN
 			}
+			relationshipScale := element.Scale * complex(pair.Multiplier, 0)
+			sum += CalculateExponentElement(z, power1, power2, relationshipScale, element.IgnoreComplexConjugate)
 		}
 	}
 	return sum
 }
 
-func setCoefficientBasedOnInstruction(powerN, powerM int, exponentPowerSetting string) int {
-	switch exponentPowerSetting {
-	case "n":
-		return powerN
-	case "m":
-		return powerM
-	default:
-		return 0
-	}
+// LockedCoefficientPair describes how to create a new Element based on the current one.
+type LockedCoefficientPair struct {
+	Multiplier                    float64
+	OtherCoefficientRelationships []CoefficientRelationship
 }
+
+// CalculateExponentElement calculates (z^power * zConj^conjugatePower)
+//   where z is a complex number, zConj is the complex conjugate
+//   and power and conjugatePower are integers.
+func CalculateExponentElement(z complex128, power1, power2 int, scale complex128, ignoreComplexConjugate bool) complex128 {
+	zRaisedToN := cmplx.Pow(z, complex(float64(power1), 0))
+	if ignoreComplexConjugate {
+		return zRaisedToN * scale
+	}
+
+	complexConjugate := complex(real(z), -1 * imag(z))
+	complexConjugateRaisedToM := cmplx.Pow(complexConjugate, complex(float64(power2), 0))
+	return zRaisedToN * complexConjugateRaisedToM * scale
+}
+
+
+// RosetteFormula uses a collection of z^m terms to calculate results.
+//    This transforms the input into a circular pattern rotating around the
+//    origin.
+type RosetteFormula struct {
+	Elements []*ZExponentialFormulaElement
+}
+
+// Calculate applies the Rosette formula to the complex number z.
+func (r RosetteFormula) Calculate(z complex128) complex128 {
+	sum := complex(0,0)
+	for _, term := range r.Elements {
+		sum += term.Calculate(z)
+	}
+
+	return sum
+}
+

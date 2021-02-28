@@ -20,8 +20,8 @@ func main() {
 	outputHeight := 800
 	colorSourceFilename := "exampleImage/brownie.png"
 	outputFilename := "exampleImage/newBrownie.png"
-	colorValueBoundMin := complex(-1e3, -1e3)
-	colorValueBoundMax := complex(1e3, 1e3)
+	colorValueBoundMin := complex(-1e5, -1e5)
+	colorValueBoundMax := complex(4.7e5, 4.7e5)
 
 	reader, err := os.Open(colorSourceFilename)
 	if err != nil {
@@ -64,52 +64,36 @@ func outputToFile(outputFilename string, outputImage image.Image) {
 }
 
 func transformCoordinates(scaledCoordinates []complex128) []complex128 {
-	//form := formula.RecipeFormula{
-	//	Coefficients: []*formula.CoefficientPairs{
-	//		{
-	//			Scale: complex(1, 0),
-	//			PowerN: 5,
-	//			PowerM: 0,
-	//		},
-	//		{
-	//			Scale: complex(-0.85, 1),
-	//			PowerN: 6,
-	//			PowerM: 1,
-	//		},
-	//		{
-	//			Scale: complex(0, 1),
-	//			PowerN: 4,
-	//			PowerM: -6,
-	//		},
-	//	},
-	//	Relationships: []formula.CoefficientRelationship{formula.PlusNPlusM, formula.PlusMPlusN},
-	//}
-	form := formula.RecipeFormula{
-		Coefficients: []*formula.CoefficientPairs{
+	form := formula.RosetteFormula{
+		Elements: []*formula.ZExponentialFormulaElement{
 			{
-				Scale: complex(1, 0),
-				PowerN: 6,
-				PowerM: 0,
+				Scale:                  complex(1, 0),
+				PowerN:                 6,
+				PowerM:                 -6,
+				IgnoreComplexConjugate: true,
+				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
+					{
+						Multiplier: -1,
+						OtherCoefficientRelationships: []formula.CoefficientRelationship{
+							formula.PlusMPlusN,
+						},
+					},
+				},
 			},
 			{
-				Scale: complex(1, 0),
-				PowerN: -6,
-				PowerM: 0,
+				Scale:                  complex(-1e0, -1e-1),
+				PowerN:                 12,
+				PowerM:                 -12,
+				IgnoreComplexConjugate: true,
+				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
+					{
+						Multiplier: -1,
+						OtherCoefficientRelationships: []formula.CoefficientRelationship{
+							formula.PlusMPlusN,
+						},
+					},
+				},
 			},
-			{
-				Scale: complex(-1e0, -1e-1),
-				PowerN: 12,
-				PowerM: 0,
-			},
-			{
-				Scale: complex(-1e0, -1e-1),
-				PowerN: -12,
-				PowerM: 0,
-			},
-		},
-		Relationships: []formula.CoefficientRelationship{
-			formula.PlusNNoConjugate,
-			formula.PlusMNoConjugate,
 		},
 	}
 
