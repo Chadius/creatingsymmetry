@@ -3,11 +3,12 @@ package formula_test
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"math"
 	"wallpaper/entities/formula"
 )
 
 var _ = Describe("Common formula formats", func() {
-	It("Can calulate a Rosette formula", func() {
+	It("Can calculate a Rosette formula", func() {
 		rosetteFormula := formula.RosetteFormula{
 			Elements: []*formula.ZExponentialFormulaElement{
 				{
@@ -114,6 +115,50 @@ var _ = Describe("Common formula formats", func() {
 			result := form.Calculate(complex(3,2))
 			Expect(real(result)).To(BeNumerically("~", 2))
 			Expect(imag(result)).To(BeNumerically("~", 2))
+		})
+	})
+
+	Context("Terms that involve e^(inz) * e^(-imzConj)", func() {
+		It("Can calculate a formula that uses Euler and complex numbers", func() {
+			form := formula.EulerFormulaElement{
+				Scale:                  complex(3, 0),
+				PowerN:                 2,
+				PowerM:                 0,
+				IgnoreComplexConjugate: true,
+			}
+			result := form.Calculate(complex(math.Pi / 6.0,1))
+			Expect(real(result)).To(BeNumerically("~", 3 * math.Exp(-2) * 1.0 / 2.0))
+			Expect(imag(result)).To(BeNumerically("~", 3 * math.Exp(-2) * math.Sqrt(3.0) / 2.0))
+		})
+		It("Can calculate a formula that uses locked coefficient pairs", func() {
+			form := formula.EulerFormulaElement{
+				Scale:                  complex(3, 0),
+				PowerN:                 2,
+				PowerM:                 0,
+				IgnoreComplexConjugate: true,
+				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
+					{
+						Multiplier: 1,
+						OtherCoefficientRelationships: []formula.CoefficientRelationship{
+							formula.PlusMPlusN,
+						},
+					},
+				},
+			}
+			result := form.Calculate(complex(math.Pi / 6.0,1))
+			Expect(real(result)).To(BeNumerically("~", 3 * ((math.Exp(-2) * 1.0 / 2.0) + 1.0)))
+			Expect(imag(result)).To(BeNumerically("~", 3 * math.Exp(-2) * math.Sqrt(3.0) / 2.0))
+		})
+		It("Can calculate a formula that uses the complex conjugate", func() {
+			form := formula.EulerFormulaElement{
+				Scale:                  complex(3, 0),
+				PowerN:                 2,
+				PowerM:                 1,
+				IgnoreComplexConjugate: false,
+			}
+			result := form.Calculate(complex(math.Pi / 6.0,2))
+			Expect(real(result)).To(BeNumerically("~", 3 * math.Exp(-6) * math.Sqrt(3.0) / 2.0))
+			Expect(imag(result)).To(BeNumerically("~", 3 * math.Exp(-6) * 1.0 / 2.0))
 		})
 	})
 })

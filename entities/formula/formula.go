@@ -88,3 +88,51 @@ func (r RosetteFormula) Calculate(z complex128) complex128 {
 	return sum
 }
 
+// EulerFormulaElement calculates e^(i*n*z) * e^(-i*m*zConj)
+type EulerFormulaElement struct {
+	Scale                  complex128
+	PowerN                 int
+	PowerM                 int
+	// IgnoreComplexConjugate will make sure zConjugate is not used in this calculation
+	//    (effectively setting it to 1 + 0i)
+	IgnoreComplexConjugate bool
+	// LockedCoefficientPairs will create similar terms to add to this one when calculating.
+	//    This is useful when trying to force symmetry by adding another term with swapped
+	//    PowerN & PowerM, or multiplying by -1.
+	LockedCoefficientPairs []*LockedCoefficientPair
+}
+
+// Calculate returns the result of using the formula on the given complex number.
+func (element EulerFormulaElement) Calculate(z complex128) complex128 {
+	sum := CalculateEulerElement(z, element.PowerN, element.PowerM, element.Scale, element.IgnoreComplexConjugate)
+	for _, pair := range element.LockedCoefficientPairs {
+		for _, relationship := range pair.OtherCoefficientRelationships {
+			var power1, power2 int
+			switch relationship {
+			case PlusNPlusM:
+				power1 = element.PowerN
+				power2 = element.PowerM
+			case PlusMPlusN:
+				power1 = element.PowerM
+				power2 = element.PowerN
+			}
+			relationshipScale := element.Scale * complex(pair.Multiplier, 0)
+			sum += CalculateEulerElement(z, power1, power2, relationshipScale, element.IgnoreComplexConjugate)
+		}
+	}
+
+	return sum
+}
+
+// CalculateEulerElement calculates e^(i*n*z) * e^(-i*m*zConj)
+func CalculateEulerElement(z complex128, power1, power2 int, scale complex128, ignoreComplexConjugate bool) complex128 {
+	eRaisedToTheNZi := cmplx.Exp(complex(0,1) * z * complex(float64(power1), 0))
+	if ignoreComplexConjugate {
+		return eRaisedToTheNZi * scale
+	}
+
+	complexConjugate := complex(real(z), -1 * imag(z))
+	eRaisedToTheNegativeMZConji := cmplx.Exp(complexConjugate * complex(0, -1 * float64(power2)))
+	return eRaisedToTheNZi * eRaisedToTheNegativeMZConji * scale
+}
+
