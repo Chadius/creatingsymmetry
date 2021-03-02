@@ -136,3 +136,17 @@ func CalculateEulerElement(z complex128, power1, power2 int, scale complex128, i
 	return eRaisedToTheNZi * eRaisedToTheNegativeMZConji * scale
 }
 
+// FriezeFormula is used to generate frieze patterns.
+type FriezeFormula struct {
+	Elements []*EulerFormulaElement
+}
+
+// Calculate applies the Frieze formula to the complex number z.
+func (formula FriezeFormula) Calculate(z complex128) complex128 {
+	sum := complex(0,0)
+	for _, term := range formula.Elements {
+		sum += term.Calculate(z)
+	}
+
+	return sum
+}

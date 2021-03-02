@@ -14,14 +14,14 @@ import (
 )
 
 func main() {
-	sampleSpaceMin := complex(-1e-0, -1e-0)
-	sampleSpaceMax := complex(1e-0, 1e-0)
+	sampleSpaceMin := complex(-1e-2, -1e-2)
+	sampleSpaceMax := complex(1e-2, 1e-2)
 	outputWidth := 800
 	outputHeight := 800
 	colorSourceFilename := "exampleImage/brownie.png"
 	outputFilename := "exampleImage/newBrownie.png"
-	colorValueBoundMin := complex(-1e5, -1e5)
-	colorValueBoundMax := complex(4.7e5, 4.7e5)
+	colorValueBoundMin := complex(-1e4, -1e4)
+	colorValueBoundMax := complex(1e4, 1e4)
 
 	reader, err := os.Open(colorSourceFilename)
 	if err != nil {
@@ -64,16 +64,49 @@ func outputToFile(outputFilename string, outputImage image.Image) {
 }
 
 func transformCoordinates(scaledCoordinates []complex128) []complex128 {
-	form := formula.RosetteFormula{
-		Elements: []*formula.ZExponentialFormulaElement{
+	//form := formula.RosetteFormula{
+	//	Elements: []*formula.ZExponentialFormulaElement{
+	//		{
+	//			Scale:                  complex(1, 0),
+	//			PowerN:                 6,
+	//			PowerM:                 -6,
+	//			IgnoreComplexConjugate: true,
+	//			LockedCoefficientPairs: []*formula.LockedCoefficientPair{
+	//				{
+	//					Multiplier: -1,
+	//					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+	//						formula.PlusMPlusN,
+	//					},
+	//				},
+	//			},
+	//		},
+	//		{
+	//			Scale:                  complex(-1e0, -1e-1),
+	//			PowerN:                 12,
+	//			PowerM:                 -12,
+	//			IgnoreComplexConjugate: true,
+	//			LockedCoefficientPairs: []*formula.LockedCoefficientPair{
+	//				{
+	//					Multiplier: -1,
+	//					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+	//						formula.PlusMPlusN,
+	//					},
+	//				},
+	//			},
+	//		},
+	//	},
+	//}
+
+	friezeFormula := formula.FriezeFormula{
+		Elements: []*formula.EulerFormulaElement{
 			{
 				Scale:                  complex(1, 0),
 				PowerN:                 6,
-				PowerM:                 -6,
-				IgnoreComplexConjugate: true,
+				PowerM:                 -1,
+				IgnoreComplexConjugate: false,
 				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
 					{
-						Multiplier: -1,
+						Multiplier: 1,
 						OtherCoefficientRelationships: []formula.CoefficientRelationship{
 							formula.PlusMPlusN,
 						},
@@ -81,13 +114,13 @@ func transformCoordinates(scaledCoordinates []complex128) []complex128 {
 				},
 			},
 			{
-				Scale:                  complex(-1e0, -1e-1),
-				PowerN:                 12,
-				PowerM:                 -12,
-				IgnoreComplexConjugate: true,
+				Scale:                  complex(-1e0, 5e2),
+				PowerN:                 -5,
+				PowerM:                 2,
+				IgnoreComplexConjugate: false,
 				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
 					{
-						Multiplier: -1,
+						Multiplier: 1,
 						OtherCoefficientRelationships: []formula.CoefficientRelationship{
 							formula.PlusMPlusN,
 						},
@@ -99,7 +132,7 @@ func transformCoordinates(scaledCoordinates []complex128) []complex128 {
 
 	transformedCoordinates := []complex128{}
 	for _, complexCoordinate := range scaledCoordinates {
-		transformedCoordinate := form.Calculate(complexCoordinate)
+		transformedCoordinate := friezeFormula.Calculate(complexCoordinate)
 		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
 	}
 	return transformedCoordinates

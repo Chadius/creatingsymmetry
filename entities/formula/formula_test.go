@@ -161,4 +161,30 @@ var _ = Describe("Common formula formats", func() {
 			Expect(imag(result)).To(BeNumerically("~", 3 * math.Exp(-6) * 1.0 / 2.0))
 		})
 	})
+
+	It("Can calculate a Frieze formula", func() {
+		friezeFormula := formula.FriezeFormula{
+			Elements: []*formula.EulerFormulaElement{
+				{
+					Scale: complex(2, 0),
+					PowerN: 1,
+					PowerM: 0,
+					IgnoreComplexConjugate: false,
+					LockedCoefficientPairs: []*formula.LockedCoefficientPair{
+						{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.PlusMPlusN,
+							},
+						},
+					},
+				},
+			},
+		}
+		result := friezeFormula.Calculate(complex(math.Pi/6, 1))
+
+		expectedResult := complex(math.Exp(-1), 0) * complex(math.Sqrt(3) * 2, 0)
+		Expect(real(result)).To(BeNumerically("~", real(expectedResult)))
+		Expect(imag(result)).To(BeNumerically("~", imag(expectedResult)))
+	})
 })
