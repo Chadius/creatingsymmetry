@@ -14,14 +14,16 @@ import (
 )
 
 func main() {
-	sampleSpaceMin := complex(-1e-2, -1e-2)
-	sampleSpaceMax := complex(1e-2, 1e-2)
+	sampleSpaceMin := complex(-2e0, -5e-1)
+	sampleSpaceMax := complex(2e0, 5e-1)
 	outputWidth := 800
-	outputHeight := 800
+	outputHeight := 450
+	//outputWidth := 3840
+	//outputHeight := 2160
 	colorSourceFilename := "exampleImage/brownie.png"
 	outputFilename := "exampleImage/newBrownie.png"
-	colorValueBoundMin := complex(-1e4, -1e4)
-	colorValueBoundMax := complex(1e4, 1e4)
+	colorValueBoundMin := complex(-1e5, -1e5)
+	colorValueBoundMax := complex(1e5, 1e5)
 
 	reader, err := os.Open(colorSourceFilename)
 	if err != nil {
@@ -48,7 +50,6 @@ func main() {
 
 	// Consider how to give a preview image? What's the picture ration
 	outputImage := image.NewNRGBA(image.Rect(0, 0, outputWidth, outputHeight))
-	////outputImage := image.NewNRGBA(image.Rect(0, 0, 3840, 2160))
 	colorDestinationImage(outputImage, colorSourceImage, destinationCoordinates, transformedCoordinates, colorValueBoundMin, colorValueBoundMax)
 
 	outputToFile(outputFilename, outputImage)
@@ -100,8 +101,8 @@ func transformCoordinates(scaledCoordinates []complex128) []complex128 {
 	friezeFormula := formula.FriezeFormula{
 		Elements: []*formula.EulerFormulaElement{
 			{
-				Scale:                  complex(1, 0),
-				PowerN:                 6,
+				Scale:                  complex(1e2, 1e3),
+				PowerN:                 10,
 				PowerM:                 -1,
 				IgnoreComplexConjugate: false,
 				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
@@ -114,9 +115,9 @@ func transformCoordinates(scaledCoordinates []complex128) []complex128 {
 				},
 			},
 			{
-				Scale:                  complex(-1e0, 5e2),
-				PowerN:                 -5,
-				PowerM:                 2,
+				Scale:                  complex(-1e2, -1e3),
+				PowerN:                 1,
+				PowerM:                 -10,
 				IgnoreComplexConjugate: false,
 				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
 					{
