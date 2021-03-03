@@ -14,16 +14,16 @@ import (
 )
 
 func main() {
-	sampleSpaceMin := complex(-2e0, -5e-1)
-	sampleSpaceMax := complex(2e0, 5e-1)
-	outputWidth := 800
-	outputHeight := 450
-	//outputWidth := 3840
-	//outputHeight := 2160
+	sampleSpaceMin := complex(-1e0, -1e1)
+	sampleSpaceMax := complex(1e0, 1e1)
+	//outputWidth := 800
+	//outputHeight := 450
+	outputWidth := 3840
+	outputHeight := 2160
 	colorSourceFilename := "exampleImage/brownie.png"
 	outputFilename := "exampleImage/newBrownie.png"
-	colorValueBoundMin := complex(-1e5, -1e5)
-	colorValueBoundMax := complex(1e5, 1e5)
+	colorValueBoundMin := complex(-2e5, -3e5)
+	colorValueBoundMax := complex(3e5, 3e5)
 
 	reader, err := os.Open(colorSourceFilename)
 	if err != nil {
@@ -47,6 +47,9 @@ func main() {
 	)
 
 	transformedCoordinates := transformCoordinates(scaledCoordinates)
+	minz, maxz := mathutility.GetBoundingBox(transformedCoordinates)
+	println(minz)
+	println(maxz)
 
 	// Consider how to give a preview image? What's the picture ration
 	outputImage := image.NewNRGBA(image.Rect(0, 0, outputWidth, outputHeight))
@@ -65,65 +68,46 @@ func outputToFile(outputFilename string, outputImage image.Image) {
 }
 
 func transformCoordinates(scaledCoordinates []complex128) []complex128 {
-	//form := formula.RosetteFormula{
-	//	Elements: []*formula.ZExponentialFormulaElement{
-	//		{
-	//			Scale:                  complex(1, 0),
-	//			PowerN:                 6,
-	//			PowerM:                 -6,
-	//			IgnoreComplexConjugate: true,
-	//			LockedCoefficientPairs: []*formula.LockedCoefficientPair{
-	//				{
-	//					Multiplier: -1,
-	//					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-	//						formula.PlusMPlusN,
-	//					},
-	//				},
-	//			},
-	//		},
-	//		{
-	//			Scale:                  complex(-1e0, -1e-1),
-	//			PowerN:                 12,
-	//			PowerM:                 -12,
-	//			IgnoreComplexConjugate: true,
-	//			LockedCoefficientPairs: []*formula.LockedCoefficientPair{
-	//				{
-	//					Multiplier: -1,
-	//					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-	//						formula.PlusMPlusN,
-	//					},
-	//				},
-	//			},
-	//		},
-	//	},
-	//}
-
 	friezeFormula := formula.FriezeFormula{
 		Elements: []*formula.EulerFormulaElement{
 			{
-				Scale:                  complex(1e2, 1e3),
-				PowerN:                 10,
+				Scale:                  complex(1e0, 0e2),
+				PowerN:                 3,
+				PowerM:                 -2,
+				IgnoreComplexConjugate: false,
+				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
+					{
+						Multiplier: 1,
+						OtherCoefficientRelationships: []formula.CoefficientRelationship{
+							formula.MinusMMinusN,
+						},
+					},
+				},
+			},
+			{
+				Scale:                  complex(-2e-1, -5e0),
+				PowerN:                 5,
+				PowerM:                 -8,
+				IgnoreComplexConjugate: false,
+				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
+					{
+						Multiplier: 1,
+						OtherCoefficientRelationships: []formula.CoefficientRelationship{
+							formula.MinusMMinusN,
+						},
+					},
+				},
+			},
+			{
+				Scale:                  complex(1e5, 0e0),
+				PowerN:                 1,
 				PowerM:                 -1,
 				IgnoreComplexConjugate: false,
 				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
 					{
 						Multiplier: 1,
 						OtherCoefficientRelationships: []formula.CoefficientRelationship{
-							formula.PlusMPlusN,
-						},
-					},
-				},
-			},
-			{
-				Scale:                  complex(-1e2, -1e3),
-				PowerN:                 1,
-				PowerM:                 -10,
-				IgnoreComplexConjugate: false,
-				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
-					{
-						Multiplier: 1,
-						OtherCoefficientRelationships: []formula.CoefficientRelationship{
-							formula.PlusMPlusN,
+							formula.MinusMMinusN,
 						},
 					},
 				},
