@@ -14,16 +14,16 @@ import (
 )
 
 func main() {
-	sampleSpaceMin := complex(-1e0, -1e1)
-	sampleSpaceMax := complex(1e0, 1e1)
-	//outputWidth := 800
-	//outputHeight := 450
-	outputWidth := 3840
-	outputHeight := 2160
+	sampleSpaceMin := complex(-2e0, -3e0)
+	sampleSpaceMax := complex(2e0, 3e0)
+	outputWidth := 800
+	outputHeight := 450
+	//outputWidth := 3840
+	//outputHeight := 2160
 	colorSourceFilename := "exampleImage/brownie.png"
 	outputFilename := "exampleImage/newBrownie.png"
-	colorValueBoundMin := complex(-2e5, -3e5)
-	colorValueBoundMax := complex(3e5, 3e5)
+	colorValueBoundMin := complex(-8e5, -6e5)
+	colorValueBoundMax := complex(8e5, 6e5)
 
 	reader, err := os.Open(colorSourceFilename)
 	if err != nil {
@@ -73,7 +73,7 @@ func transformCoordinates(scaledCoordinates []complex128) []complex128 {
 			{
 				Scale:                  complex(1e0, 0e2),
 				PowerN:                 3,
-				PowerM:                 -2,
+				PowerM:                 -4,
 				IgnoreComplexConjugate: false,
 				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
 					{
@@ -101,7 +101,7 @@ func transformCoordinates(scaledCoordinates []complex128) []complex128 {
 			{
 				Scale:                  complex(1e5, 0e0),
 				PowerN:                 1,
-				PowerM:                 -1,
+				PowerM:                 -2,
 				IgnoreComplexConjugate: false,
 				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
 					{

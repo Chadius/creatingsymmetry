@@ -11,33 +11,41 @@ type CoefficientRelationship string
 //   Plus means *1, Minus means *-1
 //   If N appears first the powers then power N is applied to the number and power M to the complex conjugate.
 //   If M appears first the powers then power M is applied to the number and power N to the complex conjugate.
+//	 MaybeFlipScale will multiply the scale by -1 if N + M is odd.
 const (
-	// PlusNPlusM Apply N to the first and M to the second complex number.
 	PlusNPlusM CoefficientRelationship = "+N+M"
-	// PlusMPlusN Apply M to the first and N to the second complex number.
 	PlusMPlusN                         = "+M+N"
-	MinusNMinusM = "-N-M"
-	MinusMMinusN = "-M-N"
+	MinusNMinusM                       = "-N-M"
+	MinusMMinusN                       = "-M-N"
+	PlusMPlusNMaybeFlipScale           = "+M+NF"
+	MinusMMinusNMaybeFlipScale         = "-M-NF"
 )
 
 // SetCoefficientsBasedOnRelationship will rearrange powerN and powerM according to their relationship.
-func SetCoefficientsBasedOnRelationship(powerN, powerM int, relationship CoefficientRelationship) (int, int) {
+func SetCoefficientsBasedOnRelationship(powerN, powerM int, scale complex128, relationship CoefficientRelationship) (int, int, complex128) {
 	var power1, power2 int
 	switch relationship {
 	case PlusNPlusM:
 		power1 = powerN
 		power2 = powerM
-	case PlusMPlusN:
+	case PlusMPlusN, PlusMPlusNMaybeFlipScale:
 		power1 = powerM
 		power2 = powerN
-	case MinusMMinusN:
+	case MinusMMinusN, MinusMMinusNMaybeFlipScale:
 		power1 = -1 * powerM
 		power2 = -1 * powerN
 	case MinusNMinusM:
 		power1 = -1 * powerN
 		power2 = -1 * powerM
 	}
-	return power1, power2
+
+	sumOfPowersIsOdd := (powerN + powerM) % 2 == 1
+	relationshipMayFlipScale := relationship == PlusMPlusNMaybeFlipScale || relationship == MinusMMinusNMaybeFlipScale
+	if sumOfPowersIsOdd && relationshipMayFlipScale {
+		scale *= -1
+	}
+
+	return power1, power2, scale
 }
 
 // ZExponentialFormulaElement describes a formula of the form Scale * z^PowerN * zConjugate^PowerM.
@@ -60,8 +68,8 @@ func (element ZExponentialFormulaElement) Calculate(z complex128) complex128 {
 
 	for _, pair := range element.LockedCoefficientPairs {
 		for _, relationship := range pair.OtherCoefficientRelationships {
-			power1, power2 := SetCoefficientsBasedOnRelationship(element.PowerN, element.PowerM, relationship)
-			relationshipScale := element.Scale * complex(pair.Multiplier, 0)
+			power1, power2, scale := SetCoefficientsBasedOnRelationship(element.PowerN, element.PowerM, element.Scale, relationship)
+			relationshipScale := scale * complex(pair.Multiplier, 0)
 			sum += CalculateExponentElement(z, power1, power2, relationshipScale, element.IgnoreComplexConjugate)
 		}
 	}
@@ -125,8 +133,8 @@ func (element EulerFormulaElement) Calculate(z complex128) complex128 {
 	sum := CalculateEulerElement(z, element.PowerN, element.PowerM, element.Scale, element.IgnoreComplexConjugate)
 	for _, pair := range element.LockedCoefficientPairs {
 		for _, relationship := range pair.OtherCoefficientRelationships {
-			power1, power2 := SetCoefficientsBasedOnRelationship(element.PowerN, element.PowerM, relationship)
-			relationshipScale := element.Scale * complex(pair.Multiplier, 0)
+			power1, power2, scale := SetCoefficientsBasedOnRelationship(element.PowerN, element.PowerM, element.Scale, relationship)
+			relationshipScale := scale * complex(pair.Multiplier, 0)
 			sum += CalculateEulerElement(z, power1, power2, relationshipScale, element.IgnoreComplexConjugate)
 		}
 	}
