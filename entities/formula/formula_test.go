@@ -16,12 +16,10 @@ var _ = Describe("Common formula formats", func() {
 					PowerN: 1,
 					PowerM: 0,
 					IgnoreComplexConjugate: false,
-					LockedCoefficientPairs: []*formula.LockedCoefficientPair{
-						{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.PlusMPlusN,
-							},
+					CoefficientPairs: formula.LockedCoefficientPair{
+						Multiplier: 1,
+						OtherCoefficientRelationships: []formula.CoefficientRelationship{
+							formula.PlusMPlusN,
 						},
 					},
 				},
@@ -51,12 +49,10 @@ var _ = Describe("Common formula formats", func() {
 				PowerN:                 2,
 				PowerM:                 0,
 				IgnoreComplexConjugate: true,
-				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
-					{
-						Multiplier: -1,
-						OtherCoefficientRelationships: []formula.CoefficientRelationship{
-							formula.PlusMPlusN,
-						},
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: -1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.PlusMPlusN,
 					},
 				},
 			}
@@ -84,12 +80,10 @@ var _ = Describe("Common formula formats", func() {
 				PowerN:                 1,
 				PowerM:                 0,
 				IgnoreComplexConjugate: true,
-				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
-					{
-						Multiplier: -1,
-						OtherCoefficientRelationships: []formula.CoefficientRelationship{
-							formula.PlusNPlusM,
-						},
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: -1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.PlusNPlusM,
 					},
 				},
 			}
@@ -103,12 +97,10 @@ var _ = Describe("Common formula formats", func() {
 				PowerN:                 1,
 				PowerM:                 0,
 				IgnoreComplexConjugate: true,
-				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
-					{
-						Multiplier: -1,
-						OtherCoefficientRelationships: []formula.CoefficientRelationship{
-							formula.PlusMPlusN,
-						},
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: -1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.PlusMPlusN,
 					},
 				},
 			}
@@ -136,12 +128,10 @@ var _ = Describe("Common formula formats", func() {
 				PowerN:                 2,
 				PowerM:                 0,
 				IgnoreComplexConjugate: true,
-				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
-					{
-						Multiplier: 1,
-						OtherCoefficientRelationships: []formula.CoefficientRelationship{
-							formula.PlusMPlusN,
-						},
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.PlusMPlusN,
 					},
 				},
 			}
@@ -170,12 +160,10 @@ var _ = Describe("Common formula formats", func() {
 					PowerN: 1,
 					PowerM: 0,
 					IgnoreComplexConjugate: false,
-					LockedCoefficientPairs: []*formula.LockedCoefficientPair{
-						{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.PlusMPlusN,
-							},
+					CoefficientPairs: formula.LockedCoefficientPair{
+						Multiplier: 1,
+						OtherCoefficientRelationships: []formula.CoefficientRelationship{
+							formula.PlusMPlusN,
 						},
 					},
 				},
@@ -244,6 +232,211 @@ var _ = Describe("Common formula formats", func() {
 			Expect(power2).To(Equal(0))
 			Expect(real(scale)).To(BeNumerically("~", 3))
 			Expect(imag(scale)).To(BeNumerically("~", 4))
+		})
+	})
+
+	Context("Analyze Friezes for symmetry", func() {
+		It("Knows when a pattern is p211", func() {
+			friezeFormula := formula.FriezeFormula{
+				Elements: []*formula.EulerFormulaElement{
+					{
+						Scale: complex(1, 0),
+						PowerN: 2,
+						PowerM: 0,
+						IgnoreComplexConjugate: false,
+						CoefficientPairs: formula.LockedCoefficientPair{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.MinusNMinusM,
+							},
+						},
+					},
+				},
+			}
+			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+			Expect(symmetriesDetected.P211).To(BeTrue())
+		})
+		It("Knows when a pattern is p1m1", func() {
+			friezeFormula := formula.FriezeFormula{
+				Elements: []*formula.EulerFormulaElement{
+					{
+						Scale: complex(1, 0),
+						PowerN: 2,
+						PowerM: 0,
+						IgnoreComplexConjugate: false,
+						CoefficientPairs: formula.LockedCoefficientPair{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.PlusMPlusN,
+							},
+						},
+					},
+				},
+			}
+			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+			Expect(symmetriesDetected.P1m1).To(BeTrue())
+		})
+		It("Knows when a pattern is p11m", func() {
+			friezeFormula := formula.FriezeFormula{
+				Elements: []*formula.EulerFormulaElement{
+					{
+						Scale: complex(1, 0),
+						PowerN: 2,
+						PowerM: 0,
+						IgnoreComplexConjugate: false,
+						CoefficientPairs: formula.LockedCoefficientPair{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.MinusMMinusN,
+							},
+						},
+					},
+				},
+			}
+			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+			Expect(symmetriesDetected.P11m).To(BeTrue())
+		})
+		It("Knows when a pattern is p11g", func() {
+			friezeFormula := formula.FriezeFormula{
+				Elements: []*formula.EulerFormulaElement{
+					{
+						Scale: complex(1, 0),
+						PowerN: 2,
+						PowerM: 1,
+						IgnoreComplexConjugate: false,
+						CoefficientPairs: formula.LockedCoefficientPair{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.MinusMMinusNMaybeFlipScale,
+							},
+						},
+					},
+				},
+			}
+			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+			Expect(symmetriesDetected.P11g).To(BeTrue())
+		})
+		It("Knows when a pattern is p11m if a p11g pattern has even sum powers", func() {
+			friezeFormula := formula.FriezeFormula{
+				Elements: []*formula.EulerFormulaElement{
+					{
+						Scale: complex(1, 0),
+						PowerN: 2,
+						PowerM: 0,
+						IgnoreComplexConjugate: false,
+						CoefficientPairs: formula.LockedCoefficientPair{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.MinusMMinusNMaybeFlipScale,
+							},
+						},
+					},
+				},
+			}
+			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+			Expect(symmetriesDetected.P11m).To(BeTrue())
+		})
+		It("Knows when a pattern is p2mm", func() {
+			friezeFormula := formula.FriezeFormula{
+				Elements: []*formula.EulerFormulaElement{
+					{
+						Scale: complex(1, 0),
+						PowerN: 2,
+						PowerM: 0,
+						IgnoreComplexConjugate: false,
+						CoefficientPairs: formula.LockedCoefficientPair{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.MinusNMinusM,
+								formula.PlusMPlusN,
+								formula.MinusMMinusN,
+							},
+						},
+					},
+				},
+			}
+			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+			Expect(symmetriesDetected.P2mm).To(BeTrue())
+		})
+		It("Knows when a pattern is p2mg", func() {
+			friezeFormula := formula.FriezeFormula{
+				Elements: []*formula.EulerFormulaElement{
+					{
+						Scale: complex(1, 0),
+						PowerN: 2,
+						PowerM: -1,
+						IgnoreComplexConjugate: false,
+						CoefficientPairs: formula.LockedCoefficientPair{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.MinusNMinusM,
+								formula.PlusMPlusNMaybeFlipScale,
+								formula.MinusMMinusNMaybeFlipScale,
+							},
+						},
+					},
+				},
+			}
+			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+			Expect(symmetriesDetected.P2mg).To(BeTrue())
+		})
+		It("Knows when a pattern is p2mm if a p2mg pattern has even sum powers", func() {
+			friezeFormula := formula.FriezeFormula{
+				Elements: []*formula.EulerFormulaElement{
+					{
+						Scale: complex(1, 0),
+						PowerN: 2,
+						PowerM: 0,
+						IgnoreComplexConjugate: false,
+						CoefficientPairs: formula.LockedCoefficientPair{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.MinusNMinusM,
+								formula.PlusMPlusNMaybeFlipScale,
+								formula.MinusMMinusNMaybeFlipScale,
+							},
+						},
+					},
+				},
+			}
+			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+			Expect(symmetriesDetected.P2mm).To(BeTrue())
+		})
+		It("Knows when a pattern is p111", func() {
+			friezeFormula := formula.FriezeFormula{
+				Elements: []*formula.EulerFormulaElement{
+					{
+						Scale: complex(1, 0),
+						PowerN: 2,
+						PowerM: 0,
+						IgnoreComplexConjugate: false,
+						CoefficientPairs: formula.LockedCoefficientPair{},
+					},
+				},
+			}
+			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+			Expect(symmetriesDetected.P111).To(BeTrue())
+		})
+		It("Knows when a pattern is p111 because complex coordinates are ignored", func() {
+			friezeFormula := formula.FriezeFormula{
+				Elements: []*formula.EulerFormulaElement{
+					{
+						Scale: complex(1, 0),
+						PowerN: 2,
+						PowerM: 0,
+						IgnoreComplexConjugate: true,
+						CoefficientPairs: formula.LockedCoefficientPair{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.MinusNMinusM,
+							},
+						},
+					},
+				},
+			}
+			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+			Expect(symmetriesDetected.P111).To(BeTrue())
+			Expect(symmetriesDetected.P211).To(BeFalse())
 		})
 	})
 })

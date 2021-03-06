@@ -14,16 +14,16 @@ import (
 )
 
 func main() {
-	sampleSpaceMin := complex(-2e0, -3e0)
-	sampleSpaceMax := complex(2e0, 3e0)
+	sampleSpaceMin := complex(-5e0, -5e0)
+	sampleSpaceMax := complex(5e0, 5e0)
 	outputWidth := 800
 	outputHeight := 450
 	//outputWidth := 3840
 	//outputHeight := 2160
 	colorSourceFilename := "exampleImage/brownie.png"
 	outputFilename := "exampleImage/newBrownie.png"
-	colorValueBoundMin := complex(-8e5, -6e5)
-	colorValueBoundMax := complex(8e5, 6e5)
+	colorValueBoundMin := complex(-10e0, -3e1)
+	colorValueBoundMax := complex(10e0, 3e1)
 
 	reader, err := os.Open(colorSourceFilename)
 	if err != nil {
@@ -72,47 +72,40 @@ func transformCoordinates(scaledCoordinates []complex128) []complex128 {
 		Elements: []*formula.EulerFormulaElement{
 			{
 				Scale:                  complex(1e0, 0e2),
-				PowerN:                 3,
-				PowerM:                 -4,
+				PowerN:                 2,
+				PowerM:                 -1,
 				IgnoreComplexConjugate: false,
-				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
-					{
-						Multiplier: 1,
-						OtherCoefficientRelationships: []formula.CoefficientRelationship{
-							formula.MinusMMinusN,
-						},
-					},
-				},
-			},
-			{
-				Scale:                  complex(-2e-1, -5e0),
-				PowerN:                 5,
-				PowerM:                 -8,
-				IgnoreComplexConjugate: false,
-				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
-					{
-						Multiplier: 1,
-						OtherCoefficientRelationships: []formula.CoefficientRelationship{
-							formula.MinusMMinusN,
-						},
-					},
-				},
-			},
-			{
-				Scale:                  complex(1e5, 0e0),
-				PowerN:                 1,
-				PowerM:                 -2,
-				IgnoreComplexConjugate: false,
-				LockedCoefficientPairs: []*formula.LockedCoefficientPair{
-					{
-						Multiplier: 1,
-						OtherCoefficientRelationships: []formula.CoefficientRelationship{
-							formula.MinusMMinusN,
-						},
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.MinusMMinusNMaybeFlipScale,
 					},
 				},
 			},
 		},
+	}
+
+	symmetryAnalysis := friezeFormula.AnalyzeForSymmetry()
+	if symmetryAnalysis.P111 {
+		println("Has these symmetries: p111")
+	}
+	if symmetryAnalysis.P211 {
+		println("  P211")
+	}
+	if symmetryAnalysis.P1m1 {
+		println("  P1m1")
+	}
+	if symmetryAnalysis.P11g {
+		println("  P11g")
+	}
+	if symmetryAnalysis.P11m {
+		println("  P11m")
+	}
+	if symmetryAnalysis.P2mm {
+		println("  P2mm")
+	}
+	if symmetryAnalysis.P2mg {
+		println("  P2mg")
 	}
 
 	transformedCoordinates := []complex128{}
