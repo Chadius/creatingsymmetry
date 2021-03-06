@@ -112,6 +112,65 @@ func (r RosetteFormula) Calculate(z complex128) complex128 {
 	return sum
 }
 
+// RosetteSymmetry notes the kinds of symmetries the rosette formula contains.
+type RosetteSymmetry struct {
+	Multifold int
+}
+
+// AnalyzeForSymmetry analyzes the formula for symmetries.
+func (r RosetteFormula) AnalyzeForSymmetry() *RosetteSymmetry {
+	symmetriesFound := &RosetteSymmetry{
+		Multifold: 1,
+	}
+
+	r.calculateMultifoldSymmetry(symmetriesFound)
+	return symmetriesFound
+}
+
+func (r RosetteFormula) calculateMultifoldSymmetry(symmetriesFound *RosetteSymmetry) {
+	elementPowerDifferences := []int{}
+
+	for _, element := range r.Elements {
+		powerDifference := element.PowerN - element.PowerM
+		if powerDifference < 0 {
+			powerDifference *= -1
+		}
+		elementPowerDifferences = append(elementPowerDifferences, powerDifference)
+	}
+
+	if len(elementPowerDifferences) == 1 {
+		symmetriesFound.Multifold = elementPowerDifferences[0]
+	} else if len(elementPowerDifferences) > 1 {
+		var currentGreatestCommonDenominator int
+		for index := range elementPowerDifferences {
+			if index >= len(elementPowerDifferences) - 1 {
+				break
+			}
+			currentGreatestCommonDenominator = getGreatestCommonDenominator(
+				elementPowerDifferences[index],
+				elementPowerDifferences[index + 1])
+		}
+		symmetriesFound.Multifold = currentGreatestCommonDenominator
+	}
+}
+
+// getGreatestCommonDenominator finds the largest integer that divides into
+//   integers a and b, leaving 0 behind.
+func getGreatestCommonDenominator(a, b int) int {
+	if a == b {
+		return a
+	}
+
+	larger := a
+	smaller := b
+
+	remainder := larger % smaller
+	if remainder == 0 {
+		return smaller
+	}
+	return getGreatestCommonDenominator(smaller, remainder)
+}
+
 // EulerFormulaElement calculates e^(i*n*z) * e^(-i*m*zConj)
 type EulerFormulaElement struct {
 	Scale                  complex128

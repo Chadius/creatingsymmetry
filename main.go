@@ -14,16 +14,16 @@ import (
 )
 
 func main() {
-	sampleSpaceMin := complex(-5e0, -5e0)
-	sampleSpaceMax := complex(5e0, 5e0)
+	sampleSpaceMin := complex(-1e0, -1e0)
+	sampleSpaceMax := complex(1e0, 1e0)
 	outputWidth := 800
 	outputHeight := 450
 	//outputWidth := 3840
 	//outputHeight := 2160
 	colorSourceFilename := "exampleImage/brownie.png"
 	outputFilename := "exampleImage/newBrownie.png"
-	colorValueBoundMin := complex(-10e0, -3e1)
-	colorValueBoundMax := complex(10e0, 3e1)
+	colorValueBoundMin := complex(-2e5, -2e5)
+	colorValueBoundMax := complex(2e5, 2e5)
 
 	reader, err := os.Open(colorSourceFilename)
 	if err != nil {
@@ -46,7 +46,8 @@ func main() {
 		sampleSpaceMax,
 	)
 
-	transformedCoordinates := transformCoordinates(scaledCoordinates)
+	//transformedCoordinates := transformCoordinatesForFriezeFormula(scaledCoordinates)
+	transformedCoordinates := transformCoordinatesForRosetteFormula(scaledCoordinates)
 	minz, maxz := mathutility.GetBoundingBox(transformedCoordinates)
 	println(minz)
 	println(maxz)
@@ -67,20 +68,36 @@ func outputToFile(outputFilename string, outputImage image.Image) {
 	png.Encode(outputImageFile, outputImage)
 }
 
-func transformCoordinates(scaledCoordinates []complex128) []complex128 {
+func transformCoordinatesForFriezeFormula(scaledCoordinates []complex128) []complex128 {
 	friezeFormula := formula.FriezeFormula{
 		Elements: []*formula.EulerFormulaElement{
 			{
 				Scale:                  complex(1e0, 0e2),
-				PowerN:                 2,
-				PowerM:                 -1,
-				IgnoreComplexConjugate: false,
-				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: 1,
-					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-						formula.MinusMMinusNMaybeFlipScale,
-					},
-				},
+				PowerN:                 6,
+				PowerM:                 0,
+				IgnoreComplexConjugate: true,
+				CoefficientPairs: formula.LockedCoefficientPair{},
+			},
+			{
+				Scale:                  complex(1e0, 0e2),
+				PowerN:                 -6,
+				PowerM:                 0,
+				IgnoreComplexConjugate: true,
+				CoefficientPairs: formula.LockedCoefficientPair{},
+			},
+			{
+				Scale:                  complex(1e0, 0e2),
+				PowerN:                 12,
+				PowerM:                 0,
+				IgnoreComplexConjugate: true,
+				CoefficientPairs: formula.LockedCoefficientPair{},
+			},
+			{
+				Scale:                  complex(1e0, 0e2),
+				PowerN:                 -12,
+				PowerM:                 0,
+				IgnoreComplexConjugate: true,
+				CoefficientPairs: formula.LockedCoefficientPair{},
 			},
 		},
 	}
@@ -111,6 +128,62 @@ func transformCoordinates(scaledCoordinates []complex128) []complex128 {
 	transformedCoordinates := []complex128{}
 	for _, complexCoordinate := range scaledCoordinates {
 		transformedCoordinate := friezeFormula.Calculate(complexCoordinate)
+		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
+	}
+	return transformedCoordinates
+}
+
+func transformCoordinatesForRosetteFormula(scaledCoordinates []complex128) []complex128 {
+	rosetteFormula := formula.RosetteFormula{
+		Elements: []*formula.ZExponentialFormulaElement{
+			{
+				Scale:                  complex(1e0, 0e2),
+				PowerN:                 12,
+				PowerM:                 0,
+				IgnoreComplexConjugate: true,
+				CoefficientPairs: formula.LockedCoefficientPair{},
+			},
+			{
+				Scale:                  complex(1e0, 0e2),
+				PowerN:                 -12,
+				PowerM:                 0,
+				IgnoreComplexConjugate: true,
+				CoefficientPairs: formula.LockedCoefficientPair{},
+			},
+			{
+				Scale:                  complex(1e3, 0e2),
+				PowerN:                 8,
+				PowerM:                 0,
+				IgnoreComplexConjugate: true,
+				CoefficientPairs: formula.LockedCoefficientPair{},
+			},
+			{
+				Scale:                  complex(1e3, 0e2),
+				PowerN:                 -8,
+				PowerM:                 0,
+				IgnoreComplexConjugate: true,
+				CoefficientPairs: formula.LockedCoefficientPair{},
+			},
+			{
+				Scale:                  complex(1e4, 0e2),
+				PowerN:                 6,
+				PowerM:                 0,
+				IgnoreComplexConjugate: true,
+				CoefficientPairs: formula.LockedCoefficientPair{},
+			},
+			{
+				Scale:                  complex(1e4, 0e2),
+				PowerN:                 -6,
+				PowerM:                 0,
+				IgnoreComplexConjugate: true,
+				CoefficientPairs: formula.LockedCoefficientPair{},
+			},
+		},
+	}
+
+	transformedCoordinates := []complex128{}
+	for _, complexCoordinate := range scaledCoordinates {
+		transformedCoordinate := rosetteFormula.Calculate(complexCoordinate)
 		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
 	}
 	return transformedCoordinates

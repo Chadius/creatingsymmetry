@@ -29,6 +29,92 @@ var _ = Describe("Common formula formats", func() {
 		Expect(real(result)).To(BeNumerically("~", 12))
 		Expect(imag(result)).To(BeNumerically("~", 0))
 	})
+	Context("Analyze Rosettes for symmetry", func() {
+		It("Can determine there is multifold symmetry with 1 term", func() {
+			rosetteFormula := formula.RosetteFormula{
+				Elements: []*formula.ZExponentialFormulaElement{
+					{
+						Scale: complex(1, 0),
+						PowerN: 6,
+						PowerM: 0,
+						IgnoreComplexConjugate: false,
+						CoefficientPairs: formula.LockedCoefficientPair{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.PlusMPlusN,
+							},
+						},
+					},
+				},
+			}
+			symmetriesDetected := rosetteFormula.AnalyzeForSymmetry()
+			Expect(symmetriesDetected.Multifold).To(Equal(6))
+		})
+		It("Multifold symmetry is always a positive value", func() {
+			rosetteFormula := formula.RosetteFormula{
+				Elements: []*formula.ZExponentialFormulaElement{
+					{
+						Scale: complex(1, 0),
+						PowerN: -6,
+						PowerM: 0,
+						IgnoreComplexConjugate: false,
+						CoefficientPairs: formula.LockedCoefficientPair{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.PlusMPlusN,
+							},
+						},
+					},
+				},
+			}
+			symmetriesDetected := rosetteFormula.AnalyzeForSymmetry()
+			Expect(symmetriesDetected.Multifold).To(Equal(6))
+		})
+		It("Multifold symmetry uses the greatest common denominator of all elements", func() {
+			rosetteFormula := formula.RosetteFormula{
+				Elements: []*formula.ZExponentialFormulaElement{
+					{
+						Scale: complex(1, 0),
+						PowerN: -6,
+						PowerM: 0,
+						IgnoreComplexConjugate: false,
+						CoefficientPairs: formula.LockedCoefficientPair{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.PlusMPlusN,
+							},
+						},
+					},
+					{
+						Scale: complex(1, 0),
+						PowerN: -8,
+						PowerM: 4,
+						IgnoreComplexConjugate: false,
+						CoefficientPairs: formula.LockedCoefficientPair{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.PlusMPlusN,
+							},
+						},
+					},
+					{
+						Scale: complex(1, 0),
+						PowerN: 2,
+						PowerM: 0,
+						IgnoreComplexConjugate: false,
+						CoefficientPairs: formula.LockedCoefficientPair{
+							Multiplier: 1,
+							OtherCoefficientRelationships: []formula.CoefficientRelationship{
+								formula.PlusMPlusN,
+							},
+						},
+					},
+				},
+			}
+			symmetriesDetected := rosetteFormula.AnalyzeForSymmetry()
+			Expect(symmetriesDetected.Multifold).To(Equal(2))
+		})
+	})
 
 	Context("Terms that involve z^n * zConj^m", func() {
 		It("Can make a z to the n exponential formula", func() {
