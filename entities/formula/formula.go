@@ -69,6 +69,7 @@ func (element ZExponentialFormulaElement) Calculate(z complex128) complex128 {
 	for _, relationship := range element.CoefficientPairs.OtherCoefficientRelationships {
 		power1, power2, scale := SetCoefficientsBasedOnRelationship(element.PowerN, element.PowerM, element.Scale, relationship)
 		relationshipScale := scale * complex(element.CoefficientPairs.Multiplier, 0)
+
 		sum += CalculateExponentElement(z, power1, power2, relationshipScale, element.IgnoreComplexConjugate)
 	}
 	return sum
@@ -94,7 +95,6 @@ func CalculateExponentElement(z complex128, power1, power2 int, scale complex128
 	return zRaisedToN * complexConjugateRaisedToM * scale
 }
 
-
 // RosetteFormula uses a collection of z^m terms to calculate results.
 //    This transforms the input into a circular pattern rotating around the
 //    origin.
@@ -102,14 +102,26 @@ type RosetteFormula struct {
 	Elements []*ZExponentialFormulaElement
 }
 
+// CalculationResultForFormula shows the results of a calculation
+type CalculationResultForFormula struct {
+	Total                 complex128
+	ContributionByTerm []complex128
+}
+
 // Calculate applies the Rosette formula to the complex number z.
-func (r RosetteFormula) Calculate(z complex128) complex128 {
-	sum := complex(0,0)
-	for _, term := range r.Elements {
-		sum += term.Calculate(z)
+func (r RosetteFormula) Calculate(z complex128) *CalculationResultForFormula {
+	result := &CalculationResultForFormula{
+		Total: complex(0,0),
+		ContributionByTerm: []complex128{},
 	}
 
-	return sum
+	for _, term := range r.Elements {
+		termResult := term.Calculate(z)
+		result.Total += termResult
+		result.ContributionByTerm = append(result.ContributionByTerm, termResult)
+	}
+
+	return result
 }
 
 // RosetteSymmetry notes the kinds of symmetries the rosette formula contains.
@@ -216,13 +228,19 @@ type FriezeFormula struct {
 }
 
 // Calculate applies the Frieze formula to the complex number z.
-func (formula FriezeFormula) Calculate(z complex128) complex128 {
-	sum := complex(0,0)
-	for _, term := range formula.Elements {
-		sum += term.Calculate(z)
+func (formula FriezeFormula) Calculate(z complex128) *CalculationResultForFormula {
+	result := &CalculationResultForFormula{
+		Total: complex(0,0),
+		ContributionByTerm: []complex128{},
 	}
 
-	return sum
+	for _, term := range formula.Elements {
+		termResult := term.Calculate(z)
+		result.Total += termResult
+		result.ContributionByTerm = append(result.ContributionByTerm, termResult)
+	}
+
+	return result
 }
 
 // FriezeSymmetry notes the kinds of symmetries the formula contains.

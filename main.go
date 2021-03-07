@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/png"
@@ -126,9 +127,25 @@ func transformCoordinatesForFriezeFormula(scaledCoordinates []complex128) []comp
 	}
 
 	transformedCoordinates := []complex128{}
+	resultsByTerm := [][]complex128{}
+	for range friezeFormula.Elements {
+		resultsByTerm = append(resultsByTerm, []complex128{})
+	}
+
 	for _, complexCoordinate := range scaledCoordinates {
-		transformedCoordinate := friezeFormula.Calculate(complexCoordinate)
+		friezeResults := friezeFormula.Calculate(complexCoordinate)
+		for index, formulaResult := range friezeResults.ContributionByTerm {
+			resultsByTerm[index] = append(resultsByTerm[index], formulaResult)
+		}
+
+		transformedCoordinate := friezeResults.Total
 		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
+	}
+
+	println("Min/Max ranges, by Term")
+	for index, results := range resultsByTerm {
+		minz, maxz := mathutility.GetBoundingBox(results)
+		fmt.Printf("%d: %e - %e\n", index, minz, maxz)
 	}
 	return transformedCoordinates
 }
@@ -182,9 +199,25 @@ func transformCoordinatesForRosetteFormula(scaledCoordinates []complex128) []com
 	}
 
 	transformedCoordinates := []complex128{}
+	resultsByTerm := [][]complex128{}
+	for range rosetteFormula.Elements {
+		resultsByTerm = append(resultsByTerm, []complex128{})
+	}
+
 	for _, complexCoordinate := range scaledCoordinates {
-		transformedCoordinate := rosetteFormula.Calculate(complexCoordinate)
+		rosetteResults := rosetteFormula.Calculate(complexCoordinate)
+		for index, formulaResult := range rosetteResults.ContributionByTerm {
+			resultsByTerm[index] = append(resultsByTerm[index], formulaResult)
+		}
+
+		transformedCoordinate := rosetteResults.Total
 		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
+	}
+
+	println("Min/Max ranges, by Term")
+	for index, results := range resultsByTerm {
+		minz, maxz := mathutility.GetBoundingBox(results)
+		fmt.Printf("%d: %e - %e\n", index, minz, maxz)
 	}
 	return transformedCoordinates
 }

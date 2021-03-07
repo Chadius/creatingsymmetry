@@ -26,8 +26,9 @@ var _ = Describe("Common formula formats", func() {
 			},
 		}
 		result := rosetteFormula.Calculate(complex(2,1))
-		Expect(real(result)).To(BeNumerically("~", 12))
-		Expect(imag(result)).To(BeNumerically("~", 0))
+		total := result.Total
+		Expect(real(total)).To(BeNumerically("~", 12))
+		Expect(imag(total)).To(BeNumerically("~", 0))
 	})
 	Context("Analyze Rosettes for symmetry", func() {
 		It("Can determine there is multifold symmetry with 1 term", func() {
@@ -115,6 +116,29 @@ var _ = Describe("Common formula formats", func() {
 			Expect(symmetriesDetected.Multifold).To(Equal(2))
 		})
 	})
+	It("Can determine the contribution by each term of a Rosette formula", func() {
+		rosetteFormula := formula.RosetteFormula{
+			Elements: []*formula.ZExponentialFormulaElement{
+				{
+					Scale: complex(3, 0),
+					PowerN: 1,
+					PowerM: 0,
+					IgnoreComplexConjugate: false,
+					CoefficientPairs: formula.LockedCoefficientPair{
+						Multiplier: 1,
+						OtherCoefficientRelationships: []formula.CoefficientRelationship{
+							formula.PlusMPlusN,
+						},
+					},
+				},
+			},
+		}
+		result := rosetteFormula.Calculate(complex(2,1))
+		Expect(result.ContributionByTerm).To(HaveLen(1))
+		contributionByFirstTerm := result.ContributionByTerm[0]
+		Expect(real(contributionByFirstTerm)).To(BeNumerically("~", 12))
+		Expect(imag(contributionByFirstTerm)).To(BeNumerically("~", 0))
+	})
 
 	Context("Terms that involve z^n * zConj^m", func() {
 		It("Can make a z to the n exponential formula", func() {
@@ -125,9 +149,9 @@ var _ = Describe("Common formula formats", func() {
 				PowerM:                 0,
 				IgnoreComplexConjugate: true,
 			}
-			result := form.Calculate(complex(3,2))
-			Expect(real(result)).To(BeNumerically("~", 15))
-			Expect(imag(result)).To(BeNumerically("~", 36))
+			total := form.Calculate(complex(3,2))
+			Expect(real(total)).To(BeNumerically("~", 15))
+			Expect(imag(total)).To(BeNumerically("~", 36))
 		})
 		It("Can make a z to the n exponential formula using locked pairs", func() {
 			form := formula.ZExponentialFormulaElement{
@@ -142,9 +166,9 @@ var _ = Describe("Common formula formats", func() {
 					},
 				},
 			}
-			result := form.Calculate(complex(3,2))
-			Expect(real(result)).To(BeNumerically("~", 12))
-			Expect(imag(result)).To(BeNumerically("~", 36))
+			total := form.Calculate(complex(3,2))
+			Expect(real(total)).To(BeNumerically("~", 12))
+			Expect(imag(total)).To(BeNumerically("~", 36))
 		})
 		It("Can make a z to the n exponential formula using a complex conjugate", func() {
 			form := formula.ZExponentialFormulaElement{
@@ -153,9 +177,9 @@ var _ = Describe("Common formula formats", func() {
 				PowerM:                 1,
 				IgnoreComplexConjugate: false,
 			}
-			result := form.Calculate(complex(3,2))
-			Expect(real(result)).To(BeNumerically("~", 117))
-			Expect(imag(result)).To(BeNumerically("~", 78))
+			total := form.Calculate(complex(3,2))
+			Expect(real(total)).To(BeNumerically("~", 117))
+			Expect(imag(total)).To(BeNumerically("~", 78))
 		})
 	})
 
@@ -173,9 +197,9 @@ var _ = Describe("Common formula formats", func() {
 					},
 				},
 			}
-			result := form.Calculate(complex(3,2))
-			Expect(real(result)).To(BeNumerically("~", 0))
-			Expect(imag(result)).To(BeNumerically("~", 0))
+			total := form.Calculate(complex(3,2))
+			Expect(real(total)).To(BeNumerically("~", 0))
+			Expect(imag(total)).To(BeNumerically("~", 0))
 		})
 		It("Can swap coefficients", func() {
 			form := formula.ZExponentialFormulaElement{
@@ -190,9 +214,9 @@ var _ = Describe("Common formula formats", func() {
 					},
 				},
 			}
-			result := form.Calculate(complex(3,2))
-			Expect(real(result)).To(BeNumerically("~", 2))
-			Expect(imag(result)).To(BeNumerically("~", 2))
+			total := form.Calculate(complex(3,2))
+			Expect(real(total)).To(BeNumerically("~", 2))
+			Expect(imag(total)).To(BeNumerically("~", 2))
 		})
 	})
 
@@ -256,10 +280,11 @@ var _ = Describe("Common formula formats", func() {
 			},
 		}
 		result := friezeFormula.Calculate(complex(math.Pi/6, 1))
+		total := result.Total
 
 		expectedResult := complex(math.Exp(-1), 0) * complex(math.Sqrt(3) * 2, 0)
-		Expect(real(result)).To(BeNumerically("~", real(expectedResult)))
-		Expect(imag(result)).To(BeNumerically("~", imag(expectedResult)))
+		Expect(real(total)).To(BeNumerically("~", real(expectedResult)))
+		Expect(imag(total)).To(BeNumerically("~", imag(expectedResult)))
 	})
 
 	Context("Can determine coefficients and scale based on coefficient relationship", func() {
@@ -524,5 +549,31 @@ var _ = Describe("Common formula formats", func() {
 			Expect(symmetriesDetected.P111).To(BeTrue())
 			Expect(symmetriesDetected.P211).To(BeFalse())
 		})
+	})
+	It("Can determine the contribution by each term of a Frieze formula", func() {
+		friezeFormula := formula.FriezeFormula{
+			Elements: []*formula.EulerFormulaElement{
+				{
+					Scale: complex(2, 0),
+					PowerN: 1,
+					PowerM: 0,
+					IgnoreComplexConjugate: false,
+					CoefficientPairs: formula.LockedCoefficientPair{
+						Multiplier: 1,
+						OtherCoefficientRelationships: []formula.CoefficientRelationship{
+							formula.PlusMPlusN,
+						},
+					},
+				},
+			},
+		}
+		result := friezeFormula.Calculate(complex(math.Pi/6, 1))
+
+		Expect(result.ContributionByTerm).To(HaveLen(1))
+		contributionByFirstTerm := result.ContributionByTerm[0]
+
+		expectedResult := complex(math.Exp(-1), 0) * complex(math.Sqrt(3) * 2, 0)
+		Expect(real(contributionByFirstTerm)).To(BeNumerically("~", real(expectedResult)))
+		Expect(imag(contributionByFirstTerm)).To(BeNumerically("~", imag(expectedResult)))
 	})
 })
