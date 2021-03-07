@@ -48,8 +48,8 @@ func SetCoefficientsBasedOnRelationship(powerN, powerM int, scale complex128, re
 	return power1, power2, scale
 }
 
-// ZExponentialFormulaElement describes a formula of the form Scale * z^PowerN * zConjugate^PowerM.
-type ZExponentialFormulaElement struct {
+// ZExponentialFormulaTerm describes a formula of the form Scale * z^PowerN * zConjugate^PowerM.
+type ZExponentialFormulaTerm struct {
 	Scale                  complex128
 	PowerN                 int
 	PowerM                 int
@@ -63,28 +63,28 @@ type ZExponentialFormulaElement struct {
 }
 
 // Calculate returns the result of using the formula on the given complex number.
-func (element ZExponentialFormulaElement) Calculate(z complex128) complex128 {
-	sum := CalculateExponentElement(z, element.PowerN, element.PowerM, element.Scale, element.IgnoreComplexConjugate)
+func (term ZExponentialFormulaTerm) Calculate(z complex128) complex128 {
+	sum := CalculateExponentTerm(z, term.PowerN, term.PowerM, term.Scale, term.IgnoreComplexConjugate)
 
-	for _, relationship := range element.CoefficientPairs.OtherCoefficientRelationships {
-		power1, power2, scale := SetCoefficientsBasedOnRelationship(element.PowerN, element.PowerM, element.Scale, relationship)
-		relationshipScale := scale * complex(element.CoefficientPairs.Multiplier, 0)
+	for _, relationship := range term.CoefficientPairs.OtherCoefficientRelationships {
+		power1, power2, scale := SetCoefficientsBasedOnRelationship(term.PowerN, term.PowerM, term.Scale, relationship)
+		relationshipScale := scale * complex(term.CoefficientPairs.Multiplier, 0)
 
-		sum += CalculateExponentElement(z, power1, power2, relationshipScale, element.IgnoreComplexConjugate)
+		sum += CalculateExponentTerm(z, power1, power2, relationshipScale, term.IgnoreComplexConjugate)
 	}
 	return sum
 }
 
-// LockedCoefficientPair describes how to create a new Element based on the current one.
+// LockedCoefficientPair describes how to create a new Term based on the current one.
 type LockedCoefficientPair struct {
 	Multiplier                    float64
 	OtherCoefficientRelationships []CoefficientRelationship
 }
 
-// CalculateExponentElement calculates (z^power * zConj^conjugatePower)
+// CalculateExponentTerm calculates (z^power * zConj^conjugatePower)
 //   where z is a complex number, zConj is the complex conjugate
 //   and power and conjugatePower are integers.
-func CalculateExponentElement(z complex128, power1, power2 int, scale complex128, ignoreComplexConjugate bool) complex128 {
+func CalculateExponentTerm(z complex128, power1, power2 int, scale complex128, ignoreComplexConjugate bool) complex128 {
 	zRaisedToN := cmplx.Pow(z, complex(float64(power1), 0))
 	if ignoreComplexConjugate {
 		return zRaisedToN * scale
@@ -99,7 +99,7 @@ func CalculateExponentElement(z complex128, power1, power2 int, scale complex128
 //    This transforms the input into a circular pattern rotating around the
 //    origin.
 type RosetteFormula struct {
-	Elements []*ZExponentialFormulaElement
+	Terms []*ZExponentialFormulaTerm
 }
 
 // CalculationResultForFormula shows the results of a calculation
@@ -115,7 +115,7 @@ func (r RosetteFormula) Calculate(z complex128) *CalculationResultForFormula {
 		ContributionByTerm: []complex128{},
 	}
 
-	for _, term := range r.Elements {
+	for _, term := range r.Terms {
 		termResult := term.Calculate(z)
 		result.Total += termResult
 		result.ContributionByTerm = append(result.ContributionByTerm, termResult)
@@ -140,27 +140,27 @@ func (r RosetteFormula) AnalyzeForSymmetry() *RosetteSymmetry {
 }
 
 func (r RosetteFormula) calculateMultifoldSymmetry(symmetriesFound *RosetteSymmetry) {
-	elementPowerDifferences := []int{}
+	termPowerDifferences := []int{}
 
-	for _, element := range r.Elements {
-		powerDifference := element.PowerN - element.PowerM
+	for _, term := range r.Terms {
+		powerDifference := term.PowerN - term.PowerM
 		if powerDifference < 0 {
 			powerDifference *= -1
 		}
-		elementPowerDifferences = append(elementPowerDifferences, powerDifference)
+		termPowerDifferences = append(termPowerDifferences, powerDifference)
 	}
 
-	if len(elementPowerDifferences) == 1 {
-		symmetriesFound.Multifold = elementPowerDifferences[0]
-	} else if len(elementPowerDifferences) > 1 {
+	if len(termPowerDifferences) == 1 {
+		symmetriesFound.Multifold = termPowerDifferences[0]
+	} else if len(termPowerDifferences) > 1 {
 		var currentGreatestCommonDenominator int
-		for index := range elementPowerDifferences {
-			if index >= len(elementPowerDifferences) - 1 {
+		for index := range termPowerDifferences {
+			if index >= len(termPowerDifferences) - 1 {
 				break
 			}
 			currentGreatestCommonDenominator = getGreatestCommonDenominator(
-				elementPowerDifferences[index],
-				elementPowerDifferences[index + 1])
+				termPowerDifferences[index],
+				termPowerDifferences[index + 1])
 		}
 		symmetriesFound.Multifold = currentGreatestCommonDenominator
 	}
@@ -183,8 +183,8 @@ func getGreatestCommonDenominator(a, b int) int {
 	return getGreatestCommonDenominator(smaller, remainder)
 }
 
-// EulerFormulaElement calculates e^(i*n*z) * e^(-i*m*zConj)
-type EulerFormulaElement struct {
+// EulerFormulaTerm calculates e^(i*n*z) * e^(-i*m*zConj)
+type EulerFormulaTerm struct {
 	Scale                  complex128
 	PowerN                 int
 	PowerM                 int
@@ -198,20 +198,20 @@ type EulerFormulaElement struct {
 }
 
 // Calculate returns the result of using the formula on the given complex number.
-func (element EulerFormulaElement) Calculate(z complex128) complex128 {
-	sum := CalculateEulerElement(z, element.PowerN, element.PowerM, element.Scale, element.IgnoreComplexConjugate)
+func (term EulerFormulaTerm) Calculate(z complex128) complex128 {
+	sum := CalculateEulerTerm(z, term.PowerN, term.PowerM, term.Scale, term.IgnoreComplexConjugate)
 
-	for _, relationship := range element.CoefficientPairs.OtherCoefficientRelationships {
-		power1, power2, scale := SetCoefficientsBasedOnRelationship(element.PowerN, element.PowerM, element.Scale, relationship)
-		relationshipScale := scale * complex(element.CoefficientPairs.Multiplier, 0)
-		sum += CalculateEulerElement(z, power1, power2, relationshipScale, element.IgnoreComplexConjugate)
+	for _, relationship := range term.CoefficientPairs.OtherCoefficientRelationships {
+		power1, power2, scale := SetCoefficientsBasedOnRelationship(term.PowerN, term.PowerM, term.Scale, relationship)
+		relationshipScale := scale * complex(term.CoefficientPairs.Multiplier, 0)
+		sum += CalculateEulerTerm(z, power1, power2, relationshipScale, term.IgnoreComplexConjugate)
 	}
 
 	return sum
 }
 
-// CalculateEulerElement calculates e^(i*n*z) * e^(-i*m*zConj)
-func CalculateEulerElement(z complex128, power1, power2 int, scale complex128, ignoreComplexConjugate bool) complex128 {
+// CalculateEulerTerm calculates e^(i*n*z) * e^(-i*m*zConj)
+func CalculateEulerTerm(z complex128, power1, power2 int, scale complex128, ignoreComplexConjugate bool) complex128 {
 	eRaisedToTheNZi := cmplx.Exp(complex(0,1) * z * complex(float64(power1), 0))
 	if ignoreComplexConjugate {
 		return eRaisedToTheNZi * scale
@@ -224,7 +224,7 @@ func CalculateEulerElement(z complex128, power1, power2 int, scale complex128, i
 
 // FriezeFormula is used to generate frieze patterns.
 type FriezeFormula struct {
-	Elements []*EulerFormulaElement
+	Terms []*EulerFormulaTerm
 }
 
 // Calculate applies the Frieze formula to the complex number z.
@@ -234,7 +234,7 @@ func (formula FriezeFormula) Calculate(z complex128) *CalculationResultForFormul
 		ContributionByTerm: []complex128{},
 	}
 
-	for _, term := range formula.Elements {
+	for _, term := range formula.Terms {
 		termResult := term.Calculate(z)
 		result.Total += termResult
 		result.ContributionByTerm = append(result.ContributionByTerm, termResult)
@@ -265,8 +265,8 @@ func (formula FriezeFormula) AnalyzeForSymmetry() *FriezeSymmetry {
 		P2mm: true,
 		P2mg: true,
 	}
-	for _, element := range formula.Elements {
-		if element.IgnoreComplexConjugate {
+	for _, term := range formula.Terms {
+		if term.IgnoreComplexConjugate {
 			symmetriesFound.P211 = false
 			symmetriesFound.P1m1 = false
 			symmetriesFound.P11g = false
@@ -275,17 +275,17 @@ func (formula FriezeFormula) AnalyzeForSymmetry() *FriezeSymmetry {
 			symmetriesFound.P2mg = false
 		}
 
-		powerSumIsEven := (element.PowerN + element.PowerM) % 2 == 0
+		powerSumIsEven := (term.PowerN + term.PowerM) % 2 == 0
 
-		containsMinusNMinusM := coefficientPairsIncludes(element.CoefficientPairs.OtherCoefficientRelationships, MinusNMinusM)
-		containsMinusMMinusN := coefficientPairsIncludes(element.CoefficientPairs.OtherCoefficientRelationships, MinusMMinusN)
-		containsPlusMPlusN := coefficientPairsIncludes(element.CoefficientPairs.OtherCoefficientRelationships, PlusMPlusN)
+		containsMinusNMinusM := coefficientPairsIncludes(term.CoefficientPairs.OtherCoefficientRelationships, MinusNMinusM)
+		containsMinusMMinusN := coefficientPairsIncludes(term.CoefficientPairs.OtherCoefficientRelationships, MinusMMinusN)
+		containsPlusMPlusN := coefficientPairsIncludes(term.CoefficientPairs.OtherCoefficientRelationships, PlusMPlusN)
 
-		containsMinusMMinusNAndPowerSumIsOdd := coefficientPairsIncludes(element.CoefficientPairs.OtherCoefficientRelationships, MinusMMinusNMaybeFlipScale ) && !powerSumIsEven
-		containsPlusMPlusNAndPowerSumIsOdd := coefficientPairsIncludes(element.CoefficientPairs.OtherCoefficientRelationships, PlusMPlusNMaybeFlipScale) && !powerSumIsEven
+		containsMinusMMinusNAndPowerSumIsOdd := coefficientPairsIncludes(term.CoefficientPairs.OtherCoefficientRelationships, MinusMMinusNMaybeFlipScale ) && !powerSumIsEven
+		containsPlusMPlusNAndPowerSumIsOdd := coefficientPairsIncludes(term.CoefficientPairs.OtherCoefficientRelationships, PlusMPlusNMaybeFlipScale) && !powerSumIsEven
 
-		containsMinusMMinusNAndPowerSumIsEven := coefficientPairsIncludes(element.CoefficientPairs.OtherCoefficientRelationships, MinusMMinusNMaybeFlipScale ) && powerSumIsEven
-		containsPlusMPlusNAndPowerSumIsEven := coefficientPairsIncludes(element.CoefficientPairs.OtherCoefficientRelationships, PlusMPlusNMaybeFlipScale) && powerSumIsEven
+		containsMinusMMinusNAndPowerSumIsEven := coefficientPairsIncludes(term.CoefficientPairs.OtherCoefficientRelationships, MinusMMinusNMaybeFlipScale ) && powerSumIsEven
+		containsPlusMPlusNAndPowerSumIsEven := coefficientPairsIncludes(term.CoefficientPairs.OtherCoefficientRelationships, PlusMPlusNMaybeFlipScale) && powerSumIsEven
 
 		if !containsMinusNMinusM {
 			symmetriesFound.P211 = false

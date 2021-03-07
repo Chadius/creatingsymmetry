@@ -10,7 +10,7 @@ import (
 var _ = Describe("Common formula formats", func() {
 	It("Can calculate a Rosette formula", func() {
 		rosetteFormula := formula.RosetteFormula{
-			Elements: []*formula.ZExponentialFormulaElement{
+			Terms: []*formula.ZExponentialFormulaTerm{
 				{
 					Scale: complex(3, 0),
 					PowerN: 1,
@@ -33,7 +33,7 @@ var _ = Describe("Common formula formats", func() {
 	Context("Analyze Rosettes for symmetry", func() {
 		It("Can determine there is multifold symmetry with 1 term", func() {
 			rosetteFormula := formula.RosetteFormula{
-				Elements: []*formula.ZExponentialFormulaElement{
+				Terms: []*formula.ZExponentialFormulaTerm{
 					{
 						Scale: complex(1, 0),
 						PowerN: 6,
@@ -53,7 +53,7 @@ var _ = Describe("Common formula formats", func() {
 		})
 		It("Multifold symmetry is always a positive value", func() {
 			rosetteFormula := formula.RosetteFormula{
-				Elements: []*formula.ZExponentialFormulaElement{
+				Terms: []*formula.ZExponentialFormulaTerm{
 					{
 						Scale: complex(1, 0),
 						PowerN: -6,
@@ -73,7 +73,7 @@ var _ = Describe("Common formula formats", func() {
 		})
 		It("Multifold symmetry uses the greatest common denominator of all elements", func() {
 			rosetteFormula := formula.RosetteFormula{
-				Elements: []*formula.ZExponentialFormulaElement{
+				Terms: []*formula.ZExponentialFormulaTerm{
 					{
 						Scale: complex(1, 0),
 						PowerN: -6,
@@ -118,7 +118,7 @@ var _ = Describe("Common formula formats", func() {
 	})
 	It("Can determine the contribution by each term of a Rosette formula", func() {
 		rosetteFormula := formula.RosetteFormula{
-			Elements: []*formula.ZExponentialFormulaElement{
+			Terms: []*formula.ZExponentialFormulaTerm{
 				{
 					Scale: complex(3, 0),
 					PowerN: 1,
@@ -143,7 +143,7 @@ var _ = Describe("Common formula formats", func() {
 	Context("Terms that involve z^n * zConj^m", func() {
 		It("Can make a z to the n exponential formula", func() {
 
-			form := formula.ZExponentialFormulaElement{
+			form := formula.ZExponentialFormulaTerm{
 				Scale:                  complex(3, 0),
 				PowerN:                 2,
 				PowerM:                 0,
@@ -154,7 +154,7 @@ var _ = Describe("Common formula formats", func() {
 			Expect(imag(total)).To(BeNumerically("~", 36))
 		})
 		It("Can make a z to the n exponential formula using locked pairs", func() {
-			form := formula.ZExponentialFormulaElement{
+			form := formula.ZExponentialFormulaTerm{
 				Scale:                  complex(3, 0),
 				PowerN:                 2,
 				PowerM:                 0,
@@ -171,7 +171,7 @@ var _ = Describe("Common formula formats", func() {
 			Expect(imag(total)).To(BeNumerically("~", 36))
 		})
 		It("Can make a z to the n exponential formula using a complex conjugate", func() {
-			form := formula.ZExponentialFormulaElement{
+			form := formula.ZExponentialFormulaTerm{
 				Scale:                  complex(3, 0),
 				PowerN:                 2,
 				PowerM:                 1,
@@ -185,7 +185,7 @@ var _ = Describe("Common formula formats", func() {
 
 	Context("Coefficient Relationships", func() {
 		It("Can keep coefficients in same order", func() {
-			form := formula.ZExponentialFormulaElement{
+			form := formula.ZExponentialFormulaTerm{
 				Scale:                  complex(1, 0),
 				PowerN:                 1,
 				PowerM:                 0,
@@ -202,7 +202,7 @@ var _ = Describe("Common formula formats", func() {
 			Expect(imag(total)).To(BeNumerically("~", 0))
 		})
 		It("Can swap coefficients", func() {
-			form := formula.ZExponentialFormulaElement{
+			form := formula.ZExponentialFormulaTerm{
 				Scale:                  complex(1, 0),
 				PowerN:                 1,
 				PowerM:                 0,
@@ -222,7 +222,7 @@ var _ = Describe("Common formula formats", func() {
 
 	Context("Terms that involve e^(inz) * e^(-imzConj)", func() {
 		It("Can calculate a formula that uses Euler and complex numbers", func() {
-			form := formula.EulerFormulaElement{
+			form := formula.EulerFormulaTerm{
 				Scale:                  complex(3, 0),
 				PowerN:                 2,
 				PowerM:                 0,
@@ -233,7 +233,7 @@ var _ = Describe("Common formula formats", func() {
 			Expect(imag(result)).To(BeNumerically("~", 3 * math.Exp(-2) * math.Sqrt(3.0) / 2.0))
 		})
 		It("Can calculate a formula that uses locked coefficient pairs", func() {
-			form := formula.EulerFormulaElement{
+			form := formula.EulerFormulaTerm{
 				Scale:                  complex(3, 0),
 				PowerN:                 2,
 				PowerM:                 0,
@@ -250,7 +250,7 @@ var _ = Describe("Common formula formats", func() {
 			Expect(imag(result)).To(BeNumerically("~", 3 * math.Exp(-2) * math.Sqrt(3.0) / 2.0))
 		})
 		It("Can calculate a formula that uses the complex conjugate", func() {
-			form := formula.EulerFormulaElement{
+			form := formula.EulerFormulaTerm{
 				Scale:                  complex(3, 0),
 				PowerN:                 2,
 				PowerM:                 1,
@@ -264,7 +264,7 @@ var _ = Describe("Common formula formats", func() {
 
 	It("Can calculate a Frieze formula", func() {
 		friezeFormula := formula.FriezeFormula{
-			Elements: []*formula.EulerFormulaElement{
+			Terms: []*formula.EulerFormulaTerm{
 				{
 					Scale: complex(2, 0),
 					PowerN: 1,
@@ -349,7 +349,7 @@ var _ = Describe("Common formula formats", func() {
 	Context("Analyze Friezes for symmetry", func() {
 		It("Knows when a pattern is p211", func() {
 			friezeFormula := formula.FriezeFormula{
-				Elements: []*formula.EulerFormulaElement{
+				Terms: []*formula.EulerFormulaTerm{
 					{
 						Scale: complex(1, 0),
 						PowerN: 2,
@@ -369,7 +369,7 @@ var _ = Describe("Common formula formats", func() {
 		})
 		It("Knows when a pattern is p1m1", func() {
 			friezeFormula := formula.FriezeFormula{
-				Elements: []*formula.EulerFormulaElement{
+				Terms: []*formula.EulerFormulaTerm{
 					{
 						Scale: complex(1, 0),
 						PowerN: 2,
@@ -389,7 +389,7 @@ var _ = Describe("Common formula formats", func() {
 		})
 		It("Knows when a pattern is p11m", func() {
 			friezeFormula := formula.FriezeFormula{
-				Elements: []*formula.EulerFormulaElement{
+				Terms: []*formula.EulerFormulaTerm{
 					{
 						Scale: complex(1, 0),
 						PowerN: 2,
@@ -409,7 +409,7 @@ var _ = Describe("Common formula formats", func() {
 		})
 		It("Knows when a pattern is p11g", func() {
 			friezeFormula := formula.FriezeFormula{
-				Elements: []*formula.EulerFormulaElement{
+				Terms: []*formula.EulerFormulaTerm{
 					{
 						Scale: complex(1, 0),
 						PowerN: 2,
@@ -429,7 +429,7 @@ var _ = Describe("Common formula formats", func() {
 		})
 		It("Knows when a pattern is p11m if a p11g pattern has even sum powers", func() {
 			friezeFormula := formula.FriezeFormula{
-				Elements: []*formula.EulerFormulaElement{
+				Terms: []*formula.EulerFormulaTerm{
 					{
 						Scale: complex(1, 0),
 						PowerN: 2,
@@ -449,7 +449,7 @@ var _ = Describe("Common formula formats", func() {
 		})
 		It("Knows when a pattern is p2mm", func() {
 			friezeFormula := formula.FriezeFormula{
-				Elements: []*formula.EulerFormulaElement{
+				Terms: []*formula.EulerFormulaTerm{
 					{
 						Scale: complex(1, 0),
 						PowerN: 2,
@@ -471,7 +471,7 @@ var _ = Describe("Common formula formats", func() {
 		})
 		It("Knows when a pattern is p2mg", func() {
 			friezeFormula := formula.FriezeFormula{
-				Elements: []*formula.EulerFormulaElement{
+				Terms: []*formula.EulerFormulaTerm{
 					{
 						Scale: complex(1, 0),
 						PowerN: 2,
@@ -493,7 +493,7 @@ var _ = Describe("Common formula formats", func() {
 		})
 		It("Knows when a pattern is p2mm if a p2mg pattern has even sum powers", func() {
 			friezeFormula := formula.FriezeFormula{
-				Elements: []*formula.EulerFormulaElement{
+				Terms: []*formula.EulerFormulaTerm{
 					{
 						Scale: complex(1, 0),
 						PowerN: 2,
@@ -515,7 +515,7 @@ var _ = Describe("Common formula formats", func() {
 		})
 		It("Knows when a pattern is p111", func() {
 			friezeFormula := formula.FriezeFormula{
-				Elements: []*formula.EulerFormulaElement{
+				Terms: []*formula.EulerFormulaTerm{
 					{
 						Scale: complex(1, 0),
 						PowerN: 2,
@@ -530,7 +530,7 @@ var _ = Describe("Common formula formats", func() {
 		})
 		It("Knows when a pattern is p111 because complex coordinates are ignored", func() {
 			friezeFormula := formula.FriezeFormula{
-				Elements: []*formula.EulerFormulaElement{
+				Terms: []*formula.EulerFormulaTerm{
 					{
 						Scale: complex(1, 0),
 						PowerN: 2,
@@ -552,7 +552,7 @@ var _ = Describe("Common formula formats", func() {
 	})
 	It("Can determine the contribution by each term of a Frieze formula", func() {
 		friezeFormula := formula.FriezeFormula{
-			Elements: []*formula.EulerFormulaElement{
+			Terms: []*formula.EulerFormulaTerm{
 				{
 					Scale: complex(2, 0),
 					PowerN: 1,

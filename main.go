@@ -71,7 +71,7 @@ func outputToFile(outputFilename string, outputImage image.Image) {
 
 func transformCoordinatesForFriezeFormula(scaledCoordinates []complex128) []complex128 {
 	friezeFormula := formula.FriezeFormula{
-		Elements: []*formula.EulerFormulaElement{
+		Terms: []*formula.EulerFormulaTerm{
 			{
 				Scale:                  complex(1e0, 0e2),
 				PowerN:                 6,
@@ -128,7 +128,7 @@ func transformCoordinatesForFriezeFormula(scaledCoordinates []complex128) []comp
 
 	transformedCoordinates := []complex128{}
 	resultsByTerm := [][]complex128{}
-	for range friezeFormula.Elements {
+	for range friezeFormula.Terms {
 		resultsByTerm = append(resultsByTerm, []complex128{})
 	}
 
@@ -152,7 +152,7 @@ func transformCoordinatesForFriezeFormula(scaledCoordinates []complex128) []comp
 
 func transformCoordinatesForRosetteFormula(scaledCoordinates []complex128) []complex128 {
 	rosetteFormula := formula.RosetteFormula{
-		Elements: []*formula.ZExponentialFormulaElement{
+		Terms: []*formula.ZExponentialFormulaTerm{
 			{
 				Scale:                  complex(1e0, 0e2),
 				PowerN:                 12,
@@ -200,7 +200,7 @@ func transformCoordinatesForRosetteFormula(scaledCoordinates []complex128) []com
 
 	transformedCoordinates := []complex128{}
 	resultsByTerm := [][]complex128{}
-	for range rosetteFormula.Elements {
+	for range rosetteFormula.Terms {
 		resultsByTerm = append(resultsByTerm, []complex128{})
 	}
 
