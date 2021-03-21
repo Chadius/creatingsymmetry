@@ -17,14 +17,14 @@ import (
 func main() {
 	sampleSpaceMin := complex(-1e0, -1e0)
 	sampleSpaceMax := complex(1e0, 1e0)
-	outputWidth := 800
-	outputHeight := 450
-	//outputWidth := 3840
-	//outputHeight := 2160
+	//outputWidth := 800
+	//outputHeight := 450
+	outputWidth := 3840
+	outputHeight := 2160
 	colorSourceFilename := "exampleImage/brownie.png"
 	outputFilename := "exampleImage/newBrownie.png"
 	colorValueBoundMin := complex(-2e5, -2e5)
-	colorValueBoundMax := complex(2e5, 2e5)
+	colorValueBoundMax := complex(5e5, 5e5)
 
 	reader, err := os.Open(colorSourceFilename)
 	if err != nil {
@@ -168,14 +168,14 @@ func transformCoordinatesForRosetteFormula(scaledCoordinates []complex128) []com
 				CoefficientPairs: formula.LockedCoefficientPair{},
 			},
 			{
-				Scale:                  complex(1e3, 0e2),
+				Scale:                  complex(1e2, 0e2),
 				PowerN:                 8,
 				PowerM:                 0,
 				IgnoreComplexConjugate: true,
 				CoefficientPairs: formula.LockedCoefficientPair{},
 			},
 			{
-				Scale:                  complex(1e3, 0e2),
+				Scale:                  complex(1e2, 0e2),
 				PowerN:                 -8,
 				PowerM:                 0,
 				IgnoreComplexConjugate: true,

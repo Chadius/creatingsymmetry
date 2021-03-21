@@ -33,3 +33,9 @@ Export with a rotating file name so you can look at old previews
 
 #### Formula stuff
 Make formula objects
+
+### Objects
+Transformation - Rosette, Frieze, Wallpaper, 3D projection
+Merge options
+Projection - Euclidean or Hyperbolic?
+Palette Selection - chooses the color range

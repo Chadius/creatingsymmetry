@@ -12,3 +12,5 @@ test: ## Test all files
 	ginkgo -r
 lint: ## Lint all the files
 	golint ./...
+delete-merged-branches: ## Delete all local branches merged to main, unless they start with dev
+	git branch --merged | grep -i -v -E "main|master|dev"| xargs git branch -d
