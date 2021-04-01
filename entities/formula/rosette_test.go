@@ -1,226 +1,232 @@
 package formula_test
 
 import (
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
+	. "gopkg.in/check.v1"
 	"wallpaper/entities/formula"
 )
 
-var _ = Describe("Rosette formulas", func() {
-	It("Can calculate a Rosette formula", func() {
-		rosetteFormula := formula.RosetteFormula{
-			Terms: []*formula.ZExponentialFormulaTerm{
-				{
-					Multiplier:             complex(3, 0),
-					PowerN:                 1,
-					PowerM:                 0,
-					IgnoreComplexConjugate: false,
-					CoefficientPairs: formula.LockedCoefficientPair{
-						Multiplier: 1,
-						OtherCoefficientRelationships: []formula.CoefficientRelationship{
-							formula.PlusMPlusN,
-						},
-					},
-				},
-			},
-		}
-		result := rosetteFormula.Calculate(complex(2,1))
-		total := result.Total
-		Expect(real(total)).To(BeNumerically("~", 12))
-		Expect(imag(total)).To(BeNumerically("~", 0))
-	})
-	Context("Analyze Rosettes for symmetry", func() {
-		It("Can determine there is multifold symmetry with 1 term", func() {
-			rosetteFormula := formula.RosetteFormula{
-				Terms: []*formula.ZExponentialFormulaTerm{
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 6,
-						PowerM:                 0,
-						IgnoreComplexConjugate: false,
-						CoefficientPairs: formula.LockedCoefficientPair{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.PlusMPlusN,
-							},
-						},
-					},
-				},
-			}
-			symmetriesDetected := rosetteFormula.AnalyzeForSymmetry()
-			Expect(symmetriesDetected.Multifold).To(Equal(6))
-		})
-		It("Multifold symmetry is always a positive value", func() {
-			rosetteFormula := formula.RosetteFormula{
-				Terms: []*formula.ZExponentialFormulaTerm{
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 -6,
-						PowerM:                 0,
-						IgnoreComplexConjugate: false,
-						CoefficientPairs: formula.LockedCoefficientPair{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.PlusMPlusN,
-							},
-						},
-					},
-				},
-			}
-			symmetriesDetected := rosetteFormula.AnalyzeForSymmetry()
-			Expect(symmetriesDetected.Multifold).To(Equal(6))
-		})
-		It("Multifold symmetry uses the greatest common denominator of all elements", func() {
-			rosetteFormula := formula.RosetteFormula{
-				Terms: []*formula.ZExponentialFormulaTerm{
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 -6,
-						PowerM:                 0,
-						IgnoreComplexConjugate: false,
-						CoefficientPairs: formula.LockedCoefficientPair{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.PlusMPlusN,
-							},
-						},
-					},
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 -8,
-						PowerM:                 4,
-						IgnoreComplexConjugate: false,
-						CoefficientPairs: formula.LockedCoefficientPair{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.PlusMPlusN,
-							},
-						},
-					},
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 2,
-						PowerM:                 0,
-						IgnoreComplexConjugate: false,
-						CoefficientPairs: formula.LockedCoefficientPair{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.PlusMPlusN,
-							},
-						},
-					},
-				},
-			}
-			symmetriesDetected := rosetteFormula.AnalyzeForSymmetry()
-			Expect(symmetriesDetected.Multifold).To(Equal(2))
-		})
-	})
-	It("Can determine the contribution by each term of a Rosette formula", func() {
-		rosetteFormula := formula.RosetteFormula{
-			Terms: []*formula.ZExponentialFormulaTerm{
-				{
-					Multiplier:             complex(3, 0),
-					PowerN:                 1,
-					PowerM:                 0,
-					IgnoreComplexConjugate: false,
-					CoefficientPairs: formula.LockedCoefficientPair{
-						Multiplier: 1,
-						OtherCoefficientRelationships: []formula.CoefficientRelationship{
-							formula.PlusMPlusN,
-						},
-					},
-				},
-			},
-		}
-		result := rosetteFormula.Calculate(complex(2,1))
-		Expect(result.ContributionByTerm).To(HaveLen(1))
-		contributionByFirstTerm := result.ContributionByTerm[0]
-		Expect(real(contributionByFirstTerm)).To(BeNumerically("~", 12))
-		Expect(imag(contributionByFirstTerm)).To(BeNumerically("~", 0))
-	})
+type RosetteFormulaTest struct {
+}
 
-	Context("Terms that involve z^n * zConj^m", func() {
-		It("Can make a z to the n exponential formula", func() {
-			form := formula.ZExponentialFormulaTerm{
+var _ = Suite(&RosetteFormulaTest{})
+
+func (suite *RosetteFormulaTest) SetUpTest(checker *C) {
+}
+
+func (suite *RosetteFormulaTest) TestCalculateRosetteFormula(checker *C) {
+	rosetteFormula := formula.RosetteFormula{
+		Terms: []*formula.ZExponentialFormulaTerm{
+			{
 				Multiplier:             complex(3, 0),
-				PowerN:                 2,
+				PowerN:                 1,
 				PowerM:                 0,
-				IgnoreComplexConjugate: true,
-			}
-			total := form.Calculate(complex(3,2))
-			Expect(real(total)).To(BeNumerically("~", 15))
-			Expect(imag(total)).To(BeNumerically("~", 36))
-		})
-		It("Can make a z to the n exponential formula using locked pairs", func() {
-			form := formula.ZExponentialFormulaTerm{
-				Multiplier:             complex(3, 0),
-				PowerN:                 2,
-				PowerM:                 0,
-				IgnoreComplexConjugate: true,
-				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: -1,
-					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-						formula.PlusMPlusN,
-					},
-				},
-			}
-			total := form.Calculate(complex(3,2))
-			Expect(real(total)).To(BeNumerically("~", 12))
-			Expect(imag(total)).To(BeNumerically("~", 36))
-		})
-		It("Can make a z to the n exponential formula using a complex conjugate", func() {
-			form := formula.ZExponentialFormulaTerm{
-				Multiplier:             complex(3, 0),
-				PowerN:                 2,
-				PowerM:                 1,
 				IgnoreComplexConjugate: false,
-			}
-			total := form.Calculate(complex(3,2))
-			Expect(real(total)).To(BeNumerically("~", 117))
-			Expect(imag(total)).To(BeNumerically("~", 78))
-		})
-	})
-
-	Context("Coefficient Relationships", func() {
-		It("Can keep coefficients in same order", func() {
-			form := formula.ZExponentialFormulaTerm{
-				Multiplier:             complex(1, 0),
-				PowerN:                 1,
-				PowerM:                 0,
-				IgnoreComplexConjugate: true,
 				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: -1,
-					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-						formula.PlusNPlusM,
-					},
-				},
-			}
-			total := form.Calculate(complex(3,2))
-			Expect(real(total)).To(BeNumerically("~", 0))
-			Expect(imag(total)).To(BeNumerically("~", 0))
-		})
-		It("Can swap coefficients", func() {
-			form := formula.ZExponentialFormulaTerm{
-				Multiplier:             complex(1, 0),
-				PowerN:                 1,
-				PowerM:                 0,
-				IgnoreComplexConjugate: true,
-				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: -1,
+					Multiplier: 1,
 					OtherCoefficientRelationships: []formula.CoefficientRelationship{
 						formula.PlusMPlusN,
 					},
 				},
-			}
-			total := form.Calculate(complex(3,2))
-			Expect(real(total)).To(BeNumerically("~", 2))
-			Expect(imag(total)).To(BeNumerically("~", 2))
-		})
-	})
+			},
+		},
+	}
+	result := rosetteFormula.Calculate(complex(2,1))
+	total := result.Total
+	checker.Assert(real(total) - 12 < 0.01, Equals, true)
+	checker.Assert(imag(total) - 0 < 0.01, Equals, true)
+}
 
-	Context("Create Rosette formula via data stream", func() {
-		It("Can create ZExponentialFormulaTerm from YAML", func() {
-			yamlByteStream := []byte(`
+func (suite *RosetteFormulaTest) TestMultifoldSymmetry1Term(checker *C) {
+	rosetteFormula := formula.RosetteFormula{
+		Terms: []*formula.ZExponentialFormulaTerm{
+			{
+				Multiplier:             complex(1, 0),
+				PowerN:                 6,
+				PowerM:                 0,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.PlusMPlusN,
+					},
+				},
+			},
+		},
+	}
+	symmetriesDetected := rosetteFormula.AnalyzeForSymmetry()
+	checker.Assert(symmetriesDetected.Multifold, Equals, 6)
+}
+
+func (suite *RosetteFormulaTest) TestMultifoldSymmetryIsAlwaysPositive(checker *C) {
+	rosetteFormula := formula.RosetteFormula{
+		Terms: []*formula.ZExponentialFormulaTerm{
+			{
+				Multiplier:             complex(1, 0),
+				PowerN:                 -6,
+				PowerM:                 0,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.PlusMPlusN,
+					},
+				},
+			},
+		},
+	}
+	symmetriesDetected := rosetteFormula.AnalyzeForSymmetry()
+	checker.Assert(symmetriesDetected.Multifold, Equals, 6)
+}
+
+func (suite *RosetteFormulaTest) TestSymmetryUsesGreatestCommonDenominator(checker *C) {
+	rosetteFormula := formula.RosetteFormula{
+		Terms: []*formula.ZExponentialFormulaTerm{
+			{
+				Multiplier:             complex(1, 0),
+				PowerN:                 -6,
+				PowerM:                 0,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.PlusMPlusN,
+					},
+				},
+			},
+			{
+				Multiplier:             complex(1, 0),
+				PowerN:                 -8,
+				PowerM:                 4,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.PlusMPlusN,
+					},
+				},
+			},
+			{
+				Multiplier:             complex(1, 0),
+				PowerN:                 2,
+				PowerM:                 0,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.PlusMPlusN,
+					},
+				},
+			},
+		},
+	}
+	symmetriesDetected := rosetteFormula.AnalyzeForSymmetry()
+	checker.Assert(symmetriesDetected.Multifold, Equals, 2)
+}
+
+func (suite *RosetteFormulaTest) TestGetContributionOfRosetteTerm(checker *C) {
+	rosetteFormula := formula.RosetteFormula{
+		Terms: []*formula.ZExponentialFormulaTerm{
+			{
+				Multiplier:             complex(3, 0),
+				PowerN:                 1,
+				PowerM:                 0,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.PlusMPlusN,
+					},
+				},
+			},
+		},
+	}
+	result := rosetteFormula.Calculate(complex(2,1))
+	checker.Assert(result.ContributionByTerm, HasLen, 1)
+	contributionByFirstTerm := result.ContributionByTerm[0]
+	checker.Assert(real(contributionByFirstTerm) - 12 < 0.01, Equals, true)
+	checker.Assert(imag(contributionByFirstTerm) - 0 < 0.01, Equals, true)
+}
+
+func (suite *RosetteFormulaTest) TestZExponentialFormula(checker *C) {
+	form := formula.ZExponentialFormulaTerm{
+		Multiplier:             complex(3, 0),
+		PowerN:                 2,
+		PowerM:                 0,
+		IgnoreComplexConjugate: true,
+	}
+	total := form.Calculate(complex(3,2))
+	checker.Assert(real(total) - 15 < 0.01, Equals, true)
+	checker.Assert(imag(total) - 36 < 0.01, Equals, true)
+}
+
+func (suite *RosetteFormulaTest) TestZExponentialFormulaWithLockedPairs(checker *C) {
+	form := formula.ZExponentialFormulaTerm{
+		Multiplier:             complex(3, 0),
+		PowerN:                 2,
+		PowerM:                 0,
+		IgnoreComplexConjugate: true,
+		CoefficientPairs: formula.LockedCoefficientPair{
+			Multiplier: -1,
+			OtherCoefficientRelationships: []formula.CoefficientRelationship{
+				formula.PlusMPlusN,
+			},
+		},
+	}
+	total := form.Calculate(complex(3,2))
+	checker.Assert(real(total) - 12 < 0.01, Equals, true)
+	checker.Assert(imag(total) - 36 < 0.01, Equals, true)
+}
+
+func (suite *RosetteFormulaTest) TestZExponentialWithComplexConjugate(checker *C) {
+	form := formula.ZExponentialFormulaTerm{
+		Multiplier:             complex(3, 0),
+		PowerN:                 2,
+		PowerM:                 1,
+		IgnoreComplexConjugate: false,
+	}
+	total := form.Calculate(complex(3,2))
+	checker.Assert(real(total) - 117 < 0.01, Equals, true)
+	checker.Assert(imag(total) - 78 < 0.01, Equals, true)
+}
+
+func (suite *RosetteFormulaTest) TestKeepCoefficientOrder(checker *C) {
+	form := formula.ZExponentialFormulaTerm{
+		Multiplier:             complex(1, 0),
+		PowerN:                 1,
+		PowerM:                 0,
+		IgnoreComplexConjugate: true,
+		CoefficientPairs: formula.LockedCoefficientPair{
+			Multiplier: -1,
+			OtherCoefficientRelationships: []formula.CoefficientRelationship{
+				formula.PlusNPlusM,
+			},
+		},
+	}
+	total := form.Calculate(complex(3,2))
+	checker.Assert(real(total) - 0 < 0.01, Equals, true)
+	checker.Assert(imag(total) - 0 < 0.01, Equals, true)
+}
+
+func (suite *RosetteFormulaTest) TestSwapCoefficientOrder(checker *C) {
+	form := formula.ZExponentialFormulaTerm{
+		Multiplier:             complex(1, 0),
+		PowerN:                 1,
+		PowerM:                 0,
+		IgnoreComplexConjugate: true,
+		CoefficientPairs: formula.LockedCoefficientPair{
+			Multiplier: -1,
+			OtherCoefficientRelationships: []formula.CoefficientRelationship{
+				formula.PlusMPlusN,
+			},
+		},
+	}
+	total := form.Calculate(complex(3,2))
+	checker.Assert(real(total) - 2 < 0.01, Equals, true)
+	checker.Assert(imag(total) - 2 < 0.01, Equals, true)
+}
+
+func (suite *RosetteFormulaTest) TestCreateZExponentialFromYAML(checker *C) {
+	yamlByteStream := []byte(`
 multiplier:
   real: -1.0
   imaginary: 2e-2
@@ -234,20 +240,21 @@ coefficient_pairs:
   - +M+NF
 `)
 
-			zExponentialFormulaTerm, err := formula.NewZExponentialFormulaTermFromYAML(yamlByteStream)
-			Expect(err).To(BeNil())
-			Expect(real(zExponentialFormulaTerm.Multiplier)).To(BeNumerically("~", -1.0))
-			Expect(imag(zExponentialFormulaTerm.Multiplier)).To(BeNumerically("~", 2e-2))
-			Expect(zExponentialFormulaTerm.PowerN).To(Equal(12))
-			Expect(zExponentialFormulaTerm.PowerM).To(Equal(-10))
-			Expect(zExponentialFormulaTerm.IgnoreComplexConjugate).To(BeTrue())
-			Expect(zExponentialFormulaTerm.CoefficientPairs.Multiplier).To(BeNumerically("~", 1))
-			Expect(zExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships).To(HaveLen(2))
-			Expect(zExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[0]).To(Equal(formula.CoefficientRelationship(formula.MinusMMinusN)))
-			Expect(zExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[1]).To(Equal(formula.CoefficientRelationship(formula.PlusMPlusNMaybeFlipScale)))
-		})
-		It("Can create ZExponentialFormulaTerm from JSON", func() {
-			jsonByteStream := []byte(`{
+	zExponentialFormulaTerm, err := formula.NewZExponentialFormulaTermFromYAML(yamlByteStream)
+	checker.Assert(err, IsNil)
+	checker.Assert(real(zExponentialFormulaTerm.Multiplier) - -1.0 < 0.01, Equals, true)
+	checker.Assert(imag(zExponentialFormulaTerm.Multiplier) - 2e-2 < 0.01, Equals, true)
+	checker.Assert(zExponentialFormulaTerm.PowerN, Equals, 12)
+	checker.Assert(zExponentialFormulaTerm.PowerM, Equals, -10)
+	checker.Assert(zExponentialFormulaTerm.IgnoreComplexConjugate, Equals, true)
+	checker.Assert(zExponentialFormulaTerm.CoefficientPairs.Multiplier - 1 < 0.01, Equals, true)
+	checker.Assert(zExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships, HasLen, 2)
+	checker.Assert(zExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[0], Equals, formula.CoefficientRelationship(formula.MinusMMinusN))
+	checker.Assert(zExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[1], Equals, formula.CoefficientRelationship(formula.PlusMPlusNMaybeFlipScale))
+}
+
+func (suite *RosetteFormulaTest) TestCreateZExponentialFromJSON(checker *C) {
+	jsonByteStream := []byte(`{
 				"multiplier": {
 					"real": -1.0,
 					"imaginary": 2e-2
@@ -260,20 +267,21 @@ coefficient_pairs:
 				  "relationships": ["-M-N", "+M+NF"]
 				}
 			}`)
-			zExponentialFormulaTerm, err := formula.NewZExponentialFormulaTermFromJSON(jsonByteStream)
-			Expect(err).To(BeNil())
-			Expect(real(zExponentialFormulaTerm.Multiplier)).To(BeNumerically("~", -1.0))
-			Expect(imag(zExponentialFormulaTerm.Multiplier)).To(BeNumerically("~", 2e-2))
-			Expect(zExponentialFormulaTerm.PowerN).To(Equal(12))
-			Expect(zExponentialFormulaTerm.PowerM).To(Equal(-10))
-			Expect(zExponentialFormulaTerm.IgnoreComplexConjugate).To(BeTrue())
-			Expect(zExponentialFormulaTerm.CoefficientPairs.Multiplier).To(BeNumerically("~", 1))
-			Expect(zExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships).To(HaveLen(2))
-			Expect(zExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[0]).To(Equal(formula.CoefficientRelationship(formula.MinusMMinusN)))
-			Expect(zExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[1]).To(Equal(formula.CoefficientRelationship(formula.PlusMPlusNMaybeFlipScale)))
-		})
-		It("Can create Rosette Formulas from YAML", func() {
-			yamlByteStream := []byte(`terms:
+	zExponentialFormulaTerm, err := formula.NewZExponentialFormulaTermFromJSON(jsonByteStream)
+	checker.Assert(err, IsNil)
+	checker.Assert(real(zExponentialFormulaTerm.Multiplier) - -1.0 < 0.01, Equals, true)
+	checker.Assert(imag(zExponentialFormulaTerm.Multiplier) - 2e-2 < 0.01, Equals, true)
+	checker.Assert(zExponentialFormulaTerm.PowerN, Equals, 12)
+	checker.Assert(zExponentialFormulaTerm.PowerM, Equals, -10)
+	checker.Assert(zExponentialFormulaTerm.IgnoreComplexConjugate, Equals, true)
+	checker.Assert(zExponentialFormulaTerm.CoefficientPairs.Multiplier - 1 < 0.01, Equals, true)
+	checker.Assert(zExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships, HasLen, 2)
+	checker.Assert(zExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[0], Equals, formula.CoefficientRelationship(formula.MinusMMinusN))
+	checker.Assert(zExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[1], Equals, formula.CoefficientRelationship(formula.PlusMPlusNMaybeFlipScale))
+}
+
+func (suite *RosetteFormulaTest) TestRosetteFormulaFromYAML(checker *C) {
+	yamlByteStream := []byte(`terms:
   -
     multiplier:
       real: -1.0
@@ -296,15 +304,16 @@ coefficient_pairs:
       relationships:
       - -M-NF
 `)
-			rosetteFormula, err := formula.NewRosetteFormulaFromYAML(yamlByteStream)
-			Expect(err).To(BeNil())
-			Expect(rosetteFormula.Terms).To(HaveLen(2))
-			Expect(rosetteFormula.Terms[0].PowerN).To(Equal(3))
-			Expect(rosetteFormula.Terms[0].IgnoreComplexConjugate).To(BeFalse())
-			Expect(rosetteFormula.Terms[1].CoefficientPairs.OtherCoefficientRelationships[0]).To(Equal(formula.CoefficientRelationship(formula.MinusMMinusNMaybeFlipScale)))
-		})
-		It("Can create Rosette Formulas from JSON", func() {
-			jsonByteStream := []byte(`{
+	rosetteFormula, err := formula.NewRosetteFormulaFromYAML(yamlByteStream)
+	checker.Assert(err, IsNil)
+	checker.Assert(rosetteFormula.Terms, HasLen, 2)
+	checker.Assert(rosetteFormula.Terms[0].PowerN, Equals, 3)
+	checker.Assert(rosetteFormula.Terms[0].IgnoreComplexConjugate, Equals, false)
+	checker.Assert(rosetteFormula.Terms[1].CoefficientPairs.OtherCoefficientRelationships[0], Equals, formula.CoefficientRelationship(formula.MinusMMinusNMaybeFlipScale))
+}
+
+func (suite *RosetteFormulaTest) TestRosetteFormulaFromJSON(checker *C) {
+	jsonByteStream := []byte(`{
 				"terms": [
 					{
 						"multiplier": {
@@ -332,12 +341,10 @@ coefficient_pairs:
 					}
 				]
 			}`)
-			rosetteFormula, err := formula.NewRosetteFormulaFromJSON(jsonByteStream)
-			Expect(err).To(BeNil())
-			Expect(rosetteFormula.Terms).To(HaveLen(2))
-			Expect(rosetteFormula.Terms[0].PowerN).To(Equal(3))
-			Expect(rosetteFormula.Terms[0].IgnoreComplexConjugate).To(BeFalse())
-			Expect(rosetteFormula.Terms[1].CoefficientPairs.OtherCoefficientRelationships[0]).To(Equal(formula.CoefficientRelationship(formula.MinusMMinusNMaybeFlipScale)))
-		})
-	})
-})
+	rosetteFormula, err := formula.NewRosetteFormulaFromJSON(jsonByteStream)
+	checker.Assert(err, IsNil)
+	checker.Assert(rosetteFormula.Terms, HasLen, 2)
+	checker.Assert(rosetteFormula.Terms[0].PowerN, Equals, 3)
+	checker.Assert(rosetteFormula.Terms[0].IgnoreComplexConjugate, Equals, false)
+	checker.Assert(rosetteFormula.Terms[1].CoefficientPairs.OtherCoefficientRelationships[0], Equals, formula.CoefficientRelationship(formula.MinusMMinusNMaybeFlipScale))
+}

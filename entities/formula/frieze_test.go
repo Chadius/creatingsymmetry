@@ -1,314 +1,327 @@
 package formula_test
 
 import (
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
+	. "gopkg.in/check.v1"
 	"math"
 	"wallpaper/entities/formula"
 )
 
-var _ = Describe("Frieze formula", func() {
-	Context("Terms that involve e^(inz) * e^(-imzConj)", func() {
-		It("Can calculate a formula that uses Euler and complex numbers", func() {
-			form := formula.EulerFormulaTerm{
-				Multiplier:             complex(3, 0),
-				PowerN:                 2,
+type FriezeFormulaSuite struct {
+}
+
+var _ = Suite(&FriezeFormulaSuite{})
+
+func (suite *FriezeFormulaSuite) SetUpTest(checker *C) {
+}
+
+func (suite *FriezeFormulaSuite) TestEulerFormulaCalculation(checker *C) {
+	form := formula.EulerFormulaTerm{
+		Multiplier:             complex(3, 0),
+		PowerN:                 2,
+		PowerM:                 0,
+		IgnoreComplexConjugate: true,
+	}
+	result := form.Calculate(complex(math.Pi / 6.0,1))
+	checker.Assert(math.Abs(real(result) - 3 * math.Exp(-2) * 1.0 / 2.0) < 0.01, Equals, true)
+	checker.Assert(math.Abs(imag(result) - 3 * math.Exp(-2) * math.Sqrt(3.0) / 2.0) < 0.01, Equals, true)
+}
+
+func (suite *FriezeFormulaSuite) TestLockedCoefficientPairs(checker *C) {
+	form := formula.EulerFormulaTerm{
+		Multiplier:             complex(3, 0),
+		PowerN:                 2,
+		PowerM:                 0,
+		IgnoreComplexConjugate: true,
+		CoefficientPairs: formula.LockedCoefficientPair{
+			Multiplier: 1,
+			OtherCoefficientRelationships: []formula.CoefficientRelationship{
+				formula.PlusMPlusN,
+			},
+		},
+	}
+	result := form.Calculate(complex(math.Pi / 6.0,1))
+	checker.Assert(math.Abs(real(result) - 3 * ((math.Exp(-2) * 1.0 / 2.0) + 1.0)) < 0.01, Equals, true)
+	checker.Assert(math.Abs(imag(result) - 3 * math.Exp(-2) * math.Sqrt(3.0) / 2.0) < 0.01, Equals, true)
+}
+
+func (suite *FriezeFormulaSuite) TestUseComplexConjugate(checker *C) {
+	form := formula.EulerFormulaTerm{
+		Multiplier:             complex(3, 0),
+		PowerN:                 2,
+		PowerM:                 1,
+		IgnoreComplexConjugate: false,
+	}
+	result := form.Calculate(complex(math.Pi / 6.0,2))
+	checker.Assert(real(result), Equals, 3 * math.Exp(-6) * math.Sqrt(3.0) / 2.0)
+	checker.Assert(imag(result), Equals, 3 * math.Exp(-6) * 1.0 / 2.0)
+}
+
+func (suite *FriezeFormulaSuite) TestFriezeFormula(checker *C) {
+	friezeFormula := formula.FriezeFormula{
+		Terms: []*formula.EulerFormulaTerm{
+			{
+				Multiplier:             complex(2, 0),
+				PowerN:                 1,
 				PowerM:                 0,
-				IgnoreComplexConjugate: true,
-			}
-			result := form.Calculate(complex(math.Pi / 6.0,1))
-			Expect(real(result)).To(BeNumerically("~", 3 * math.Exp(-2) * 1.0 / 2.0))
-			Expect(imag(result)).To(BeNumerically("~", 3 * math.Exp(-2) * math.Sqrt(3.0) / 2.0))
-		})
-		It("Can calculate a formula that uses locked coefficient pairs", func() {
-			form := formula.EulerFormulaTerm{
-				Multiplier:             complex(3, 0),
-				PowerN:                 2,
-				PowerM:                 0,
-				IgnoreComplexConjugate: true,
+				IgnoreComplexConjugate: false,
 				CoefficientPairs: formula.LockedCoefficientPair{
 					Multiplier: 1,
 					OtherCoefficientRelationships: []formula.CoefficientRelationship{
 						formula.PlusMPlusN,
 					},
 				},
-			}
-			result := form.Calculate(complex(math.Pi / 6.0,1))
-			Expect(real(result)).To(BeNumerically("~", 3 * ((math.Exp(-2) * 1.0 / 2.0) + 1.0)))
-			Expect(imag(result)).To(BeNumerically("~", 3 * math.Exp(-2) * math.Sqrt(3.0) / 2.0))
-		})
-		It("Can calculate a formula that uses the complex conjugate", func() {
-			form := formula.EulerFormulaTerm{
-				Multiplier:             complex(3, 0),
+			},
+		},
+	}
+	result := friezeFormula.Calculate(complex(math.Pi/6, 1))
+	total := result.Total
+
+	expectedResult := complex(math.Exp(-1), 0) * complex(math.Sqrt(3) * 2, 0)
+	checker.Assert(real(total), Equals, real(expectedResult))
+	checker.Assert(imag(total), Equals, imag(expectedResult))
+}
+
+func (suite *FriezeFormulaSuite) TestP211Frieze(checker *C) {
+	friezeFormula := formula.FriezeFormula{
+		Terms: []*formula.EulerFormulaTerm{
+			{
+				Multiplier:             complex(1, 0),
+				PowerN:                 2,
+				PowerM:                 0,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.MinusNMinusM,
+					},
+				},
+			},
+		},
+	}
+	symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+	checker.Assert(symmetriesDetected.P211, Equals, true)
+}
+
+func (suite *FriezeFormulaSuite) TestP1m1Frieze(checker *C) {
+	friezeFormula := formula.FriezeFormula{
+		Terms: []*formula.EulerFormulaTerm{
+			{
+				Multiplier:             complex(1, 0),
+				PowerN:                 2,
+				PowerM:                 0,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.PlusMPlusN,
+					},
+				},
+			},
+		},
+	}
+	symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+	checker.Assert(symmetriesDetected.P1m1, Equals, true)
+}
+
+func (suite *FriezeFormulaSuite) TestP11mFrieze(checker *C) {
+	friezeFormula := formula.FriezeFormula{
+		Terms: []*formula.EulerFormulaTerm{
+			{
+				Multiplier:             complex(1, 0),
+				PowerN:                 2,
+				PowerM:                 0,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.MinusMMinusN,
+					},
+				},
+			},
+		},
+	}
+	symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+	checker.Assert(symmetriesDetected.P11m, Equals, true)
+}
+
+func (suite *FriezeFormulaSuite) TestP11gFrieze(checker *C) {
+	friezeFormula := formula.FriezeFormula{
+		Terms: []*formula.EulerFormulaTerm{
+			{
+				Multiplier:             complex(1, 0),
 				PowerN:                 2,
 				PowerM:                 1,
 				IgnoreComplexConjugate: false,
-			}
-			result := form.Calculate(complex(math.Pi / 6.0,2))
-			Expect(real(result)).To(BeNumerically("~", 3 * math.Exp(-6) * math.Sqrt(3.0) / 2.0))
-			Expect(imag(result)).To(BeNumerically("~", 3 * math.Exp(-6) * 1.0 / 2.0))
-		})
-	})
-
-	It("Can calculate a Frieze formula", func() {
-		friezeFormula := formula.FriezeFormula{
-			Terms: []*formula.EulerFormulaTerm{
-				{
-					Multiplier:             complex(2, 0),
-					PowerN:                 1,
-					PowerM:                 0,
-					IgnoreComplexConjugate: false,
-					CoefficientPairs: formula.LockedCoefficientPair{
-						Multiplier: 1,
-						OtherCoefficientRelationships: []formula.CoefficientRelationship{
-							formula.PlusMPlusN,
-						},
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.MinusMMinusNMaybeFlipScale,
 					},
 				},
 			},
-		}
-		result := friezeFormula.Calculate(complex(math.Pi/6, 1))
-		total := result.Total
+		},
+	}
+	symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+	checker.Assert(symmetriesDetected.P11g, Equals, true)
+}
 
-		expectedResult := complex(math.Exp(-1), 0) * complex(math.Sqrt(3) * 2, 0)
-		Expect(real(total)).To(BeNumerically("~", real(expectedResult)))
-		Expect(imag(total)).To(BeNumerically("~", imag(expectedResult)))
-	})
-
-	Context("Analyze Friezes for symmetry", func() {
-		It("Knows when a pattern is p211", func() {
-			friezeFormula := formula.FriezeFormula{
-				Terms: []*formula.EulerFormulaTerm{
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 2,
-						PowerM:                 0,
-						IgnoreComplexConjugate: false,
-						CoefficientPairs: formula.LockedCoefficientPair{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.MinusNMinusM,
-							},
-						},
-					},
-				},
-			}
-			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
-			Expect(symmetriesDetected.P211).To(BeTrue())
-		})
-		It("Knows when a pattern is p1m1", func() {
-			friezeFormula := formula.FriezeFormula{
-				Terms: []*formula.EulerFormulaTerm{
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 2,
-						PowerM:                 0,
-						IgnoreComplexConjugate: false,
-						CoefficientPairs: formula.LockedCoefficientPair{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.PlusMPlusN,
-							},
-						},
-					},
-				},
-			}
-			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
-			Expect(symmetriesDetected.P1m1).To(BeTrue())
-		})
-		It("Knows when a pattern is p11m", func() {
-			friezeFormula := formula.FriezeFormula{
-				Terms: []*formula.EulerFormulaTerm{
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 2,
-						PowerM:                 0,
-						IgnoreComplexConjugate: false,
-						CoefficientPairs: formula.LockedCoefficientPair{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.MinusMMinusN,
-							},
-						},
-					},
-				},
-			}
-			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
-			Expect(symmetriesDetected.P11m).To(BeTrue())
-		})
-		It("Knows when a pattern is p11g", func() {
-			friezeFormula := formula.FriezeFormula{
-				Terms: []*formula.EulerFormulaTerm{
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 2,
-						PowerM:                 1,
-						IgnoreComplexConjugate: false,
-						CoefficientPairs: formula.LockedCoefficientPair{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.MinusMMinusNMaybeFlipScale,
-							},
-						},
-					},
-				},
-			}
-			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
-			Expect(symmetriesDetected.P11g).To(BeTrue())
-		})
-		It("Knows when a pattern is p11m if a p11g pattern has even sum powers", func() {
-			friezeFormula := formula.FriezeFormula{
-				Terms: []*formula.EulerFormulaTerm{
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 2,
-						PowerM:                 0,
-						IgnoreComplexConjugate: false,
-						CoefficientPairs: formula.LockedCoefficientPair{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.MinusMMinusNMaybeFlipScale,
-							},
-						},
-					},
-				},
-			}
-			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
-			Expect(symmetriesDetected.P11m).To(BeTrue())
-		})
-		It("Knows when a pattern is p2mm", func() {
-			friezeFormula := formula.FriezeFormula{
-				Terms: []*formula.EulerFormulaTerm{
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 2,
-						PowerM:                 0,
-						IgnoreComplexConjugate: false,
-						CoefficientPairs: formula.LockedCoefficientPair{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.MinusNMinusM,
-								formula.PlusMPlusN,
-								formula.MinusMMinusN,
-							},
-						},
-					},
-				},
-			}
-			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
-			Expect(symmetriesDetected.P2mm).To(BeTrue())
-		})
-		It("Knows when a pattern is p2mg", func() {
-			friezeFormula := formula.FriezeFormula{
-				Terms: []*formula.EulerFormulaTerm{
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 2,
-						PowerM:                 -1,
-						IgnoreComplexConjugate: false,
-						CoefficientPairs: formula.LockedCoefficientPair{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.MinusNMinusM,
-								formula.PlusMPlusNMaybeFlipScale,
-								formula.MinusMMinusNMaybeFlipScale,
-							},
-						},
-					},
-				},
-			}
-			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
-			Expect(symmetriesDetected.P2mg).To(BeTrue())
-		})
-		It("Knows when a pattern is p2mm if a p2mg pattern has even sum powers", func() {
-			friezeFormula := formula.FriezeFormula{
-				Terms: []*formula.EulerFormulaTerm{
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 2,
-						PowerM:                 0,
-						IgnoreComplexConjugate: false,
-						CoefficientPairs: formula.LockedCoefficientPair{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.MinusNMinusM,
-								formula.PlusMPlusNMaybeFlipScale,
-								formula.MinusMMinusNMaybeFlipScale,
-							},
-						},
-					},
-				},
-			}
-			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
-			Expect(symmetriesDetected.P2mm).To(BeTrue())
-		})
-		It("Knows when a pattern is p111", func() {
-			friezeFormula := formula.FriezeFormula{
-				Terms: []*formula.EulerFormulaTerm{
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 2,
-						PowerM:                 0,
-						IgnoreComplexConjugate: false,
-						CoefficientPairs:       formula.LockedCoefficientPair{},
-					},
-				},
-			}
-			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
-			Expect(symmetriesDetected.P111).To(BeTrue())
-		})
-		It("Knows when a pattern is p111 because complex coordinates are ignored", func() {
-			friezeFormula := formula.FriezeFormula{
-				Terms: []*formula.EulerFormulaTerm{
-					{
-						Multiplier:             complex(1, 0),
-						PowerN:                 2,
-						PowerM:                 0,
-						IgnoreComplexConjugate: true,
-						CoefficientPairs: formula.LockedCoefficientPair{
-							Multiplier: 1,
-							OtherCoefficientRelationships: []formula.CoefficientRelationship{
-								formula.MinusNMinusM,
-							},
-						},
-					},
-				},
-			}
-			symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
-			Expect(symmetriesDetected.P111).To(BeTrue())
-			Expect(symmetriesDetected.P211).To(BeFalse())
-		})
-	})
-	It("Can determine the contribution by each term of a Frieze formula", func() {
-		friezeFormula := formula.FriezeFormula{
-			Terms: []*formula.EulerFormulaTerm{
-				{
-					Multiplier:             complex(2, 0),
-					PowerN:                 1,
-					PowerM:                 0,
-					IgnoreComplexConjugate: false,
-					CoefficientPairs: formula.LockedCoefficientPair{
-						Multiplier: 1,
-						OtherCoefficientRelationships: []formula.CoefficientRelationship{
-							formula.PlusMPlusN,
-						},
+func (suite *FriezeFormulaSuite) TestP11mFriezeIfP11gHasEvenSumPowers (checker *C) {
+	friezeFormula := formula.FriezeFormula{
+		Terms: []*formula.EulerFormulaTerm{
+			{
+				Multiplier:             complex(1, 0),
+				PowerN:                 2,
+				PowerM:                 0,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.MinusMMinusNMaybeFlipScale,
 					},
 				},
 			},
-		}
-		result := friezeFormula.Calculate(complex(math.Pi/6, 1))
+		},
+	}
+	symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+	checker.Assert(symmetriesDetected.P11m, Equals, true)
+}
 
-		Expect(result.ContributionByTerm).To(HaveLen(1))
-		contributionByFirstTerm := result.ContributionByTerm[0]
+func (suite *FriezeFormulaSuite) TestP2mmFrieze(checker *C) {
+	friezeFormula := formula.FriezeFormula{
+		Terms: []*formula.EulerFormulaTerm{
+			{
+				Multiplier:             complex(1, 0),
+				PowerN:                 2,
+				PowerM:                 0,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.MinusNMinusM,
+						formula.PlusMPlusN,
+						formula.MinusMMinusN,
+					},
+				},
+			},
+		},
+	}
+	symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+	checker.Assert(symmetriesDetected.P2mm, Equals, true)
+}
 
-		expectedResult := complex(math.Exp(-1), 0) * complex(math.Sqrt(3) * 2, 0)
-		Expect(real(contributionByFirstTerm)).To(BeNumerically("~", real(expectedResult)))
-		Expect(imag(contributionByFirstTerm)).To(BeNumerically("~", imag(expectedResult)))
-	})
+func (suite *FriezeFormulaSuite) TestP2mgFrieze(checker *C) {
+	friezeFormula := formula.FriezeFormula{
+		Terms: []*formula.EulerFormulaTerm{
+			{
+				Multiplier:             complex(1, 0),
+				PowerN:                 2,
+				PowerM:                 -1,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.MinusNMinusM,
+						formula.PlusMPlusNMaybeFlipScale,
+						formula.MinusMMinusNMaybeFlipScale,
+					},
+				},
+			},
+		},
+	}
+	symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+	checker.Assert(symmetriesDetected.P2mg, Equals, true)
+}
 
-	Context("Create Frieze formulas via data stream", func() {
-		It("Can create EulerFormulaTerm from YAML", func() {
-			yamlByteStream := []byte(`
+func (suite *FriezeFormulaSuite) TestP2mmFriezeEvenIfP2mgHasEvenSumPowers(checker *C) {
+	friezeFormula := formula.FriezeFormula{
+		Terms: []*formula.EulerFormulaTerm{
+			{
+				Multiplier:             complex(1, 0),
+				PowerN:                 2,
+				PowerM:                 0,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.MinusNMinusM,
+						formula.PlusMPlusNMaybeFlipScale,
+						formula.MinusMMinusNMaybeFlipScale,
+					},
+				},
+			},
+		},
+	}
+	symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+	checker.Assert(symmetriesDetected.P2mm, Equals, true)
+}
+
+func (suite *FriezeFormulaSuite) TestP111Frieze(checker *C) {
+	friezeFormula := formula.FriezeFormula{
+		Terms: []*formula.EulerFormulaTerm{
+			{
+				Multiplier:             complex(1, 0),
+				PowerN:                 2,
+				PowerM:                 0,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs:       formula.LockedCoefficientPair{},
+			},
+		},
+	}
+	symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+	checker.Assert(symmetriesDetected.P111, Equals, true)
+}
+
+func (suite *FriezeFormulaSuite) TestP111FriezeComplexConjugateIgnored(checker *C) {
+	friezeFormula := formula.FriezeFormula{
+		Terms: []*formula.EulerFormulaTerm{
+			{
+				Multiplier:             complex(1, 0),
+				PowerN:                 2,
+				PowerM:                 0,
+				IgnoreComplexConjugate: true,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.MinusNMinusM,
+					},
+				},
+			},
+		},
+	}
+	symmetriesDetected := friezeFormula.AnalyzeForSymmetry()
+	checker.Assert(symmetriesDetected.P111, Equals, true)
+	checker.Assert(symmetriesDetected.P211, Equals, false)
+}
+
+func (suite *FriezeFormulaSuite) TestContributionOfFriezeFormula(checker *C) {
+	friezeFormula := formula.FriezeFormula{
+		Terms: []*formula.EulerFormulaTerm{
+			{
+				Multiplier:             complex(2, 0),
+				PowerN:                 1,
+				PowerM:                 0,
+				IgnoreComplexConjugate: false,
+				CoefficientPairs: formula.LockedCoefficientPair{
+					Multiplier: 1,
+					OtherCoefficientRelationships: []formula.CoefficientRelationship{
+						formula.PlusMPlusN,
+					},
+				},
+			},
+		},
+	}
+	result := friezeFormula.Calculate(complex(math.Pi/6, 1))
+
+	checker.Assert(result.ContributionByTerm, HasLen, 1)
+	contributionByFirstTerm := result.ContributionByTerm[0]
+
+	expectedResult := complex(math.Exp(-1), 0) * complex(math.Sqrt(3) * 2, 0)
+	checker.Assert(real(contributionByFirstTerm), Equals, real(expectedResult))
+	checker.Assert(imag(contributionByFirstTerm), Equals, imag(expectedResult))
+}
+
+func (suite *FriezeFormulaSuite) TestCreateEulerFormulaWithYAML(checker *C) {
+	yamlByteStream := []byte(`
 multiplier:
   real: -1.0
   imaginary: 2e-2
@@ -321,20 +334,21 @@ coefficient_pairs:
   - -M-N
   - +M+NF
 `)
-			eulerExponentialFormulaTerm, err := formula.NewEulerFormulaTermFromYAML(yamlByteStream)
-			Expect(err).To(BeNil())
-			Expect(real(eulerExponentialFormulaTerm.Multiplier)).To(BeNumerically("~", -1.0))
-			Expect(imag(eulerExponentialFormulaTerm.Multiplier)).To(BeNumerically("~", 2e-2))
-			Expect(eulerExponentialFormulaTerm.PowerN).To(Equal(12))
-			Expect(eulerExponentialFormulaTerm.PowerM).To(Equal(-10))
-			Expect(eulerExponentialFormulaTerm.IgnoreComplexConjugate).To(BeTrue())
-			Expect(eulerExponentialFormulaTerm.CoefficientPairs.Multiplier).To(BeNumerically("~", 1))
-			Expect(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships).To(HaveLen(2))
-			Expect(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[0]).To(Equal(formula.CoefficientRelationship(formula.MinusMMinusN)))
-			Expect(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[1]).To(Equal(formula.CoefficientRelationship(formula.PlusMPlusNMaybeFlipScale)))
-		})
-		It("Can create EulerFormulaTerm from JSON", func() {
-			jsonByteStream := []byte(`{
+	eulerExponentialFormulaTerm, err := formula.NewEulerFormulaTermFromYAML(yamlByteStream)
+	checker.Assert(err, IsNil)
+	checker.Assert(real(eulerExponentialFormulaTerm.Multiplier), Equals, -1.0)
+	checker.Assert(imag(eulerExponentialFormulaTerm.Multiplier), Equals, 2e-2)
+	checker.Assert(eulerExponentialFormulaTerm.PowerN, Equals, 12)
+	checker.Assert(eulerExponentialFormulaTerm.PowerM, Equals, -10)
+	checker.Assert(eulerExponentialFormulaTerm.IgnoreComplexConjugate, Equals, true)
+	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.Multiplier, Equals, 1.0)
+	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships, HasLen, 2)
+	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[0], Equals, formula.CoefficientRelationship(formula.MinusMMinusN))
+	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[1], Equals, formula.CoefficientRelationship(formula.PlusMPlusNMaybeFlipScale))
+}
+
+func (suite *FriezeFormulaSuite) TestCreateEulerFormulaWithJSON(checker *C) {
+	jsonByteStream := []byte(`{
 				"multiplier": {
 					"real": -1.0,
 					"imaginary": 2e-2
@@ -347,20 +361,21 @@ coefficient_pairs:
 				  "relationships": ["-M-N", "+M+NF"]
 				}
 			}`)
-			eulerExponentialFormulaTerm, err := formula.NewEulerFormulaTermFromJSON(jsonByteStream)
-			Expect(err).To(BeNil())
-			Expect(real(eulerExponentialFormulaTerm.Multiplier)).To(BeNumerically("~", -1.0))
-			Expect(imag(eulerExponentialFormulaTerm.Multiplier)).To(BeNumerically("~", 2e-2))
-			Expect(eulerExponentialFormulaTerm.PowerN).To(Equal(12))
-			Expect(eulerExponentialFormulaTerm.PowerM).To(Equal(-10))
-			Expect(eulerExponentialFormulaTerm.IgnoreComplexConjugate).To(BeTrue())
-			Expect(eulerExponentialFormulaTerm.CoefficientPairs.Multiplier).To(BeNumerically("~", 1))
-			Expect(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships).To(HaveLen(2))
-			Expect(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[0]).To(Equal(formula.CoefficientRelationship(formula.MinusMMinusN)))
-			Expect(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[1]).To(Equal(formula.CoefficientRelationship(formula.PlusMPlusNMaybeFlipScale)))
-		})
-		It("Can create Frieze Formulas from YAML", func() {
-			yamlByteStream := []byte(`terms:
+	eulerExponentialFormulaTerm, err := formula.NewEulerFormulaTermFromJSON(jsonByteStream)
+	checker.Assert(err, IsNil)
+	checker.Assert(real(eulerExponentialFormulaTerm.Multiplier), Equals, -1.0)
+	checker.Assert(imag(eulerExponentialFormulaTerm.Multiplier), Equals, 2e-2)
+	checker.Assert(eulerExponentialFormulaTerm.PowerN, Equals, 12)
+	checker.Assert(eulerExponentialFormulaTerm.PowerM, Equals, -10)
+	checker.Assert(eulerExponentialFormulaTerm.IgnoreComplexConjugate, Equals, true)
+	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.Multiplier, Equals, 1.0)
+	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships, HasLen, 2)
+	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[0], Equals, formula.CoefficientRelationship(formula.MinusMMinusN))
+	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[1], Equals, formula.CoefficientRelationship(formula.PlusMPlusNMaybeFlipScale))
+}
+
+func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithYAML(checker *C) {
+	yamlByteStream := []byte(`terms:
   -
     multiplier:
       real: -1.0
@@ -383,16 +398,16 @@ coefficient_pairs:
       relationships:
       - -M-NF
 `)
-			rosetteFormula, err := formula.NewFriezeFormulaFromYAML(yamlByteStream)
-			Expect(err).To(BeNil())
-			Expect(rosetteFormula.Terms).To(HaveLen(2))
-			Expect(rosetteFormula.Terms[0].PowerN).To(Equal(3))
-			Expect(rosetteFormula.Terms[0].IgnoreComplexConjugate).To(BeFalse())
-			Expect(rosetteFormula.Terms[1].CoefficientPairs.OtherCoefficientRelationships[0]).To(Equal(formula.CoefficientRelationship(formula.MinusMMinusNMaybeFlipScale)))
-		})
-	})
-	It("Can create Frieze Formulas from JSON", func() {
-		jsonByteStream := []byte(`{
+	rosetteFormula, err := formula.NewFriezeFormulaFromYAML(yamlByteStream)
+	checker.Assert(err, IsNil)
+	checker.Assert(rosetteFormula.Terms, HasLen, 2)
+	checker.Assert(rosetteFormula.Terms[0].PowerN, Equals, 3)
+	checker.Assert(rosetteFormula.Terms[0].IgnoreComplexConjugate, Equals, false)
+	checker.Assert(rosetteFormula.Terms[1].CoefficientPairs.OtherCoefficientRelationships[0], Equals, formula.CoefficientRelationship(formula.MinusMMinusNMaybeFlipScale))
+}
+
+func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithJSON(checker *C) {
+	jsonByteStream := []byte(`{
 				"terms": [
 					{
 						"multiplier": {
@@ -420,11 +435,10 @@ coefficient_pairs:
 					}
 				]
 			}`)
-		rosetteFormula, err := formula.NewFriezeFormulaFromJSON(jsonByteStream)
-		Expect(err).To(BeNil())
-		Expect(rosetteFormula.Terms).To(HaveLen(2))
-		Expect(rosetteFormula.Terms[0].PowerN).To(Equal(3))
-		Expect(rosetteFormula.Terms[0].IgnoreComplexConjugate).To(BeFalse())
-		Expect(rosetteFormula.Terms[1].CoefficientPairs.OtherCoefficientRelationships[0]).To(Equal(formula.CoefficientRelationship(formula.MinusMMinusNMaybeFlipScale)))
-	})
-})
+	rosetteFormula, err := formula.NewFriezeFormulaFromJSON(jsonByteStream)
+	checker.Assert(err, IsNil)
+	checker.Assert(rosetteFormula.Terms, HasLen, 2)
+	checker.Assert(rosetteFormula.Terms[0].PowerN, Equals, 3)
+	checker.Assert(rosetteFormula.Terms[0].IgnoreComplexConjugate, Equals, false)
+	checker.Assert(rosetteFormula.Terms[1].CoefficientPairs.OtherCoefficientRelationships[0], Equals, formula.CoefficientRelationship(formula.MinusMMinusNMaybeFlipScale))
+}

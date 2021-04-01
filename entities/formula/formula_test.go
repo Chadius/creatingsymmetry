@@ -1,84 +1,95 @@
 package formula_test
 
 import (
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
+	. "gopkg.in/check.v1"
+	"testing"
 	"wallpaper/entities/formula"
 )
 
-var _ = Describe("Common formula features", func() {
-	Context("Can determine coefficients and scale based on coefficient relationship", func() {
-		It("PlusNPlusM reuses given coefficients", func() {
-			power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.PlusNPlusM)
-			Expect(power1).To(Equal(1))
-			Expect(power2).To(Equal(2))
-			Expect(real(scale)).To(BeNumerically("~", 3))
-			Expect(imag(scale)).To(BeNumerically("~", 4))
-		})
-		It("PlusMPlusN swaps given coefficients", func() {
-			power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.PlusMPlusN)
-			Expect(power1).To(Equal(2))
-			Expect(power2).To(Equal(1))
-			Expect(real(scale)).To(BeNumerically("~", 3))
-			Expect(imag(scale)).To(BeNumerically("~", 4))
-		})
-		It("MinusNMinusM reuses given coefficients", func() {
-			power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.MinusNMinusM)
-			Expect(power1).To(Equal(-1))
-			Expect(power2).To(Equal(-2))
-			Expect(real(scale)).To(BeNumerically("~", 3))
-			Expect(imag(scale)).To(BeNumerically("~", 4))
-		})
-		It("MinusMMinusN swaps given coefficients", func() {
-			power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.MinusMMinusN)
-			Expect(power1).To(Equal(-2))
-			Expect(power2).To(Equal(-1))
-			Expect(real(scale)).To(BeNumerically("~", 3))
-			Expect(imag(scale)).To(BeNumerically("~", 4))
-		})
-		It("PlusMPlusNMaybeFlipScale changes the scale of odd summed powers ", func() {
-			power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.PlusMPlusNMaybeFlipScale)
-			Expect(power1).To(Equal(2))
-			Expect(power2).To(Equal(1))
-			Expect(real(scale)).To(BeNumerically("~", -3))
-			Expect(imag(scale)).To(BeNumerically("~", -4))
-		})
-		It("PlusMPlusNMaybeFlipScale does not change the scale of even summed powers ", func() {
-			power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(0, 2, complex(3, 4), formula.PlusMPlusNMaybeFlipScale)
-			Expect(power1).To(Equal(2))
-			Expect(power2).To(Equal(0))
-			Expect(real(scale)).To(BeNumerically("~", 3))
-			Expect(imag(scale)).To(BeNumerically("~", 4))
-		})
-		It("MinusMMinusNMaybeFlipScale changes the scale of odd summed powers ", func() {
-			power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.MinusMMinusNMaybeFlipScale)
-			Expect(power1).To(Equal(-2))
-			Expect(power2).To(Equal(-1))
-			Expect(real(scale)).To(BeNumerically("~", -3))
-			Expect(imag(scale)).To(BeNumerically("~", -4))
-		})
-		It("MinusMMinusNMaybeFlipScale does not change the scale of even summed powers ", func() {
-			power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(0, 2, complex(3, 4), formula.MinusMMinusNMaybeFlipScale)
-			Expect(power1).To(Equal(-2))
-			Expect(power2).To(Equal(0))
-			Expect(real(scale)).To(BeNumerically("~", 3))
-			Expect(imag(scale)).To(BeNumerically("~", 4))
-		})
-	})
+func Test(t *testing.T) { TestingT(t) }
 
-	Context("Create LockedCoefficientPair objects", func() {
-		It("Can create from YAML", func() {
-			yamlByteStream := []byte(`multiplier: 1
+type CommonFormulaFeatures struct {
+}
+
+var _ = Suite(&CommonFormulaFeatures{})
+
+func (suite *CommonFormulaFeatures) SetUpTest(checker *C) {
+}
+
+func (suite *CommonFormulaFeatures) TestPlusNPlusM(checker *C) {
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.PlusNPlusM)
+	checker.Assert(power1, Equals, 1)
+	checker.Assert(power2, Equals, 2)
+	checker.Assert(real(scale), Equals, 3.0)
+	checker.Assert(imag(scale), Equals, 4.0)
+}
+
+func (suite *CommonFormulaFeatures) TestPlusMPlusN(checker *C) {
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.PlusMPlusN)
+	checker.Assert(power1, Equals, 2)
+	checker.Assert(power2, Equals, 1)
+	checker.Assert(real(scale), Equals, 3.0)
+	checker.Assert(imag(scale), Equals, 4.0)
+}
+
+func (suite *CommonFormulaFeatures) TestMinusNMinusM(checker *C) {
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.MinusNMinusM)
+	checker.Assert(power1, Equals, -1)
+	checker.Assert(power2, Equals, -2)
+	checker.Assert(real(scale), Equals, 3.0)
+	checker.Assert(imag(scale), Equals, 4.0)
+}
+
+func (suite *CommonFormulaFeatures) TestMinusMMinusN(checker *C) {
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.MinusMMinusN)
+	checker.Assert(power1, Equals, -2)
+	checker.Assert(power2, Equals, -1)
+	checker.Assert(real(scale), Equals, 3.0)
+	checker.Assert(imag(scale), Equals, 4.0)
+}
+
+func (suite *CommonFormulaFeatures) TestPlusMPlusNMaybeFlipScaleOdd(checker *C) {
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.PlusMPlusNMaybeFlipScale)
+	checker.Assert(power1, Equals, 2)
+	checker.Assert(power2, Equals, 1)
+	checker.Assert(real(scale), Equals, -3.0)
+	checker.Assert(imag(scale), Equals, -4.0)
+}
+
+func (suite *CommonFormulaFeatures) TestPlusMPlusNMaybeFlipScaleEven(checker *C) {
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(0, 2, complex(3, 4), formula.PlusMPlusNMaybeFlipScale)
+	checker.Assert(power1, Equals, 2)
+	checker.Assert(power2, Equals, 0)
+	checker.Assert(real(scale), Equals, 3.0)
+	checker.Assert(imag(scale), Equals, 4.0)
+}
+
+func (suite *CommonFormulaFeatures) TestMinusMMinusNMaybeFlipScaleOdd(checker *C) {
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.MinusMMinusNMaybeFlipScale)
+	checker.Assert(power1, Equals, -2)
+	checker.Assert(power2, Equals, -1)
+	checker.Assert(real(scale), Equals, -3.0)
+	checker.Assert(imag(scale), Equals, -4.0)
+}
+
+func (suite *CommonFormulaFeatures) TestMinusMMinusNMaybeFlipScaleEven(checker *C) {
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(0, 2, complex(3, 4), formula.MinusMMinusNMaybeFlipScale)
+	checker.Assert(power1, Equals, -2)
+	checker.Assert(power2, Equals, 0)
+	checker.Assert(real(scale), Equals, 3.0)
+	checker.Assert(imag(scale), Equals, 4.0)
+}
+
+func (suite *CommonFormulaFeatures) TestLockedCoefficientPairYAML(checker *C) {
+	yamlByteStream := []byte(`multiplier: 1
 relationships:
   - "+N+M"
   - "-M-NF"
 `)
-			coefficientPair, err := formula.NewLockedCoefficientPairFromYAML(yamlByteStream)
-			Expect(err).To(BeNil())
-			Expect(coefficientPair.Multiplier).To(BeNumerically("~", 1))
-			Expect(coefficientPair.OtherCoefficientRelationships).To(HaveLen(2))
-			Expect(coefficientPair.OtherCoefficientRelationships[0]).To(Equal(formula.CoefficientRelationship(formula.PlusNPlusM)))
-			Expect(coefficientPair.OtherCoefficientRelationships[1]).To(Equal(formula.CoefficientRelationship(formula.MinusMMinusNMaybeFlipScale)))
-		})
-	})
-})
+	coefficientPair, err := formula.NewLockedCoefficientPairFromYAML(yamlByteStream)
+	checker.Assert(err, IsNil)
+	checker.Assert(coefficientPair.Multiplier, Equals, 1.0)
+	checker.Assert(coefficientPair.OtherCoefficientRelationships, HasLen, 2)
+	checker.Assert(coefficientPair.OtherCoefficientRelationships[0], Equals, formula.CoefficientRelationship(formula.PlusNPlusM))
+	checker.Assert(coefficientPair.OtherCoefficientRelationships[1], Equals, formula.CoefficientRelationship(formula.MinusMMinusNMaybeFlipScale))
+}

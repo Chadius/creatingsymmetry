@@ -1,15 +1,23 @@
 package command_test
 
 import (
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
+	. "gopkg.in/check.v1"
+	"testing"
 	"wallpaper/entities/command"
 )
 
-var _ = Describe("Commands that create wallpaper", func() {
-	Context("Create commands from YAML", func() {
-		It("Can create a command using YAML", func() {
-			yamlByteStream := []byte(`sample_source_filename: input.png
+func Test(t *testing.T) { TestingT(t) }
+
+type CreateWallpaperCommandSuite struct {
+}
+
+var _ = Suite(&CreateWallpaperCommandSuite{})
+
+func (suite *CreateWallpaperCommandSuite) SetUpTest(checker *C) {
+}
+
+func (suite *CreateWallpaperCommandSuite) TestCreateFromYAML(checker *C) {
+	yamlByteStream := []byte(`sample_source_filename: input.png
 output_filename: output.png
 output_size:
   width: 800
@@ -48,28 +56,29 @@ rosette_formula:
         relationships:
         - -M-NF
 `)
-			wallpaperCommand, err := command.NewCreateWallpaperCommandFromYAML(yamlByteStream)
-			Expect(err).To(BeNil())
-			Expect(wallpaperCommand.SampleSourceFilename).To(Equal("input.png"))
+	wallpaperCommand, err := command.NewCreateWallpaperCommandFromYAML(yamlByteStream)
+	checker.Assert(err, IsNil)
+	checker.Assert(wallpaperCommand.SampleSourceFilename, Equals, "input.png")
 
-			Expect(wallpaperCommand.OutputFilename).To(Equal("output.png"))
-			Expect(wallpaperCommand.OutputImageSize.Width).To(Equal(800))
-			Expect(wallpaperCommand.OutputImageSize.Height).To(Equal(600))
+	checker.Assert(wallpaperCommand.OutputFilename, Equals, "output.png")
+	checker.Assert(wallpaperCommand.OutputImageSize.Width, Equals, 800)
+	checker.Assert(wallpaperCommand.OutputImageSize.Height, Equals, 600)
 
-			Expect(wallpaperCommand.SampleSpace.MinX).To(BeNumerically("~", 0))
-			Expect(wallpaperCommand.SampleSpace.MinY).To(BeNumerically("~", 0))
-			Expect(wallpaperCommand.SampleSpace.MaxX).To(BeNumerically("~", 1e-10))
-			Expect(wallpaperCommand.SampleSpace.MaxY).To(BeNumerically("~", 3e5))
+	checker.Assert(wallpaperCommand.SampleSpace.MinX, Equals, 0.0)
+	checker.Assert(wallpaperCommand.SampleSpace.MinY, Equals, 0.0)
+	checker.Assert(wallpaperCommand.SampleSpace.MaxX, Equals, 1e-10)
+	checker.Assert(wallpaperCommand.SampleSpace.MaxY, Equals, 3e5)
 
-			Expect(wallpaperCommand.ColorValueSpace.MinX).To(BeNumerically("~", -50))
-			Expect(wallpaperCommand.ColorValueSpace.MinY).To(BeNumerically("~", 9001))
-			Expect(wallpaperCommand.ColorValueSpace.MaxX).To(BeNumerically("~", -1e-1))
-			Expect(wallpaperCommand.ColorValueSpace.MaxY).To(BeNumerically("~", 2e10))
+	checker.Assert(wallpaperCommand.ColorValueSpace.MinX, Equals, -50.0)
+	checker.Assert(wallpaperCommand.ColorValueSpace.MinY, Equals, 9001.0)
+	checker.Assert(wallpaperCommand.ColorValueSpace.MaxX, Equals, -1e-1)
+	checker.Assert(wallpaperCommand.ColorValueSpace.MaxY, Equals, 2e10)
 
-			Expect(wallpaperCommand.RosetteFormula.Terms).To(HaveLen(2))
-		})
-		It("Can create a command using JSON", func() {
-			jsonByteStream := []byte(`{
+	checker.Assert(wallpaperCommand.RosetteFormula.Terms, HasLen, 2)
+}
+
+func (suite *CreateWallpaperCommandSuite) TestCreateFromJSON(checker *C) {
+	jsonByteStream := []byte(`{
 				"sample_source_filename": "input.png",
 				"output_filename": "output.png",
 				"output_size": {
@@ -117,25 +126,23 @@ rosette_formula:
 					]
 				}
 			}`)
-			wallpaperCommand, err := command.NewCreateWallpaperCommandFromJSON(jsonByteStream)
-			Expect(err).To(BeNil())
-			Expect(wallpaperCommand.SampleSourceFilename).To(Equal("input.png"))
+	wallpaperCommand, err := command.NewCreateWallpaperCommandFromJSON(jsonByteStream)
+	checker.Assert(err, IsNil)
+	checker.Assert(wallpaperCommand.SampleSourceFilename, Equals, "input.png")
 
-			Expect(wallpaperCommand.OutputFilename).To(Equal("output.png"))
-			Expect(wallpaperCommand.OutputImageSize.Width).To(Equal(800))
-			Expect(wallpaperCommand.OutputImageSize.Height).To(Equal(600))
+	checker.Assert(wallpaperCommand.OutputFilename, Equals, "output.png")
+	checker.Assert(wallpaperCommand.OutputImageSize.Width, Equals, 800)
+	checker.Assert(wallpaperCommand.OutputImageSize.Height, Equals, 600)
 
-			Expect(wallpaperCommand.SampleSpace.MinX).To(BeNumerically("~", 0))
-			Expect(wallpaperCommand.SampleSpace.MinY).To(BeNumerically("~", 0))
-			Expect(wallpaperCommand.SampleSpace.MaxX).To(BeNumerically("~", 1e-10))
-			Expect(wallpaperCommand.SampleSpace.MaxY).To(BeNumerically("~", 3e5))
+	checker.Assert(wallpaperCommand.SampleSpace.MinX, Equals, 0.0)
+	checker.Assert(wallpaperCommand.SampleSpace.MinY, Equals, 0.0)
+	checker.Assert(wallpaperCommand.SampleSpace.MaxX, Equals, 1e-10)
+	checker.Assert(wallpaperCommand.SampleSpace.MaxY, Equals, 3e5)
 
-			Expect(wallpaperCommand.ColorValueSpace.MinX).To(BeNumerically("~", -50))
-			Expect(wallpaperCommand.ColorValueSpace.MinY).To(BeNumerically("~", 9001))
-			Expect(wallpaperCommand.ColorValueSpace.MaxX).To(BeNumerically("~", -1e-1))
-			Expect(wallpaperCommand.ColorValueSpace.MaxY).To(BeNumerically("~", 2e10))
+	checker.Assert(wallpaperCommand.ColorValueSpace.MinX, Equals, -50.0)
+	checker.Assert(wallpaperCommand.ColorValueSpace.MinY, Equals, 9001.0)
+	checker.Assert(wallpaperCommand.ColorValueSpace.MaxX, Equals, -1e-1)
+	checker.Assert(wallpaperCommand.ColorValueSpace.MaxY, Equals, 2e10)
 
-			Expect(wallpaperCommand.FriezeFormula.Terms).To(HaveLen(2))
-		})
-	})
-})
+	checker.Assert(wallpaperCommand.FriezeFormula.Terms, HasLen, 2)
+}
