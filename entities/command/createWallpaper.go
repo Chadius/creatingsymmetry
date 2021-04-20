@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"gopkg.in/yaml.v2"
 	"wallpaper/entities/formula"
+	"wallpaper/entities/formula/wave"
 	"wallpaper/entities/utility"
 )
 
@@ -23,13 +24,14 @@ type WidthHeightDimensions struct {
 
 // CreateWallpaperCommand records the desired command to generate.
 type CreateWallpaperCommand struct {
-	SampleSpace				ComplexNumberCorners	`json:"sample_space" yaml:"sample_space"`
-	OutputImageSize			WidthHeightDimensions	`json:"output_size" yaml:"output_size"`
-	SampleSourceFilename	string					`json:"sample_source_filename" yaml:"sample_source_filename"`
-	OutputFilename			string					`json:"output_filename" yaml:"output_filename"`
-	ColorValueSpace			ComplexNumberCorners	`json:"color_value_space" yaml:"color_value_space"`
-	RosetteFormula			*formula.RosetteFormula	`json:"rosette_formula" yaml:"rosette_formula"`
-	FriezeFormula			*formula.FriezeFormula	`json:"frieze_formula" yaml:"frieze_formula"`
+	SampleSpace				  ComplexNumberCorners			  `json:"sample_space" yaml:"sample_space"`
+	OutputImageSize			  WidthHeightDimensions			  `json:"output_size" yaml:"output_size"`
+	SampleSourceFilename	  string						  `json:"sample_source_filename" yaml:"sample_source_filename"`
+	OutputFilename			  string						  `json:"output_filename" yaml:"output_filename"`
+	ColorValueSpace			  ComplexNumberCorners	          `json:"color_value_space" yaml:"color_value_space"`
+	RosetteFormula			  *formula.RosetteFormula	      `json:"rosette_formula" yaml:"rosette_formula"`
+	FriezeFormula			  *formula.FriezeFormula	      `json:"frieze_formula" yaml:"frieze_formula"`
+	HexagonalWallpaperFormula *wave.HexagonalWallpaperFormula `json:"hexagonal_wallpaper_formula" yaml:"hexagonal_wallpaper_formula"`
 }
 
 // CreateWallpaperCommandMarshal can be marshaled and converted to a CreateWallpaperCommand
@@ -41,6 +43,7 @@ type CreateWallpaperCommandMarshal struct {
 	ColorValueSpace			ComplexNumberCorners				`json:"color_value_space" yaml:"color_value_space"`
 	RosetteFormula			*formula.RosetteFormulaMarshalable	`json:"rosette_formula" yaml:"rosette_formula"`
 	FriezeFormula			*formula.FriezeFormulaMarshalable	`json:"frieze_formula" yaml:"frieze_formula"`
+	HexagonalWallpaperFormula *wave.HexagonalWallpaperFormulaMarshalable `json:"hexagonal_wallpaper_formula" yaml:"hexagonal_wallpaper_formula"`
 }
 
 // NewCreateWallpaperCommandFromYAML reads the data and returns a CreateWallpaperCommand from it.
@@ -77,6 +80,10 @@ func newCreateWallpaperCommandFromDatastream(data []byte, unmarshal utility.Unma
 
 	if commandToCreateMarshal.FriezeFormula != nil {
 		commandToCreate.FriezeFormula  = formula.NewFriezeFormulaFromMarshalObject(*commandToCreateMarshal.FriezeFormula)
+	}
+
+	if commandToCreateMarshal.HexagonalWallpaperFormula != nil {
+		commandToCreate.HexagonalWallpaperFormula = wave.NewHexagonalWallpaperFormulaFromMarshalObject(*commandToCreateMarshal.HexagonalWallpaperFormula)
 	}
 
 	return commandToCreate, nil

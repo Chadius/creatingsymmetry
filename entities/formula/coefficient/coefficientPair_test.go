@@ -19,13 +19,11 @@ func (suite *CoefficientPairFeatures) SetUpTest(checker *C) {
 	suite.evenSumPair = &coefficient.Pairing{
 		PowerN: 1,
 		PowerM: 3,
-		Multiplier: complex(2.5, 1),
 	}
 
 	suite.oddSumPair = &coefficient.Pairing{
 		PowerN: 1,
 		PowerM: 2,
-		Multiplier: complex(2.5, 1),
 	}
 }
 
@@ -37,8 +35,7 @@ func (suite *CoefficientPairFeatures) TestPlusNPlusM(checker *C) {
 	checker.Assert(newSets, HasLen, 1)
 	checker.Assert(newSets[0].PowerN, Equals, 1)
 	checker.Assert(newSets[0].PowerM, Equals, 3)
-	checker.Assert(real(newSets[0].Multiplier), Equals, 2.5)
-	checker.Assert(imag(newSets[0].Multiplier), Equals, 1.0)
+	checker.Assert(newSets[0].NegateMultiplier, Equals, false)
 }
 
 func (suite *CoefficientPairFeatures) TestPlusMPlusN(checker *C) {
@@ -49,8 +46,7 @@ func (suite *CoefficientPairFeatures) TestPlusMPlusN(checker *C) {
 	checker.Assert(newSets, HasLen, 1)
 	checker.Assert(newSets[0].PowerN, Equals, 3)
 	checker.Assert(newSets[0].PowerM, Equals, 1)
-	checker.Assert(real(newSets[0].Multiplier), Equals, 2.5)
-	checker.Assert(imag(newSets[0].Multiplier), Equals, 1.0)
+	checker.Assert(newSets[0].NegateMultiplier, Equals, false)
 }
 
 func (suite *CoefficientPairFeatures) TestReturnsMultiples(checker *C) {
@@ -62,13 +58,11 @@ func (suite *CoefficientPairFeatures) TestReturnsMultiples(checker *C) {
 	checker.Assert(newSets, HasLen, 2)
 	checker.Assert(newSets[0].PowerN, Equals, 1)
 	checker.Assert(newSets[0].PowerM, Equals, 3)
-	checker.Assert(real(newSets[0].Multiplier), Equals, 2.5)
-	checker.Assert(imag(newSets[0].Multiplier), Equals, 1.0)
+	checker.Assert(newSets[0].NegateMultiplier, Equals, false)
 
 	checker.Assert(newSets[1].PowerN, Equals, 3)
 	checker.Assert(newSets[1].PowerM, Equals, 1)
-	checker.Assert(real(newSets[0].Multiplier), Equals, 2.5)
-	checker.Assert(imag(newSets[0].Multiplier), Equals, 1.0)
+	checker.Assert(newSets[1].NegateMultiplier, Equals, false)
 }
 
 func (suite *CoefficientPairFeatures) TestPlusMPlusNMaybeFlipScale(checker *C) {
@@ -79,8 +73,7 @@ func (suite *CoefficientPairFeatures) TestPlusMPlusNMaybeFlipScale(checker *C) {
 	checker.Assert(newSets, HasLen, 1)
 	checker.Assert(newSets[0].PowerN, Equals, 2)
 	checker.Assert(newSets[0].PowerM, Equals, 1)
-	checker.Assert(real(newSets[0].Multiplier), Equals, -2.5)
-	checker.Assert(imag(newSets[0].Multiplier), Equals, -1.0)
+	checker.Assert(newSets[0].NegateMultiplier, Equals, true)
 }
 
 func (suite *CoefficientPairFeatures) TestMinusNMinusM(checker *C) {
@@ -91,8 +84,7 @@ func (suite *CoefficientPairFeatures) TestMinusNMinusM(checker *C) {
 	checker.Assert(newSets, HasLen, 1)
 	checker.Assert(newSets[0].PowerN, Equals, -1)
 	checker.Assert(newSets[0].PowerM, Equals, -3)
-	checker.Assert(real(newSets[0].Multiplier), Equals, 2.5)
-	checker.Assert(imag(newSets[0].Multiplier), Equals, 1.0)
+	checker.Assert(newSets[0].NegateMultiplier, Equals, false)
 }
 
 func (suite *CoefficientPairFeatures) TestMinusMMinusN(checker *C) {
@@ -103,8 +95,7 @@ func (suite *CoefficientPairFeatures) TestMinusMMinusN(checker *C) {
 	checker.Assert(newSets, HasLen, 1)
 	checker.Assert(newSets[0].PowerN, Equals, -3)
 	checker.Assert(newSets[0].PowerM, Equals, -1)
-	checker.Assert(real(newSets[0].Multiplier), Equals, 2.5)
-	checker.Assert(imag(newSets[0].Multiplier), Equals, 1.0)
+	checker.Assert(newSets[0].NegateMultiplier, Equals, false)
 }
 
 func (suite *CoefficientPairFeatures) TestMinusMMinusNMaybeFlipScale(checker *C) {
@@ -115,6 +106,27 @@ func (suite *CoefficientPairFeatures) TestMinusMMinusNMaybeFlipScale(checker *C)
 	checker.Assert(newSets, HasLen, 1)
 	checker.Assert(newSets[0].PowerN, Equals, -2)
 	checker.Assert(newSets[0].PowerM, Equals, -1)
-	checker.Assert(real(newSets[0].Multiplier), Equals, -2.5)
-	checker.Assert(imag(newSets[0].Multiplier), Equals, -1.0)
+	checker.Assert(newSets[0].NegateMultiplier, Equals, true)
+}
+
+func (suite *CoefficientPairFeatures) TestPlusMMinusSumNAndM(checker *C) {
+	newSets := suite.evenSumPair.GenerateCoefficientSets([]coefficient.Relationship{
+		coefficient.PlusMMinusSumNAndM,
+	})
+
+	checker.Assert(newSets, HasLen, 1)
+	checker.Assert(newSets[0].PowerN, Equals, 3)
+	checker.Assert(newSets[0].PowerM, Equals, -(1 + 3))
+	checker.Assert(newSets[0].NegateMultiplier, Equals, false)
+}
+
+func (suite *CoefficientPairFeatures) TestMinusSumNAndMPlusN(checker *C) {
+	newSets := suite.evenSumPair.GenerateCoefficientSets([]coefficient.Relationship{
+		coefficient.MinusSumNAndMPlusN,
+	})
+
+	checker.Assert(newSets, HasLen, 1)
+	checker.Assert(newSets[0].PowerN, Equals, -(1+3))
+	checker.Assert(newSets[0].PowerM, Equals, 3)
+	checker.Assert(newSets[0].NegateMultiplier, Equals, false)
 }

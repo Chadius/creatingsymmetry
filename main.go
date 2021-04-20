@@ -10,6 +10,7 @@ import (
 	"log"
 	"wallpaper/entities/command"
 	"wallpaper/entities/formula"
+	"wallpaper/entities/formula/wave"
 
 	//"image/png"
 	_ "image/png"
@@ -67,7 +68,6 @@ func main() {
 		sampleSpaceMax,
 	)
 
-	//transformedCoordinates := transformCoordinatesForFriezeFormula(scaledCoordinates)
 	transformedCoordinates := transformCoordinatesForFormula(wallpaperCommand, scaledCoordinates)
 	minz, maxz := mathutility.GetBoundingBox(transformedCoordinates)
 	println(minz)
@@ -95,6 +95,9 @@ func transformCoordinatesForFormula(command *command.CreateWallpaperCommand, sca
 	}
 	if command.RosetteFormula != nil {
 		return transformCoordinatesForRosetteFormula(command.RosetteFormula, scaledCoordinates)
+	}
+	if command.HexagonalWallpaperFormula != nil {
+		return transformCoordinatesForHexagonalWallpaperFormula(command.HexagonalWallpaperFormula, scaledCoordinates)
 	}
 	log.Fatal(errors.New("No formula found"))
 	return []complex128{}
@@ -162,6 +165,33 @@ func transformCoordinatesForRosetteFormula(rosetteFormula *formula.RosetteFormul
 		}
 
 		transformedCoordinate := rosetteResults.Total
+		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
+	}
+
+	println("Min/Max ranges, by Term")
+	for index, results := range resultsByTerm {
+		minz, maxz := mathutility.GetBoundingBox(results)
+		fmt.Printf("%d: %e - %e\n", index, minz, maxz)
+	}
+	return transformedCoordinates
+}
+
+func transformCoordinatesForHexagonalWallpaperFormula(wallpaperFormula *wave.HexagonalWallpaperFormula, scaledCoordinates []complex128) []complex128 {
+	wallpaperFormula.SetUp()
+
+	transformedCoordinates := []complex128{}
+	resultsByTerm := [][]complex128{}
+	for range wallpaperFormula.WavePackets {
+		resultsByTerm = append(resultsByTerm, []complex128{})
+	}
+
+	for _, complexCoordinate := range scaledCoordinates {
+		hexagonalWallpaperResults := wallpaperFormula.Calculate(complexCoordinate)
+		for index, formulaResult := range hexagonalWallpaperResults.ContributionByTerm {
+			resultsByTerm[index] = append(resultsByTerm[index], formulaResult)
+		}
+
+		transformedCoordinate := hexagonalWallpaperResults.Total
 		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
 	}
 

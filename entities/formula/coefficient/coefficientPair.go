@@ -2,9 +2,9 @@ package coefficient
 
 // Pairing notes the multiplier and the powers applied to a formula term.
 type Pairing struct {
-	PowerN		int
-	PowerM		int
-	Multiplier	complex128
+	PowerN				int
+	PowerM				int
+	NegateMultiplier	bool
 }
 
 // GenerateCoefficientSets creates a list of locked coefficient sets (powers and multipliers)
@@ -12,47 +12,48 @@ type Pairing struct {
 func (pairing Pairing) GenerateCoefficientSets(relationships []Relationship) []*Pairing {
 	pairs := []*Pairing{}
 
-	multiplierMultiplierBasedOnPowerNPlusPowerMIsEvenOrOdd := 1.0
-	if (pairing.PowerN + pairing.PowerM) % 2 != 0 {
-		multiplierMultiplierBasedOnPowerNPlusPowerMIsEvenOrOdd = -1.0
-	}
+	negateMultiplier := (pairing.PowerN + pairing.PowerM) % 2 != 0
 
 	pairingByRelationship := map[Relationship]*Pairing{
 		PlusNPlusM: {
 			PowerN: pairing.PowerN,
 			PowerM: pairing.PowerM,
-			Multiplier: pairing.Multiplier,
+			NegateMultiplier: false,
 		},
 		PlusMPlusN: {
 			PowerN: pairing.PowerM,
 			PowerM: pairing.PowerN,
-			Multiplier: pairing.Multiplier,
+			NegateMultiplier: false,
 		},
 		PlusMPlusNMaybeFlipScale: {
 			PowerN:     pairing.PowerM,
 			PowerM:     pairing.PowerN,
-			Multiplier: complex(
-				multiplierMultiplierBasedOnPowerNPlusPowerMIsEvenOrOdd * real(pairing.Multiplier),
-				multiplierMultiplierBasedOnPowerNPlusPowerMIsEvenOrOdd * imag(pairing.Multiplier),
-			),
+			NegateMultiplier: negateMultiplier,
 		},
 		MinusNMinusM: {
 			PowerN:     -1 * pairing.PowerN,
 			PowerM:     -1 * pairing.PowerM,
-			Multiplier: pairing.Multiplier,
+			NegateMultiplier: false,
 		},
 		MinusMMinusN: {
 			PowerN:     -1 * pairing.PowerM,
 			PowerM:     -1 * pairing.PowerN,
-			Multiplier: pairing.Multiplier,
+			NegateMultiplier: false,
 		},
 		MinusMMinusNMaybeFlipScale: {
 			PowerN:     -1 * pairing.PowerM,
 			PowerM:     -1 * pairing.PowerN,
-			Multiplier: complex(
-				multiplierMultiplierBasedOnPowerNPlusPowerMIsEvenOrOdd * real(pairing.Multiplier),
-				multiplierMultiplierBasedOnPowerNPlusPowerMIsEvenOrOdd * imag(pairing.Multiplier),
-			),
+			NegateMultiplier: negateMultiplier,
+		},
+		PlusMMinusSumNAndM: {
+			PowerN: pairing.PowerM,
+			PowerM: -1 * (pairing.PowerN + pairing.PowerM),
+			NegateMultiplier: false,
+		},
+		MinusSumNAndMPlusN: {
+			PowerN: -1 * (pairing.PowerN + pairing.PowerM),
+			PowerM: pairing.PowerM,
+			NegateMultiplier: false,
 		},
 	}
 
@@ -61,7 +62,7 @@ func (pairing Pairing) GenerateCoefficientSets(relationships []Relationship) []*
 		newPair := &Pairing{
 			PowerN: pairWithSameRelationship.PowerN,
 			PowerM: pairWithSameRelationship.PowerM,
-			Multiplier: pairWithSameRelationship.Multiplier,
+			NegateMultiplier: pairWithSameRelationship.NegateMultiplier,
 		}
 		pairs = append(pairs, newPair)
 	}
@@ -84,5 +85,7 @@ const (
 	MinusMMinusN                            = "-M-N"
 	PlusMPlusNMaybeFlipScale                = "+M+NF"
 	MinusMMinusNMaybeFlipScale              = "-M-NF"
+	PlusMMinusSumNAndM						= "+M-(N+M)"
+	MinusSumNAndMPlusN						= "-(N+M)+N"
 )
 

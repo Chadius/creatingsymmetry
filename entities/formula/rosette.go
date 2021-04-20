@@ -73,11 +73,14 @@ func (term ZExponentialFormulaTerm) Calculate(z complex128) complex128 {
 	coefficientSets := coefficient.Pairing{
 		PowerN:     term.PowerN,
 		PowerM:     term.PowerM,
-		Multiplier: term.Multiplier,
 	}.GenerateCoefficientSets(coefficientRelationships)
 
 	for _, relationshipSet := range coefficientSets {
-		sum += CalculateExponentTerm(z, relationshipSet.PowerN, relationshipSet.PowerM, relationshipSet.Multiplier, term.IgnoreComplexConjugate)
+		multiplier := term.Multiplier
+		if relationshipSet.NegateMultiplier == true {
+			multiplier *= -1
+		}
+		sum += CalculateExponentTerm(z, relationshipSet.PowerN, relationshipSet.PowerM, multiplier, term.IgnoreComplexConjugate)
 	}
 	return sum
 }

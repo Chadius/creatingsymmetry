@@ -113,11 +113,12 @@ func newEisensteinFormulaTermFromDatastream(data []byte, unmarshal utility.Unmar
 		return nil, unmarshalError
 	}
 
-	formulaTerm := newEisensteinFormulaTermFromMarshalObject(formulaTermMarshal)
+	formulaTerm := NewEisensteinFormulaTermFromMarshalObject(formulaTermMarshal)
 	return formulaTerm, nil
 }
 
-func newEisensteinFormulaTermFromMarshalObject(marshalObject EisensteinFormulaTermMarshalable) *EisensteinFormulaTerm {
+// NewEisensteinFormulaTermFromMarshalObject converts the marshaled intermediary object into a usable object.
+func NewEisensteinFormulaTermFromMarshalObject(marshalObject EisensteinFormulaTermMarshalable) *EisensteinFormulaTerm {
 	return &EisensteinFormulaTerm{
 		PowerN:                 marshalObject.PowerN,
 		PowerM:                 marshalObject.PowerM,
