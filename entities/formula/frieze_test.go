@@ -4,6 +4,8 @@ import (
 	. "gopkg.in/check.v1"
 	"math"
 	"wallpaper/entities/formula"
+	"wallpaper/entities/formula/coefficient"
+	"wallpaper/entities/utility"
 )
 
 type FriezeFormulaSuite struct {
@@ -22,26 +24,21 @@ func (suite *FriezeFormulaSuite) TestEulerFormulaCalculation(checker *C) {
 		IgnoreComplexConjugate: true,
 	}
 	result := form.Calculate(complex(math.Pi / 6.0,1))
-	checker.Assert(math.Abs(real(result) - 3 * math.Exp(-2) * 1.0 / 2.0) < 0.01, Equals, true)
-	checker.Assert(math.Abs(imag(result) - 3 * math.Exp(-2) * math.Sqrt(3.0) / 2.0) < 0.01, Equals, true)
+	checker.Assert(real(result), utility.NumericallyCloseEnough{}, 3 * math.Exp(-2) * 1.0 / 2.0, 1e-6)
+	checker.Assert(imag(result), utility.NumericallyCloseEnough{}, 3 * math.Exp(-2) * math.Sqrt(3.0) / 2.0, 1e-6)
 }
 
-func (suite *FriezeFormulaSuite) TestLockedCoefficientPairs(checker *C) {
+func (suite *FriezeFormulaSuite) TestEulerCoefficientRelationships(checker *C) {
 	form := formula.EulerFormulaTerm{
 		Multiplier:             complex(3, 0),
 		PowerN:                 2,
 		PowerM:                 0,
 		IgnoreComplexConjugate: true,
-		CoefficientPairs: formula.LockedCoefficientPair{
-			Multiplier: 1,
-			OtherCoefficientRelationships: []formula.CoefficientRelationship{
-				formula.PlusMPlusN,
-			},
-		},
+		CoefficientRelationships: []coefficient.Relationship{coefficient.PlusMPlusN},
 	}
 	result := form.Calculate(complex(math.Pi / 6.0,1))
-	checker.Assert(math.Abs(real(result) - 3 * ((math.Exp(-2) * 1.0 / 2.0) + 1.0)) < 0.01, Equals, true)
-	checker.Assert(math.Abs(imag(result) - 3 * math.Exp(-2) * math.Sqrt(3.0) / 2.0) < 0.01, Equals, true)
+	checker.Assert(real(result), utility.NumericallyCloseEnough{}, 3 * ((math.Exp(-2) / 2.0) + 1.0), 1e-6)
+	checker.Assert(imag(result), utility.NumericallyCloseEnough{}, 3 * math.Exp(-2) * math.Sqrt(3.0) / 2.0, 1e-6)
 }
 
 func (suite *FriezeFormulaSuite) TestUseComplexConjugate(checker *C) {
@@ -52,8 +49,8 @@ func (suite *FriezeFormulaSuite) TestUseComplexConjugate(checker *C) {
 		IgnoreComplexConjugate: false,
 	}
 	result := form.Calculate(complex(math.Pi / 6.0,2))
-	checker.Assert(real(result), Equals, 3 * math.Exp(-6) * math.Sqrt(3.0) / 2.0)
-	checker.Assert(imag(result), Equals, 3 * math.Exp(-6) * 1.0 / 2.0)
+	checker.Assert(real(result), utility.NumericallyCloseEnough{}, 3 * math.Exp(-6) * math.Sqrt(3.0) / 2.0, 1e-6)
+	checker.Assert(imag(result), utility.NumericallyCloseEnough{}, 3 * math.Exp(-6) * 1.0 / 2.0, 1e-6)
 }
 
 func (suite *FriezeFormulaSuite) TestFriezeFormula(checker *C) {
@@ -64,12 +61,7 @@ func (suite *FriezeFormulaSuite) TestFriezeFormula(checker *C) {
 				PowerN:                 1,
 				PowerM:                 0,
 				IgnoreComplexConjugate: false,
-				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: 1,
-					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-						formula.PlusMPlusN,
-					},
-				},
+				CoefficientRelationships: []coefficient.Relationship{coefficient.PlusMPlusN},
 			},
 		},
 	}
@@ -77,8 +69,8 @@ func (suite *FriezeFormulaSuite) TestFriezeFormula(checker *C) {
 	total := result.Total
 
 	expectedResult := complex(math.Exp(-1), 0) * complex(math.Sqrt(3) * 2, 0)
-	checker.Assert(real(total), Equals, real(expectedResult))
-	checker.Assert(imag(total), Equals, imag(expectedResult))
+	checker.Assert(real(total), utility.NumericallyCloseEnough{}, real(expectedResult), 1e-6)
+	checker.Assert(imag(total), utility.NumericallyCloseEnough{}, imag(expectedResult), 1e-6)
 }
 
 func (suite *FriezeFormulaSuite) TestP211Frieze(checker *C) {
@@ -89,12 +81,7 @@ func (suite *FriezeFormulaSuite) TestP211Frieze(checker *C) {
 				PowerN:                 2,
 				PowerM:                 0,
 				IgnoreComplexConjugate: false,
-				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: 1,
-					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-						formula.MinusNMinusM,
-					},
-				},
+				CoefficientRelationships: []coefficient.Relationship{coefficient.MinusNMinusM},
 			},
 		},
 	}
@@ -110,12 +97,7 @@ func (suite *FriezeFormulaSuite) TestP1m1Frieze(checker *C) {
 				PowerN:                 2,
 				PowerM:                 0,
 				IgnoreComplexConjugate: false,
-				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: 1,
-					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-						formula.PlusMPlusN,
-					},
-				},
+				CoefficientRelationships: []coefficient.Relationship{coefficient.PlusMPlusN},
 			},
 		},
 	}
@@ -131,12 +113,7 @@ func (suite *FriezeFormulaSuite) TestP11mFrieze(checker *C) {
 				PowerN:                 2,
 				PowerM:                 0,
 				IgnoreComplexConjugate: false,
-				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: 1,
-					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-						formula.MinusMMinusN,
-					},
-				},
+				CoefficientRelationships: []coefficient.Relationship{coefficient.MinusMMinusN},
 			},
 		},
 	}
@@ -152,12 +129,7 @@ func (suite *FriezeFormulaSuite) TestP11gFrieze(checker *C) {
 				PowerN:                 2,
 				PowerM:                 1,
 				IgnoreComplexConjugate: false,
-				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: 1,
-					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-						formula.MinusMMinusNMaybeFlipScale,
-					},
-				},
+				CoefficientRelationships: []coefficient.Relationship{coefficient.MinusMMinusNMaybeFlipScale},
 			},
 		},
 	}
@@ -173,12 +145,7 @@ func (suite *FriezeFormulaSuite) TestP11mFriezeIfP11gHasEvenSumPowers (checker *
 				PowerN:                 2,
 				PowerM:                 0,
 				IgnoreComplexConjugate: false,
-				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: 1,
-					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-						formula.MinusMMinusNMaybeFlipScale,
-					},
-				},
+				CoefficientRelationships: []coefficient.Relationship{coefficient.MinusMMinusNMaybeFlipScale},
 			},
 		},
 	}
@@ -194,13 +161,10 @@ func (suite *FriezeFormulaSuite) TestP2mmFrieze(checker *C) {
 				PowerN:                 2,
 				PowerM:                 0,
 				IgnoreComplexConjugate: false,
-				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: 1,
-					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-						formula.MinusNMinusM,
-						formula.PlusMPlusN,
-						formula.MinusMMinusN,
-					},
+				CoefficientRelationships: []coefficient.Relationship{
+					coefficient.MinusNMinusM,
+					coefficient.PlusMPlusN,
+					coefficient.MinusMMinusN,
 				},
 			},
 		},
@@ -217,13 +181,10 @@ func (suite *FriezeFormulaSuite) TestP2mgFrieze(checker *C) {
 				PowerN:                 2,
 				PowerM:                 -1,
 				IgnoreComplexConjugate: false,
-				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: 1,
-					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-						formula.MinusNMinusM,
-						formula.PlusMPlusNMaybeFlipScale,
-						formula.MinusMMinusNMaybeFlipScale,
-					},
+				CoefficientRelationships: []coefficient.Relationship{
+					coefficient.MinusNMinusM,
+					coefficient.PlusMPlusNMaybeFlipScale,
+					coefficient.MinusMMinusNMaybeFlipScale,
 				},
 			},
 		},
@@ -240,13 +201,10 @@ func (suite *FriezeFormulaSuite) TestP2mmFriezeEvenIfP2mgHasEvenSumPowers(checke
 				PowerN:                 2,
 				PowerM:                 0,
 				IgnoreComplexConjugate: false,
-				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: 1,
-					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-						formula.MinusNMinusM,
-						formula.PlusMPlusNMaybeFlipScale,
-						formula.MinusMMinusNMaybeFlipScale,
-					},
+				CoefficientRelationships: []coefficient.Relationship{
+					coefficient.MinusNMinusM,
+					coefficient.PlusMPlusNMaybeFlipScale,
+					coefficient.MinusMMinusNMaybeFlipScale,
 				},
 			},
 		},
@@ -263,7 +221,7 @@ func (suite *FriezeFormulaSuite) TestP111Frieze(checker *C) {
 				PowerN:                 2,
 				PowerM:                 0,
 				IgnoreComplexConjugate: false,
-				CoefficientPairs:       formula.LockedCoefficientPair{},
+				CoefficientRelationships: []coefficient.Relationship{},
 			},
 		},
 	}
@@ -279,12 +237,7 @@ func (suite *FriezeFormulaSuite) TestP111FriezeComplexConjugateIgnored(checker *
 				PowerN:                 2,
 				PowerM:                 0,
 				IgnoreComplexConjugate: true,
-				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: 1,
-					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-						formula.MinusNMinusM,
-					},
-				},
+				CoefficientRelationships: []coefficient.Relationship{coefficient.MinusNMinusM},
 			},
 		},
 	}
@@ -301,11 +254,8 @@ func (suite *FriezeFormulaSuite) TestContributionOfFriezeFormula(checker *C) {
 				PowerN:                 1,
 				PowerM:                 0,
 				IgnoreComplexConjugate: false,
-				CoefficientPairs: formula.LockedCoefficientPair{
-					Multiplier: 1,
-					OtherCoefficientRelationships: []formula.CoefficientRelationship{
-						formula.PlusMPlusN,
-					},
+				CoefficientRelationships: []coefficient.Relationship{
+					coefficient.PlusMPlusN,
 				},
 			},
 		},
@@ -316,8 +266,8 @@ func (suite *FriezeFormulaSuite) TestContributionOfFriezeFormula(checker *C) {
 	contributionByFirstTerm := result.ContributionByTerm[0]
 
 	expectedResult := complex(math.Exp(-1), 0) * complex(math.Sqrt(3) * 2, 0)
-	checker.Assert(real(contributionByFirstTerm), Equals, real(expectedResult))
-	checker.Assert(imag(contributionByFirstTerm), Equals, imag(expectedResult))
+	checker.Assert(real(contributionByFirstTerm), utility.NumericallyCloseEnough{}, real(expectedResult), 1e-6)
+	checker.Assert(imag(contributionByFirstTerm), utility.NumericallyCloseEnough{}, imag(expectedResult), 1e-6)
 }
 
 func (suite *FriezeFormulaSuite) TestCreateEulerFormulaWithYAML(checker *C) {
@@ -328,23 +278,20 @@ multiplier:
 power_n: 12
 power_m: -10
 ignore_complex_conjugate: true
-coefficient_pairs:
-  multiplier: 1
-  relationships:
+coefficient_relationships:
   - -M-N
   - +M+NF
 `)
 	eulerExponentialFormulaTerm, err := formula.NewEulerFormulaTermFromYAML(yamlByteStream)
 	checker.Assert(err, IsNil)
-	checker.Assert(real(eulerExponentialFormulaTerm.Multiplier), Equals, -1.0)
-	checker.Assert(imag(eulerExponentialFormulaTerm.Multiplier), Equals, 2e-2)
+	checker.Assert(real(eulerExponentialFormulaTerm.Multiplier), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
+	checker.Assert(imag(eulerExponentialFormulaTerm.Multiplier), utility.NumericallyCloseEnough{}, 2e-2, 1e-6)
 	checker.Assert(eulerExponentialFormulaTerm.PowerN, Equals, 12)
 	checker.Assert(eulerExponentialFormulaTerm.PowerM, Equals, -10)
 	checker.Assert(eulerExponentialFormulaTerm.IgnoreComplexConjugate, Equals, true)
-	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.Multiplier, Equals, 1.0)
-	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships, HasLen, 2)
-	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[0], Equals, formula.CoefficientRelationship(formula.MinusMMinusN))
-	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[1], Equals, formula.CoefficientRelationship(formula.PlusMPlusNMaybeFlipScale))
+	checker.Assert(eulerExponentialFormulaTerm.CoefficientRelationships, HasLen, 2)
+	checker.Assert(eulerExponentialFormulaTerm.CoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.MinusMMinusN))
+	checker.Assert(eulerExponentialFormulaTerm.CoefficientRelationships[1], Equals, coefficient.Relationship(coefficient.PlusMPlusNMaybeFlipScale))
 }
 
 func (suite *FriezeFormulaSuite) TestCreateEulerFormulaWithJSON(checker *C) {
@@ -356,22 +303,18 @@ func (suite *FriezeFormulaSuite) TestCreateEulerFormulaWithJSON(checker *C) {
 				"power_n": 12,
 				"power_m": -10,
 				"ignore_complex_conjugate": true,
-				"coefficient_pairs": {
-				  "multiplier": 1,
-				  "relationships": ["-M-N", "+M+NF"]
-				}
+				"coefficient_relationships": ["-M-N", "+M+NF"]
 			}`)
 	eulerExponentialFormulaTerm, err := formula.NewEulerFormulaTermFromJSON(jsonByteStream)
 	checker.Assert(err, IsNil)
-	checker.Assert(real(eulerExponentialFormulaTerm.Multiplier), Equals, -1.0)
-	checker.Assert(imag(eulerExponentialFormulaTerm.Multiplier), Equals, 2e-2)
+	checker.Assert(real(eulerExponentialFormulaTerm.Multiplier), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
+	checker.Assert(imag(eulerExponentialFormulaTerm.Multiplier), utility.NumericallyCloseEnough{}, 2e-2, 1e-6)
 	checker.Assert(eulerExponentialFormulaTerm.PowerN, Equals, 12)
 	checker.Assert(eulerExponentialFormulaTerm.PowerM, Equals, -10)
 	checker.Assert(eulerExponentialFormulaTerm.IgnoreComplexConjugate, Equals, true)
-	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.Multiplier, Equals, 1.0)
-	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships, HasLen, 2)
-	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[0], Equals, formula.CoefficientRelationship(formula.MinusMMinusN))
-	checker.Assert(eulerExponentialFormulaTerm.CoefficientPairs.OtherCoefficientRelationships[1], Equals, formula.CoefficientRelationship(formula.PlusMPlusNMaybeFlipScale))
+	checker.Assert(eulerExponentialFormulaTerm.CoefficientRelationships, HasLen, 2)
+	checker.Assert(eulerExponentialFormulaTerm.CoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.MinusMMinusN))
+	checker.Assert(eulerExponentialFormulaTerm.CoefficientRelationships[1], Equals, coefficient.Relationship(coefficient.PlusMPlusNMaybeFlipScale))
 }
 
 func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithYAML(checker *C) {
@@ -382,9 +325,7 @@ func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithYAML(checker *C) {
       imaginary: 2e-2
     power_n: 3
     power_m: 0
-    coefficient_pairs:
-      multiplier: 1
-      relationships:
+    coefficient_relationships:
       - -M-N
       - "+M+NF"
   -
@@ -393,9 +334,7 @@ func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithYAML(checker *C) {
       imaginary: 0
     power_n: 1
     power_m: 1
-    coefficient_pairs:
-      multiplier: 1
-      relationships:
+    coefficient_relationships:
       - -M-NF
 `)
 	rosetteFormula, err := formula.NewFriezeFormulaFromYAML(yamlByteStream)
@@ -403,7 +342,7 @@ func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithYAML(checker *C) {
 	checker.Assert(rosetteFormula.Terms, HasLen, 2)
 	checker.Assert(rosetteFormula.Terms[0].PowerN, Equals, 3)
 	checker.Assert(rosetteFormula.Terms[0].IgnoreComplexConjugate, Equals, false)
-	checker.Assert(rosetteFormula.Terms[1].CoefficientPairs.OtherCoefficientRelationships[0], Equals, formula.CoefficientRelationship(formula.MinusMMinusNMaybeFlipScale))
+	checker.Assert(rosetteFormula.Terms[1].CoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.MinusMMinusNMaybeFlipScale))
 }
 
 func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithJSON(checker *C) {
@@ -416,10 +355,7 @@ func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithJSON(checker *C) {
 						},
 						"power_n": 3,
 						"power_m": 0,
-						"coefficient_pairs": {
-						  "multiplier": 1,
-						  "relationships": ["-M-N", "+M+NF"]
-						}
+						"coefficient_relationships": ["-M-N", "+M+NF"]
 					},
 					{
 						"multiplier": {
@@ -428,10 +364,7 @@ func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithJSON(checker *C) {
 						},
 						"power_n": 1,
 						"power_m": 1,
-						"coefficient_pairs": {
-						  "multiplier": 1,
-						  "relationships": ["-M-NF"]
-						}
+						"coefficient_relationships": ["-M-NF"]
 					}
 				]
 			}`)
@@ -440,5 +373,5 @@ func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithJSON(checker *C) {
 	checker.Assert(rosetteFormula.Terms, HasLen, 2)
 	checker.Assert(rosetteFormula.Terms[0].PowerN, Equals, 3)
 	checker.Assert(rosetteFormula.Terms[0].IgnoreComplexConjugate, Equals, false)
-	checker.Assert(rosetteFormula.Terms[1].CoefficientPairs.OtherCoefficientRelationships[0], Equals, formula.CoefficientRelationship(formula.MinusMMinusNMaybeFlipScale))
+	checker.Assert(rosetteFormula.Terms[1].CoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.MinusMMinusNMaybeFlipScale))
 }

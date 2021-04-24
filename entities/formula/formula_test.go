@@ -4,6 +4,7 @@ import (
 	. "gopkg.in/check.v1"
 	"testing"
 	"wallpaper/entities/formula"
+	"wallpaper/entities/formula/coefficient"
 )
 
 func Test(t *testing.T) { TestingT(t) }
@@ -17,7 +18,7 @@ func (suite *CommonFormulaFeatures) SetUpTest(checker *C) {
 }
 
 func (suite *CommonFormulaFeatures) TestPlusNPlusM(checker *C) {
-	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.PlusNPlusM)
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), coefficient.PlusNPlusM)
 	checker.Assert(power1, Equals, 1)
 	checker.Assert(power2, Equals, 2)
 	checker.Assert(real(scale), Equals, 3.0)
@@ -25,7 +26,7 @@ func (suite *CommonFormulaFeatures) TestPlusNPlusM(checker *C) {
 }
 
 func (suite *CommonFormulaFeatures) TestPlusMPlusN(checker *C) {
-	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.PlusMPlusN)
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), coefficient.PlusMPlusN)
 	checker.Assert(power1, Equals, 2)
 	checker.Assert(power2, Equals, 1)
 	checker.Assert(real(scale), Equals, 3.0)
@@ -33,7 +34,7 @@ func (suite *CommonFormulaFeatures) TestPlusMPlusN(checker *C) {
 }
 
 func (suite *CommonFormulaFeatures) TestMinusNMinusM(checker *C) {
-	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.MinusNMinusM)
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), coefficient.MinusNMinusM)
 	checker.Assert(power1, Equals, -1)
 	checker.Assert(power2, Equals, -2)
 	checker.Assert(real(scale), Equals, 3.0)
@@ -41,7 +42,7 @@ func (suite *CommonFormulaFeatures) TestMinusNMinusM(checker *C) {
 }
 
 func (suite *CommonFormulaFeatures) TestMinusMMinusN(checker *C) {
-	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.MinusMMinusN)
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), coefficient.MinusMMinusN)
 	checker.Assert(power1, Equals, -2)
 	checker.Assert(power2, Equals, -1)
 	checker.Assert(real(scale), Equals, 3.0)
@@ -49,7 +50,7 @@ func (suite *CommonFormulaFeatures) TestMinusMMinusN(checker *C) {
 }
 
 func (suite *CommonFormulaFeatures) TestPlusMPlusNMaybeFlipScaleOdd(checker *C) {
-	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.PlusMPlusNMaybeFlipScale)
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), coefficient.PlusMPlusNMaybeFlipScale)
 	checker.Assert(power1, Equals, 2)
 	checker.Assert(power2, Equals, 1)
 	checker.Assert(real(scale), Equals, -3.0)
@@ -57,7 +58,7 @@ func (suite *CommonFormulaFeatures) TestPlusMPlusNMaybeFlipScaleOdd(checker *C) 
 }
 
 func (suite *CommonFormulaFeatures) TestPlusMPlusNMaybeFlipScaleEven(checker *C) {
-	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(0, 2, complex(3, 4), formula.PlusMPlusNMaybeFlipScale)
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(0, 2, complex(3, 4), coefficient.PlusMPlusNMaybeFlipScale)
 	checker.Assert(power1, Equals, 2)
 	checker.Assert(power2, Equals, 0)
 	checker.Assert(real(scale), Equals, 3.0)
@@ -65,7 +66,7 @@ func (suite *CommonFormulaFeatures) TestPlusMPlusNMaybeFlipScaleEven(checker *C)
 }
 
 func (suite *CommonFormulaFeatures) TestMinusMMinusNMaybeFlipScaleOdd(checker *C) {
-	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), formula.MinusMMinusNMaybeFlipScale)
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(1, 2, complex(3, 4), coefficient.MinusMMinusNMaybeFlipScale)
 	checker.Assert(power1, Equals, -2)
 	checker.Assert(power2, Equals, -1)
 	checker.Assert(real(scale), Equals, -3.0)
@@ -73,7 +74,7 @@ func (suite *CommonFormulaFeatures) TestMinusMMinusNMaybeFlipScaleOdd(checker *C
 }
 
 func (suite *CommonFormulaFeatures) TestMinusMMinusNMaybeFlipScaleEven(checker *C) {
-	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(0, 2, complex(3, 4), formula.MinusMMinusNMaybeFlipScale)
+	power1, power2, scale := formula.SetCoefficientsBasedOnRelationship(0, 2, complex(3, 4), coefficient.MinusMMinusNMaybeFlipScale)
 	checker.Assert(power1, Equals, -2)
 	checker.Assert(power2, Equals, 0)
 	checker.Assert(real(scale), Equals, 3.0)
@@ -90,6 +91,6 @@ relationships:
 	checker.Assert(err, IsNil)
 	checker.Assert(coefficientPair.Multiplier, Equals, 1.0)
 	checker.Assert(coefficientPair.OtherCoefficientRelationships, HasLen, 2)
-	checker.Assert(coefficientPair.OtherCoefficientRelationships[0], Equals, formula.CoefficientRelationship(formula.PlusNPlusM))
-	checker.Assert(coefficientPair.OtherCoefficientRelationships[1], Equals, formula.CoefficientRelationship(formula.MinusMMinusNMaybeFlipScale))
+	checker.Assert(coefficientPair.OtherCoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.PlusNPlusM))
+	checker.Assert(coefficientPair.OtherCoefficientRelationships[1], Equals, coefficient.Relationship(coefficient.MinusMMinusNMaybeFlipScale))
 }

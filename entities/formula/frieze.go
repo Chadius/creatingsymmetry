@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"gopkg.in/yaml.v2"
 	"math/cmplx"
+	"wallpaper/entities/formula/coefficient"
 	"wallpaper/entities/utility"
 )
 
@@ -62,15 +63,15 @@ func (formula FriezeFormula) AnalyzeForSymmetry() *FriezeSymmetry {
 
 		powerSumIsEven := (term.PowerN + term.PowerM) % 2 == 0
 
-		containsMinusNMinusM := coefficientPairsIncludes(term.CoefficientPairs.OtherCoefficientRelationships, MinusNMinusM)
-		containsMinusMMinusN := coefficientPairsIncludes(term.CoefficientPairs.OtherCoefficientRelationships, MinusMMinusN)
-		containsPlusMPlusN := coefficientPairsIncludes(term.CoefficientPairs.OtherCoefficientRelationships, PlusMPlusN)
+		containsMinusNMinusM := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.MinusNMinusM)
+		containsMinusMMinusN := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.MinusMMinusN)
+		containsPlusMPlusN := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.PlusMPlusN)
 
-		containsMinusMMinusNAndPowerSumIsOdd := coefficientPairsIncludes(term.CoefficientPairs.OtherCoefficientRelationships, MinusMMinusNMaybeFlipScale ) && !powerSumIsEven
-		containsPlusMPlusNAndPowerSumIsOdd := coefficientPairsIncludes(term.CoefficientPairs.OtherCoefficientRelationships, PlusMPlusNMaybeFlipScale) && !powerSumIsEven
+		containsMinusMMinusNAndPowerSumIsOdd := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.MinusMMinusNMaybeFlipScale) && !powerSumIsEven
+		containsPlusMPlusNAndPowerSumIsOdd := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.PlusMPlusNMaybeFlipScale) && !powerSumIsEven
 
-		containsMinusMMinusNAndPowerSumIsEven := coefficientPairsIncludes(term.CoefficientPairs.OtherCoefficientRelationships, MinusMMinusNMaybeFlipScale ) && powerSumIsEven
-		containsPlusMPlusNAndPowerSumIsEven := coefficientPairsIncludes(term.CoefficientPairs.OtherCoefficientRelationships, PlusMPlusNMaybeFlipScale) && powerSumIsEven
+		containsMinusMMinusNAndPowerSumIsEven := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.MinusMMinusNMaybeFlipScale) && powerSumIsEven
+		containsPlusMPlusNAndPowerSumIsEven := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.PlusMPlusNMaybeFlipScale) && powerSumIsEven
 
 		if !containsMinusNMinusM {
 			symmetriesFound.P211 = false
@@ -99,25 +100,24 @@ func (formula FriezeFormula) AnalyzeForSymmetry() *FriezeSymmetry {
 }
 
 type eulerFormulaTermMarshalable struct {
-	Multiplier				utility.ComplexNumberForMarshal	`json:"multiplier" yaml:"multiplier"`
-	PowerN					int								`json:"power_n" yaml:"power_n"`
-	PowerM					int								`json:"power_m" yaml:"power_m"`
-	IgnoreComplexConjugate	bool							`json:"ignore_complex_conjugate" yaml:"ignore_complex_conjugate"`
-	CoefficientPairs		LockedCoefficientPair			`json:"coefficient_pairs" yaml:"coefficient_pairs"`
+	Multiplier					utility.ComplexNumberForMarshal	`json:"multiplier" yaml:"multiplier"`
+	PowerN						int								`json:"power_n" yaml:"power_n"`
+	PowerM						int								`json:"power_m" yaml:"power_m"`
+	IgnoreComplexConjugate		bool							`json:"ignore_complex_conjugate" yaml:"ignore_complex_conjugate"`
+	CoefficientRelationships	[]coefficient.Relationship		`json:"coefficient_relationships" yaml:"coefficient_relationships"`
 }
 
 // EulerFormulaTerm calculates e^(i*n*z) * e^(-i*m*zConj)
 type EulerFormulaTerm struct {
-	Multiplier				complex128
-	PowerN					int
-	PowerM					int
+	Multiplier					complex128
+	PowerN						int
+	PowerM						int
 	// IgnoreComplexConjugate will make sure zConjugate is not used in this calculation
 	//    (effectively setting it to 1 + 0i)
-	IgnoreComplexConjugate	bool
-	// CoefficientPairs will create similar terms to add to this one when calculating.
-	//    This is useful when trying to force symmetry by adding another term with swapped
-	//    PowerN & PowerM, or multiplying by -1.
-	CoefficientPairs		LockedCoefficientPair
+	IgnoreComplexConjugate		bool
+	// CoefficientRelationships has a list of locked coefficient pairings. These locks are
+	//   used to generate similar locked terms. Relationships affect PowerN, PowerM and Multiplier.
+	CoefficientRelationships	[]coefficient.Relationship
 }
 
 // NewEulerFormulaTermFromYAML reads the data and returns a formula term from it.
@@ -146,24 +146,29 @@ func newEulerFormulaTermFromDatastream(data []byte, unmarshal utility.UnmarshalF
 
 func newEulerFormulaTermFromMarshalObject(marshalObject eulerFormulaTermMarshalable) *EulerFormulaTerm {
 	return &EulerFormulaTerm{
-		Multiplier:             complex(marshalObject.Multiplier.Real, marshalObject.Multiplier.Imaginary),
-		PowerN:                 marshalObject.PowerN,
-		PowerM:                 marshalObject.PowerM,
-		IgnoreComplexConjugate: marshalObject.IgnoreComplexConjugate,
-		CoefficientPairs:       marshalObject.CoefficientPairs,
+		Multiplier:             	complex(marshalObject.Multiplier.Real, marshalObject.Multiplier.Imaginary),
+		PowerN:                 	marshalObject.PowerN,
+		PowerM:                 	marshalObject.PowerM,
+		IgnoreComplexConjugate:		marshalObject.IgnoreComplexConjugate,
+		CoefficientRelationships:	marshalObject.CoefficientRelationships,
 	}
 }
 
 // Calculate returns the result of using the formula on the given complex number.
 func (term EulerFormulaTerm) Calculate(z complex128) complex128 {
-	sum := CalculateEulerTerm(z, term.PowerN, term.PowerM, term.Multiplier, term.IgnoreComplexConjugate)
+	sum := complex(0.0,0.0)
 
-	for _, relationship := range term.CoefficientPairs.OtherCoefficientRelationships {
-		power1, power2, scale := SetCoefficientsBasedOnRelationship(term.PowerN, term.PowerM, term.Multiplier, relationship)
-		relationshipScale := scale * complex(term.CoefficientPairs.Multiplier, 0)
-		sum += CalculateEulerTerm(z, power1, power2, relationshipScale, term.IgnoreComplexConjugate)
+	coefficientRelationships := []coefficient.Relationship{coefficient.PlusNPlusM}
+	coefficientRelationships = append(coefficientRelationships, term.CoefficientRelationships...)
+	coefficientSets := coefficient.Pairing{
+		PowerN:     term.PowerN,
+		PowerM:     term.PowerM,
+		Multiplier: term.Multiplier,
+	}.GenerateCoefficientSets(coefficientRelationships)
+
+	for _, relationshipSet := range coefficientSets {
+		sum += CalculateEulerTerm(z, relationshipSet.PowerN, relationshipSet.PowerM, relationshipSet.Multiplier, term.IgnoreComplexConjugate)
 	}
-
 	return sum
 }
 
@@ -179,7 +184,7 @@ func CalculateEulerTerm(z complex128, power1, power2 int, scale complex128, igno
 	return eRaisedToTheNZi * eRaisedToTheNegativeMZConji * scale
 }
 
-func coefficientPairsIncludes (relationships []CoefficientRelationship, relationshipToFind CoefficientRelationship) bool {
+func coefficientRelationshipsIncludes(relationships []coefficient.Relationship, relationshipToFind coefficient.Relationship) bool {
 	for _, relationship := range relationships {
 		if relationship == relationshipToFind {
 			return true

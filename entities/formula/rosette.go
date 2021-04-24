@@ -4,16 +4,17 @@ import (
 	"encoding/json"
 	"gopkg.in/yaml.v2"
 	"math/cmplx"
+	"wallpaper/entities/formula/coefficient"
 	"wallpaper/entities/utility"
 )
 
 // ZExponentialFormulaTermMarshalable can be marshaled and converted to a ZExponentialFormulaTerm
 type ZExponentialFormulaTermMarshalable struct {
-	Multiplier				utility.ComplexNumberForMarshal	`json:"multiplier" yaml:"multiplier"`
-	PowerN					int								`json:"power_n" yaml:"power_n"`
-	PowerM					int								`json:"power_m" yaml:"power_m"`
-	IgnoreComplexConjugate	bool							`json:"ignore_complex_conjugate" yaml:"ignore_complex_conjugate"`
-	CoefficientPairs		LockedCoefficientPair			`json:"coefficient_pairs" yaml:"coefficient_pairs"`
+	Multiplier					utility.ComplexNumberForMarshal	`json:"multiplier" yaml:"multiplier"`
+	PowerN						int								`json:"power_n" yaml:"power_n"`
+	PowerM						int								`json:"power_m" yaml:"power_m"`
+	IgnoreComplexConjugate		bool							`json:"ignore_complex_conjugate" yaml:"ignore_complex_conjugate"`
+	CoefficientRelationships	[]coefficient.Relationship		`json:"coefficient_relationships" yaml:"coefficient_relationships"`
 }
 
 // ZExponentialFormulaTerm describes a formula of the form Multiplier * z^PowerN * zConjugate^PowerM.
@@ -24,10 +25,9 @@ type ZExponentialFormulaTerm struct {
 	// IgnoreComplexConjugate will make sure zConjugate is not used in this calculation
 	//    (effectively setting it to 1 + 0i)
 	IgnoreComplexConjugate	bool
-	// CoefficientPairs will create similar terms to add to this one when calculating.
-	//    This is useful when trying to force symmetry by adding another term with swapped
-	//    PowerN & PowerM, or multiplying by -1.
-	CoefficientPairs		LockedCoefficientPair
+	// CoefficientRelationships has a list of locked coefficient pairings. These locks are
+	//   used to generate similar locked terms. Relationships affect PowerN, PowerM and Multiplier.
+	CoefficientRelationships	[]coefficient.Relationship
 }
 
 // NewZExponentialFormulaTermFromYAML reads the data and returns a formula term from it.
@@ -56,23 +56,28 @@ func newZExponentialFormulaTermFromDatastream(data []byte, unmarshal utility.Unm
 
 func newZExponentialFormulaTermFromMarshalObject(marshalObject ZExponentialFormulaTermMarshalable) *ZExponentialFormulaTerm {
 	return &ZExponentialFormulaTerm{
-		Multiplier:             complex(marshalObject.Multiplier.Real, marshalObject.Multiplier.Imaginary),
-		PowerN:                 marshalObject.PowerN,
-		PowerM:                 marshalObject.PowerM,
-		IgnoreComplexConjugate: marshalObject.IgnoreComplexConjugate,
-		CoefficientPairs:       marshalObject.CoefficientPairs,
+		Multiplier:             	complex(marshalObject.Multiplier.Real, marshalObject.Multiplier.Imaginary),
+		PowerN:                 	marshalObject.PowerN,
+		PowerM:                 	marshalObject.PowerM,
+		IgnoreComplexConjugate: 	marshalObject.IgnoreComplexConjugate,
+		CoefficientRelationships:	marshalObject.CoefficientRelationships,
 	}
 }
 
 // Calculate returns the result of using the formula on the given complex number.
 func (term ZExponentialFormulaTerm) Calculate(z complex128) complex128 {
-	sum := CalculateExponentTerm(z, term.PowerN, term.PowerM, term.Multiplier, term.IgnoreComplexConjugate)
+	sum := complex(0.0,0.0)
 
-	for _, relationship := range term.CoefficientPairs.OtherCoefficientRelationships {
-		power1, power2, scale := SetCoefficientsBasedOnRelationship(term.PowerN, term.PowerM, term.Multiplier, relationship)
-		relationshipScale := scale * complex(term.CoefficientPairs.Multiplier, 0)
+	coefficientRelationships := []coefficient.Relationship{coefficient.PlusNPlusM}
+	coefficientRelationships = append(coefficientRelationships, term.CoefficientRelationships...)
+	coefficientSets := coefficient.Pairing{
+		PowerN:     term.PowerN,
+		PowerM:     term.PowerM,
+		Multiplier: term.Multiplier,
+	}.GenerateCoefficientSets(coefficientRelationships)
 
-		sum += CalculateExponentTerm(z, power1, power2, relationshipScale, term.IgnoreComplexConjugate)
+	for _, relationshipSet := range coefficientSets {
+		sum += CalculateExponentTerm(z, relationshipSet.PowerN, relationshipSet.PowerM, relationshipSet.Multiplier, term.IgnoreComplexConjugate)
 	}
 	return sum
 }
@@ -174,25 +179,25 @@ func CalculateExponentTerm(z complex128, power1, power2 int, scale complex128, i
 }
 
 // SetCoefficientsBasedOnRelationship will rearrange powerN and powerM according to their relationship.
-func SetCoefficientsBasedOnRelationship(powerN, powerM int, scale complex128, relationship CoefficientRelationship) (int, int, complex128) {
+func SetCoefficientsBasedOnRelationship(powerN, powerM int, scale complex128, relationship coefficient.Relationship) (int, int, complex128) {
 	var power1, power2 int
 	switch relationship {
-	case PlusNPlusM:
+	case coefficient.PlusNPlusM:
 		power1 = powerN
 		power2 = powerM
-	case PlusMPlusN, PlusMPlusNMaybeFlipScale:
+	case coefficient.PlusMPlusN, coefficient.PlusMPlusNMaybeFlipScale:
 		power1 = powerM
 		power2 = powerN
-	case MinusMMinusN, MinusMMinusNMaybeFlipScale:
+	case coefficient.MinusMMinusN, coefficient.MinusMMinusNMaybeFlipScale:
 		power1 = -1 * powerM
 		power2 = -1 * powerN
-	case MinusNMinusM:
+	case coefficient.MinusNMinusM:
 		power1 = -1 * powerN
 		power2 = -1 * powerM
 	}
 
 	sumOfPowersIsOdd := (powerN + powerM) % 2 == 1
-	relationshipMayFlipScale := relationship == PlusMPlusNMaybeFlipScale || relationship == MinusMMinusNMaybeFlipScale
+	relationshipMayFlipScale := relationship == coefficient.PlusMPlusNMaybeFlipScale || relationship == coefficient.MinusMMinusNMaybeFlipScale
 	if sumOfPowersIsOdd && relationshipMayFlipScale {
 		scale *= -1
 	}
