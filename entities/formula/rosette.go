@@ -181,33 +181,6 @@ func CalculateExponentTerm(z complex128, power1, power2 int, scale complex128, i
 	return zRaisedToN * complexConjugateRaisedToM * scale
 }
 
-// SetCoefficientsBasedOnRelationship will rearrange powerN and powerM according to their relationship.
-func SetCoefficientsBasedOnRelationship(powerN, powerM int, scale complex128, relationship coefficient.Relationship) (int, int, complex128) {
-	var power1, power2 int
-	switch relationship {
-	case coefficient.PlusNPlusM:
-		power1 = powerN
-		power2 = powerM
-	case coefficient.PlusMPlusN, coefficient.PlusMPlusNMaybeFlipScale:
-		power1 = powerM
-		power2 = powerN
-	case coefficient.MinusMMinusN, coefficient.MinusMMinusNMaybeFlipScale:
-		power1 = -1 * powerM
-		power2 = -1 * powerN
-	case coefficient.MinusNMinusM:
-		power1 = -1 * powerN
-		power2 = -1 * powerM
-	}
-
-	sumOfPowersIsOdd := (powerN + powerM) % 2 == 1
-	relationshipMayFlipScale := relationship == coefficient.PlusMPlusNMaybeFlipScale || relationship == coefficient.MinusMMinusNMaybeFlipScale
-	if sumOfPowersIsOdd && relationshipMayFlipScale {
-		scale *= -1
-	}
-
-	return power1, power2, scale
-}
-
 // NewRosetteFormulaFromYAML reads the data and returns a RosetteFormula from it.
 func NewRosetteFormulaFromYAML(data []byte) (*RosetteFormula, error) {
 	return newRosetteFormulaFromDatastream(data, yaml.Unmarshal)
