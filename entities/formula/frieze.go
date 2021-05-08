@@ -1,16 +1,16 @@
 package formula
 
 import (
-	"encoding/json"
 	"gopkg.in/yaml.v2"
 	"math/cmplx"
 	"wallpaper/entities/formula/coefficient"
+	"wallpaper/entities/formula/exponential"
 	"wallpaper/entities/utility"
 )
 
 // FriezeFormula is used to generate frieze patterns.
 type FriezeFormula struct {
-	Terms []*EulerFormulaTerm
+	Terms []*exponential.Term
 }
 
 // Calculate applies the Frieze formula to the complex number z.
@@ -21,12 +21,32 @@ func (formula FriezeFormula) Calculate(z complex128) *CalculationResultForFormul
 	}
 
 	for _, term := range formula.Terms {
-		termResult := term.Calculate(z)
+		termResult := formula.calculateTerm(term, z)
 		result.Total += termResult
 		result.ContributionByTerm = append(result.ContributionByTerm, termResult)
 	}
 
 	return result
+}
+
+func (formula *FriezeFormula) calculateTerm(term *exponential.Term, z complex128) complex128 {
+	sum := complex(0.0,0.0)
+
+	coefficientRelationships := []coefficient.Relationship{coefficient.PlusNPlusM}
+	coefficientRelationships = append(coefficientRelationships, term.CoefficientRelationships...)
+	coefficientSets := coefficient.Pairing{
+		PowerN:     term.PowerN,
+		PowerM:     term.PowerM,
+	}.GenerateCoefficientSets(coefficientRelationships)
+
+	for _, relationshipSet := range coefficientSets {
+		multiplier := term.Multiplier
+		if relationshipSet.NegateMultiplier == true {
+			multiplier *= -1
+		}
+		sum += CalculateEulerTerm(z, relationshipSet.PowerN, relationshipSet.PowerM, multiplier, term.IgnoreComplexConjugate)
+	}
+	return sum
 }
 
 // FriezeSymmetry notes the kinds of symmetries the formula contains.
@@ -99,82 +119,6 @@ func (formula FriezeFormula) AnalyzeForSymmetry() *FriezeSymmetry {
 	return symmetriesFound
 }
 
-type eulerFormulaTermMarshalable struct {
-	Multiplier					utility.ComplexNumberForMarshal	`json:"multiplier" yaml:"multiplier"`
-	PowerN						int								`json:"power_n" yaml:"power_n"`
-	PowerM						int								`json:"power_m" yaml:"power_m"`
-	IgnoreComplexConjugate		bool							`json:"ignore_complex_conjugate" yaml:"ignore_complex_conjugate"`
-	CoefficientRelationships	[]coefficient.Relationship		`json:"coefficient_relationships" yaml:"coefficient_relationships"`
-}
-
-// EulerFormulaTerm calculates e^(i*n*z) * e^(-i*m*zConj)
-type EulerFormulaTerm struct {
-	Multiplier					complex128
-	PowerN						int
-	PowerM						int
-	// IgnoreComplexConjugate will make sure zConjugate is not used in this calculation
-	//    (effectively setting it to 1 + 0i)
-	IgnoreComplexConjugate		bool
-	// CoefficientRelationships has a list of locked coefficient pairings. These locks are
-	//   used to generate similar locked terms. Relationships affect PowerN, PowerM and Multiplier.
-	CoefficientRelationships	[]coefficient.Relationship
-}
-
-// NewEulerFormulaTermFromYAML reads the data and returns a formula term from it.
-func NewEulerFormulaTermFromYAML(data []byte) (*EulerFormulaTerm, error) {
-	return newEulerFormulaTermFromDatastream(data, yaml.Unmarshal)
-}
-
-// NewEulerFormulaTermFromJSON reads the data and returns a formula term from it.
-func NewEulerFormulaTermFromJSON(data []byte) (*EulerFormulaTerm, error) {
-	return newEulerFormulaTermFromDatastream(data, json.Unmarshal)
-}
-
-//newEulerFormulaTermFromDatastream consumes a given bytestream and tries to create a new object from it.
-func newEulerFormulaTermFromDatastream(data []byte, unmarshal utility.UnmarshalFunc) (*EulerFormulaTerm, error) {
-	var unmarshalError error
-	var formulaTermMarshal eulerFormulaTermMarshalable
-	unmarshalError = unmarshal(data, &formulaTermMarshal)
-
-	if unmarshalError != nil {
-		return nil, unmarshalError
-	}
-
-	formulaTerm := newEulerFormulaTermFromMarshalObject(formulaTermMarshal)
-	return formulaTerm, nil
-}
-
-func newEulerFormulaTermFromMarshalObject(marshalObject eulerFormulaTermMarshalable) *EulerFormulaTerm {
-	return &EulerFormulaTerm{
-		Multiplier:             	complex(marshalObject.Multiplier.Real, marshalObject.Multiplier.Imaginary),
-		PowerN:                 	marshalObject.PowerN,
-		PowerM:                 	marshalObject.PowerM,
-		IgnoreComplexConjugate:		marshalObject.IgnoreComplexConjugate,
-		CoefficientRelationships:	marshalObject.CoefficientRelationships,
-	}
-}
-
-// Calculate returns the result of using the formula on the given complex number.
-func (term EulerFormulaTerm) Calculate(z complex128) complex128 {
-	sum := complex(0.0,0.0)
-
-	coefficientRelationships := []coefficient.Relationship{coefficient.PlusNPlusM}
-	coefficientRelationships = append(coefficientRelationships, term.CoefficientRelationships...)
-	coefficientSets := coefficient.Pairing{
-		PowerN:     term.PowerN,
-		PowerM:     term.PowerM,
-	}.GenerateCoefficientSets(coefficientRelationships)
-
-	for _, relationshipSet := range coefficientSets {
-		multiplier := term.Multiplier
-		if relationshipSet.NegateMultiplier == true {
-			multiplier *= -1
-		}
-		sum += CalculateEulerTerm(z, relationshipSet.PowerN, relationshipSet.PowerM, multiplier, term.IgnoreComplexConjugate)
-	}
-	return sum
-}
-
 // CalculateEulerTerm calculates e^(i*n*z) * e^(-i*m*zConj)
 func CalculateEulerTerm(z complex128, power1, power2 int, scale complex128, ignoreComplexConjugate bool) complex128 {
 	eRaisedToTheNZi := cmplx.Exp(complex(0,1) * z * complex(float64(power1), 0))
@@ -208,7 +152,7 @@ func NewFriezeFormulaFromJSON(data []byte) (*FriezeFormula, error) {
 
 // FriezeFormulaMarshalable can be marshaled and can be converted into a FriezeFormula.
 type FriezeFormulaMarshalable struct {
-	Terms []*eulerFormulaTermMarshalable
+	Terms []*exponential.TermMarshalable
 }
 
 // newFriezeFormulaFromDatastream consumes a given bytestream and tries to create a new object from it.
@@ -227,9 +171,9 @@ func newFriezeFormulaFromDatastream(data []byte, unmarshal utility.UnmarshalFunc
 
 // NewFriezeFormulaFromMarshalObject converts the marshaled object into a FriezeFormula.
 func NewFriezeFormulaFromMarshalObject(marshalObject FriezeFormulaMarshalable) *FriezeFormula {
-	terms := []*EulerFormulaTerm{}
+	terms := []*exponential.Term{}
 	for _, termMarshal := range marshalObject.Terms {
-		newTerm := newEulerFormulaTermFromMarshalObject(*termMarshal)
+		newTerm := exponential.NewTermFromMarshalObject(*termMarshal)
 		terms = append(terms, newTerm)
 	}
 	return &FriezeFormula{Terms: terms}

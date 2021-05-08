@@ -5,3 +5,4 @@ type CalculationResultForFormula struct {
 	Total				complex128
 	ContributionByTerm	[]complex128
 }
+
