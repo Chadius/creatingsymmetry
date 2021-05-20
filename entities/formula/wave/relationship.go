@@ -1,26 +1,26 @@
 package wave
 
 // Relationship explains how the Wave packet coefficients are related.
-type Relationship string
-
-// WaveRelationship s determine the order and sign of powers n and m.
 //   Plus means *1, Minus means *-1
 //   If N appears first the powers then power N is applied to the number and power M to the complex conjugate.
 //   If M appears first the powers then power M is applied to the number and power N to the complex conjugate.
 //	 MaybeFlipScale will multiply the scale by -1 if N + M is odd.
-const (
-	NoRelation Relationship = ""
-	PlusMPlusN                         Relationship = "+M+N"
-	MinusNMinusM                       Relationship = "-N-M"
-	MinusMMinusN                       Relationship = "-M-N"
-	MinusNMinusMPlusMPlusNMinusMMinusN Relationship = "-N-M+M+N-M-N"
-)
+type Relationship struct {
+	NoRelation bool
+	PlusMPlusN bool
+	MinusNMinusM bool
+	MinusMMinusN bool
+	MinusNMinusMPlusMPlusNMinusMMinusN bool
+}
 
 // FindWaveRelationships returns the relationship explaining how this set of wave formulas are related.
 func FindWaveRelationships(waveFormulas []*Formula) Relationship {
 
+	formulaRelationship := Relationship{}
+
 	if len(waveFormulas) < 2 {
-		return ""
+		formulaRelationship.NoRelation = true
+		return formulaRelationship
 	}
 
 	if len(waveFormulas) == 2 {
@@ -32,16 +32,18 @@ func FindWaveRelationships(waveFormulas []*Formula) Relationship {
 		relation02 := getRelationshipBetweenTwoFormulas(waveFormulas[0], waveFormulas[2])
 		relation03 := getRelationshipBetweenTwoFormulas(waveFormulas[0], waveFormulas[3])
 
-		foundMinusNMinusM := relation01 == MinusNMinusM || relation02 == MinusNMinusM || relation03 == MinusNMinusM
-		foundPlusMPlusN := relation01 == PlusMPlusN || relation02 == PlusMPlusN || relation03 == PlusMPlusN
-		foundMinusMMinusN := relation01 == MinusMMinusN || relation02 == MinusMMinusN || relation03 == MinusMMinusN
+		foundMinusNMinusM := relation01.MinusNMinusM || relation02.MinusNMinusM || relation03.MinusNMinusM
+		foundPlusMPlusN := relation01.PlusMPlusN || relation02.PlusMPlusN || relation03.PlusMPlusN
+		foundMinusMMinusN := relation01.MinusMMinusN || relation02.MinusMMinusN || relation03.MinusMMinusN
 
 		if foundMinusMMinusN && foundPlusMPlusN && foundMinusNMinusM {
-			return MinusNMinusMPlusMPlusNMinusMMinusN
+			formulaRelationship.MinusNMinusMPlusMPlusNMinusMMinusN = true
+			return formulaRelationship
 		}
 	}
 
-	return NoRelation
+	formulaRelationship.NoRelation = true
+	return formulaRelationship
 }
 
 func getRelationshipBetweenTwoFormulas(pair1, pair2 *Formula) Relationship {
@@ -65,17 +67,26 @@ func getRelationshipBetweenTwoFormulas(pair1, pair2 *Formula) Relationship {
 		firstPowerMtoSecondPowerMRatio = pair1.Terms[0].PowerM / pair2.Terms[0].PowerM
 	}
 
+	relationBetween := Relationship{}
+	relationFound := false
+
 	if firstPowerNtoSecondPowerMRatio == 1 && firstPowerMtoSecondPowerNRatio == 1{
-		return PlusMPlusN
+		relationBetween.PlusMPlusN = true
+		relationFound = true
 	}
 
 	if firstPowerNtoSecondPowerNRatio == -1 && firstPowerMtoSecondPowerMRatio == -1 {
-		return MinusNMinusM
+		relationBetween.MinusNMinusM = true
+		relationFound = true
 	}
 
 	if firstPowerNtoSecondPowerMRatio == -1 && firstPowerMtoSecondPowerNRatio == -1 {
-		return MinusMMinusN
+		relationBetween.MinusMMinusN = true
+		relationFound = true
 	}
 
-	return NoRelation
+	if !relationFound {
+		relationBetween.NoRelation = true
+	}
+	return relationBetween
 }

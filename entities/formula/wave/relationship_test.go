@@ -31,7 +31,7 @@ func (suite *WaveSymmetryFormulaTests) TestNeedTwoFormulasToDetectSymmetry(check
 	relationship := wave.FindWaveRelationships([]*wave.Formula{
 		suite.baseOddWave,
 	})
-	checker.Assert(relationship, Equals, wave.NoRelation)
+	checker.Assert(relationship.NoRelation, Equals, true)
 }
 
 func (suite *WaveSymmetryFormulaTests) TestPlusMPlusN(checker *C) {
@@ -49,7 +49,7 @@ func (suite *WaveSymmetryFormulaTests) TestPlusMPlusN(checker *C) {
 			Multiplier: complex(1, 0),
 		},
 	})
-	checker.Assert(relationship, Equals, wave.PlusMPlusN)
+	checker.Assert(relationship.PlusMPlusN, Equals, true)
 }
 
 func (suite *WaveSymmetryFormulaTests) TestMinusNMinusM(checker *C) {
@@ -67,7 +67,7 @@ func (suite *WaveSymmetryFormulaTests) TestMinusNMinusM(checker *C) {
 			Multiplier: complex(1, 0),
 		},
 	})
-	checker.Assert(relationship, Equals, wave.MinusNMinusM)
+	checker.Assert(relationship.MinusNMinusM, Equals, true)
 }
 
 func (suite *WaveSymmetryFormulaTests) TestMinusMMinusN(checker *C) {
@@ -85,7 +85,7 @@ func (suite *WaveSymmetryFormulaTests) TestMinusMMinusN(checker *C) {
 			Multiplier: complex(1, 0),
 		},
 	})
-	checker.Assert(relationship, Equals, wave.MinusMMinusN)
+	checker.Assert(relationship.MinusMMinusN, Equals, true)
 }
 
 func (suite *WaveSymmetryFormulaTests) TestMinusNMinusMPlusMPlusNMinusMMinusN(checker *C) {
@@ -125,5 +125,34 @@ func (suite *WaveSymmetryFormulaTests) TestMinusNMinusMPlusMPlusNMinusMMinusN(ch
 			Multiplier: complex(1, 0),
 		},
 	})
-	checker.Assert(relationship, Equals, wave.MinusNMinusMPlusMPlusNMinusMMinusN)
+	checker.Assert(relationship.MinusNMinusMPlusMPlusNMinusMMinusN, Equals, true)
+}
+
+func (suite *WaveSymmetryFormulaTests) TestMultipleSymmetries(checker *C) {
+	relationship := wave.FindWaveRelationships([]*wave.Formula{
+		{
+			Terms: []*formula.EisensteinFormulaTerm{
+				{
+					XLatticeVector: complex(1,0),
+					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
+					PowerN:         1,
+					PowerM:         -1,
+				},
+			},
+			Multiplier: complex(1, 0),
+		},
+		{
+			Terms: []*formula.EisensteinFormulaTerm{
+				{
+					XLatticeVector: complex(1,0),
+					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
+					PowerN:         -1,
+					PowerM:         1,
+				},
+			},
+			Multiplier: complex(1, 0),
+		},
+	})
+	checker.Assert(relationship.PlusMPlusN, Equals, true)
+	checker.Assert(relationship.MinusNMinusM, Equals, true)
 }
