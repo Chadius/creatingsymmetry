@@ -1,12 +1,12 @@
-package formula_test
+package frieze_test
 
 import (
 	. "gopkg.in/check.v1"
 	"math"
 	"testing"
-	"wallpaper/entities/formula"
 	"wallpaper/entities/formula/coefficient"
 	"wallpaper/entities/formula/exponential"
+	"wallpaper/entities/formula/frieze"
 	"wallpaper/entities/utility"
 )
 
@@ -20,7 +20,7 @@ func (suite *FriezeFormulaSuite) SetUpTest(checker *C) {
 }
 
 func (suite *FriezeFormulaSuite) TestFriezeFormula(checker *C) {
-	friezeFormula := formula.FriezeFormula{
+	friezeFormula := frieze.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(2, 0),
@@ -40,7 +40,7 @@ func (suite *FriezeFormulaSuite) TestFriezeFormula(checker *C) {
 }
 
 func (suite *FriezeFormulaSuite) TestP211Frieze(checker *C) {
-	friezeFormula := formula.FriezeFormula{
+	friezeFormula := frieze.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(1, 0),
@@ -56,7 +56,7 @@ func (suite *FriezeFormulaSuite) TestP211Frieze(checker *C) {
 }
 
 func (suite *FriezeFormulaSuite) TestP1m1Frieze(checker *C) {
-	friezeFormula := formula.FriezeFormula{
+	friezeFormula := frieze.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(1, 0),
@@ -72,7 +72,7 @@ func (suite *FriezeFormulaSuite) TestP1m1Frieze(checker *C) {
 }
 
 func (suite *FriezeFormulaSuite) TestP11mFrieze(checker *C) {
-	friezeFormula := formula.FriezeFormula{
+	friezeFormula := frieze.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(1, 0),
@@ -88,7 +88,7 @@ func (suite *FriezeFormulaSuite) TestP11mFrieze(checker *C) {
 }
 
 func (suite *FriezeFormulaSuite) TestP11gFrieze(checker *C) {
-	friezeFormula := formula.FriezeFormula{
+	friezeFormula := frieze.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(1, 0),
@@ -104,7 +104,7 @@ func (suite *FriezeFormulaSuite) TestP11gFrieze(checker *C) {
 }
 
 func (suite *FriezeFormulaSuite) TestP11mFriezeIfP11gHasEvenSumPowers (checker *C) {
-	friezeFormula := formula.FriezeFormula{
+	friezeFormula := frieze.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(1, 0),
@@ -120,7 +120,7 @@ func (suite *FriezeFormulaSuite) TestP11mFriezeIfP11gHasEvenSumPowers (checker *
 }
 
 func (suite *FriezeFormulaSuite) TestP2mmFrieze(checker *C) {
-	friezeFormula := formula.FriezeFormula{
+	friezeFormula := frieze.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(1, 0),
@@ -140,7 +140,7 @@ func (suite *FriezeFormulaSuite) TestP2mmFrieze(checker *C) {
 }
 
 func (suite *FriezeFormulaSuite) TestP2mgFrieze(checker *C) {
-	friezeFormula := formula.FriezeFormula{
+	friezeFormula := frieze.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(1, 0),
@@ -160,7 +160,7 @@ func (suite *FriezeFormulaSuite) TestP2mgFrieze(checker *C) {
 }
 
 func (suite *FriezeFormulaSuite) TestP2mmFriezeEvenIfP2mgHasEvenSumPowers(checker *C) {
-	friezeFormula := formula.FriezeFormula{
+	friezeFormula := frieze.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(1, 0),
@@ -180,7 +180,7 @@ func (suite *FriezeFormulaSuite) TestP2mmFriezeEvenIfP2mgHasEvenSumPowers(checke
 }
 
 func (suite *FriezeFormulaSuite) TestP111Frieze(checker *C) {
-	friezeFormula := formula.FriezeFormula{
+	friezeFormula := frieze.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(1, 0),
@@ -196,7 +196,7 @@ func (suite *FriezeFormulaSuite) TestP111Frieze(checker *C) {
 }
 
 func (suite *FriezeFormulaSuite) TestP111FriezeComplexConjugateIgnored(checker *C) {
-	friezeFormula := formula.FriezeFormula{
+	friezeFormula := frieze.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(1, 0),
@@ -213,7 +213,7 @@ func (suite *FriezeFormulaSuite) TestP111FriezeComplexConjugateIgnored(checker *
 }
 
 func (suite *FriezeFormulaSuite) TestContributionOfFriezeFormula(checker *C) {
-	friezeFormula := formula.FriezeFormula{
+	friezeFormula := frieze.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(2, 0),
@@ -256,7 +256,7 @@ func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithYAML(checker *C) {
     coefficient_relationships:
       - -M-NF
 `)
-	rosetteFormula, err := formula.NewFriezeFormulaFromYAML(yamlByteStream)
+	rosetteFormula, err := frieze.NewFriezeFormulaFromYAML(yamlByteStream)
 	checker.Assert(err, IsNil)
 	checker.Assert(rosetteFormula.Terms, HasLen, 2)
 	checker.Assert(rosetteFormula.Terms[0].PowerN, Equals, 3)
@@ -287,7 +287,7 @@ func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithJSON(checker *C) {
 					}
 				]
 			}`)
-	rosetteFormula, err := formula.NewFriezeFormulaFromJSON(jsonByteStream)
+	rosetteFormula, err := frieze.NewFriezeFormulaFromJSON(jsonByteStream)
 	checker.Assert(err, IsNil)
 	checker.Assert(rosetteFormula.Terms, HasLen, 2)
 	checker.Assert(rosetteFormula.Terms[0].PowerN, Equals, 3)

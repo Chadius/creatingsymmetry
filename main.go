@@ -9,7 +9,8 @@ import (
 	"io/ioutil"
 	"log"
 	"wallpaper/entities/command"
-	"wallpaper/entities/formula"
+	"wallpaper/entities/formula/frieze"
+	"wallpaper/entities/formula/rosette"
 	"wallpaper/entities/formula/wave"
 
 	//"image/png"
@@ -103,7 +104,7 @@ func transformCoordinatesForFormula(command *command.CreateWallpaperCommand, sca
 	return []complex128{}
 }
 
-func transformCoordinatesForFriezeFormula(friezeFormula *formula.FriezeFormula, scaledCoordinates []complex128) []complex128 {
+func transformCoordinatesForFriezeFormula(friezeFormula *frieze.Formula, scaledCoordinates []complex128) []complex128 {
 	symmetryAnalysis := friezeFormula.AnalyzeForSymmetry()
 	if symmetryAnalysis.P111 {
 		println("Has these symmetries: p111")
@@ -151,7 +152,7 @@ func transformCoordinatesForFriezeFormula(friezeFormula *formula.FriezeFormula, 
 	return transformedCoordinates
 }
 
-func transformCoordinatesForRosetteFormula(rosetteFormula *formula.RosetteFormula, scaledCoordinates []complex128) []complex128 {
+func transformCoordinatesForRosetteFormula(rosetteFormula *rosette.Formula, scaledCoordinates []complex128) []complex128 {
 	transformedCoordinates := []complex128{}
 	resultsByTerm := [][]complex128{}
 	for range rosetteFormula.Terms {

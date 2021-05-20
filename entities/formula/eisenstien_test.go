@@ -2,12 +2,14 @@ package formula_test
 
 import (
 	. "gopkg.in/check.v1"
+	"testing"
 	"wallpaper/entities/formula"
 	"wallpaper/entities/utility"
 )
 
-type EisensteinFormulaSuite struct {
-}
+func Test(t *testing.T) { TestingT(t) }
+
+type EisensteinFormulaSuite struct {}
 
 var _ = Suite(&EisensteinFormulaSuite{})
 

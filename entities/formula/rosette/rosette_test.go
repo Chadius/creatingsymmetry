@@ -1,12 +1,15 @@
-package formula_test
+package rosette_test
 
 import (
 	. "gopkg.in/check.v1"
-	"wallpaper/entities/formula"
+	"testing"
 	"wallpaper/entities/formula/coefficient"
 	"wallpaper/entities/formula/exponential"
+	"wallpaper/entities/formula/rosette"
 	"wallpaper/entities/utility"
 )
+
+func Test(t *testing.T) { TestingT(t) }
 
 type RosetteFormulaTest struct {}
 
@@ -16,7 +19,7 @@ func (suite *RosetteFormulaTest) SetUpTest(checker *C) {
 }
 
 func (suite *RosetteFormulaTest) TestCalculateRosetteFormula(checker *C) {
-	rosetteFormula := formula.RosetteFormula{
+	rosetteFormula := rosette.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(3, 0),
@@ -36,7 +39,7 @@ func (suite *RosetteFormulaTest) TestCalculateRosetteFormula(checker *C) {
 }
 
 func (suite *RosetteFormulaTest) TestMultifoldSymmetry1Term(checker *C) {
-	rosetteFormula := formula.RosetteFormula{
+	rosetteFormula := rosette.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(1, 0),
@@ -54,7 +57,7 @@ func (suite *RosetteFormulaTest) TestMultifoldSymmetry1Term(checker *C) {
 }
 
 func (suite *RosetteFormulaTest) TestMultifoldSymmetryIsAlwaysPositive(checker *C) {
-	rosetteFormula := formula.RosetteFormula{
+	rosetteFormula := rosette.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(1, 0),
@@ -72,7 +75,7 @@ func (suite *RosetteFormulaTest) TestMultifoldSymmetryIsAlwaysPositive(checker *
 }
 
 func (suite *RosetteFormulaTest) TestSymmetryUsesGreatestCommonDenominator(checker *C) {
-	rosetteFormula := formula.RosetteFormula{
+	rosetteFormula := rosette.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(1, 0),
@@ -108,7 +111,7 @@ func (suite *RosetteFormulaTest) TestSymmetryUsesGreatestCommonDenominator(check
 }
 
 func (suite *RosetteFormulaTest) TestGetContributionOfRosetteTerm(checker *C) {
-	rosetteFormula := formula.RosetteFormula{
+	rosetteFormula := rosette.Formula{
 		Terms: []*exponential.Term{
 			{
 				Multiplier:             complex(3, 0),
@@ -148,7 +151,7 @@ func (suite *RosetteFormulaTest) TestRosetteFormulaFromYAML(checker *C) {
     coefficient_relationships:
       - -M-NF
 `)
-	rosetteFormula, err := formula.NewRosetteFormulaFromYAML(yamlByteStream)
+	rosetteFormula, err := rosette.NewRosetteFormulaFromYAML(yamlByteStream)
 	checker.Assert(err, IsNil)
 	checker.Assert(rosetteFormula.Terms, HasLen, 2)
 	checker.Assert(rosetteFormula.Terms[0].PowerN, Equals, 3)
@@ -179,7 +182,7 @@ func (suite *RosetteFormulaTest) TestRosetteFormulaFromJSON(checker *C) {
 					}
 				]
 			}`)
-	rosetteFormula, err := formula.NewRosetteFormulaFromJSON(jsonByteStream)
+	rosetteFormula, err := rosette.NewRosetteFormulaFromJSON(jsonByteStream)
 	checker.Assert(err, IsNil)
 	checker.Assert(rosetteFormula.Terms, HasLen, 2)
 	checker.Assert(rosetteFormula.Terms[0].PowerN, Equals, 3)

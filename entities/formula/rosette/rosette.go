@@ -1,24 +1,25 @@
-package formula
+package rosette
 
 import (
 	"encoding/json"
 	"gopkg.in/yaml.v2"
 	"math/cmplx"
+	"wallpaper/entities/formula"
 	"wallpaper/entities/formula/coefficient"
 	"wallpaper/entities/formula/exponential"
 	"wallpaper/entities/utility"
 )
 
-// RosetteFormula uses a collection of z^m terms to calculate results.
+// Formula uses a collection of z^m terms to calculate results.
 //    This transforms the input into a circular pattern rotating around the
 //    origin.
-type RosetteFormula struct {
+type Formula struct {
 	Terms []*exponential.Term
 }
 
 // Calculate applies the Rosette formula to the complex number z.
-func (r RosetteFormula) Calculate(z complex128) *CalculationResultForFormula {
-	result := &CalculationResultForFormula{
+func (r Formula) Calculate(z complex128) *formula.CalculationResultForFormula {
+	result := &formula.CalculationResultForFormula{
 		Total: complex(0,0),
 		ContributionByTerm: []complex128{},
 	}
@@ -32,7 +33,7 @@ func (r RosetteFormula) Calculate(z complex128) *CalculationResultForFormula {
 	return result
 }
 
-func (r *RosetteFormula) calculateTerm(term *exponential.Term, z complex128) complex128 {
+func (r *Formula) calculateTerm(term *exponential.Term, z complex128) complex128 {
 	sum := complex(0.0,0.0)
 
 	coefficientRelationships := []coefficient.Relationship{coefficient.PlusNPlusM}
@@ -52,14 +53,14 @@ func (r *RosetteFormula) calculateTerm(term *exponential.Term, z complex128) com
 	return sum
 }
 
-// RosetteSymmetry notes the kinds of symmetries the rosette formula contains.
-type RosetteSymmetry struct {
+// Symmetry notes the kinds of symmetries the rosette formula contains.
+type Symmetry struct {
 	Multifold int
 }
 
 // AnalyzeForSymmetry analyzes the formula for symmetries.
-func (r RosetteFormula) AnalyzeForSymmetry() *RosetteSymmetry {
-	symmetriesFound := &RosetteSymmetry{
+func (r Formula) AnalyzeForSymmetry() *Symmetry {
+	symmetriesFound := &Symmetry{
 		Multifold: 1,
 	}
 
@@ -67,7 +68,7 @@ func (r RosetteFormula) AnalyzeForSymmetry() *RosetteSymmetry {
 	return symmetriesFound
 }
 
-func (r RosetteFormula) calculateMultifoldSymmetry(symmetriesFound *RosetteSymmetry) {
+func (r Formula) calculateMultifoldSymmetry(symmetriesFound *Symmetry) {
 	termPowerDifferences := []int{}
 
 	for _, term := range r.Terms {
@@ -125,25 +126,25 @@ func CalculateExponentTerm(z complex128, power1, power2 int, scale complex128, i
 	return zRaisedToN * complexConjugateRaisedToM * scale
 }
 
-// NewRosetteFormulaFromYAML reads the data and returns a RosetteFormula from it.
-func NewRosetteFormulaFromYAML(data []byte) (*RosetteFormula, error) {
+// NewRosetteFormulaFromYAML reads the data and returns a Formula from it.
+func NewRosetteFormulaFromYAML(data []byte) (*Formula, error) {
 	return newRosetteFormulaFromDatastream(data, yaml.Unmarshal)
 }
 
-// NewRosetteFormulaFromJSON reads the data and returns a RosetteFormula from it.
-func NewRosetteFormulaFromJSON(data []byte) (*RosetteFormula, error) {
+// NewRosetteFormulaFromJSON reads the data and returns a Formula from it.
+func NewRosetteFormulaFromJSON(data []byte) (*Formula, error) {
 	return newRosetteFormulaFromDatastream(data, json.Unmarshal)
 }
 
-// RosetteFormulaMarshalable can be marshaled and mapped to a RosetteFormula object.
-type RosetteFormulaMarshalable struct {
+// MarshaledFormula can be marshaled and mapped to a Formula object.
+type MarshaledFormula struct {
 	Terms []*exponential.TermMarshalable
 }
 
 // newRosetteFormulaFromDatastream consumes a given bytestream and tries to create a new object from it.
-func newRosetteFormulaFromDatastream(data []byte, unmarshal utility.UnmarshalFunc) (*RosetteFormula, error) {
+func newRosetteFormulaFromDatastream(data []byte, unmarshal utility.UnmarshalFunc) (*Formula, error) {
 	var unmarshalError error
-	var rosetteFormulaMarshal RosetteFormulaMarshalable
+	var rosetteFormulaMarshal MarshaledFormula
 	unmarshalError = unmarshal(data, &rosetteFormulaMarshal)
 
 	if unmarshalError != nil {
@@ -155,11 +156,11 @@ func newRosetteFormulaFromDatastream(data []byte, unmarshal utility.UnmarshalFun
 }
 
 // NewRosetteFormulaFromMarshalObject converts the marshalled object to a usable one.
-func NewRosetteFormulaFromMarshalObject(marshalObject RosetteFormulaMarshalable) *RosetteFormula {
+func NewRosetteFormulaFromMarshalObject(marshalObject MarshaledFormula) *Formula {
 	terms := []*exponential.Term{}
 	for _, termMarshal := range marshalObject.Terms {
 		newTerm := exponential.NewTermFromMarshalObject(*termMarshal)
 		terms = append(terms, newTerm)
 	}
-	return &RosetteFormula{Terms: terms}
+	return &Formula{Terms: terms}
 }

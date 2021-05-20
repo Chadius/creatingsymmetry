@@ -1,27 +1,28 @@
-package formula
+package frieze
 
 import (
 	"gopkg.in/yaml.v2"
 	"math/cmplx"
+	"wallpaper/entities/formula"
 	"wallpaper/entities/formula/coefficient"
 	"wallpaper/entities/formula/exponential"
 	"wallpaper/entities/utility"
 )
 
-// FriezeFormula is used to generate frieze patterns.
-type FriezeFormula struct {
+// Formula is used to generate frieze patterns.
+type Formula struct {
 	Terms []*exponential.Term
 }
 
 // Calculate applies the Frieze formula to the complex number z.
-func (formula FriezeFormula) Calculate(z complex128) *CalculationResultForFormula {
-	result := &CalculationResultForFormula{
+func (friezeFormula Formula) Calculate(z complex128) *formula.CalculationResultForFormula {
+	result := &formula.CalculationResultForFormula{
 		Total: complex(0,0),
 		ContributionByTerm: []complex128{},
 	}
 
-	for _, term := range formula.Terms {
-		termResult := formula.calculateTerm(term, z)
+	for _, term := range friezeFormula.Terms {
+		termResult := friezeFormula.calculateTerm(term, z)
 		result.Total += termResult
 		result.ContributionByTerm = append(result.ContributionByTerm, termResult)
 	}
@@ -29,7 +30,7 @@ func (formula FriezeFormula) Calculate(z complex128) *CalculationResultForFormul
 	return result
 }
 
-func (formula *FriezeFormula) calculateTerm(term *exponential.Term, z complex128) complex128 {
+func (friezeFormula *Formula) calculateTerm(term *exponential.Term, z complex128) complex128 {
 	sum := complex(0.0,0.0)
 
 	coefficientRelationships := []coefficient.Relationship{coefficient.PlusNPlusM}
@@ -49,8 +50,8 @@ func (formula *FriezeFormula) calculateTerm(term *exponential.Term, z complex128
 	return sum
 }
 
-// FriezeSymmetry notes the kinds of symmetries the formula contains.
-type FriezeSymmetry struct {
+// Symmetry notes the kinds of symmetries the formula contains.
+type Symmetry struct {
 	P111 bool
 	P11m bool
 	P211 bool
@@ -61,8 +62,8 @@ type FriezeSymmetry struct {
 }
 
 //AnalyzeForSymmetry scans the formula and returns a list of symmetries.
-func (formula FriezeFormula) AnalyzeForSymmetry() *FriezeSymmetry {
-	symmetriesFound := &FriezeSymmetry{
+func (friezeFormula Formula) AnalyzeForSymmetry() *Symmetry {
+	symmetriesFound := &Symmetry{
 		P111: true,
 		P11m: true,
 		P211: true,
@@ -71,7 +72,7 @@ func (formula FriezeFormula) AnalyzeForSymmetry() *FriezeSymmetry {
 		P2mm: true,
 		P2mg: true,
 	}
-	for _, term := range formula.Terms {
+	for _, term := range friezeFormula.Terms {
 		if term.IgnoreComplexConjugate {
 			symmetriesFound.P211 = false
 			symmetriesFound.P1m1 = false
@@ -141,24 +142,24 @@ func coefficientRelationshipsIncludes(relationships []coefficient.Relationship, 
 }
 
 // NewFriezeFormulaFromYAML reads the data and returns a Frieze formula from it.
-func NewFriezeFormulaFromYAML(data []byte) (*FriezeFormula, error) {
+func NewFriezeFormulaFromYAML(data []byte) (*Formula, error) {
 	return newFriezeFormulaFromDatastream(data, yaml.Unmarshal)
 }
 
 // NewFriezeFormulaFromJSON reads the data and returns a Frieze formula from it.
-func NewFriezeFormulaFromJSON(data []byte) (*FriezeFormula, error) {
+func NewFriezeFormulaFromJSON(data []byte) (*Formula, error) {
 	return newFriezeFormulaFromDatastream(data, yaml.Unmarshal)
 }
 
-// FriezeFormulaMarshalable can be marshaled and can be converted into a FriezeFormula.
-type FriezeFormulaMarshalable struct {
+// MarshaledFormula can be marshaled and can be converted into a Formula.
+type MarshaledFormula struct {
 	Terms []*exponential.TermMarshalable
 }
 
 // newFriezeFormulaFromDatastream consumes a given bytestream and tries to create a new object from it.
-func newFriezeFormulaFromDatastream(data []byte, unmarshal utility.UnmarshalFunc) (*FriezeFormula, error) {
+func newFriezeFormulaFromDatastream(data []byte, unmarshal utility.UnmarshalFunc) (*Formula, error) {
 	var unmarshalError error
-	var friezeFormulaMarshal FriezeFormulaMarshalable
+	var friezeFormulaMarshal MarshaledFormula
 	unmarshalError = unmarshal(data, &friezeFormulaMarshal)
 
 	if unmarshalError != nil {
@@ -169,12 +170,12 @@ func newFriezeFormulaFromDatastream(data []byte, unmarshal utility.UnmarshalFunc
 	return friezeFormula, nil
 }
 
-// NewFriezeFormulaFromMarshalObject converts the marshaled object into a FriezeFormula.
-func NewFriezeFormulaFromMarshalObject(marshalObject FriezeFormulaMarshalable) *FriezeFormula {
+// NewFriezeFormulaFromMarshalObject converts the marshaled object into a Formula.
+func NewFriezeFormulaFromMarshalObject(marshalObject MarshaledFormula) *Formula {
 	terms := []*exponential.Term{}
 	for _, termMarshal := range marshalObject.Terms {
 		newTerm := exponential.NewTermFromMarshalObject(*termMarshal)
 		terms = append(terms, newTerm)
 	}
-	return &FriezeFormula{Terms: terms}
+	return &Formula{Terms: terms}
 }
