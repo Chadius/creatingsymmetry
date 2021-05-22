@@ -130,3 +130,25 @@ func (suite *CoefficientPairFeatures) TestMinusSumNAndMPlusN(checker *C) {
 	checker.Assert(newSets[0].PowerM, Equals, 3)
 	checker.Assert(newSets[0].NegateMultiplier, Equals, false)
 }
+
+func (suite *CoefficientPairFeatures) TestPlusMMinusN(checker *C) {
+	newSets := suite.evenSumPair.GenerateCoefficientSets([]coefficient.Relationship{
+		coefficient.PlusMMinusN,
+	})
+
+	checker.Assert(newSets, HasLen, 1)
+	checker.Assert(newSets[0].PowerN, Equals, 3)
+	checker.Assert(newSets[0].PowerM, Equals, -1)
+	checker.Assert(newSets[0].NegateMultiplier, Equals, false)
+}
+
+func (suite *CoefficientPairFeatures) TestMinusMPlusN(checker *C) {
+	newSets := suite.evenSumPair.GenerateCoefficientSets([]coefficient.Relationship{
+		coefficient.MinusMPlusN,
+	})
+
+	checker.Assert(newSets, HasLen, 1)
+	checker.Assert(newSets[0].PowerN, Equals, -3)
+	checker.Assert(newSets[0].PowerM, Equals, 1)
+	checker.Assert(newSets[0].NegateMultiplier, Equals, false)
+}

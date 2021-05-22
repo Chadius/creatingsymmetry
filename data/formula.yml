@@ -13,9 +13,9 @@ color_value_space:
   miny: -3e-0
   maxx: 3e-0
   maxy: 3e-0
-hexagonal_wallpaper_formula:
+square_wallpaper_formula:
   multiplier:
-    real: -1
+    real: 1
     imaginary: 0
   wave_packets:
     -
@@ -28,9 +28,9 @@ hexagonal_wallpaper_formula:
           power_m: -1
     -
       multiplier:
-        real: 1
-        imaginary: 1
+        real: -1
+        imaginary: -1
       terms:
         -
-          power_n: -2
-          power_m: 1
+          power_n: -1
+          power_m: 2

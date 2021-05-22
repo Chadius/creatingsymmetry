@@ -100,6 +100,9 @@ func transformCoordinatesForFormula(command *command.CreateWallpaperCommand, sca
 	if command.HexagonalWallpaperFormula != nil {
 		return transformCoordinatesForHexagonalWallpaperFormula(command.HexagonalWallpaperFormula, scaledCoordinates)
 	}
+	if command.SquareWallpaperFormula != nil {
+		return transformCoordinatesForSquareWallpaperFormula(command.SquareWallpaperFormula, scaledCoordinates)
+	}
 	log.Fatal(errors.New("No formula found"))
 	return []complex128{}
 }
@@ -218,6 +221,34 @@ func transformCoordinatesForHexagonalWallpaperFormula(wallpaperFormula *wave.Hex
 	}
 	if hexWallpaperSymmetry.P3 {
 		println("  p3")
+	}
+
+	return transformedCoordinates
+}
+
+func transformCoordinatesForSquareWallpaperFormula(wallpaperFormula *wave.SquareWallpaperFormula, scaledCoordinates []complex128) []complex128 {
+	wallpaperFormula.SetUp()
+
+	transformedCoordinates := []complex128{}
+	resultsByTerm := [][]complex128{}
+	for range wallpaperFormula.WavePackets {
+		resultsByTerm = append(resultsByTerm, []complex128{})
+	}
+
+	for _, complexCoordinate := range scaledCoordinates {
+		hexagonalWallpaperResults := wallpaperFormula.Calculate(complexCoordinate)
+		for index, formulaResult := range hexagonalWallpaperResults.ContributionByTerm {
+			resultsByTerm[index] = append(resultsByTerm[index], formulaResult)
+		}
+
+		transformedCoordinate := hexagonalWallpaperResults.Total
+		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
+	}
+
+	println("Min/Max ranges, by Term")
+	for index, results := range resultsByTerm {
+		minz, maxz := mathutility.GetBoundingBox(results)
+		fmt.Printf("%d: %e - %e\n", index, minz, maxz)
 	}
 
 	return transformedCoordinates

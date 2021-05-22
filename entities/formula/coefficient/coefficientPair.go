@@ -55,6 +55,16 @@ func (pairing Pairing) GenerateCoefficientSets(relationships []Relationship) []*
 			PowerM: pairing.PowerM,
 			NegateMultiplier: false,
 		},
+		PlusMMinusN: {
+			PowerN: pairing.PowerM,
+			PowerM: -1 * pairing.PowerN,
+			NegateMultiplier: false,
+		},
+		MinusMPlusN: {
+			PowerN: -1 * pairing.PowerM,
+			PowerM: pairing.PowerN,
+			NegateMultiplier: false,
+		},
 	}
 
 	for _, relationship := range relationships {
@@ -80,12 +90,14 @@ type Relationship string
 //	 MaybeFlipScale will multiply the scale by -1 if N + M is odd.
 const (
 	PlusNPlusM                 Relationship = "+N+M"
-	PlusMPlusN                              = "+M+N"
-	MinusNMinusM                            = "-N-M"
-	MinusMMinusN                            = "-M-N"
-	PlusMPlusNMaybeFlipScale                = "+M+NF"
-	MinusMMinusNMaybeFlipScale              = "-M-NF"
-	PlusMMinusSumNAndM						= "+M-(N+M)"
-	MinusSumNAndMPlusN						= "-(N+M)+N"
+	PlusMPlusN                 Relationship             = "+M+N"
+	MinusNMinusM               Relationship             = "-N-M"
+	MinusMMinusN               Relationship             = "-M-N"
+	PlusMPlusNMaybeFlipScale   Relationship             = "+M+NF"
+	MinusMMinusNMaybeFlipScale Relationship             = "-M-NF"
+	PlusMMinusSumNAndM		Relationship				= "+M-(N+M)"
+	MinusSumNAndMPlusN		Relationship				= "-(N+M)+N"
+	PlusMMinusN Relationship = "+M-N"
+	MinusMPlusN Relationship = "-M+N"
 )
 

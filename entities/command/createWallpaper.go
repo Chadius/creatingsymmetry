@@ -33,6 +33,7 @@ type CreateWallpaperCommand struct {
 	RosetteFormula			  *rosette.Formula              `json:"rosette_formula" yaml:"rosette_formula"`
 	FriezeFormula			  *frieze.Formula                `json:"frieze_formula" yaml:"frieze_formula"`
 	HexagonalWallpaperFormula *wave.HexagonalWallpaperFormula `json:"hexagonal_wallpaper_formula" yaml:"hexagonal_wallpaper_formula"`
+	SquareWallpaperFormula *wave.SquareWallpaperFormula `json:"square_wallpaper_formula" yaml:"square_wallpaper_formula"`
 }
 
 // CreateWallpaperCommandMarshal can be marshaled and converted to a CreateWallpaperCommand
@@ -44,7 +45,8 @@ type CreateWallpaperCommandMarshal struct {
 	ColorValueSpace			ComplexNumberCorners                      `json:"color_value_space" yaml:"color_value_space"`
 	RosetteFormula			*rosette.MarshaledFormula                  `json:"rosette_formula" yaml:"rosette_formula"`
 	FriezeFormula			*frieze.MarshaledFormula                    `json:"frieze_formula" yaml:"frieze_formula"`
-	HexagonalWallpaperFormula *wave.HexagonalWallpaperFormulaMarshalable `json:"hexagonal_wallpaper_formula" yaml:"hexagonal_wallpaper_formula"`
+	HexagonalWallpaperFormula *wave.WallpaperFormulaMarshalled `json:"hexagonal_wallpaper_formula" yaml:"hexagonal_wallpaper_formula"`
+	SquareWallpaperFormula *wave.WallpaperFormulaMarshalled `json:"square_wallpaper_formula" yaml:"square_wallpaper_formula"`
 }
 
 // NewCreateWallpaperCommandFromYAML reads the data and returns a CreateWallpaperCommand from it.
@@ -85,6 +87,10 @@ func newCreateWallpaperCommandFromDatastream(data []byte, unmarshal utility.Unma
 
 	if commandToCreateMarshal.HexagonalWallpaperFormula != nil {
 		commandToCreate.HexagonalWallpaperFormula = wave.NewHexagonalWallpaperFormulaFromMarshalObject(*commandToCreateMarshal.HexagonalWallpaperFormula)
+	}
+
+	if commandToCreateMarshal.SquareWallpaperFormula != nil {
+		commandToCreate.SquareWallpaperFormula = wave.NewSquareWallpaperFormulaFromMarshalObject(*commandToCreateMarshal.SquareWallpaperFormula)
 	}
 
 	return commandToCreate, nil

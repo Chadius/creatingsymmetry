@@ -9,12 +9,6 @@ import (
 	"wallpaper/entities/utility"
 )
 
-// HexagonalWallpaperFormulaMarshalable is a marshalable object that can be turned into a real object.
-type HexagonalWallpaperFormulaMarshalable struct {
-	WavePackets []*FormulaMarshalable			`json:"wave_packets" yaml:"wave_packets"`
-	Multiplier utility.ComplexNumberForMarshal	`json:"multiplier" yaml:"multiplier"`
-}
-
 // HexagonalWallpaperFormula uses waves that create a 3 rotation symmetry.
 //  Each term will be rotated 3 times and averaged by 1/3.
 type HexagonalWallpaperFormula struct {
@@ -112,7 +106,7 @@ func NewHexagonalWallpaperFormulaFromYAML(data []byte) (*HexagonalWallpaperFormu
 //newHexagonalWallpaperFormulaFromDatastream consumes a given bytestream and tries to create a new object from it.
 func newHexagonalWallpaperFormulaFromDatastream(data []byte, unmarshal utility.UnmarshalFunc) (*HexagonalWallpaperFormula, error) {
 	var unmarshalError error
-	var formulaMarshal HexagonalWallpaperFormulaMarshalable
+	var formulaMarshal WallpaperFormulaMarshalled
 	unmarshalError = unmarshal(data, &formulaMarshal)
 
 	if unmarshalError != nil {
@@ -124,7 +118,7 @@ func newHexagonalWallpaperFormulaFromDatastream(data []byte, unmarshal utility.U
 }
 
 // NewHexagonalWallpaperFormulaFromMarshalObject uses a marshalled object to create a new object.
-func NewHexagonalWallpaperFormulaFromMarshalObject(marshalObject HexagonalWallpaperFormulaMarshalable) *HexagonalWallpaperFormula {
+func NewHexagonalWallpaperFormulaFromMarshalObject(marshalObject WallpaperFormulaMarshalled) *HexagonalWallpaperFormula {
 	wavePackets := []*Formula{}
 	for _,packet := range marshalObject.WavePackets {
 		newWavePacket := NewWaveFormulaFromMarshalObject(*packet)
