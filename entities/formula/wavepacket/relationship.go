@@ -1,4 +1,4 @@
-package wave
+package wavepacket
 
 // Relationship explains how the Wave packet coefficients are related.
 //   Plus means *1, Minus means *-1
@@ -13,7 +13,7 @@ type Relationship struct {
 	MinusNMinusMPlusMPlusNMinusMMinusN bool
 }
 
-// FindWaveRelationships returns the relationship explaining how this set of wave formulas are related.
+// FindWaveRelationships returns the relationship explaining how this set of wavepacket formulas are related.
 func FindWaveRelationships(waveFormulas []*Formula) Relationship {
 
 	formulaRelationship := Relationship{}

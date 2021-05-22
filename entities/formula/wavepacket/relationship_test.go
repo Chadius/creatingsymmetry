@@ -1,20 +1,20 @@
-package wave_test
+package wavepacket_test
 
 import (
 	. "gopkg.in/check.v1"
 	"math"
 	"wallpaper/entities/formula"
-	"wallpaper/entities/formula/wave"
+	"wallpaper/entities/formula/wavepacket"
 )
 
 type WaveSymmetryFormulaTests struct {
-	baseOddWave *wave.Formula
+	baseOddWave *wavepacket.Formula
 }
 
 var _ = Suite(&WaveSymmetryFormulaTests{})
 
 func (suite *WaveSymmetryFormulaTests) SetUpTest(checker *C) {
-	suite.baseOddWave = &wave.Formula{
+	suite.baseOddWave = &wavepacket.Formula{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				XLatticeVector: complex(1,0),
@@ -28,14 +28,14 @@ func (suite *WaveSymmetryFormulaTests) SetUpTest(checker *C) {
 }
 
 func (suite *WaveSymmetryFormulaTests) TestNeedTwoFormulasToDetectSymmetry(checker *C) {
-	relationship := wave.FindWaveRelationships([]*wave.Formula{
+	relationship := wavepacket.FindWaveRelationships([]*wavepacket.Formula{
 		suite.baseOddWave,
 	})
 	checker.Assert(relationship.NoRelation, Equals, true)
 }
 
 func (suite *WaveSymmetryFormulaTests) TestPlusMPlusN(checker *C) {
-	relationship := wave.FindWaveRelationships([]*wave.Formula{
+	relationship := wavepacket.FindWaveRelationships([]*wavepacket.Formula{
 		suite.baseOddWave,
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
@@ -53,7 +53,7 @@ func (suite *WaveSymmetryFormulaTests) TestPlusMPlusN(checker *C) {
 }
 
 func (suite *WaveSymmetryFormulaTests) TestMinusNMinusM(checker *C) {
-	relationship := wave.FindWaveRelationships([]*wave.Formula{
+	relationship := wavepacket.FindWaveRelationships([]*wavepacket.Formula{
 		suite.baseOddWave,
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
@@ -71,7 +71,7 @@ func (suite *WaveSymmetryFormulaTests) TestMinusNMinusM(checker *C) {
 }
 
 func (suite *WaveSymmetryFormulaTests) TestMinusMMinusN(checker *C) {
-	relationship := wave.FindWaveRelationships([]*wave.Formula{
+	relationship := wavepacket.FindWaveRelationships([]*wavepacket.Formula{
 		suite.baseOddWave,
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
@@ -89,7 +89,7 @@ func (suite *WaveSymmetryFormulaTests) TestMinusMMinusN(checker *C) {
 }
 
 func (suite *WaveSymmetryFormulaTests) TestMinusNMinusMPlusMPlusNMinusMMinusN(checker *C) {
-	relationship := wave.FindWaveRelationships([]*wave.Formula{
+	relationship := wavepacket.FindWaveRelationships([]*wavepacket.Formula{
 		suite.baseOddWave,
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
@@ -129,7 +129,7 @@ func (suite *WaveSymmetryFormulaTests) TestMinusNMinusMPlusMPlusNMinusMMinusN(ch
 }
 
 func (suite *WaveSymmetryFormulaTests) TestMultipleSymmetries(checker *C) {
-	relationship := wave.FindWaveRelationships([]*wave.Formula{
+	relationship := wavepacket.FindWaveRelationships([]*wavepacket.Formula{
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{

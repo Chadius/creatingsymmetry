@@ -11,7 +11,7 @@ import (
 	"wallpaper/entities/command"
 	"wallpaper/entities/formula/frieze"
 	"wallpaper/entities/formula/rosette"
-	"wallpaper/entities/formula/wave"
+	"wallpaper/entities/formula/wavepacket"
 
 	//"image/png"
 	_ "image/png"
@@ -103,7 +103,7 @@ func transformCoordinatesForFormula(command *command.CreateWallpaperCommand, sca
 	if command.SquareWallpaperFormula != nil {
 		return transformCoordinatesForSquareWallpaperFormula(command.SquareWallpaperFormula, scaledCoordinates)
 	}
-	log.Fatal(errors.New("No formula found"))
+	log.Fatal(errors.New("no formula found"))
 	return []complex128{}
 }
 
@@ -180,12 +180,12 @@ func transformCoordinatesForRosetteFormula(rosetteFormula *rosette.Formula, scal
 	return transformedCoordinates
 }
 
-func transformCoordinatesForHexagonalWallpaperFormula(wallpaperFormula *wave.HexagonalWallpaperFormula, scaledCoordinates []complex128) []complex128 {
+func transformCoordinatesForHexagonalWallpaperFormula(wallpaperFormula *wavepacket.HexagonalWallpaperFormula, scaledCoordinates []complex128) []complex128 {
 	wallpaperFormula.SetUp()
 
 	transformedCoordinates := []complex128{}
 	resultsByTerm := [][]complex128{}
-	for range wallpaperFormula.WavePackets {
+	for range wallpaperFormula.Formula.WavePackets {
 		resultsByTerm = append(resultsByTerm, []complex128{})
 	}
 
@@ -226,12 +226,12 @@ func transformCoordinatesForHexagonalWallpaperFormula(wallpaperFormula *wave.Hex
 	return transformedCoordinates
 }
 
-func transformCoordinatesForSquareWallpaperFormula(wallpaperFormula *wave.SquareWallpaperFormula, scaledCoordinates []complex128) []complex128 {
+func transformCoordinatesForSquareWallpaperFormula(wallpaperFormula *wavepacket.SquareWallpaperFormula, scaledCoordinates []complex128) []complex128 {
 	wallpaperFormula.SetUp()
 
 	transformedCoordinates := []complex128{}
 	resultsByTerm := [][]complex128{}
-	for range wallpaperFormula.WavePackets {
+	for range wallpaperFormula.Formula.WavePackets {
 		resultsByTerm = append(resultsByTerm, []complex128{})
 	}
 

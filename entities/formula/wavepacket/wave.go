@@ -1,4 +1,4 @@
-package wave
+package wavepacket
 
 import (
 	"encoding/json"

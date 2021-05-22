@@ -1,34 +1,36 @@
-package wave_test
+package wavepacket_test
 
 import (
 	. "gopkg.in/check.v1"
 	"math"
 	"math/cmplx"
 	"wallpaper/entities/formula"
-	"wallpaper/entities/formula/wave"
+	"wallpaper/entities/formula/wavepacket"
 	"wallpaper/entities/utility"
 )
 
 type SquareLatticeWallpaper struct {
-	squareWavePacket *wave.SquareWallpaperFormula
+	squareWavePacket *wavepacket.SquareWallpaperFormula
 }
 
 var _ = Suite(&SquareLatticeWallpaper{})
 
 func (suite *SquareLatticeWallpaper) SetUpTest(checker *C) {
-	suite.squareWavePacket = &wave.SquareWallpaperFormula{
-		WavePackets: []*wave.Formula{
-			{
-				Terms:[]*formula.EisensteinFormulaTerm{
-					{
-						PowerN:         1,
-						PowerM:         -2,
+	suite.squareWavePacket = &wavepacket.SquareWallpaperFormula{
+		Formula: &wavepacket.WallpaperFormula{
+			WavePackets: []*wavepacket.Formula{
+				{
+					Terms:[]*formula.EisensteinFormulaTerm{
+						{
+							PowerN:         1,
+							PowerM:         -2,
+						},
 					},
+					Multiplier: complex(1, 0),
 				},
-				Multiplier: complex(1, 0),
 			},
+			Multiplier: complex(1, 0),
 		},
-		Multiplier: complex(1, 0),
 	}
 }
 
@@ -69,12 +71,12 @@ func (suite *SquareLatticeWallpaper) TestUnmarshalFromJSON(checker *C) {
 					}
 				]
 			}`)
-	hexFormula, err := wave.NewSquareWallpaperFormulaFromJSON(jsonByteStream)
+	squareFormula, err := wavepacket.NewSquareWallpaperFormulaFromJSON(jsonByteStream)
 	checker.Assert(err, IsNil)
-	checker.Assert(real(hexFormula.Multiplier), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
-	checker.Assert(imag(hexFormula.Multiplier), utility.NumericallyCloseEnough{}, 2e-2, 1e-6)
-	checker.Assert(hexFormula.WavePackets, HasLen, 1)
-	checker.Assert(hexFormula.WavePackets[0].Terms[0].PowerM, Equals, -10)
+	checker.Assert(real(squareFormula.Formula.Multiplier), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
+	checker.Assert(imag(squareFormula.Formula.Multiplier), utility.NumericallyCloseEnough{}, 2e-2, 1e-6)
+	checker.Assert(squareFormula.Formula.WavePackets, HasLen, 1)
+	checker.Assert(squareFormula.Formula.WavePackets[0].Terms[0].PowerM, Equals, -10)
 }
 
 func (suite *SquareLatticeWallpaper) TestUnmarshalFromYAML(checker *C) {
@@ -92,10 +94,10 @@ wave_packets:
        power_n: 12
        power_m: -10
 `)
-	hexFormula, err := wave.NewSquareWallpaperFormulaFromYAML(yamlByteStream)
+	squareFormula, err := wavepacket.NewSquareWallpaperFormulaFromYAML(yamlByteStream)
 	checker.Assert(err, IsNil)
-	checker.Assert(real(hexFormula.Multiplier), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
-	checker.Assert(imag(hexFormula.Multiplier), utility.NumericallyCloseEnough{}, 2e-2, 1e-6)
-	checker.Assert(hexFormula.WavePackets, HasLen, 1)
-	checker.Assert(hexFormula.WavePackets[0].Terms[0].PowerM, Equals, -10)
+	checker.Assert(real(squareFormula.Formula.Multiplier), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
+	checker.Assert(imag(squareFormula.Formula.Multiplier), utility.NumericallyCloseEnough{}, 2e-2, 1e-6)
+	checker.Assert(squareFormula.Formula.WavePackets, HasLen, 1)
+	checker.Assert(squareFormula.Formula.WavePackets[0].Terms[0].PowerM, Equals, -10)
 }

@@ -1,4 +1,4 @@
-package wave_test
+package wavepacket_test
 
 import (
 	. "gopkg.in/check.v1"
@@ -6,20 +6,20 @@ import (
 	"math/cmplx"
 	"testing"
 	"wallpaper/entities/formula"
-	"wallpaper/entities/formula/wave"
+	"wallpaper/entities/formula/wavepacket"
 	"wallpaper/entities/utility"
 )
 
 func Test(t *testing.T) { TestingT(t) }
 
 type WaveFormulaTests struct {
-	hexagonalWavePacket *wave.Formula
+	hexagonalWavePacket *wavepacket.Formula
 }
 
 var _ = Suite(&WaveFormulaTests{})
 
 func (suite *WaveFormulaTests) SetUpTest(checker *C) {
-	suite.hexagonalWavePacket = &wave.Formula{
+	suite.hexagonalWavePacket = &wavepacket.Formula{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				XLatticeVector: complex(1,0),
@@ -108,7 +108,7 @@ func (suite *WaveFormulaTests) TestWaveFormulaMarshalFromJson(checker *C) {
 					}
 				]
 	}`)
-	wave, err := wave.NewWaveFormulaFromJSON(jsonByteStream)
+	wave, err := wavepacket.NewWaveFormulaFromJSON(jsonByteStream)
 	checker.Assert(err, IsNil)
 	checker.Assert(real(wave.Multiplier), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
 	checker.Assert(imag(wave.Multiplier), utility.NumericallyCloseEnough{}, 2e-2, 1e-6)
@@ -132,7 +132,7 @@ terms:
     power_n: 12
     power_m: -10
 `)
-	wave, err := wave.NewWaveFormulaFromYAML(yamlByteStream)
+	wave, err := wavepacket.NewWaveFormulaFromYAML(yamlByteStream)
 	checker.Assert(err, IsNil)
 	checker.Assert(real(wave.Multiplier), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
 	checker.Assert(imag(wave.Multiplier), utility.NumericallyCloseEnough{}, 2e-2, 1e-6)
