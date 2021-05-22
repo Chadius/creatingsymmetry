@@ -101,3 +101,136 @@ wave_packets:
 	checker.Assert(squareFormula.Formula.WavePackets, HasLen, 1)
 	checker.Assert(squareFormula.Formula.WavePackets[0].Terms[0].PowerM, Equals, -10)
 }
+
+type SquareWaveSymmetry struct {
+	baseWavePacket *wavepacket.Formula
+}
+
+var _ = Suite(&SquareWaveSymmetry{})
+
+func (suite *SquareWaveSymmetry) SetUpTest(checker *C) {
+	suite.baseWavePacket = &wavepacket.Formula{
+		Terms:[]*formula.EisensteinFormulaTerm{
+			{
+				PowerN:         8,
+				PowerM:         -3,
+			},
+		},
+		Multiplier: complex(1, 0),
+	}
+}
+
+func (suite *SquareWaveSymmetry) TestEverySquareWallpaperHasP4Symmetry(checker *C) {
+	squareFormula := wavepacket.SquareWallpaperFormula{
+		Formula: &wavepacket.WallpaperFormula{
+			WavePackets: []*wavepacket.Formula{
+				suite.baseWavePacket,
+			},
+			Multiplier: complex(1, 0),
+		},
+	}
+
+	squareFormula.SetUp()
+
+	symmetriesFound := squareFormula.FindSymmetries()
+	checker.Assert(symmetriesFound.P4, Equals, true)
+	checker.Assert(symmetriesFound.P4m, Equals, false)
+	checker.Assert(symmetriesFound.P4g, Equals, false)
+}
+
+func (suite *SquareWaveSymmetry) TestP4m(checker *C) {
+	squareFormula := wavepacket.SquareWallpaperFormula{
+		Formula: &wavepacket.WallpaperFormula{
+			WavePackets: []*wavepacket.Formula{
+				suite.baseWavePacket,
+				{
+					Terms: []*formula.EisensteinFormulaTerm{
+						{
+							XLatticeVector: suite.baseWavePacket.Terms[0].XLatticeVector,
+							YLatticeVector: suite.baseWavePacket.Terms[0].YLatticeVector,
+							PowerN:         suite.baseWavePacket.Terms[0].PowerM,
+							PowerM:         suite.baseWavePacket.Terms[0].PowerN,
+						},
+					},
+					Multiplier: suite.baseWavePacket.Multiplier,
+				},
+			},
+			Multiplier: complex(1, 0),
+		},
+	}
+
+	squareFormula.SetUp()
+
+	symmetriesFound := squareFormula.FindSymmetries()
+	checker.Assert(symmetriesFound.P4, Equals, true)
+	checker.Assert(symmetriesFound.P4m, Equals, true)
+	checker.Assert(symmetriesFound.P4g, Equals, false)
+}
+
+func (suite *SquareWaveSymmetry) TestP4gWithOddSumPowers(checker *C) {
+	squareFormula := wavepacket.SquareWallpaperFormula{
+		Formula: &wavepacket.WallpaperFormula{
+			WavePackets: []*wavepacket.Formula{
+				suite.baseWavePacket,
+				{
+					Terms: []*formula.EisensteinFormulaTerm{
+						{
+							XLatticeVector: -1 * suite.baseWavePacket.Terms[0].XLatticeVector,
+							YLatticeVector: -1 * suite.baseWavePacket.Terms[0].YLatticeVector,
+							PowerN:         suite.baseWavePacket.Terms[0].PowerM,
+							PowerM:         suite.baseWavePacket.Terms[0].PowerN,
+						},
+					},
+					Multiplier: -1.0 * suite.baseWavePacket.Multiplier,
+				},
+			},
+			Multiplier: complex(1, 0),
+		},
+	}
+
+	squareFormula.SetUp()
+
+	symmetriesFound := squareFormula.FindSymmetries()
+	checker.Assert(symmetriesFound.P4, Equals, true)
+	checker.Assert(symmetriesFound.P4m, Equals, false)
+	checker.Assert(symmetriesFound.P4g, Equals, true)
+}
+
+func (suite *SquareWaveSymmetry) TestP4gWithEvenSumPowers(checker *C) {
+	squareFormula := wavepacket.SquareWallpaperFormula{
+		Formula: &wavepacket.WallpaperFormula{
+			WavePackets: []*wavepacket.Formula{
+				{
+					Terms: []*formula.EisensteinFormulaTerm{
+						{
+							XLatticeVector: suite.baseWavePacket.Terms[0].XLatticeVector,
+							YLatticeVector: suite.baseWavePacket.Terms[0].YLatticeVector,
+							PowerN: 8,
+							PowerM: -4,
+						},
+					},
+					Multiplier: suite.baseWavePacket.Multiplier,
+				},
+				{
+					Terms: []*formula.EisensteinFormulaTerm{
+						{
+							XLatticeVector: suite.baseWavePacket.Terms[0].XLatticeVector,
+							YLatticeVector: suite.baseWavePacket.Terms[0].YLatticeVector,
+							PowerN:         -4,
+							PowerM:         8,
+						},
+					},
+					Multiplier: suite.baseWavePacket.Multiplier,
+				},
+			},
+			Multiplier: complex(1, 0),
+		},
+	}
+
+	squareFormula.SetUp()
+
+	symmetriesFound := squareFormula.FindSymmetries()
+	checker.Assert(symmetriesFound.P4, Equals, true)
+	checker.Assert(symmetriesFound.P4m, Equals, true)
+	checker.Assert(symmetriesFound.P4g, Equals, true)
+}

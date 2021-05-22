@@ -156,3 +156,51 @@ func (suite *WaveSymmetryFormulaTests) TestMultipleSymmetries(checker *C) {
 	checker.Assert(relationship.PlusMPlusN, Equals, true)
 	checker.Assert(relationship.MinusNMinusM, Equals, true)
 }
+
+func (suite *WaveSymmetryFormulaTests) TestMaybeNegateBasedOnSumPlusMPlusNWithOddSum(checker *C) {
+	relationship := wavepacket.FindWaveRelationships([]*wavepacket.Formula{
+		suite.baseOddWave,
+		{
+			Terms: []*formula.EisensteinFormulaTerm{
+				{
+					XLatticeVector: complex(1,0),
+					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
+					PowerN:         suite.baseOddWave.Terms[0].PowerM,
+					PowerM:         suite.baseOddWave.Terms[0].PowerN,
+				},
+			},
+			Multiplier: complex(-1, 0),
+		},
+	})
+	checker.Assert(relationship.PlusMPlusN, Equals, false)
+	checker.Assert(relationship.MaybeNegateBasedOnSumPlusMPlusN, Equals, true)
+}
+
+func (suite *WaveSymmetryFormulaTests) TestMaybeNegateBasedOnSumPlusMPlusNWithEvenSum(checker *C) {
+	relationship := wavepacket.FindWaveRelationships([]*wavepacket.Formula{
+		{
+			Terms: []*formula.EisensteinFormulaTerm{
+				{
+					XLatticeVector: complex(1,0),
+					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
+					PowerN:         4,
+					PowerM:         -2,
+				},
+			},
+			Multiplier: complex(-1, 0),
+		},
+		{
+			Terms: []*formula.EisensteinFormulaTerm{
+				{
+					XLatticeVector: complex(1,0),
+					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
+					PowerN:         -2,
+					PowerM:         4,
+				},
+			},
+			Multiplier: complex(1, 0),
+		},
+	})
+	checker.Assert(relationship.PlusMPlusN, Equals, true)
+	checker.Assert(relationship.MaybeNegateBasedOnSumPlusMPlusN, Equals, true)
+}

@@ -251,6 +251,18 @@ func transformCoordinatesForSquareWallpaperFormula(wallpaperFormula *wavepacket.
 		fmt.Printf("%d: %e - %e\n", index, minz, maxz)
 	}
 
+	println("Symmetries found:")
+	squareWallpaperSymmetry := wallpaperFormula.FindSymmetries()
+	if squareWallpaperSymmetry.P4 {
+		println("  p4")
+	}
+	if squareWallpaperSymmetry.P4m {
+		println("  p4m")
+	}
+	if squareWallpaperSymmetry.P4g {
+		println("  p4g")
+	}
+
 	return transformedCoordinates
 }
 

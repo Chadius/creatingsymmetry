@@ -32,6 +32,24 @@ func (squareWaveFormula *SquareWallpaperFormula) Calculate(z complex128) *formul
 	return squareWaveFormula.Formula.Calculate(z)
 }
 
+// FindSymmetries returns an object that tracks all of the symmetries found
+//  in this formula.
+func (squareWaveFormula *SquareWallpaperFormula) FindSymmetries() *Symmetry {
+	foundSymmetries := Symmetry{
+		P4: true,
+	}
+
+	symmetryFound := FindWaveRelationships(squareWaveFormula.Formula.WavePackets)
+	if symmetryFound.PlusMPlusN {
+		foundSymmetries.P4m = true
+	}
+	if symmetryFound.MaybeNegateBasedOnSumPlusMPlusN {
+		foundSymmetries.P4g = true
+	}
+
+	return &foundSymmetries
+}
+
 // NewSquareWallpaperFormulaFromJSON reads the data and returns a formula term from it.
 func NewSquareWallpaperFormulaFromJSON(data []byte) (*SquareWallpaperFormula, error) {
 	formula, err := NewWallpaperFormulaFromJSON(data)

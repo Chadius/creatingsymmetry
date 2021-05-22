@@ -82,4 +82,7 @@ type Symmetry struct {
 	P3m1 bool
 	P6 bool
 	P6m bool
+	P4 bool
+	P4m bool
+	P4g bool
 }

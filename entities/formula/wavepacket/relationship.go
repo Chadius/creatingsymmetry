@@ -11,6 +11,7 @@ type Relationship struct {
 	MinusNMinusM bool
 	MinusMMinusN bool
 	MinusNMinusMPlusMPlusNMinusMMinusN bool
+	MaybeNegateBasedOnSumPlusMPlusN bool
 }
 
 // FindWaveRelationships returns the relationship explaining how this set of wavepacket formulas are related.
@@ -67,11 +68,26 @@ func getRelationshipBetweenTwoFormulas(pair1, pair2 *Formula) Relationship {
 		firstPowerMtoSecondPowerMRatio = pair1.Terms[0].PowerM / pair2.Terms[0].PowerM
 	}
 
+	multiplierWasNegated := false
+	if real(pair2.Multiplier) != 0 || imag(pair2.Multiplier) != 0 {
+		if real(pair1.Multiplier) == -1 * real(pair2.Multiplier) && imag(pair1.Multiplier) == -1 * imag(pair2.Multiplier) {
+			multiplierWasNegated = true
+		}
+	}
+	pair1SumIsOdd := (pair1.Terms[0].PowerN + pair1.Terms[0].PowerM) % 2 != 0
+
 	relationBetween := Relationship{}
 	relationFound := false
 
 	if firstPowerNtoSecondPowerMRatio == 1 && firstPowerMtoSecondPowerNRatio == 1{
-		relationBetween.PlusMPlusN = true
+		if pair1SumIsOdd && multiplierWasNegated {
+			relationBetween.MaybeNegateBasedOnSumPlusMPlusN = true
+		} else if pair1SumIsOdd && !multiplierWasNegated {
+			relationBetween.PlusMPlusN = true
+		} else if !pair1SumIsOdd {
+			relationBetween.MaybeNegateBasedOnSumPlusMPlusN = true
+			relationBetween.PlusMPlusN = true
+		}
 		relationFound = true
 	}
 
