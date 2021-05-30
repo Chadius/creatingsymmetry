@@ -12,12 +12,14 @@ import (
 type WallpaperFormulaMarshalled struct {
 	WavePackets []*FormulaMarshalable			`json:"wave_packets" yaml:"wave_packets"`
 	Multiplier utility.ComplexNumberForMarshal	`json:"multiplier" yaml:"multiplier"`
+	Lattice *formula.LatticeVectorPairMarshal `json:"lattice" yaml:"lattice"`
 }
 
 // WallpaperFormula uses wave packets that enforce rotation symmetry.
 type WallpaperFormula struct {
 	WavePackets []*Formula
 	Multiplier complex128
+	Lattice *formula.LatticeVectorPair
 }
 
 // SetUp adds the locked Eisenstein terms to the formula.
@@ -26,8 +28,6 @@ type WallpaperFormula struct {
 //     as well as the base vectors.
 func (wallpaperFormula *WallpaperFormula) SetUp(
 	lockedRelationships []coefficient.Relationship,
-	baseXVector complex128,
-	baseYVector complex128,
 	) {
 	for _, wavePacket := range wallpaperFormula.WavePackets {
 		baseCoefficientPairing := coefficient.Pairing{
@@ -37,22 +37,18 @@ func (wallpaperFormula *WallpaperFormula) SetUp(
 
 		newPairings := baseCoefficientPairing.GenerateCoefficientSets(lockedRelationships)
 
-		wavePacket.Terms[0].XLatticeVector = complex(real(baseXVector), imag(baseXVector))
-		wavePacket.Terms[0].YLatticeVector = complex(real(baseYVector), imag(baseYVector))
+		wavePacket.Terms[0].Multiplier = complex(1, 0)
 
 		for _, newCoefficientPair := range newPairings {
-			xVector := baseXVector
-			yVector := baseYVector
+			baseMultiplier := complex(1,0)
 
 			if newCoefficientPair.NegateMultiplier == true {
-				xVector *= -1
-				yVector *= -1
+				baseMultiplier = complex(-1, 0)
 			}
 			newEisenstein := &formula.EisensteinFormulaTerm{
-				XLatticeVector: xVector,
-				YLatticeVector: yVector,
 				PowerN:         newCoefficientPair.PowerN,
 				PowerM:         newCoefficientPair.PowerM,
+				Multiplier: baseMultiplier,
 			}
 			wavePacket.Terms = append(wavePacket.Terms, newEisenstein)
 		}
@@ -67,8 +63,10 @@ func (wallpaperFormula *WallpaperFormula) Calculate(z complex128) *formula.Calcu
 		ContributionByTerm: []complex128{},
 	}
 
+	zInLatticeCoordinates := wallpaperFormula.Lattice.ConvertToLatticeCoordinates(z)
+
 	for _, wavePacket := range wallpaperFormula.WavePackets {
-		termContribution := wavePacket.Calculate(z)
+		termContribution := wavePacket.Calculate(zInLatticeCoordinates)
 		result.Total += termContribution.Total / complex(float64(len(wavePacket.Terms)), 0)
 		result.ContributionByTerm = append(result.ContributionByTerm, termContribution.Total)
 	}

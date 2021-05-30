@@ -14,13 +14,15 @@ type HexagonalWallpaperFormula struct {
 
 // SetUp initializes all of the needed wallpaper terms.
 func (hexWaveFormula *HexagonalWallpaperFormula) SetUp() {
+	hexWaveFormula.Formula.Lattice = &formula.LatticeVectorPair{
+		XLatticeVector: complex(1, 0),
+		YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
+	}
 	hexWaveFormula.Formula.SetUp(
 		[]coefficient.Relationship{
 			coefficient.PlusMMinusSumNAndM,
 			coefficient.MinusSumNAndMPlusN,
 		},
-		complex(1, 0),
-		complex(-0.5, math.Sqrt(3.0)/2.0),
 	)
 }
 

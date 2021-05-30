@@ -2,7 +2,6 @@ package wavepacket_test
 
 import (
 	. "gopkg.in/check.v1"
-	"math"
 	"wallpaper/entities/formula"
 	"wallpaper/entities/formula/wavepacket"
 )
@@ -17,8 +16,6 @@ func (suite *WaveSymmetryFormulaTests) SetUpTest(checker *C) {
 	suite.baseOddWave = &wavepacket.Formula{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
-				XLatticeVector: complex(1,0),
-				YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 				PowerN:         1,
 				PowerM:         -2,
 			},
@@ -40,8 +37,6 @@ func (suite *WaveSymmetryFormulaTests) TestPlusMPlusN(checker *C) {
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
-					XLatticeVector: complex(1,0),
-					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 					PowerN:         suite.baseOddWave.Terms[0].PowerM,
 					PowerM:         suite.baseOddWave.Terms[0].PowerN,
 				},
@@ -58,8 +53,6 @@ func (suite *WaveSymmetryFormulaTests) TestMinusNMinusM(checker *C) {
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
-					XLatticeVector: complex(1,0),
-					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 					PowerN:         suite.baseOddWave.Terms[0].PowerN * -1,
 					PowerM:         suite.baseOddWave.Terms[0].PowerM * -1,
 				},
@@ -76,8 +69,6 @@ func (suite *WaveSymmetryFormulaTests) TestMinusMMinusN(checker *C) {
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
-					XLatticeVector: complex(1,0),
-					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 					PowerN:         suite.baseOddWave.Terms[0].PowerM * -1,
 					PowerM:         suite.baseOddWave.Terms[0].PowerN * -1,
 				},
@@ -94,8 +85,6 @@ func (suite *WaveSymmetryFormulaTests) TestMinusNMinusMPlusMPlusNMinusMMinusN(ch
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
-					XLatticeVector: complex(1,0),
-					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 					PowerN:         suite.baseOddWave.Terms[0].PowerN * -1,
 					PowerM:         suite.baseOddWave.Terms[0].PowerM * -1,
 				},
@@ -105,8 +94,6 @@ func (suite *WaveSymmetryFormulaTests) TestMinusNMinusMPlusMPlusNMinusMMinusN(ch
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
-					XLatticeVector: complex(1,0),
-					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 					PowerN:         suite.baseOddWave.Terms[0].PowerM * -1,
 					PowerM:         suite.baseOddWave.Terms[0].PowerN * -1,
 				},
@@ -116,8 +103,6 @@ func (suite *WaveSymmetryFormulaTests) TestMinusNMinusMPlusMPlusNMinusMMinusN(ch
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
-					XLatticeVector: complex(1,0),
-					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 					PowerN:         suite.baseOddWave.Terms[0].PowerM,
 					PowerM:         suite.baseOddWave.Terms[0].PowerN,
 				},
@@ -133,8 +118,6 @@ func (suite *WaveSymmetryFormulaTests) TestMultipleSymmetries(checker *C) {
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
-					XLatticeVector: complex(1,0),
-					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 					PowerN:         1,
 					PowerM:         -1,
 				},
@@ -144,8 +127,6 @@ func (suite *WaveSymmetryFormulaTests) TestMultipleSymmetries(checker *C) {
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
-					XLatticeVector: complex(1,0),
-					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 					PowerN:         -1,
 					PowerM:         1,
 				},
@@ -163,8 +144,6 @@ func (suite *WaveSymmetryFormulaTests) TestMaybeNegateBasedOnSumPlusMPlusNWithOd
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
-					XLatticeVector: complex(1,0),
-					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 					PowerN:         suite.baseOddWave.Terms[0].PowerM,
 					PowerM:         suite.baseOddWave.Terms[0].PowerN,
 				},
@@ -181,8 +160,6 @@ func (suite *WaveSymmetryFormulaTests) TestMaybeNegateBasedOnSumPlusMPlusNWithEv
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
-					XLatticeVector: complex(1,0),
-					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 					PowerN:         4,
 					PowerM:         -2,
 				},
@@ -192,8 +169,6 @@ func (suite *WaveSymmetryFormulaTests) TestMaybeNegateBasedOnSumPlusMPlusNWithEv
 		{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
-					XLatticeVector: complex(1,0),
-					YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 					PowerN:         -2,
 					PowerM:         4,
 				},

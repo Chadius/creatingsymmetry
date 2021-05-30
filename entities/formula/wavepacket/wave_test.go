@@ -13,31 +13,34 @@ import (
 func Test(t *testing.T) { TestingT(t) }
 
 type WaveFormulaTests struct {
+	hexLatticeVectors *formula.LatticeVectorPair
 	hexagonalWavePacket *wavepacket.Formula
 }
 
 var _ = Suite(&WaveFormulaTests{})
 
 func (suite *WaveFormulaTests) SetUpTest(checker *C) {
+	suite.hexLatticeVectors = &formula.LatticeVectorPair{
+		XLatticeVector: complex(1,0),
+		YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
+	}
 	suite.hexagonalWavePacket = &wavepacket.Formula{
+
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
-				XLatticeVector: complex(1,0),
-				YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 				PowerN:         1,
 				PowerM:         -2,
+				Multiplier: complex(1, 0),
 			},
 			{
-				XLatticeVector: complex(1,0),
-				YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 				PowerN:         -2,
 				PowerM:         1,
+				Multiplier: complex(1, 0),
 			},
 			{
-				XLatticeVector: complex(1,0),
-				YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 				PowerN:         1,
 				PowerM:         1,
+				Multiplier: complex(1, 0),
 			},
 		},
 		Multiplier: complex(1, 0),
@@ -45,7 +48,8 @@ func (suite *WaveFormulaTests) SetUpTest(checker *C) {
 }
 
 func (suite *WaveFormulaTests) TestWaveFormulaCombinesEisensteinTerms(checker *C) {
-	calculation := suite.hexagonalWavePacket.Calculate(complex(math.Sqrt(3), -1 * math.Sqrt(3)))
+	zInLatticeCoordinates := suite.hexLatticeVectors.ConvertToLatticeCoordinates(complex(math.Sqrt(3), -1 * math.Sqrt(3)))
+	calculation := suite.hexagonalWavePacket.Calculate(zInLatticeCoordinates)
 	total := calculation.Total
 
 	expectedAnswer := cmplx.Exp(complex(0, 2 * math.Pi * (3 + math.Sqrt(3)))) +
@@ -57,7 +61,8 @@ func (suite *WaveFormulaTests) TestWaveFormulaCombinesEisensteinTerms(checker *C
 }
 
 func (suite *WaveFormulaTests) TestWaveFormulaShowsContributionsPerTerm(checker *C) {
-	calculation := suite.hexagonalWavePacket.Calculate(complex(math.Sqrt(3), -1 * math.Sqrt(3)))
+	zInLatticeCoordinates := suite.hexLatticeVectors.ConvertToLatticeCoordinates(complex(math.Sqrt(3), -1 * math.Sqrt(3)))
+	calculation := suite.hexagonalWavePacket.Calculate(zInLatticeCoordinates)
 
 	checker.Assert(calculation.ContributionByTerm, HasLen, 3)
 
@@ -76,7 +81,8 @@ func (suite *WaveFormulaTests) TestWaveFormulaShowsContributionsPerTerm(checker 
 
 func (suite *WaveFormulaTests) TestWaveFormulaUsesMultiplier(checker *C) {
 	suite.hexagonalWavePacket.Multiplier = complex(1/3.0, 0)
-	calculation := suite.hexagonalWavePacket.Calculate(complex(math.Sqrt(3), -1 * math.Sqrt(3)))
+	zInLatticeCoordinates := suite.hexLatticeVectors.ConvertToLatticeCoordinates(complex(math.Sqrt(3), -1 * math.Sqrt(3)))
+	calculation := suite.hexagonalWavePacket.Calculate(zInLatticeCoordinates)
 	total := calculation.Total
 
 	expectedAnswer := (cmplx.Exp(complex(0, 2 * math.Pi * (3 + math.Sqrt(3)))) +
@@ -95,16 +101,12 @@ func (suite *WaveFormulaTests) TestWaveFormulaMarshalFromJson(checker *C) {
 				},
 				"terms": [
 					{
-						"x_lattice_vector": {
+						"power_n": 12,
+						"power_m": -10,
+						"multiplier": {
 							"real": -1.0,
 							"imaginary": 2e-2
-						},
-						"y_lattice_vector": {
-							"real": 100,
-							"imaginary": -9000
-						},
-						"power_n": 12,
-						"power_m": -10
+						}
 					}
 				]
 	}`)
@@ -123,14 +125,11 @@ multiplier:
   imaginary: 2e-2
 terms:
   -
-    x_lattice_vector:
-      real: -1.0
-      imaginary: 2e-2
-    y_lattice_vector:
-      real: 100
-      imaginary: -9000
     power_n: 12
     power_m: -10
+    multiplier:
+      real: -1.0
+      imaginary: 2e-2
 `)
 	wave, err := wavepacket.NewWaveFormulaFromYAML(yamlByteStream)
 	checker.Assert(err, IsNil)

@@ -14,14 +14,16 @@ type SquareWallpaperFormula struct {
 
 // SetUp initializes all of the needed wallpaper terms.
 func (squareWaveFormula *SquareWallpaperFormula) SetUp() {
+	squareWaveFormula.Formula.Lattice = &formula.LatticeVectorPair{
+		XLatticeVector: complex(1, 0),
+		YLatticeVector: complex(0, 1),
+	}
 	squareWaveFormula.Formula.SetUp(
 		[]coefficient.Relationship{
 			coefficient.PlusMMinusN,
 			coefficient.MinusNMinusM,
 			coefficient.MinusMPlusN,
 		},
-		complex(1, 0),
-		complex(0, 1),
 	)
 }
 

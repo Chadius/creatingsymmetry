@@ -144,13 +144,10 @@ func (suite *HexagonalWaveSymmetry) TestP31m(checker *C) {
 				{
 					Terms: []*formula.EisensteinFormulaTerm{
 						{
-							XLatticeVector: suite.baseWavePacket.Terms[0].XLatticeVector,
-							YLatticeVector: suite.baseWavePacket.Terms[0].YLatticeVector,
 							PowerN:         suite.baseWavePacket.Terms[0].PowerM,
 							PowerM:         suite.baseWavePacket.Terms[0].PowerN,
 						},
 					},
-					Multiplier: suite.baseWavePacket.Multiplier,
 				},
 			},
 			Multiplier: complex(1, 0),
@@ -174,8 +171,6 @@ func (suite *HexagonalWaveSymmetry) TestP3m1(checker *C) {
 				{
 					Terms: []*formula.EisensteinFormulaTerm{
 						{
-							XLatticeVector: suite.baseWavePacket.Terms[0].XLatticeVector,
-							YLatticeVector: suite.baseWavePacket.Terms[0].YLatticeVector,
 							PowerN:         suite.baseWavePacket.Terms[0].PowerM * -1,
 							PowerM:         suite.baseWavePacket.Terms[0].PowerN * -1,
 						},
@@ -204,8 +199,6 @@ func (suite *HexagonalWaveSymmetry) TestP6(checker *C) {
 				{
 					Terms: []*formula.EisensteinFormulaTerm{
 						{
-							XLatticeVector: suite.baseWavePacket.Terms[0].XLatticeVector,
-							YLatticeVector: suite.baseWavePacket.Terms[0].YLatticeVector,
 							PowerN:         suite.baseWavePacket.Terms[0].PowerN * -1,
 							PowerM:         suite.baseWavePacket.Terms[0].PowerM * -1,
 						},
@@ -234,8 +227,6 @@ func (suite *HexagonalWaveSymmetry) TestP6m(checker *C) {
 				{
 					Terms: []*formula.EisensteinFormulaTerm{
 						{
-							XLatticeVector: suite.baseWavePacket.Terms[0].XLatticeVector,
-							YLatticeVector: suite.baseWavePacket.Terms[0].YLatticeVector,
 							PowerN:         suite.baseWavePacket.Terms[0].PowerN * -1,
 							PowerM:         suite.baseWavePacket.Terms[0].PowerM * -1,
 						},
@@ -245,8 +236,6 @@ func (suite *HexagonalWaveSymmetry) TestP6m(checker *C) {
 				{
 					Terms: []*formula.EisensteinFormulaTerm{
 						{
-							XLatticeVector: suite.baseWavePacket.Terms[0].XLatticeVector,
-							YLatticeVector: suite.baseWavePacket.Terms[0].YLatticeVector,
 							PowerN:         suite.baseWavePacket.Terms[0].PowerM,
 							PowerM:         suite.baseWavePacket.Terms[0].PowerN,
 						},
@@ -256,8 +245,6 @@ func (suite *HexagonalWaveSymmetry) TestP6m(checker *C) {
 				{
 					Terms: []*formula.EisensteinFormulaTerm{
 						{
-							XLatticeVector: suite.baseWavePacket.Terms[0].XLatticeVector,
-							YLatticeVector: suite.baseWavePacket.Terms[0].YLatticeVector,
 							PowerN:         suite.baseWavePacket.Terms[0].PowerM * -1,
 							PowerM:         suite.baseWavePacket.Terms[0].PowerN * -1,
 						},
@@ -285,8 +272,6 @@ func (suite *HexagonalWaveSymmetry) TestMultipleSymmetries(checker *C) {
 				{
 					Terms: []*formula.EisensteinFormulaTerm{
 						{
-							XLatticeVector: suite.baseWavePacket.Terms[0].XLatticeVector,
-							YLatticeVector: suite.baseWavePacket.Terms[0].YLatticeVector,
 							PowerN:         1,
 							PowerM:         -1,
 						},
@@ -296,8 +281,6 @@ func (suite *HexagonalWaveSymmetry) TestMultipleSymmetries(checker *C) {
 				{
 					Terms: []*formula.EisensteinFormulaTerm{
 						{
-							XLatticeVector: suite.baseWavePacket.Terms[0].XLatticeVector,
-							YLatticeVector: suite.baseWavePacket.Terms[0].YLatticeVector,
 							PowerN:         -1,
 							PowerM:         1,
 						},

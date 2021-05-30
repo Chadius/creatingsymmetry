@@ -9,8 +9,8 @@ import (
 
 // FormulaMarshalable can be marshaled and converted to a EisensteinFormulaTerm
 type FormulaMarshalable struct {
-	Terms []*formula.EisensteinFormulaTermMarshalable `json:"terms" yaml:"terms"`
-	Multiplier utility.ComplexNumberForMarshal	`json:"multiplier" yaml:"multiplier"`
+	Terms []*formula.EisensteinFormulaTermMarshal `json:"terms" yaml:"terms"`
+	Multiplier utility.ComplexNumberForMarshal    `json:"multiplier" yaml:"multiplier"`
 }
 
 // Formula for Waves mathematically creates repeating, cyclical mathematical patterns
@@ -20,15 +20,15 @@ type Formula struct {
 	Multiplier 		complex128
 }
 
-// Calculate takes the complex number z and processes it using the mathematical terms.
-func (waveFormula Formula) Calculate(z complex128) *formula.CalculationResultForFormula {
+// Calculate takes the complex number zInLatticeCoordinates and processes it using the mathematical terms.
+func (waveFormula Formula) Calculate(zInLatticeCoordinates complex128) *formula.CalculationResultForFormula {
 	result := &formula.CalculationResultForFormula{
 		Total: complex(0,0),
 		ContributionByTerm: []complex128{},
 	}
 
 	for _, term := range waveFormula.Terms {
-		termContribution := term.Calculate(z)
+		termContribution := term.Calculate(zInLatticeCoordinates)
 		result.Total += termContribution
 		result.ContributionByTerm = append(result.ContributionByTerm, termContribution)
 	}

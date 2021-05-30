@@ -146,10 +146,9 @@ func (suite *SquareWaveSymmetry) TestP4m(checker *C) {
 				{
 					Terms: []*formula.EisensteinFormulaTerm{
 						{
-							XLatticeVector: suite.baseWavePacket.Terms[0].XLatticeVector,
-							YLatticeVector: suite.baseWavePacket.Terms[0].YLatticeVector,
 							PowerN:         suite.baseWavePacket.Terms[0].PowerM,
 							PowerM:         suite.baseWavePacket.Terms[0].PowerN,
+							Multiplier: suite.baseWavePacket.Multiplier,
 						},
 					},
 					Multiplier: suite.baseWavePacket.Multiplier,
@@ -175,10 +174,9 @@ func (suite *SquareWaveSymmetry) TestP4gWithOddSumPowers(checker *C) {
 				{
 					Terms: []*formula.EisensteinFormulaTerm{
 						{
-							XLatticeVector: -1 * suite.baseWavePacket.Terms[0].XLatticeVector,
-							YLatticeVector: -1 * suite.baseWavePacket.Terms[0].YLatticeVector,
 							PowerN:         suite.baseWavePacket.Terms[0].PowerM,
 							PowerM:         suite.baseWavePacket.Terms[0].PowerN,
+							Multiplier: suite.baseWavePacket.Multiplier,
 						},
 					},
 					Multiplier: -1.0 * suite.baseWavePacket.Multiplier,
@@ -203,10 +201,9 @@ func (suite *SquareWaveSymmetry) TestP4gWithEvenSumPowers(checker *C) {
 				{
 					Terms: []*formula.EisensteinFormulaTerm{
 						{
-							XLatticeVector: suite.baseWavePacket.Terms[0].XLatticeVector,
-							YLatticeVector: suite.baseWavePacket.Terms[0].YLatticeVector,
 							PowerN: 8,
 							PowerM: -4,
+							Multiplier: suite.baseWavePacket.Multiplier,
 						},
 					},
 					Multiplier: suite.baseWavePacket.Multiplier,
@@ -214,10 +211,9 @@ func (suite *SquareWaveSymmetry) TestP4gWithEvenSumPowers(checker *C) {
 				{
 					Terms: []*formula.EisensteinFormulaTerm{
 						{
-							XLatticeVector: suite.baseWavePacket.Terms[0].XLatticeVector,
-							YLatticeVector: suite.baseWavePacket.Terms[0].YLatticeVector,
 							PowerN:         -4,
 							PowerM:         8,
+							Multiplier: suite.baseWavePacket.Multiplier,
 						},
 					},
 					Multiplier: suite.baseWavePacket.Multiplier,
