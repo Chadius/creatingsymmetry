@@ -1,6 +1,7 @@
 package wavepacket
 
 import (
+	"errors"
 	"math"
 	"wallpaper/entities/formula"
 	"wallpaper/entities/formula/coefficient"
@@ -86,4 +87,64 @@ func NewHexagonalWallpaperFormulaFromMarshalObject(marshalObject WallpaperFormul
 	return &HexagonalWallpaperFormula{
 		Formula: NewWallpaperFormulaFromMarshalObject(marshalObject),
 	}
+}
+
+// NewHexagonalWallpaperFormulaWithSymmetry will try to create a new Hexagonal Wallpaper Formula
+//   with the desired Terms, Multiplier and Symmetry.
+func NewHexagonalWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, desiredSymmetry *Symmetry) (*HexagonalWallpaperFormula, error) {
+	err := checkForIncompatibleHexagonalSymmetries(desiredSymmetry)
+	if err != nil {
+		return nil, err
+	}
+
+	newWavePackets := []*Formula{}
+	for _, term := range terms {
+		newWavePackets = append(
+			newWavePackets,
+			&Formula{
+				Terms:      []*formula.EisensteinFormulaTerm{term},
+				Multiplier: term.Multiplier,
+			},
+		)
+
+		newWavePackets = addNewWavePacketsBasedOnSymmetry(term, desiredSymmetry, newWavePackets)
+	}
+
+	newBaseWallpaper := &HexagonalWallpaperFormula{
+		Formula: &WallpaperFormula{
+			WavePackets: newWavePackets,
+			Multiplier:  wallpaperMultiplier,
+		},
+	}
+	newBaseWallpaper.SetUp()
+	return newBaseWallpaper, nil
+}
+
+func checkForIncompatibleHexagonalSymmetries(desiredSymmetry *Symmetry) error {
+	desiredSymmetryAlreadySet := false
+	if desiredSymmetry.P3m1 {
+		if desiredSymmetryAlreadySet {
+			return errors.New("invalid desired symmetry")
+		}
+		desiredSymmetryAlreadySet = true
+	}
+	if desiredSymmetry.P31m {
+		if desiredSymmetryAlreadySet {
+			return errors.New("invalid desired symmetry")
+		}
+		desiredSymmetryAlreadySet = true
+	}
+	if desiredSymmetry.P6 {
+		if desiredSymmetryAlreadySet {
+			return errors.New("invalid desired symmetry")
+		}
+		desiredSymmetryAlreadySet = true
+	}
+	if desiredSymmetry.P6m {
+		if desiredSymmetryAlreadySet {
+			return errors.New("invalid desired symmetry")
+		}
+		desiredSymmetryAlreadySet = true
+	}
+	return nil
 }

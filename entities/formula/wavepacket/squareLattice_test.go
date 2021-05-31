@@ -230,3 +230,149 @@ func (suite *SquareWaveSymmetry) TestP4gWithEvenSumPowers(checker *C) {
 	checker.Assert(symmetriesFound.P4m, Equals, true)
 	checker.Assert(symmetriesFound.P4g, Equals, true)
 }
+
+type SquareCreatedWithDesiredSymmetry struct {
+	singleEisensteinOddSumFormulaTerm []*formula.EisensteinFormulaTerm
+	singleEisensteinEvenSumFormulaTerm []*formula.EisensteinFormulaTerm
+	wallpaperMultiplier complex128
+}
+
+var _ = Suite(&SquareCreatedWithDesiredSymmetry{})
+
+func (suite *SquareCreatedWithDesiredSymmetry) SetUpTest (checker *C) {
+	suite.singleEisensteinOddSumFormulaTerm = []*formula.EisensteinFormulaTerm{
+		{
+			PowerM: -2,
+			PowerN: 1,
+			Multiplier: complex(1, 0),
+		},
+	}
+	suite.singleEisensteinEvenSumFormulaTerm = []*formula.EisensteinFormulaTerm{
+		{
+			PowerM: 3,
+			PowerN: -1,
+			Multiplier: complex(1, 0),
+		},
+	}
+	suite.wallpaperMultiplier = complex(1, 0)
+}
+
+func (suite *SquareCreatedWithDesiredSymmetry) SymmetryCheck(checker *C, squareFormula *wavepacket.SquareWallpaperFormula , desiredSymmetry wavepacket.Symmetry) {
+	symmetriesFound := squareFormula.FindSymmetries()
+	checker.Assert(symmetriesFound.P4, Equals, desiredSymmetry.P4)
+	checker.Assert(symmetriesFound.P4m, Equals, desiredSymmetry.P4m)
+	checker.Assert(symmetriesFound.P4g, Equals, desiredSymmetry.P4g)
+}
+
+func (suite *SquareCreatedWithDesiredSymmetry) TestNoSymmetryDoesNotChangePattern(checker *C) {
+	squareFormula, err := wavepacket.NewSquareWallpaperFormulaWithSymmetry(
+		suite.singleEisensteinOddSumFormulaTerm,
+		suite.wallpaperMultiplier,
+		&wavepacket.Symmetry{},
+	)
+
+	checker.Assert(err, IsNil)
+	checker.Assert(squareFormula.Formula.WavePackets, HasLen, 1)
+	checker.Assert(squareFormula.Formula.WavePackets[0].Terms, HasLen, 4)
+
+	suite.SymmetryCheck(checker, squareFormula, wavepacket.Symmetry{
+		P4:   true,
+	})
+}
+
+func (suite *SquareCreatedWithDesiredSymmetry) TestCreateWallpaperWithP4m(checker *C) {
+	squareFormula, err := wavepacket.NewSquareWallpaperFormulaWithSymmetry(
+		suite.singleEisensteinOddSumFormulaTerm,
+		suite.wallpaperMultiplier,
+		&wavepacket.Symmetry{
+			P4m: true,
+		},
+	)
+
+	checker.Assert(err, IsNil)
+	checker.Assert(squareFormula.Formula.WavePackets, HasLen, 2)
+	checker.Assert(squareFormula.Formula.WavePackets[0].Terms, HasLen, 4)
+
+	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, 1)
+	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, -2)
+
+	suite.SymmetryCheck(checker, squareFormula, wavepacket.Symmetry{
+		P4:   true,
+		P4m:   true,
+	})
+}
+
+func (suite *SquareCreatedWithDesiredSymmetry) TestCreateWallpaperWithP4gAndOddSumPowers(checker *C) {
+	squareFormula, errOddSum := wavepacket.NewSquareWallpaperFormulaWithSymmetry(
+		suite.singleEisensteinOddSumFormulaTerm,
+		suite.wallpaperMultiplier,
+		&wavepacket.Symmetry{
+			P4g: true,
+		},
+	)
+
+	checker.Assert(errOddSum, IsNil)
+	checker.Assert(squareFormula.Formula.WavePackets, HasLen, 2)
+	checker.Assert(squareFormula.Formula.WavePackets[0].Terms, HasLen, 4)
+
+	checker.Assert(real(squareFormula.Formula.WavePackets[1].Multiplier), utility.NumericallyCloseEnough{}, real(suite.wallpaperMultiplier) * -1, 1e-6)
+	checker.Assert(imag(squareFormula.Formula.WavePackets[1].Multiplier), utility.NumericallyCloseEnough{}, imag(suite.wallpaperMultiplier) * -1, 1e-6)
+	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, 1)
+	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, -2)
+
+	suite.SymmetryCheck(checker, squareFormula, wavepacket.Symmetry{
+		P4:   true,
+		P4g:   true,
+	})
+}
+
+func (suite *SquareCreatedWithDesiredSymmetry) TestCreateWallpaperWithP4gAndEvenSumPowers(checker *C) {
+	squareFormula, errEvenSum := wavepacket.NewSquareWallpaperFormulaWithSymmetry(
+		suite.singleEisensteinEvenSumFormulaTerm,
+		suite.wallpaperMultiplier,
+		&wavepacket.Symmetry{
+			P4g: true,
+		},
+	)
+
+	checker.Assert(errEvenSum, IsNil)
+	checker.Assert(squareFormula.Formula.WavePackets, HasLen, 2)
+	checker.Assert(squareFormula.Formula.WavePackets[0].Terms, HasLen, 4)
+
+	checker.Assert(real(squareFormula.Formula.WavePackets[1].Terms[0].Multiplier), utility.NumericallyCloseEnough{}, real(suite.wallpaperMultiplier), 1e-6)
+	checker.Assert(imag(squareFormula.Formula.WavePackets[1].Terms[0].Multiplier), utility.NumericallyCloseEnough{}, imag(suite.wallpaperMultiplier), 1e-6)
+	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, -1)
+	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, 3)
+
+	suite.SymmetryCheck(checker, squareFormula, wavepacket.Symmetry{
+		P4:   true,
+		P4m:   true,
+		P4g:   true,
+	})
+}
+
+func (suite *SquareCreatedWithDesiredSymmetry) TestP4mP4gOnlyCombinesForEvenSumTerms(checker *C) {
+	_, errEven := wavepacket.NewSquareWallpaperFormulaWithSymmetry(
+		suite.singleEisensteinEvenSumFormulaTerm,
+		suite.wallpaperMultiplier,
+		&wavepacket.Symmetry{
+			P4: true,
+			P4m: true,
+			P4g: true,
+		},
+	)
+
+	checker.Assert(errEven, IsNil)
+
+	_, errIncompatible := wavepacket.NewSquareWallpaperFormulaWithSymmetry(
+		suite.singleEisensteinOddSumFormulaTerm,
+		suite.wallpaperMultiplier,
+		&wavepacket.Symmetry{
+			P4: true,
+			P4m: true,
+			P4g: true,
+		},
+	)
+
+	checker.Assert(errIncompatible, ErrorMatches, "invalid desired symmetry")
+}

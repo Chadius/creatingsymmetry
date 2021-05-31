@@ -13,7 +13,7 @@ color_value_space:
   miny: -3e-0
   maxx: 3e-0
   maxy: 3e-0
-square_wallpaper_formula:
+skip_square_wallpaper_formula:
   multiplier:
     real: 1
     imaginary: 0
@@ -34,3 +34,40 @@ square_wallpaper_formula:
         -
           power_n: -1
           power_m: 4
+hexagonal_wallpaper_formula:
+  multiplier:
+    real: 1
+    imaginary: 0
+  wave_packets:
+    -
+      multiplier:
+        real: 1
+        imaginary: 1
+      terms:
+        -
+          power_n: 4
+          power_m: -1
+    -
+      multiplier:
+        real: 1
+        imaginary: 1
+      terms:
+        -
+          power_n: -1
+          power_m: 4
+    -
+      multiplier:
+        real: 5e-1
+        imaginary: 0
+      terms:
+        -
+          power_n: 2
+          power_m: -2
+    -
+      multiplier:
+        real: 5e-1
+        imaginary: 0
+      terms:
+        -
+          power_n: -2
+          power_m: 2

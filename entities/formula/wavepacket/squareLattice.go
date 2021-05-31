@@ -1,6 +1,7 @@
 package wavepacket
 
 import (
+	"errors"
 	"wallpaper/entities/formula"
 	"wallpaper/entities/formula/coefficient"
 )
@@ -82,4 +83,52 @@ func NewSquareWallpaperFormulaFromMarshalObject(marshalObject WallpaperFormulaMa
 	return &SquareWallpaperFormula{
 		Formula: NewWallpaperFormulaFromMarshalObject(marshalObject),
 	}
+}
+
+// NewSquareWallpaperFormulaWithSymmetry will try to create a new Hexagonal Wallpaper Formula
+//   with the desired Terms, Multiplier and Symmetry.
+func NewSquareWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, desiredSymmetry *Symmetry) (*SquareWallpaperFormula, error) {
+	err := checkForIncompatibleSquareSymmetries(terms, desiredSymmetry)
+	if err != nil {
+		return nil, err
+	}
+
+	newWavePackets := []*Formula{}
+	for _, term := range terms {
+		newWavePackets = append(
+			newWavePackets,
+			&Formula{
+				Terms:      []*formula.EisensteinFormulaTerm{term},
+				Multiplier: term.Multiplier,
+			},
+		)
+
+		newWavePackets = addNewWavePacketsBasedOnSymmetry(term, desiredSymmetry, newWavePackets)
+	}
+
+	newBaseWallpaper := &SquareWallpaperFormula{
+		Formula: &WallpaperFormula{
+			WavePackets: newWavePackets,
+			Multiplier:  wallpaperMultiplier,
+		},
+	}
+	newBaseWallpaper.SetUp()
+	return newBaseWallpaper, nil
+}
+
+
+func checkForIncompatibleSquareSymmetries(terms []*formula.EisensteinFormulaTerm, desiredSymmetry *Symmetry) error {
+	atLeastOneTermPowerSumIsOdd := false
+	for _, term := range terms {
+		powerSumIsOdd := (term.PowerN + term.PowerM) % 2 != 0
+		if powerSumIsOdd {
+			atLeastOneTermPowerSumIsOdd = true
+			break
+		}
+	}
+
+	if desiredSymmetry.P4g && desiredSymmetry.P4m && atLeastOneTermPowerSumIsOdd {
+		return errors.New("invalid desired symmetry")
+	}
+	return nil
 }
