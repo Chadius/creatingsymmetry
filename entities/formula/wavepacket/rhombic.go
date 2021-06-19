@@ -22,11 +22,16 @@ type RhombicWallpaperFormula struct {
 }
 
 // SetUp will create the rhombic RhombicWallpaperFormula using the given LatticeHeight.
-func (rhombic *RhombicWallpaperFormula) SetUp() {
+func (rhombic *RhombicWallpaperFormula) SetUp() error {
 
 	rhombic.Formula.Lattice = &formula.LatticeVectorPair{
 		XLatticeVector: complex(0.5, rhombic.LatticeHeight),
 		YLatticeVector: complex(0.5, rhombic.LatticeHeight * -1),
+	}
+
+	err := rhombic.Formula.Lattice.Validate()
+	if err != nil {
+		return err
 	}
 
 	rhombic.Formula.SetUp(
@@ -34,6 +39,8 @@ func (rhombic *RhombicWallpaperFormula) SetUp() {
 			coefficient.PlusMPlusN,
 		},
 	)
+
+	return nil
 }
 
 // Calculate applies the formula to the complex number z.

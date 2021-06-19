@@ -36,7 +36,7 @@ func vectorsAreCollinear(vector1 complex128, vector2 complex128) bool {
 	lengthOfVector2 := math.Sqrt((real(vector2) * real(vector2)) + (imag(vector2) * imag(vector2)))
 
 	tolerance := 1e-8
-	return math.Abs(absoluteValueDotProduct - lengthOfVector1 * lengthOfVector2) < tolerance
+	return math.Abs(absoluteValueDotProduct - (lengthOfVector1 * lengthOfVector2)) < tolerance
 }
 
 // Validate returns an error if this is an invalid formula.

@@ -44,6 +44,29 @@ func (suite *RhombicWallpaper) TestSetupCreatesLatticeVectors (checker *C) {
 	checker.Assert(imag(suite.rhombicFormula.Formula.Lattice.YLatticeVector), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
 }
 
+func (suite *RhombicWallpaper) TestRaiseErrorIfHeightIsZero (checker *C) {
+	rhombicFormulaWithNoHeight := &wavepacket.RhombicWallpaperFormula{
+		Formula: &wavepacket.WallpaperFormula{
+			WavePackets: []*wavepacket.WavePacket{
+				{
+					Terms: []*formula.EisensteinFormulaTerm{
+						{
+							PowerN: 1,
+							PowerM: -2,
+						},
+					},
+					Multiplier: complex(1, 0),
+				},
+			},
+			Multiplier: complex(1, 0),
+		},
+		LatticeHeight: 0,
+	}
+	err := rhombicFormulaWithNoHeight.SetUp()
+
+	checker.Assert(err, ErrorMatches, "vectors cannot be collinear: (.*,.*) and (.*,.*)")
+}
+
 func (suite *RhombicWallpaper) TestSetupLocksPairs (checker *C) {
 	checker.Assert(suite.rhombicFormula.Formula.WavePackets[0].Terms, HasLen, 2)
 	checker.Assert(suite.rhombicFormula.Formula.WavePackets[0].Terms[1].PowerN, Equals, suite.rhombicFormula.Formula.WavePackets[0].Terms[0].PowerM)

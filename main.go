@@ -268,7 +268,10 @@ func transformCoordinatesForSquareWallpaperFormula(wallpaperFormula *wavepacket.
 }
 
 func transformCoordinatesForRhombicWallpaperFormula(wallpaperFormula *wavepacket.RhombicWallpaperFormula, scaledCoordinates []complex128) []complex128 {
-	wallpaperFormula.SetUp()
+	err := wallpaperFormula.SetUp()
+	if err != nil {
+		println(err.Error())
+	}
 
 	transformedCoordinates := []complex128{}
 	resultsByTerm := [][]complex128{}
