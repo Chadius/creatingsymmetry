@@ -68,10 +68,13 @@ func (lattice LatticeVectorPair) ConvertToLatticeCoordinates(cartesianPoint comp
 		vector2 = lattice.XLatticeVector
 	}
 
-	scalarForVector2 := (imag(cartesianPoint) - (real(cartesianPoint) * imag(vector1))) /
-		((real(vector1) * imag(vector2)) - (imag(vector1) * real(vector2)))
+	scalarForVector2Numerator := (real(vector1) * imag(cartesianPoint)) - (imag(vector1) * real(cartesianPoint))
+	scalarForVector2Denominator := (real(vector1) * imag(vector2)) - (imag(vector1) * real(vector2))
+	scalarForVector2 := scalarForVector2Numerator / scalarForVector2Denominator
 
-	scalarForVector1 := (real(cartesianPoint) - (scalarForVector2 * real(vector2)))/ real(vector1)
+	scalarForVector1Numerator := real(cartesianPoint) - (scalarForVector2 * real(vector2))
+	scalarForVector1Denominator := real(vector1)
+	scalarForVector1 := scalarForVector1Numerator / scalarForVector1Denominator
 
 	if swapVectorsDuringCalculation {
 		return complex(scalarForVector2, scalarForVector1)

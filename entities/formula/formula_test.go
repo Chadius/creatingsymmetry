@@ -48,6 +48,17 @@ func (suite *LatticeVectorSuite) TestConvertToLatticeVector(checker *C) {
 	checker.Assert(imag(latticeCoordinate), utility.NumericallyCloseEnough{}, 2.0, 1e-6)
 }
 
+func (suite *LatticeVectorSuite) TestConvertToLatticeVectorNonPerpendicularVectors(checker *C) {
+	squareLatticeFormula := formula.LatticeVectorPair{
+		XLatticeVector: complex(0.5, 1),
+		YLatticeVector: complex(0.5, -1),
+	}
+
+	latticeCoordinate := squareLatticeFormula.ConvertToLatticeCoordinates(complex(0.75, -0.25))
+	checker.Assert(real(latticeCoordinate), utility.NumericallyCloseEnough{}, 0.625, 1e-6)
+	checker.Assert(imag(latticeCoordinate), utility.NumericallyCloseEnough{}, 0.875, 1e-6)
+}
+
 func (suite *LatticeVectorSuite) TestConvertToLatticeVectorEvenIfFirstVectorHasZeroRealComponent(checker *C) {
 	squareLatticeFormulaWithFlippedVectors := formula.LatticeVectorPair{
 		XLatticeVector: complex(0, 1),
