@@ -98,7 +98,7 @@ func NewHexagonalWallpaperFormulaFromMarshalObject(marshalObject WallpaperFormul
 	}
 }
 
-// NewHexagonalWallpaperFormulaWithSymmetry will try to create a new Hexagonal Wallpaper WavePacket
+// NewHexagonalWallpaperFormulaWithSymmetry will try to create a new Hexagonal RhombicWallpaperFormula WavePacket
 //   with the desired Terms, Multiplier and Symmetry.
 func NewHexagonalWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, desiredSymmetry *Symmetry) (*HexagonalWallpaperFormula, error) {
 	err := checkForIncompatibleHexagonalSymmetries(desiredSymmetry)

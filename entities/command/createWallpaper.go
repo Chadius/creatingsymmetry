@@ -34,6 +34,7 @@ type CreateWallpaperCommand struct {
 	FriezeFormula			  *frieze.Formula                      `json:"frieze_formula" yaml:"frieze_formula"`
 	HexagonalWallpaperFormula *wavepacket.HexagonalWallpaperFormula `json:"hexagonal_wallpaper_formula" yaml:"hexagonal_wallpaper_formula"`
 	SquareWallpaperFormula *wavepacket.SquareWallpaperFormula       `json:"square_wallpaper_formula" yaml:"square_wallpaper_formula"`
+	RhombicWallpaperFormula *wavepacket.RhombicWallpaperFormula            `json:"rhombic_wallpaper_formula" yaml:"rhombic_wallpaper_formula"`
 }
 
 // CreateWallpaperCommandMarshal can be marshaled and converted to a CreateWallpaperCommand
@@ -47,6 +48,7 @@ type CreateWallpaperCommandMarshal struct {
 	FriezeFormula			*frieze.MarshaledFormula                `json:"frieze_formula" yaml:"frieze_formula"`
 	HexagonalWallpaperFormula *wavepacket.WallpaperFormulaMarshalled `json:"hexagonal_wallpaper_formula" yaml:"hexagonal_wallpaper_formula"`
 	SquareWallpaperFormula *wavepacket.WallpaperFormulaMarshalled    `json:"square_wallpaper_formula" yaml:"square_wallpaper_formula"`
+	RhombicWallpaperFormula *wavepacket.RhombicWallpaperFormulaMarshalled       `json:"rhombic_wallpaper_formula" yaml:"rhombic_wallpaper_formula"`
 }
 
 // NewCreateWallpaperCommandFromYAML reads the data and returns a CreateWallpaperCommand from it.
@@ -91,6 +93,10 @@ func newCreateWallpaperCommandFromDatastream(data []byte, unmarshal utility.Unma
 
 	if commandToCreateMarshal.SquareWallpaperFormula != nil {
 		commandToCreate.SquareWallpaperFormula = wavepacket.NewSquareWallpaperFormulaFromMarshalObject(*commandToCreateMarshal.SquareWallpaperFormula)
+	}
+
+	if commandToCreateMarshal.RhombicWallpaperFormula != nil {
+		commandToCreate.RhombicWallpaperFormula = wavepacket.NewRhombicWallpaperFormulaFromMarshalObject(*commandToCreateMarshal.RhombicWallpaperFormula)
 	}
 
 	return commandToCreate, nil
