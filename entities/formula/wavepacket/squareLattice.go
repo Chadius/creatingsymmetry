@@ -121,21 +121,8 @@ func (squareWaveFormula *SquareWallpaperFormula) HasSymmetry(desiredSymmetry Sym
 		return true
 	}
 
-	numberOfWavePackets := len(squareWaveFormula.Formula.WavePackets)
-	if numberOfWavePackets < 2 || numberOfWavePackets % 2 == 1 {
-		return false
-	}
-
-	desiredSymmetryToCoefficients := map[SymmetryType][]coefficient.Relationship {
+	return HasSymmetry(squareWaveFormula.Formula.WavePackets, desiredSymmetry, map[SymmetryType][]coefficient.Relationship {
 		P4m: {coefficient.PlusMPlusN},
 		P4g: {coefficient.PlusMPlusNMaybeFlipScale},
-	}
-
-	coefficientsToFind := desiredSymmetryToCoefficients[desiredSymmetry]
-
-	if coefficientsToFind == nil {
-		return false
-	}
-
-	return CanWavePacketsBeGroupedAmongCoefficientRelationships(squareWaveFormula.Formula.WavePackets, coefficientsToFind)
+	})
 }

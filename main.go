@@ -295,16 +295,13 @@ func transformCoordinatesForRhombicWallpaperFormula(wallpaperFormula *wavepacket
 		fmt.Printf("%d: %e - %e\n", index, minz, maxz)
 	}
 
-	//println("Symmetries found:")
-	//if wallpaperFormula.HasSymmetry(wavepacket.P4) {
-	//	println("  p4")
-	//}
-	//if wallpaperFormula.HasSymmetry(wavepacket.P4m) {
-	//	println("  p4m")
-	//}
-	//if wallpaperFormula.HasSymmetry(wavepacket.P4g) {
-	//	println("  p4g")
-	//}
+	println("Symmetries found:")
+	if wallpaperFormula.HasSymmetry(wavepacket.Cm) {
+		println("  cm")
+	}
+	if wallpaperFormula.HasSymmetry(wavepacket.Cmm) {
+		println("  cmm")
+	}
 
 	return transformedCoordinates
 }

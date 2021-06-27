@@ -149,3 +149,19 @@ func CanWavePacketsBeGroupedAmongCoefficientRelationships(wavePackets []*WavePac
 
 	return true
 }
+
+// HasSymmetry returns true if the WavePackets involved form the desired symmetry.
+func HasSymmetry(wavePackets []*WavePacket, desiredSymmetry SymmetryType, desiredSymmetryToCoefficients map[SymmetryType][]coefficient.Relationship) bool {
+	numberOfWavePackets := len(wavePackets)
+	if numberOfWavePackets < 2 || numberOfWavePackets % 2 == 1 {
+		return false
+	}
+
+	coefficientsToFind := desiredSymmetryToCoefficients[desiredSymmetry]
+
+	if coefficientsToFind == nil {
+		return false
+	}
+
+	return CanWavePacketsBeGroupedAmongCoefficientRelationships(wavePackets, coefficientsToFind)
+}

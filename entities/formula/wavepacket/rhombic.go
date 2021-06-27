@@ -50,6 +50,18 @@ func (rhombic *RhombicWallpaperFormula) Calculate(z complex128) *formula.Calcula
 	return rhombic.Formula.Calculate(z)
 }
 
+// HasSymmetry returns true if the WavePackets involved form symmetry.
+func (rhombic *RhombicWallpaperFormula) HasSymmetry(desiredSymmetry SymmetryType) bool {
+	return HasSymmetry(rhombic.Formula.WavePackets, desiredSymmetry, map[SymmetryType][]coefficient.Relationship {
+		Cm: {coefficient.PlusMPlusN},
+		Cmm: {
+			coefficient.MinusNMinusM,
+			coefficient.MinusMMinusN,
+			coefficient.PlusMPlusN,
+		},
+	})
+}
+
 // NewRhombicWallpaperFormulaFromJSON reads the data and returns a formula term from it.
 func NewRhombicWallpaperFormulaFromJSON(data []byte) (*RhombicWallpaperFormula, error) {
 	return newRhombicWallpaperFormulaFromDatastream(data, json.Unmarshal)
@@ -80,4 +92,31 @@ func NewRhombicWallpaperFormulaFromMarshalObject(marshalObject RhombicWallpaperF
 		Formula:       formula,
 		LatticeHeight: marshalObject.LatticeHeight,
 	}
+}
+
+// NewRhombicWallpaperFormulaWithSymmetry will try to create a new RhombicWallpaperFormula WavePacket
+//   with the desired Terms, Multiplier and Symmetry.
+func NewRhombicWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, latticeHeight float64, desiredSymmetry SymmetryType) (*RhombicWallpaperFormula, error) {
+	newWavePackets := []*WavePacket{}
+	for _, term := range terms {
+		newWavePackets = append(
+			newWavePackets,
+			&WavePacket{
+				Terms:      []*formula.EisensteinFormulaTerm{term},
+				Multiplier: term.Multiplier,
+			},
+		)
+
+		newWavePackets = addNewWavePacketsBasedOnSymmetry2(term, desiredSymmetry, newWavePackets)
+	}
+
+	newBaseWallpaper := &RhombicWallpaperFormula{
+		Formula: &WallpaperFormula{
+			WavePackets: newWavePackets,
+			Multiplier:  wallpaperMultiplier,
+		},
+		LatticeHeight: latticeHeight,
+	}
+	newBaseWallpaper.SetUp()
+	return newBaseWallpaper, nil
 }

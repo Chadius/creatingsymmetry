@@ -40,12 +40,7 @@ func (hexWaveFormula *HexagonalWallpaperFormula) HasSymmetry(desiredSymmetry Sym
 		return true
 	}
 
-	numberOfWavePackets := len(hexWaveFormula.Formula.WavePackets)
-	if numberOfWavePackets < 2 || numberOfWavePackets % 2 == 1 {
-		return false
-	}
-
-	desiredSymmetryToCoefficients := map[SymmetryType][]coefficient.Relationship {
+	return HasSymmetry(hexWaveFormula.Formula.WavePackets, desiredSymmetry, map[SymmetryType][]coefficient.Relationship {
 		P31m: {coefficient.PlusMPlusN},
 		P3m1: {coefficient.MinusMMinusN},
 		P6: {coefficient.MinusNMinusM},
@@ -54,15 +49,7 @@ func (hexWaveFormula *HexagonalWallpaperFormula) HasSymmetry(desiredSymmetry Sym
 			coefficient.MinusMMinusN,
 			coefficient.PlusMPlusN,
 		},
-	}
-
-	coefficientsToFind := desiredSymmetryToCoefficients[desiredSymmetry]
-
-	if coefficientsToFind == nil {
-		return false
-	}
-
-	return CanWavePacketsBeGroupedAmongCoefficientRelationships(hexWaveFormula.Formula.WavePackets, coefficientsToFind)
+	})
 }
 
 // NewHexagonalWallpaperFormulaFromJSON reads the data and returns a formula term from it.
@@ -98,7 +85,7 @@ func NewHexagonalWallpaperFormulaFromMarshalObject(marshalObject WallpaperFormul
 	}
 }
 
-// NewHexagonalWallpaperFormulaWithSymmetry will try to create a new Hexagonal RhombicWallpaperFormula WavePacket
+// NewHexagonalWallpaperFormulaWithSymmetry will try to create a new Hexagonal Wallpaper
 //   with the desired Terms, Multiplier and Symmetry.
 func NewHexagonalWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, desiredSymmetry *Symmetry) (*HexagonalWallpaperFormula, error) {
 	err := checkForIncompatibleHexagonalSymmetries(desiredSymmetry)

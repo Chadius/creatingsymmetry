@@ -1,18 +1,18 @@
 sample_source_filename: exampleImage/brownie.png
-output_filename: exampleImage/newBrownie.png
+output_filename: exampleImage/new_brownie.png
 output_size:
   width: 800
   height: 600
 sample_space:
-  minx: -1e0
-  miny: -1e0
-  maxx: 1e0
-  maxy: 1e0
+  minx: -2e0
+  miny: -2e0
+  maxx: 0e0
+  maxy: 0e0
 color_value_space:
-  minx: -5e-0
-  miny: -5e-0
-  maxx: 5e-0
-  maxy: 5e-0
+  minx: -10e-1
+  miny: -10e-1
+  maxx: 9e0
+  maxy: 9e0
 skip_square_wallpaper_formula:
   multiplier:
     real: 1
@@ -86,3 +86,27 @@ rhombic_wallpaper_formula:
           -
             power_n: 5
             power_m: -4
+      -
+        multiplier:
+          real: 1
+          imaginary: 2
+        terms:
+          -
+            power_n: -4
+            power_m: 5
+      -
+        multiplier:
+          real: 1
+          imaginary: 2
+        terms:
+          -
+            power_n: 4
+            power_m: -5
+      -
+        multiplier:
+          real: 1
+          imaginary: 2
+        terms:
+          -
+            power_n: -5
+            power_m: 4
