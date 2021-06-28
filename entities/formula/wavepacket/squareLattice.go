@@ -1,7 +1,6 @@
 package wavepacket
 
 import (
-	"errors"
 	"wallpaper/entities/formula"
 	"wallpaper/entities/formula/coefficient"
 )
@@ -69,12 +68,7 @@ func NewSquareWallpaperFormulaFromMarshalObject(marshalObject WallpaperFormulaMa
 
 // NewSquareWallpaperFormulaWithSymmetry will try to create a new Hexagonal RhombicWallpaperFormula WavePacket
 //   with the desired Terms, Multiplier and Symmetry.
-func NewSquareWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, desiredSymmetry *Symmetry) (*SquareWallpaperFormula, error) {
-	err := checkForIncompatibleSquareSymmetries(terms, desiredSymmetry)
-	if err != nil {
-		return nil, err
-	}
-
+func NewSquareWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, desiredSymmetry Symmetry) (*SquareWallpaperFormula, error) {
 	newWavePackets := []*WavePacket{}
 	for _, term := range terms {
 		newWavePackets = append(
@@ -98,30 +92,13 @@ func NewSquareWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTer
 	return newBaseWallpaper, nil
 }
 
-
-func checkForIncompatibleSquareSymmetries(terms []*formula.EisensteinFormulaTerm, desiredSymmetry *Symmetry) error {
-	atLeastOneTermPowerSumIsOdd := false
-	for _, term := range terms {
-		powerSumIsOdd := (term.PowerN + term.PowerM) % 2 != 0
-		if powerSumIsOdd {
-			atLeastOneTermPowerSumIsOdd = true
-			break
-		}
-	}
-
-	if desiredSymmetry.P4g && desiredSymmetry.P4m && atLeastOneTermPowerSumIsOdd {
-		return errors.New("invalid desired symmetry")
-	}
-	return nil
-}
-
 // HasSymmetry returns true if the WavePackets involved form symmetry.
-func (squareWaveFormula *SquareWallpaperFormula) HasSymmetry(desiredSymmetry SymmetryType) bool {
+func (squareWaveFormula *SquareWallpaperFormula) HasSymmetry(desiredSymmetry Symmetry) bool {
 	if desiredSymmetry == P4 {
 		return true
 	}
 
-	return HasSymmetry(squareWaveFormula.Formula.WavePackets, desiredSymmetry, map[SymmetryType][]coefficient.Relationship {
+	return HasSymmetry(squareWaveFormula.Formula.WavePackets, desiredSymmetry, map[Symmetry][]coefficient.Relationship {
 		P4m: {coefficient.PlusMPlusN},
 		P4g: {coefficient.PlusMPlusNMaybeFlipScale},
 	})

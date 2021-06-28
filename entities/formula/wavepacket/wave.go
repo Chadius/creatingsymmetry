@@ -76,18 +76,6 @@ func NewWaveFormulaFromMarshalObject(marshalObject Marshal) *WavePacket {
 	}
 }
 
-// Symmetry tracks the various ways a Wave Pattern formula can have symmetry.
-type Symmetry struct {
-	P3 bool
-	P31m bool
-	P3m1 bool
-	P6 bool
-	P6m bool
-	P4 bool
-	P4m bool
-	P4g bool
-}
-
 // GetWavePacketRelationship returns a list of relationships that all of the wave packets conform to.
 func GetWavePacketRelationship(wavePacket1, wavePacket2 *WavePacket) []coefficient.Relationship {
 	if wavePacket1 == nil || wavePacket2 == nil {
@@ -151,7 +139,7 @@ func CanWavePacketsBeGroupedAmongCoefficientRelationships(wavePackets []*WavePac
 }
 
 // HasSymmetry returns true if the WavePackets involved form the desired symmetry.
-func HasSymmetry(wavePackets []*WavePacket, desiredSymmetry SymmetryType, desiredSymmetryToCoefficients map[SymmetryType][]coefficient.Relationship) bool {
+func HasSymmetry(wavePackets []*WavePacket, desiredSymmetry Symmetry, desiredSymmetryToCoefficients map[Symmetry][]coefficient.Relationship) bool {
 	numberOfWavePackets := len(wavePackets)
 	if numberOfWavePackets < 2 || numberOfWavePackets % 2 == 1 {
 		return false

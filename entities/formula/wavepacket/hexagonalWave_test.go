@@ -314,27 +314,11 @@ func (suite *HexagonalCreatedWithDesiredSymmetry) SetUpTest (checker *C) {
 	suite.wallpaperMultiplier = complex(1, 0)
 }
 
-func (suite *HexagonalCreatedWithDesiredSymmetry) TestNoSymmetryDoesNotChangePattern(checker *C) {
-	hexFormula, err := wavepacket.NewHexagonalWallpaperFormulaWithSymmetry(
-		suite.singleEisensteinFormulaTerm,
-		suite.wallpaperMultiplier,
-		&wavepacket.Symmetry{},
-	)
-
-	checker.Assert(err, IsNil)
-	checker.Assert(hexFormula.Formula.WavePackets, HasLen, 1)
-	checker.Assert(hexFormula.Formula.WavePackets[0].Terms, HasLen, 3)
-
-	checker.Assert(hexFormula.HasSymmetry(wavepacket.P3), Equals, true)
-}
-
 func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithP31m(checker *C) {
 	hexFormula, err := wavepacket.NewHexagonalWallpaperFormulaWithSymmetry(
 		suite.singleEisensteinFormulaTerm,
 		suite.wallpaperMultiplier,
-		&wavepacket.Symmetry{
-			P31m: true,
-		},
+		wavepacket.P31m,
 	)
 
 	checker.Assert(err, IsNil)
@@ -352,9 +336,7 @@ func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithP3m1(ch
 	hexFormula, err := wavepacket.NewHexagonalWallpaperFormulaWithSymmetry(
 		suite.singleEisensteinFormulaTerm,
 		suite.wallpaperMultiplier,
-		&wavepacket.Symmetry{
-			P3m1: true,
-		},
+		wavepacket.P3m1,
 	)
 
 	checker.Assert(err, IsNil)
@@ -372,9 +354,7 @@ func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithP6(chec
 	hexFormula, err := wavepacket.NewHexagonalWallpaperFormulaWithSymmetry(
 		suite.singleEisensteinFormulaTerm,
 		suite.wallpaperMultiplier,
-		&wavepacket.Symmetry{
-			P6: true,
-		},
+		wavepacket.P6,
 	)
 
 	checker.Assert(err, IsNil)
@@ -392,9 +372,7 @@ func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithP6m(che
 	hexFormula, err := wavepacket.NewHexagonalWallpaperFormulaWithSymmetry(
 		suite.singleEisensteinFormulaTerm,
 		suite.wallpaperMultiplier,
-		&wavepacket.Symmetry{
-			P6m: true,
-		},
+		wavepacket.P6m,
 	)
 
 	checker.Assert(err, IsNil)
@@ -429,9 +407,7 @@ func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithMultipl
 			},
 		},
 		suite.wallpaperMultiplier,
-		&wavepacket.Symmetry{
-			P31m: true,
-		},
+		wavepacket.P31m,
 	)
 
 	checker.Assert(err, IsNil)
@@ -446,31 +422,6 @@ func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithMultipl
 
 	checker.Assert(hexFormula.Formula.WavePackets[3].Terms[0].PowerM, Equals, 5)
 	checker.Assert(hexFormula.Formula.WavePackets[3].Terms[0].PowerN, Equals, -3)
-}
-
-func (suite *HexagonalCreatedWithDesiredSymmetry) TestOnlyP3CanBeCombined(checker *C) {
-	_, err := wavepacket.NewHexagonalWallpaperFormulaWithSymmetry(
-		suite.singleEisensteinFormulaTerm,
-		suite.wallpaperMultiplier,
-		&wavepacket.Symmetry{
-			P3: true,
-			P31m: true,
-		},
-	)
-
-	checker.Assert(err, IsNil)
-
-	_, errIncompatible := wavepacket.NewHexagonalWallpaperFormulaWithSymmetry(
-		suite.singleEisensteinFormulaTerm,
-		suite.wallpaperMultiplier,
-		&wavepacket.Symmetry{
-			P3: true,
-			P31m: true,
-			P6: true,
-		},
-	)
-
-	checker.Assert(errIncompatible, ErrorMatches, "invalid desired symmetry")
 }
 
 type HexagonalWaveDetectRelationship struct {}

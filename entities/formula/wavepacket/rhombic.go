@@ -51,8 +51,8 @@ func (rhombic *RhombicWallpaperFormula) Calculate(z complex128) *formula.Calcula
 }
 
 // HasSymmetry returns true if the WavePackets involved form symmetry.
-func (rhombic *RhombicWallpaperFormula) HasSymmetry(desiredSymmetry SymmetryType) bool {
-	return HasSymmetry(rhombic.Formula.WavePackets, desiredSymmetry, map[SymmetryType][]coefficient.Relationship {
+func (rhombic *RhombicWallpaperFormula) HasSymmetry(desiredSymmetry Symmetry) bool {
+	return HasSymmetry(rhombic.Formula.WavePackets, desiredSymmetry, map[Symmetry][]coefficient.Relationship {
 		Cm: {coefficient.PlusMPlusN},
 		Cmm: {
 			coefficient.MinusNMinusM,
@@ -96,7 +96,7 @@ func NewRhombicWallpaperFormulaFromMarshalObject(marshalObject RhombicWallpaperF
 
 // NewRhombicWallpaperFormulaWithSymmetry will try to create a new RhombicWallpaperFormula WavePacket
 //   with the desired Terms, Multiplier and Symmetry.
-func NewRhombicWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, latticeHeight float64, desiredSymmetry SymmetryType) (*RhombicWallpaperFormula, error) {
+func NewRhombicWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, latticeHeight float64, desiredSymmetry Symmetry) (*RhombicWallpaperFormula, error) {
 	newWavePackets := []*WavePacket{}
 	for _, term := range terms {
 		newWavePackets = append(
@@ -107,7 +107,7 @@ func NewRhombicWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTe
 			},
 		)
 
-		newWavePackets = addNewWavePacketsBasedOnSymmetry2(term, desiredSymmetry, newWavePackets)
+		newWavePackets = addNewWavePacketsBasedOnSymmetry(term, desiredSymmetry, newWavePackets)
 	}
 
 	newBaseWallpaper := &RhombicWallpaperFormula{

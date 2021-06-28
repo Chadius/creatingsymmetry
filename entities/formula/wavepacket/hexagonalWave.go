@@ -1,7 +1,6 @@
 package wavepacket
 
 import (
-	"errors"
 	"math"
 	"wallpaper/entities/formula"
 	"wallpaper/entities/formula/coefficient"
@@ -35,12 +34,12 @@ func (hexWaveFormula *HexagonalWallpaperFormula) Calculate(z complex128) *formul
 }
 
 // HasSymmetry returns true if the WavePackets involved form symmetry.
-func (hexWaveFormula *HexagonalWallpaperFormula) HasSymmetry(desiredSymmetry SymmetryType) bool {
+func (hexWaveFormula *HexagonalWallpaperFormula) HasSymmetry(desiredSymmetry Symmetry) bool {
 	if desiredSymmetry == P3 {
 		return true
 	}
 
-	return HasSymmetry(hexWaveFormula.Formula.WavePackets, desiredSymmetry, map[SymmetryType][]coefficient.Relationship {
+	return HasSymmetry(hexWaveFormula.Formula.WavePackets, desiredSymmetry, map[Symmetry][]coefficient.Relationship {
 		P31m: {coefficient.PlusMPlusN},
 		P3m1: {coefficient.MinusMMinusN},
 		P6: {coefficient.MinusNMinusM},
@@ -87,12 +86,7 @@ func NewHexagonalWallpaperFormulaFromMarshalObject(marshalObject WallpaperFormul
 
 // NewHexagonalWallpaperFormulaWithSymmetry will try to create a new Hexagonal Wallpaper
 //   with the desired Terms, Multiplier and Symmetry.
-func NewHexagonalWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, desiredSymmetry *Symmetry) (*HexagonalWallpaperFormula, error) {
-	err := checkForIncompatibleHexagonalSymmetries(desiredSymmetry)
-	if err != nil {
-		return nil, err
-	}
-
+func NewHexagonalWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, desiredSymmetry Symmetry) (*HexagonalWallpaperFormula, error) {
 	newWavePackets := []*WavePacket{}
 	for _, term := range terms {
 		newWavePackets = append(
@@ -114,33 +108,4 @@ func NewHexagonalWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormula
 	}
 	newBaseWallpaper.SetUp()
 	return newBaseWallpaper, nil
-}
-
-func checkForIncompatibleHexagonalSymmetries(desiredSymmetry *Symmetry) error {
-	desiredSymmetryAlreadySet := false
-	if desiredSymmetry.P3m1 {
-		if desiredSymmetryAlreadySet {
-			return errors.New("invalid desired symmetry")
-		}
-		desiredSymmetryAlreadySet = true
-	}
-	if desiredSymmetry.P31m {
-		if desiredSymmetryAlreadySet {
-			return errors.New("invalid desired symmetry")
-		}
-		desiredSymmetryAlreadySet = true
-	}
-	if desiredSymmetry.P6 {
-		if desiredSymmetryAlreadySet {
-			return errors.New("invalid desired symmetry")
-		}
-		desiredSymmetryAlreadySet = true
-	}
-	if desiredSymmetry.P6m {
-		if desiredSymmetryAlreadySet {
-			return errors.New("invalid desired symmetry")
-		}
-		desiredSymmetryAlreadySet = true
-	}
-	return nil
 }
