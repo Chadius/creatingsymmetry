@@ -300,3 +300,76 @@ func (suite *RhombicCreatedWithDesiredSymmetry) TestCreateWallpaperWithCmm(check
 	checker.Assert(rhombicFormula.HasSymmetry(wavepacket.Cm), Equals, true)
 	checker.Assert(rhombicFormula.HasSymmetry(wavepacket.Cmm), Equals, true)
 }
+
+func (suite *RhombicCreatedWithDesiredSymmetry) TestCreateDesiredSymmetryWithYAML(checker *C) {
+	yamlByteStream := []byte(`
+lattice_height: 0.3
+formula:
+  desired_symmetry: cm
+  multiplier:
+    real: 1.0
+    imaginary: 0
+  wave_packets:
+    - 
+      multiplier:
+        real: 1.0
+        imaginary: 0
+      terms:
+        -
+          power_n: 1
+          power_m: -2
+`)
+	rhombicFormula, err := wavepacket.NewRhombicWallpaperFormulaFromYAML(yamlByteStream)
+	checker.Assert(err, IsNil)
+
+	checker.Assert(rhombicFormula.Formula.WavePackets, HasLen, 2)
+	checker.Assert(rhombicFormula.Formula.WavePackets[0].Terms[0].PowerM, Equals, -2)
+
+	checker.Assert(rhombicFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, -2)
+	checker.Assert(rhombicFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, 1)
+
+	checker.Assert(rhombicFormula.HasSymmetry(wavepacket.Cm), Equals, true)
+	checker.Assert(rhombicFormula.HasSymmetry(wavepacket.Cmm), Equals, false)
+}
+
+func (suite *RhombicCreatedWithDesiredSymmetry) TestCreateDesiredSymmetryWithJSON(checker *C) {
+	jsonByteStream := []byte(`{
+				"lattice_height": 0.3,
+				"formula": {
+					"desired_symmetry": "cmm",
+					"multiplier": {
+						"real": 1.0,
+						"imaginary": 0
+					},
+					"wave_packets": [
+						{
+							"multiplier": {
+								"real": 1.0,
+								"imaginary": 0
+							},
+							"terms": [
+								{
+									"power_n": 1,
+									"power_m": -2
+								}
+							]
+						}
+					]
+				}
+			}`)
+	rhombicFormula, err := wavepacket.NewRhombicWallpaperFormulaFromJSON(jsonByteStream)
+	checker.Assert(err, IsNil)
+
+	checker.Assert(rhombicFormula.Formula.WavePackets, HasLen, 4)
+	checker.Assert(rhombicFormula.Formula.WavePackets[0].Terms[0].PowerM, Equals, -2)
+
+	checker.Assert(rhombicFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, -1)
+	checker.Assert(rhombicFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, 2)
+	checker.Assert(rhombicFormula.Formula.WavePackets[2].Terms[0].PowerN, Equals, -2)
+	checker.Assert(rhombicFormula.Formula.WavePackets[2].Terms[0].PowerM, Equals, 1)
+	checker.Assert(rhombicFormula.Formula.WavePackets[3].Terms[0].PowerN, Equals, 2)
+	checker.Assert(rhombicFormula.Formula.WavePackets[3].Terms[0].PowerM, Equals, -1)
+
+	checker.Assert(rhombicFormula.HasSymmetry(wavepacket.Cm), Equals, true)
+	checker.Assert(rhombicFormula.HasSymmetry(wavepacket.Cmm), Equals, true)
+}

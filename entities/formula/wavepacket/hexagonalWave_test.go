@@ -306,8 +306,8 @@ var _ = Suite(&HexagonalCreatedWithDesiredSymmetry{})
 func (suite *HexagonalCreatedWithDesiredSymmetry) SetUpTest (checker *C) {
 	suite.singleEisensteinFormulaTerm = []*formula.EisensteinFormulaTerm{
 		{
-			PowerM: -2,
 			PowerN: 1,
+			PowerM: -2,
 			Multiplier: complex(1, 0),
 		},
 	}
@@ -392,36 +392,66 @@ func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithP6m(che
 	checker.Assert(hexFormula.HasSymmetry(wavepacket.P6m), Equals, true)
 }
 
-func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithMultipleTerms(checker *C) {
-	hexFormula, err := wavepacket.NewHexagonalWallpaperFormulaWithSymmetry(
-		[]*formula.EisensteinFormulaTerm{
-			{
-				PowerM: -2,
-				PowerN: 1,
-				Multiplier: complex(1, 0),
-			},
-			{
-				PowerM: -3,
-				PowerN: 5,
-				Multiplier: complex(0, 1),
-			},
-		},
-		suite.wallpaperMultiplier,
-		wavepacket.P31m,
-	)
-
+func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateDesiredSymmetryFromJSON(checker *C) {
+	jsonByteStream := []byte(`{
+				"desired_symmetry": "p31m",
+				"multiplier": {
+					"real": -1.0,
+					"imaginary": 2e-2
+				},
+				"wave_packets": [
+					{
+						"multiplier": {
+							"real": -1.0,
+							"imaginary": 2e-2
+						},
+						"terms": [
+							{
+								"power_n": 1,
+								"power_m": -2
+							}
+						]
+					}
+				]
+			}`)
+	hexFormula, err := wavepacket.NewHexagonalWallpaperFormulaFromJSON(jsonByteStream)
 	checker.Assert(err, IsNil)
-	checker.Assert(hexFormula.Formula.WavePackets, HasLen, 4)
-	checker.Assert(hexFormula.Formula.WavePackets[0].Terms, HasLen, 3)
-
-	checker.Assert(hexFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, 1)
+	checker.Assert(real(hexFormula.Formula.Multiplier), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
+	checker.Assert(imag(hexFormula.Formula.Multiplier), utility.NumericallyCloseEnough{}, 2e-2, 1e-6)
+	checker.Assert(hexFormula.Formula.WavePackets, HasLen, 2)
+	checker.Assert(hexFormula.Formula.WavePackets[0].Terms[0].PowerN, Equals, 1)
+	checker.Assert(hexFormula.Formula.WavePackets[0].Terms[0].PowerM, Equals, -2)
 	checker.Assert(hexFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, -2)
+	checker.Assert(hexFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, 1)
+	checker.Assert(hexFormula.HasSymmetry(wavepacket.P31m), Equals, true)
+}
 
-	checker.Assert(hexFormula.Formula.WavePackets[2].Terms[0].PowerM, Equals, -3)
-	checker.Assert(hexFormula.Formula.WavePackets[2].Terms[0].PowerN, Equals, 5)
-
-	checker.Assert(hexFormula.Formula.WavePackets[3].Terms[0].PowerM, Equals, 5)
-	checker.Assert(hexFormula.Formula.WavePackets[3].Terms[0].PowerN, Equals, -3)
+func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateDesiredSymmetryFromYAML(checker *C) {
+	yamlByteStream := []byte(`
+desired_symmetry: p3m1
+multiplier:
+  real: -1.0
+  imaginary: 2e-2
+wave_packets:
+  - 
+    multiplier:
+      real: -1.0
+      imaginary: 2e-2
+    terms:
+      -
+        power_n: 1
+        power_m: -2
+`)
+	hexFormula, err := wavepacket.NewHexagonalWallpaperFormulaFromYAML(yamlByteStream)
+	checker.Assert(err, IsNil)
+	checker.Assert(real(hexFormula.Formula.Multiplier), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
+	checker.Assert(imag(hexFormula.Formula.Multiplier), utility.NumericallyCloseEnough{}, 2e-2, 1e-6)
+	checker.Assert(hexFormula.Formula.WavePackets, HasLen, 2)
+	checker.Assert(hexFormula.Formula.WavePackets[0].Terms[0].PowerN, Equals, 1)
+	checker.Assert(hexFormula.Formula.WavePackets[0].Terms[0].PowerM, Equals, -2)
+	checker.Assert(hexFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, 2)
+	checker.Assert(hexFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, -1)
+	checker.Assert(hexFormula.HasSymmetry(wavepacket.P3m1), Equals, true)
 }
 
 type HexagonalWaveDetectRelationship struct {}

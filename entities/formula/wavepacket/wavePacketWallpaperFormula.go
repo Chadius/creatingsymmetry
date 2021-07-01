@@ -1,8 +1,6 @@
 package wavepacket
 
 import (
-	"encoding/json"
-	"gopkg.in/yaml.v2"
 	"wallpaper/entities/formula"
 	"wallpaper/entities/formula/coefficient"
 	"wallpaper/entities/utility"
@@ -13,6 +11,7 @@ type WallpaperFormulaMarshalled struct {
 	WavePackets []*Marshal                     `json:"wave_packets" yaml:"wave_packets"`
 	Multiplier utility.ComplexNumberForMarshal `json:"multiplier" yaml:"multiplier"`
 	Lattice *formula.LatticeVectorPairMarshal  `json:"lattice" yaml:"lattice"`
+	DesiredSymmetry string `json:"desired_symmetry" yaml:"desired_symmetry"`
 }
 
 // WallpaperFormula uses wave packets that enforce rotation symmetry.
@@ -75,30 +74,6 @@ func (wallpaperFormula *WallpaperFormula) Calculate(z complex128) *formula.Calcu
 	result.Total *= wallpaperFormula.Multiplier
 
 	return result
-}
-
-// NewWallpaperFormulaFromYAML reads the data and returns a formula from it.
-func NewWallpaperFormulaFromYAML(data []byte) (*WallpaperFormula, error) {
-	return newWallpaperFormulaFromDatastream(data, yaml.Unmarshal)
-}
-
-// NewWallpaperFormulaFromJSON reads the data and returns a formula from it.
-func NewWallpaperFormulaFromJSON(data []byte) (*WallpaperFormula, error) {
-	return newWallpaperFormulaFromDatastream(data, json.Unmarshal)
-}
-
-//newWallpaperFormulaFromDatastream consumes a given bytestream and tries to create a new object from it.
-func newWallpaperFormulaFromDatastream(data []byte, unmarshal utility.UnmarshalFunc) (*WallpaperFormula, error) {
-	var unmarshalError error
-	var formulaMarshal WallpaperFormulaMarshalled
-	unmarshalError = unmarshal(data, &formulaMarshal)
-
-	if unmarshalError != nil {
-		return nil, unmarshalError
-	}
-
-	formula := NewWallpaperFormulaFromMarshalObject(formulaMarshal)
-	return formula, nil
 }
 
 // NewWallpaperFormulaFromMarshalObject uses a marshalled object to create a new Wave WavePacket.

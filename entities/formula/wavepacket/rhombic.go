@@ -88,6 +88,21 @@ func newRhombicWallpaperFormulaFromDatastream(data []byte, unmarshal utility.Unm
 // NewRhombicWallpaperFormulaFromMarshalObject uses a marshalled object to create a new object.
 func NewRhombicWallpaperFormulaFromMarshalObject(marshalObject RhombicWallpaperFormulaMarshalled) *RhombicWallpaperFormula {
 	formula := NewWallpaperFormulaFromMarshalObject(*marshalObject.Formula)
+
+	if marshalObject.Formula.DesiredSymmetry != "" {
+		wallpaper, err := NewRhombicWallpaperFormulaWithSymmetry(
+			formula.WavePackets[0].Terms,
+			formula.Multiplier,
+			marshalObject.LatticeHeight,
+			Symmetry(marshalObject.Formula.DesiredSymmetry),
+		)
+
+		if err != nil {
+			return nil
+		}
+		return wallpaper
+	}
+
 	return &RhombicWallpaperFormula{
 		Formula:       formula,
 		LatticeHeight: marshalObject.LatticeHeight,
@@ -99,6 +114,10 @@ func NewRhombicWallpaperFormulaFromMarshalObject(marshalObject RhombicWallpaperF
 func NewRhombicWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, latticeHeight float64, desiredSymmetry Symmetry) (*RhombicWallpaperFormula, error) {
 	newWavePackets := []*WavePacket{}
 	for _, term := range terms {
+		if real(term.Multiplier) == 0 && imag(term.Multiplier) == 0 {
+			term.Multiplier = complex(1, 0)
+		}
+
 		newWavePackets = append(
 			newWavePackets,
 			&WavePacket{

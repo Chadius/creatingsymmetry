@@ -1,9 +1,12 @@
 package wavepacket
 
 import (
+	"encoding/json"
+	"gopkg.in/yaml.v2"
 	"math"
 	"wallpaper/entities/formula"
 	"wallpaper/entities/formula/coefficient"
+	"wallpaper/entities/utility"
 )
 
 // HexagonalWallpaperFormula uses waves that create a 3 rotation symmetry.
@@ -53,34 +56,46 @@ func (hexWaveFormula *HexagonalWallpaperFormula) HasSymmetry(desiredSymmetry Sym
 
 // NewHexagonalWallpaperFormulaFromJSON reads the data and returns a formula term from it.
 func NewHexagonalWallpaperFormulaFromJSON(data []byte) (*HexagonalWallpaperFormula, error) {
-	formula, err := NewWallpaperFormulaFromJSON(data)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &HexagonalWallpaperFormula{
-		Formula: formula,
-	}, nil
+	return newHexagonalWallpaperFormulaFromDatastream(data, json.Unmarshal)
 }
 
 // NewHexagonalWallpaperFormulaFromYAML reads the data and returns a formula term from it.
 func NewHexagonalWallpaperFormulaFromYAML(data []byte) (*HexagonalWallpaperFormula, error) {
-	formula, err := NewWallpaperFormulaFromYAML(data)
+	return newHexagonalWallpaperFormulaFromDatastream(data, yaml.Unmarshal)
+}
 
-	if err != nil {
-		return nil, err
+//newHexagonalWallpaperFormulaFromDatastream consumes a given bytestream and tries to create a new object from it.
+func newHexagonalWallpaperFormulaFromDatastream(data []byte, unmarshal utility.UnmarshalFunc) (*HexagonalWallpaperFormula, error) {
+	var unmarshalError error
+	var hexFormulaMarshalled WallpaperFormulaMarshalled
+	unmarshalError = unmarshal(data, &hexFormulaMarshalled)
+
+	if unmarshalError != nil {
+		return nil, unmarshalError
 	}
 
-	return &HexagonalWallpaperFormula{
-		Formula: formula,
-	}, nil
+	return NewHexagonalWallpaperFormulaFromMarshalObject(hexFormulaMarshalled), nil
 }
 
 // NewHexagonalWallpaperFormulaFromMarshalObject uses a marshalled object to create a new object.
 func NewHexagonalWallpaperFormulaFromMarshalObject(marshalObject WallpaperFormulaMarshalled) *HexagonalWallpaperFormula {
+	formula := NewWallpaperFormulaFromMarshalObject(marshalObject)
+
+	if marshalObject.DesiredSymmetry != "" {
+		wallpaper, err := NewHexagonalWallpaperFormulaWithSymmetry(
+			formula.WavePackets[0].Terms,
+			formula.Multiplier,
+			Symmetry(marshalObject.DesiredSymmetry),
+		)
+
+		if err != nil {
+			return nil
+		}
+		return wallpaper
+	}
+
 	return &HexagonalWallpaperFormula{
-		Formula: NewWallpaperFormulaFromMarshalObject(marshalObject),
+		Formula:       formula,
 	}
 }
 
@@ -89,6 +104,10 @@ func NewHexagonalWallpaperFormulaFromMarshalObject(marshalObject WallpaperFormul
 func NewHexagonalWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, desiredSymmetry Symmetry) (*HexagonalWallpaperFormula, error) {
 	newWavePackets := []*WavePacket{}
 	for _, term := range terms {
+		if real(term.Multiplier) == 0 && imag(term.Multiplier) == 0 {
+			term.Multiplier = complex(1, 0)
+		}
+
 		newWavePackets = append(
 			newWavePackets,
 			&WavePacket{

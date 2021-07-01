@@ -113,8 +113,8 @@ var _ = Suite(&SquareCreatedWithDesiredSymmetry{})
 func (suite *SquareCreatedWithDesiredSymmetry) SetUpTest (checker *C) {
 	suite.singleEisensteinOddSumFormulaTerm = []*formula.EisensteinFormulaTerm{
 		{
-			PowerM: -2,
 			PowerN: 1,
+			PowerM: -2,
 			Multiplier: complex(1, 0),
 		},
 	}
@@ -139,8 +139,8 @@ func (suite *SquareCreatedWithDesiredSymmetry) TestCreateWallpaperWithP4m(checke
 	checker.Assert(squareFormula.Formula.WavePackets, HasLen, 2)
 	checker.Assert(squareFormula.Formula.WavePackets[0].Terms, HasLen, 4)
 
-	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, 1)
 	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, -2)
+	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, 1)
 
 	checker.Assert(squareFormula.HasSymmetry(wavepacket.P4), Equals, true)
 	checker.Assert(squareFormula.HasSymmetry(wavepacket.P4m), Equals, true)
@@ -184,6 +184,66 @@ func (suite *SquareCreatedWithDesiredSymmetry) TestCreateWallpaperWithP4gAndEven
 
 	checker.Assert(squareFormula.HasSymmetry(wavepacket.P4), Equals, true)
 	checker.Assert(squareFormula.HasSymmetry(wavepacket.P4m), Equals, true)
+	checker.Assert(squareFormula.HasSymmetry(wavepacket.P4g), Equals, true)
+}
+
+func (suite *SquareCreatedWithDesiredSymmetry) TestCreateDesiredSymmetryFromYAML(checker *C) {
+	yamlByteStream := []byte(`
+desired_symmetry: p4m
+multiplier:
+ real: -1.0
+ imaginary: 2e-2
+wave_packets:
+ -
+   multiplier:
+     real: -1.0
+     imaginary: 2e-2
+   terms:
+     -
+       power_n: 1
+       power_m: -2
+`)
+	squareFormula, err := wavepacket.NewSquareWallpaperFormulaFromYAML(yamlByteStream)
+	checker.Assert(err, IsNil)
+	checker.Assert(real(squareFormula.Formula.Multiplier), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
+	checker.Assert(imag(squareFormula.Formula.Multiplier), utility.NumericallyCloseEnough{}, 2e-2, 1e-6)
+	checker.Assert(squareFormula.Formula.WavePackets, HasLen, 2)
+
+	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, -2)
+	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, 1)
+	checker.Assert(squareFormula.HasSymmetry(wavepacket.P4m), Equals, true)
+}
+
+func (suite *SquareCreatedWithDesiredSymmetry) TestCreateDesiredSymmetryFromJSON(checker *C) {
+	jsonByteStream := []byte(`{
+				"desired_symmetry": "p4g",
+				"multiplier": {
+					"real": -1.0,
+					"imaginary": 2e-2
+				},
+				"wave_packets": [
+					{
+						"multiplier": {
+							"real": -1.0,
+							"imaginary": 2e-2
+						},
+						"terms": [
+							{
+								"power_n": 1,
+								"power_m": -2
+							}
+						]
+					}
+				]
+			}`)
+	squareFormula, err := wavepacket.NewSquareWallpaperFormulaFromJSON(jsonByteStream)
+	checker.Assert(err, IsNil)
+	checker.Assert(real(squareFormula.Formula.Multiplier), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
+	checker.Assert(imag(squareFormula.Formula.Multiplier), utility.NumericallyCloseEnough{}, 2e-2, 1e-6)
+	checker.Assert(squareFormula.Formula.WavePackets, HasLen, 2)
+
+	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, -2)
+	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, 1)
 	checker.Assert(squareFormula.HasSymmetry(wavepacket.P4g), Equals, true)
 }
 
