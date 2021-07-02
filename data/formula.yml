@@ -34,7 +34,7 @@ skip_square_wallpaper_formula:
         -
           power_n: -1
           power_m: 4
-hexagonal_wallpaper_formula:
+skip_hexagonal_wallpaper_formula:
   desired_symmetry: p6
   multiplier:
     real: 1
@@ -111,3 +111,32 @@ skip_rhombic_wallpaper_formula:
           -
             power_n: -5
             power_m: 4
+rectangular_wallpaper_formula:
+  lattice_height: 0.5
+  formula:
+    multiplier:
+      real: 1
+      imaginary: 0.5
+    wave_packets:
+      -
+        multiplier:
+          real: 2
+          imaginary: 0.5
+        terms:
+          -
+            power_n: 3
+            power_m: -1
+          -
+            power_n: -3
+            power_m: 1
+      -
+        multiplier:
+          real: -2
+          imaginary: -0.5
+        terms:
+          -
+            power_n: -3
+            power_m: -1
+          -
+            power_n: 3
+            power_m: 1

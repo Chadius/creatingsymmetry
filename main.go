@@ -105,6 +105,9 @@ func transformCoordinatesForFormula(command *command.CreateWallpaperCommand, sca
 	if command.RhombicWallpaperFormula != nil {
 		return transformCoordinatesForRhombicWallpaperFormula(command.RhombicWallpaperFormula, scaledCoordinates)
 	}
+	if command.RectangularWallpaperFormula != nil {
+		return transformCoordinatesForRectangularWallpaperFormula(command.RectangularWallpaperFormula, scaledCoordinates)
+	}
 	log.Fatal(errors.New("no formula found"))
 	return []complex128{}
 }
@@ -302,6 +305,45 @@ func transformCoordinatesForRhombicWallpaperFormula(wallpaperFormula *wavepacket
 	if wallpaperFormula.HasSymmetry(wavepacket.Cmm) {
 		println("  cmm")
 	}
+
+	return transformedCoordinates
+}
+
+func transformCoordinatesForRectangularWallpaperFormula(wallpaperFormula *wavepacket.RectangularWallpaperFormula, scaledCoordinates []complex128) []complex128 {
+	err := wallpaperFormula.SetUp()
+	if err != nil {
+		println(err.Error())
+	}
+
+	transformedCoordinates := []complex128{}
+	resultsByTerm := [][]complex128{}
+	for range wallpaperFormula.Formula.WavePackets {
+		resultsByTerm = append(resultsByTerm, []complex128{})
+	}
+
+	for _, complexCoordinate := range scaledCoordinates {
+		hexagonalWallpaperResults := wallpaperFormula.Calculate(complexCoordinate)
+		for index, formulaResult := range hexagonalWallpaperResults.ContributionByTerm {
+			resultsByTerm[index] = append(resultsByTerm[index], formulaResult)
+		}
+
+		transformedCoordinate := hexagonalWallpaperResults.Total
+		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
+	}
+
+	println("Min/Max ranges, by Term")
+	for index, results := range resultsByTerm {
+		minz, maxz := mathutility.GetBoundingBox(results)
+		fmt.Printf("%d: %e - %e\n", index, minz, maxz)
+	}
+
+	//println("Symmetries found:")
+	//if wallpaperFormula.HasSymmetry(wavepacket.Cm) {
+	//	println("  cm")
+	//}
+	//if wallpaperFormula.HasSymmetry(wavepacket.Cmm) {
+	//	println("  cmm")
+	//}
 
 	return transformedCoordinates
 }
