@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"gopkg.in/yaml.v2"
 	"wallpaper/entities/formula"
+	"wallpaper/entities/formula/coefficient"
 	"wallpaper/entities/utility"
 
 	//"wallpaper/entities/utility"
@@ -55,18 +56,29 @@ func (Rectangular *RectangularWallpaperFormula) Calculate(z complex128) *formula
 	return Rectangular.Formula.Calculate(z)
 }
 
-//// HasSymmetry returns true if the WavePackets involved form symmetry.
-//func (Rectangular *RectangularWallpaperFormula) HasSymmetry(desiredSymmetry Symmetry) bool {
-//	return HasSymmetry(Rectangular.Formula.WavePackets, desiredSymmetry, map[Symmetry][]coefficient.Relationship {
-//		Cm: {coefficient.PlusMPlusN},
-//		Cmm: {
-//			coefficient.MinusNMinusM,
-//			coefficient.MinusMMinusN,
-//			coefficient.PlusMPlusN,
-//		},
-//	})
-//}
-//
+// HasSymmetry returns true if the WavePackets involved form symmetry.
+func (Rectangular *RectangularWallpaperFormula) HasSymmetry(desiredSymmetry Symmetry) bool {
+	return HasSymmetry(Rectangular.Formula.WavePackets, desiredSymmetry, map[Symmetry][]coefficient.Relationship {
+		Pm: {coefficient.PlusNMinusM},
+		Pg: {coefficient.PlusNMinusMNegateMultiplierIfOddPowerN},
+		Pmm: {
+			coefficient.PlusNMinusM,
+			coefficient.MinusNMinusM,
+			coefficient.MinusNPlusM,
+		},
+		Pmg: {
+			coefficient.MinusNMinusM,
+			coefficient.PlusNMinusMNegateMultiplierIfOddPowerN,
+			coefficient.MinusNPlusMNegateMultiplierIfOddPowerN,
+		},
+		Pgg: {
+			coefficient.MinusNMinusM,
+			coefficient.PlusNMinusMNegateMultiplierIfOddPowerSum,
+			coefficient.MinusNPlusMNegateMultiplierIfOddPowerSum,
+		},
+	})
+}
+
 // NewRectangularWallpaperFormulaFromJSON reads the data and returns a formula term from it.
 func NewRectangularWallpaperFormulaFromJSON(data []byte) (*RectangularWallpaperFormula, error) {
 	return newRectangularWallpaperFormulaFromDatastream(data, json.Unmarshal)
@@ -94,19 +106,19 @@ func newRectangularWallpaperFormulaFromDatastream(data []byte, unmarshal utility
 func NewRectangularWallpaperFormulaFromMarshalObject(marshalObject RectangularWallpaperFormulaMarshalled) *RectangularWallpaperFormula {
 	formula := NewWallpaperFormulaFromMarshalObject(*marshalObject.Formula)
 
-	//if marshalObject.Formula.DesiredSymmetry != "" {
-	//	wallpaper, err := NewRectangularWallpaperFormulaWithSymmetry(
-	//		formula.WavePackets[0].Terms,
-	//		formula.Multiplier,
-	//		marshalObject.LatticeHeight,
-	//		Symmetry(marshalObject.Formula.DesiredSymmetry),
-	//	)
-	//
-	//	if err != nil {
-	//		return nil
-	//	}
-	//	return wallpaper
-	//}
+	if marshalObject.Formula.DesiredSymmetry != "" {
+		wallpaper, err := NewRectangularWallpaperFormulaWithSymmetry(
+			formula.WavePackets[0].Terms,
+			formula.Multiplier,
+			marshalObject.LatticeHeight,
+			Symmetry(marshalObject.Formula.DesiredSymmetry),
+		)
+
+		if err != nil {
+			return nil
+		}
+		return wallpaper
+	}
 
 	return &RectangularWallpaperFormula{
 		Formula:       formula,
@@ -114,33 +126,33 @@ func NewRectangularWallpaperFormulaFromMarshalObject(marshalObject RectangularWa
 	}
 }
 
-//// NewRectangularWallpaperFormulaWithSymmetry will try to create a new RectangularWallpaperFormula WavePacket
-////   with the desired Terms, Multiplier and Symmetry.
-//func NewRectangularWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, latticeHeight float64, desiredSymmetry Symmetry) (*RectangularWallpaperFormula, error) {
-//	newWavePackets := []*WavePacket{}
-//	for _, term := range terms {
-//		if real(term.Multiplier) == 0 && imag(term.Multiplier) == 0 {
-//			term.Multiplier = complex(1, 0)
-//		}
-//
-//		newWavePackets = append(
-//			newWavePackets,
-//			&WavePacket{
-//				Terms:      []*formula.EisensteinFormulaTerm{term},
-//				Multiplier: term.Multiplier,
-//			},
-//		)
-//
-//		newWavePackets = addNewWavePacketsBasedOnSymmetry(term, desiredSymmetry, newWavePackets)
-//	}
-//
-//	newBaseWallpaper := &RectangularWallpaperFormula{
-//		Formula: &WallpaperFormula{
-//			WavePackets: newWavePackets,
-//			Multiplier:  wallpaperMultiplier,
-//		},
-//		LatticeHeight: latticeHeight,
-//	}
-//	newBaseWallpaper.SetUp()
-//	return newBaseWallpaper, nil
-//}
+// NewRectangularWallpaperFormulaWithSymmetry will try to create a new RectangularWallpaperFormula WavePacket
+//   with the desired Terms, Multiplier and Symmetry.
+func NewRectangularWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, latticeHeight float64, desiredSymmetry Symmetry) (*RectangularWallpaperFormula, error) {
+	newWavePackets := []*WavePacket{}
+	for _, term := range terms {
+		if real(term.Multiplier) == 0 && imag(term.Multiplier) == 0 {
+			term.Multiplier = complex(1, 0)
+		}
+
+		newWavePackets = append(
+			newWavePackets,
+			&WavePacket{
+				Terms:      []*formula.EisensteinFormulaTerm{term},
+				Multiplier: term.Multiplier,
+			},
+		)
+
+		newWavePackets = addNewWavePacketsBasedOnSymmetry(term, desiredSymmetry, newWavePackets)
+	}
+
+	newBaseWallpaper := &RectangularWallpaperFormula{
+		Formula: &WallpaperFormula{
+			WavePackets: newWavePackets,
+			Multiplier:  wallpaperMultiplier,
+		},
+		LatticeHeight: latticeHeight,
+	}
+	newBaseWallpaper.SetUp()
+	return newBaseWallpaper, nil
+}
