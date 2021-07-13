@@ -26,7 +26,7 @@ power_m: -10
 ignore_complex_conjugate: true
 coefficient_relationships:
   - -M-N
-  - +M+NF
+  - +M+NF(N+M)
 `)
 
 	term, err := exponential.NewTermFromYAML(yamlByteStream)
@@ -38,7 +38,7 @@ coefficient_relationships:
 	checker.Assert(term.IgnoreComplexConjugate, Equals, true)
 	checker.Assert(term.CoefficientRelationships, HasLen, 2)
 	checker.Assert(term.CoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.MinusMMinusN))
-	checker.Assert(term.CoefficientRelationships[1], Equals, coefficient.Relationship(coefficient.PlusMPlusNMaybeFlipScale))
+	checker.Assert(term.CoefficientRelationships[1], Equals, coefficient.Relationship(coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum))
 }
 
 func (suite *ExponentialTerm) TestCreateTermFromJSON(checker *C) {
@@ -50,7 +50,7 @@ func (suite *ExponentialTerm) TestCreateTermFromJSON(checker *C) {
 				"power_n": 12,
 				"power_m": -10,
 				"ignore_complex_conjugate": true,
-				"coefficient_relationships": ["-M-N", "+M+NF"]
+				"coefficient_relationships": ["-M-N", "+M+NF(N+M)"]
 			}`)
 	term, err := exponential.NewTermFromJSON(jsonByteStream)
 	checker.Assert(err, IsNil)
@@ -61,5 +61,5 @@ func (suite *ExponentialTerm) TestCreateTermFromJSON(checker *C) {
 	checker.Assert(term.IgnoreComplexConjugate, Equals, true)
 	checker.Assert(term.CoefficientRelationships, HasLen, 2)
 	checker.Assert(term.CoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.MinusMMinusN))
-	checker.Assert(term.CoefficientRelationships[1], Equals, coefficient.Relationship(coefficient.PlusMPlusNMaybeFlipScale))
+	checker.Assert(term.CoefficientRelationships[1], Equals, coefficient.Relationship(coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum))
 }

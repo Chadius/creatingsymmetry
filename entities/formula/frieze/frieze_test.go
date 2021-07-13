@@ -95,7 +95,7 @@ func (suite *FriezeFormulaSuite) TestP11gFrieze(checker *C) {
 				PowerN:                 2,
 				PowerM:                 1,
 				IgnoreComplexConjugate: false,
-				CoefficientRelationships: []coefficient.Relationship{coefficient.MinusMMinusNMaybeFlipScale},
+				CoefficientRelationships: []coefficient.Relationship{coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum},
 			},
 		},
 	}
@@ -111,7 +111,7 @@ func (suite *FriezeFormulaSuite) TestP11mFriezeIfP11gHasEvenSumPowers (checker *
 				PowerN:                 2,
 				PowerM:                 0,
 				IgnoreComplexConjugate: false,
-				CoefficientRelationships: []coefficient.Relationship{coefficient.MinusMMinusNMaybeFlipScale},
+				CoefficientRelationships: []coefficient.Relationship{coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum},
 			},
 		},
 	}
@@ -149,8 +149,8 @@ func (suite *FriezeFormulaSuite) TestP2mgFrieze(checker *C) {
 				IgnoreComplexConjugate: false,
 				CoefficientRelationships: []coefficient.Relationship{
 					coefficient.MinusNMinusM,
-					coefficient.PlusMPlusNMaybeFlipScale,
-					coefficient.MinusMMinusNMaybeFlipScale,
+					coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum,
+					coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum,
 				},
 			},
 		},
@@ -169,8 +169,8 @@ func (suite *FriezeFormulaSuite) TestP2mmFriezeEvenIfP2mgHasEvenSumPowers(checke
 				IgnoreComplexConjugate: false,
 				CoefficientRelationships: []coefficient.Relationship{
 					coefficient.MinusNMinusM,
-					coefficient.PlusMPlusNMaybeFlipScale,
-					coefficient.MinusMMinusNMaybeFlipScale,
+					coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum,
+					coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum,
 				},
 			},
 		},
@@ -246,7 +246,7 @@ func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithYAML(checker *C) {
     power_m: 0
     coefficient_relationships:
       - -M-N
-      - "+M+NF"
+      - "+M+NF(N+M)"
   -
     multiplier:
       real: 1e-10
@@ -254,14 +254,14 @@ func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithYAML(checker *C) {
     power_n: 1
     power_m: 1
     coefficient_relationships:
-      - -M-NF
+      - -M-NF(N+M)
 `)
 	rosetteFormula, err := frieze.NewFriezeFormulaFromYAML(yamlByteStream)
 	checker.Assert(err, IsNil)
 	checker.Assert(rosetteFormula.Terms, HasLen, 2)
 	checker.Assert(rosetteFormula.Terms[0].PowerN, Equals, 3)
 	checker.Assert(rosetteFormula.Terms[0].IgnoreComplexConjugate, Equals, false)
-	checker.Assert(rosetteFormula.Terms[1].CoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.MinusMMinusNMaybeFlipScale))
+	checker.Assert(rosetteFormula.Terms[1].CoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum))
 }
 
 func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithJSON(checker *C) {
@@ -274,7 +274,7 @@ func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithJSON(checker *C) {
 						},
 						"power_n": 3,
 						"power_m": 0,
-						"coefficient_relationships": ["-M-N", "+M+NF"]
+						"coefficient_relationships": ["-M-N", "+M+NF(N+M)"]
 					},
 					{
 						"multiplier": {
@@ -283,7 +283,7 @@ func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithJSON(checker *C) {
 						},
 						"power_n": 1,
 						"power_m": 1,
-						"coefficient_relationships": ["-M-NF"]
+						"coefficient_relationships": ["-M-NF(N+M)"]
 					}
 				]
 			}`)
@@ -292,5 +292,5 @@ func (suite *FriezeFormulaSuite) TestCreateFriezeFormulaWithJSON(checker *C) {
 	checker.Assert(rosetteFormula.Terms, HasLen, 2)
 	checker.Assert(rosetteFormula.Terms[0].PowerN, Equals, 3)
 	checker.Assert(rosetteFormula.Terms[0].IgnoreComplexConjugate, Equals, false)
-	checker.Assert(rosetteFormula.Terms[1].CoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.MinusMMinusNMaybeFlipScale))
+	checker.Assert(rosetteFormula.Terms[1].CoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum))
 }

@@ -160,7 +160,7 @@ func (suite *WaveFormulaTests) TestSetUpUsesMultipliers(checker *C) {
 
 	wallPaperWithOddSumTerms.SetUp([]coefficient.Relationship{
 		coefficient.PlusNPlusM,
-		coefficient.MinusMMinusNMaybeFlipScale,
+		coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum,
 		coefficient.PlusMMinusSumNAndM,
 	})
 
@@ -418,7 +418,7 @@ func (suite *WavePacketRelationshipTest) TestPlusMPlusNMaybeFlipScale(checker *C
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 1)
-	checker.Assert(wavepacket.ContainsRelationship(relationshipsFound, coefficient.PlusMPlusNMaybeFlipScale), Equals, true)
+	checker.Assert(wavepacket.ContainsRelationship(relationshipsFound, coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum), Equals, true)
 
 	relationshipsFound = wavepacket.GetWavePacketRelationship(
 		suite.aPlusNPlusMEvenWavePacket,
@@ -433,7 +433,7 @@ func (suite *WavePacketRelationshipTest) TestPlusMPlusNMaybeFlipScale(checker *C
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 2)
-	checker.Assert(wavepacket.ContainsRelationship(relationshipsFound, coefficient.PlusMPlusNMaybeFlipScale), Equals, true)
+	checker.Assert(wavepacket.ContainsRelationship(relationshipsFound, coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum), Equals, true)
 	checker.Assert(wavepacket.ContainsRelationship(relationshipsFound, coefficient.PlusMPlusN), Equals, true)
 }
 
@@ -444,7 +444,7 @@ func (suite *WavePacketRelationshipTest) TestMinusMMinusNMaybeFlipScale(checker 
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 1)
-	checker.Assert(relationshipsFound[0], Equals, coefficient.MinusMMinusNMaybeFlipScale)
+	checker.Assert(relationshipsFound[0], Equals, coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum)
 
 	relationshipsFound = wavepacket.GetWavePacketRelationship(
 		suite.aPlusNPlusMEvenWavePacket,
@@ -452,7 +452,7 @@ func (suite *WavePacketRelationshipTest) TestMinusMMinusNMaybeFlipScale(checker 
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 2)
-	checker.Assert(wavepacket.ContainsRelationship(relationshipsFound, coefficient.MinusMMinusNMaybeFlipScale), Equals, true)
+	checker.Assert(wavepacket.ContainsRelationship(relationshipsFound, coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum), Equals, true)
 	checker.Assert(wavepacket.ContainsRelationship(relationshipsFound, coefficient.MinusMMinusN), Equals, true)
 
 	relationshipsFound = wavepacket.GetWavePacketRelationship(

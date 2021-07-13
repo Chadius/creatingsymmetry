@@ -88,11 +88,11 @@ func (friezeFormula Formula) AnalyzeForSymmetry() *Symmetry {
 		containsMinusMMinusN := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.MinusMMinusN)
 		containsPlusMPlusN := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.PlusMPlusN)
 
-		containsMinusMMinusNAndPowerSumIsOdd := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.MinusMMinusNMaybeFlipScale) && !powerSumIsEven
-		containsPlusMPlusNAndPowerSumIsOdd := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.PlusMPlusNMaybeFlipScale) && !powerSumIsEven
+		containsMinusMMinusNAndPowerSumIsOdd := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum) && !powerSumIsEven
+		containsPlusMPlusNAndPowerSumIsOdd := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum) && !powerSumIsEven
 
-		containsMinusMMinusNAndPowerSumIsEven := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.MinusMMinusNMaybeFlipScale) && powerSumIsEven
-		containsPlusMPlusNAndPowerSumIsEven := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.PlusMPlusNMaybeFlipScale) && powerSumIsEven
+		containsMinusMMinusNAndPowerSumIsEven := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum) && powerSumIsEven
+		containsPlusMPlusNAndPowerSumIsEven := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum) && powerSumIsEven
 
 		if !containsMinusNMinusM {
 			symmetriesFound.P211 = false

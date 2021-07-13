@@ -262,31 +262,31 @@ func (suite *EisensteinRelationshipTest) TestPlusMPlusNMaybeFlipScale(checker *C
 	checker.Assert(formula.SatisfiesRelationship(
 			suite.aPlusNPlusMOddTerm,
 			suite.aPlusMPlusNOddNegatedTerm,
-		coefficient.PlusMPlusNMaybeFlipScale,
+		coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum,
 	), Equals, true)
 
 	checker.Assert(formula.SatisfiesRelationship(
 			suite.aPlusNPlusMOddTerm,
 			suite.aPlusMPlusNOddTerm,
-		coefficient.PlusMPlusNMaybeFlipScale,
+		coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum,
 	), Equals, false)
 
 	checker.Assert(formula.SatisfiesRelationship(
 			suite.aPlusNPlusMEvenTerm,
 			suite.aPlusMPlusNEvenTerm,
-		coefficient.PlusMPlusNMaybeFlipScale,
+		coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum,
 	), Equals, true)
 
 	checker.Assert(formula.SatisfiesRelationship(
 			suite.aPlusNPlusMEvenTerm,
 			suite.aPlusMPlusNEvenNegatedTerm,
-		coefficient.PlusMPlusNMaybeFlipScale,
+		coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum,
 	), Equals, false)
 
 	checker.Assert(formula.SatisfiesRelationship(
 			suite.aPlusNPlusMOddTerm,
 			suite.aPlusMPlusNOddTerm,
-		coefficient.PlusMPlusNMaybeFlipScale,
+		coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum,
 	), Equals, false)
 }
 
@@ -294,31 +294,31 @@ func (suite *EisensteinRelationshipTest) TestMinusMMinusNMaybeFlipScale(checker 
 	checker.Assert(formula.SatisfiesRelationship(
 			suite.aPlusNPlusMOddTerm,
 			suite.aMinusMMinusNOddNegatedTerm,
-		coefficient.MinusMMinusNMaybeFlipScale,
+		coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum,
 	), Equals, true)
 
 	checker.Assert(formula.SatisfiesRelationship(
 			suite.aPlusNPlusMOddTerm,
 			suite.aMinusMMinusNOddTerm,
-		coefficient.MinusMMinusNMaybeFlipScale,
+		coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum,
 	), Equals, false)
 
 	checker.Assert(formula.SatisfiesRelationship(
 			suite.aPlusNPlusMEvenTerm,
 			suite.aMinusMMinusNEvenTerm,
-		coefficient.MinusMMinusNMaybeFlipScale,
+		coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum,
 	), Equals, true)
 
 	checker.Assert(formula.SatisfiesRelationship(
 			suite.aPlusNPlusMEvenTerm,
 			suite.aMinusMMinusNEvenNegatedTerm,
-		coefficient.MinusMMinusNMaybeFlipScale,
+		coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum,
 	), Equals, false)
 
 	checker.Assert(formula.SatisfiesRelationship(
 			suite.aPlusNPlusMOddTerm,
 			suite.aPlusMPlusNOddTerm,
-		coefficient.MinusMMinusNMaybeFlipScale,
+		coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum,
 	), Equals, false)
 }
 
@@ -473,7 +473,7 @@ func (suite *EisensteinTermSymmetryTest) TestTooManyRelationshipWillNeverSatisfy
 		[]coefficient.Relationship{
 			coefficient.PlusNPlusM,
 			coefficient.PlusNPlusM,
-			coefficient.PlusMPlusNMaybeFlipScale,
+			coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum,
 		})
 	checker.Assert(matchingTerms, HasLen, 0)
 }
@@ -510,7 +510,7 @@ func (suite *EisensteinTermSymmetryTest) TestEachTermCanOnlySatisfyOneRelationsh
 			suite.aMinusMMinusNEvenEisensteinTerm,
 		},
 		[]coefficient.Relationship{
-			coefficient.MinusMMinusNMaybeFlipScale,
+			coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum,
 		}), HasLen, 1)
 
 	matchingTerms := formula.SelectTermsToSatisfyRelationships(
@@ -520,7 +520,7 @@ func (suite *EisensteinTermSymmetryTest) TestEachTermCanOnlySatisfyOneRelationsh
 		},
 		[]coefficient.Relationship{
 			coefficient.MinusMMinusN,
-			coefficient.MinusMMinusNMaybeFlipScale,
+			coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum,
 		})
 	checker.Assert(matchingTerms, HasLen, 0)
 }

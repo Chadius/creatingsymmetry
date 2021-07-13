@@ -26,7 +26,7 @@ func (pairing Pairing) GenerateCoefficientSets(relationships []Relationship) []*
 			PowerM: pairing.PowerN,
 			NegateMultiplier: false,
 		},
-		PlusMPlusNMaybeFlipScale: {
+		PlusMPlusNNegateMultiplierIfOddPowerSum: {
 			PowerN:           pairing.PowerM,
 			PowerM:           pairing.PowerN,
 			NegateMultiplier: negateMultiplierIfSumIsOdd,
@@ -41,7 +41,7 @@ func (pairing Pairing) GenerateCoefficientSets(relationships []Relationship) []*
 			PowerM:     -1 * pairing.PowerN,
 			NegateMultiplier: false,
 		},
-		MinusMMinusNMaybeFlipScale: {
+		MinusMMinusNNegateMultiplierIfOddPowerSum: {
 			PowerN:           -1 * pairing.PowerM,
 			PowerM:           -1 * pairing.PowerN,
 			NegateMultiplier: negateMultiplierIfSumIsOdd,
@@ -120,21 +120,21 @@ type Relationship string
 //   If M appears first the powers then power M is applied to the number and power N to the complex conjugate.
 //	 MaybeFlipScale will multiply the scale by -1 if N + M is odd.
 const (
-	PlusNPlusM                 Relationship = "+N+M"
-	PlusMPlusN                             Relationship = "+M+N"
-	MinusNMinusM                           Relationship = "-N-M"
-	MinusMMinusN                           Relationship = "-M-N"
-	PlusMPlusNMaybeFlipScale               Relationship = "+M+NF"
-	MinusMMinusNMaybeFlipScale             Relationship = "-M-NF"
-	PlusMMinusSumNAndM                     Relationship = "+M-(N+M)"
-	MinusSumNAndMPlusN                     Relationship = "-(N+M)+N"
-	PlusMMinusN                            Relationship = "+M-N"
-	MinusMPlusN                            Relationship = "-M+N"
-	PlusNMinusM                            Relationship = "+N-M"
-	PlusNMinusMNegateMultiplierIfOddPowerN Relationship = "+N-MF(N)"
-	MinusNPlusMNegateMultiplierIfOddPowerN Relationship = "-N+MF(N)"
-	MinusNPlusM Relationship = "-N+M"
-	PlusNMinusMNegateMultiplierIfOddPowerSum Relationship = "+N-MF(N+M)"
-	MinusNPlusMNegateMultiplierIfOddPowerSum Relationship = "-N+MF(N+M)"
+	PlusNPlusM                                Relationship = "+N+M"
+	PlusMPlusN                                Relationship = "+M+N"
+	MinusNMinusM                              Relationship = "-N-M"
+	MinusMMinusN                              Relationship = "-M-N"
+	PlusMPlusNNegateMultiplierIfOddPowerSum   Relationship = "+M+NF(N+M)"
+	MinusMMinusNNegateMultiplierIfOddPowerSum Relationship = "-M-NF(N+M)"
+	PlusMMinusSumNAndM                        Relationship = "+M-(N+M)"
+	MinusSumNAndMPlusN                        Relationship = "-(N+M)+N"
+	PlusMMinusN                               Relationship = "+M-N"
+	MinusMPlusN                               Relationship = "-M+N"
+	PlusNMinusM                               Relationship = "+N-M"
+	PlusNMinusMNegateMultiplierIfOddPowerN    Relationship = "+N-MF(N)"
+	MinusNPlusMNegateMultiplierIfOddPowerN    Relationship = "-N+MF(N)"
+	MinusNPlusM                               Relationship = "-N+M"
+	PlusNMinusMNegateMultiplierIfOddPowerSum  Relationship = "+N-MF(N+M)"
+	MinusNPlusMNegateMultiplierIfOddPowerSum  Relationship = "-N+MF(N+M)"
 )
 

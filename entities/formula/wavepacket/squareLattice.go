@@ -120,6 +120,6 @@ func (squareWaveFormula *SquareWallpaperFormula) HasSymmetry(desiredSymmetry Sym
 
 	return HasSymmetry(squareWaveFormula.Formula.WavePackets, desiredSymmetry, map[Symmetry][]coefficient.Relationship {
 		P4m: {coefficient.PlusMPlusN},
-		P4g: {coefficient.PlusMPlusNMaybeFlipScale},
+		P4g: {coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum},
 	})
 }

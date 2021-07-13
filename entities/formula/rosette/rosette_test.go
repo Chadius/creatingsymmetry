@@ -141,7 +141,7 @@ func (suite *RosetteFormulaTest) TestRosetteFormulaFromYAML(checker *C) {
     power_m: 0
     coefficient_relationships:
       - -M-N
-      - "+M+NF"
+      - "+M+NF(N+M)"
   -
     multiplier:
       real: 1e-10
@@ -149,14 +149,14 @@ func (suite *RosetteFormulaTest) TestRosetteFormulaFromYAML(checker *C) {
     power_n: 1
     power_m: 1
     coefficient_relationships:
-      - -M-NF
+      - -M-NF(N+M)
 `)
 	rosetteFormula, err := rosette.NewRosetteFormulaFromYAML(yamlByteStream)
 	checker.Assert(err, IsNil)
 	checker.Assert(rosetteFormula.Terms, HasLen, 2)
 	checker.Assert(rosetteFormula.Terms[0].PowerN, Equals, 3)
 	checker.Assert(rosetteFormula.Terms[0].IgnoreComplexConjugate, Equals, false)
-	checker.Assert(rosetteFormula.Terms[1].CoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.MinusMMinusNMaybeFlipScale))
+	checker.Assert(rosetteFormula.Terms[1].CoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum))
 }
 
 func (suite *RosetteFormulaTest) TestRosetteFormulaFromJSON(checker *C) {
@@ -169,7 +169,7 @@ func (suite *RosetteFormulaTest) TestRosetteFormulaFromJSON(checker *C) {
 						},
 						"power_n": 3,
 						"power_m": 0,
-						"coefficient_relationships": ["-M-N", "+M+NF"]
+						"coefficient_relationships": ["-M-N", "+M+NF(N+M)"]
 					},
 					{
 						"multiplier": {
@@ -178,7 +178,7 @@ func (suite *RosetteFormulaTest) TestRosetteFormulaFromJSON(checker *C) {
 						},
 						"power_n": 1,
 						"power_m": 1,
-						"coefficient_relationships": ["-M-NF"]
+						"coefficient_relationships": ["-M-NF(N+M)"]
 					}
 				]
 			}`)
@@ -187,5 +187,5 @@ func (suite *RosetteFormulaTest) TestRosetteFormulaFromJSON(checker *C) {
 	checker.Assert(rosetteFormula.Terms, HasLen, 2)
 	checker.Assert(rosetteFormula.Terms[0].PowerN, Equals, 3)
 	checker.Assert(rosetteFormula.Terms[0].IgnoreComplexConjugate, Equals, false)
-	checker.Assert(rosetteFormula.Terms[1].CoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.MinusMMinusNMaybeFlipScale))
+	checker.Assert(rosetteFormula.Terms[1].CoefficientRelationships[0], Equals, coefficient.Relationship(coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum))
 }

@@ -67,7 +67,7 @@ func (suite *CoefficientPairFeatures) TestReturnsMultiples(checker *C) {
 
 func (suite *CoefficientPairFeatures) TestPlusMPlusNMaybeFlipScale(checker *C) {
 	newSets := suite.oddSumPair.GenerateCoefficientSets([]coefficient.Relationship{
-		coefficient.PlusMPlusNMaybeFlipScale,
+		coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum,
 	})
 
 	checker.Assert(newSets, HasLen, 1)
@@ -100,7 +100,7 @@ func (suite *CoefficientPairFeatures) TestMinusMMinusN(checker *C) {
 
 func (suite *CoefficientPairFeatures) TestMinusMMinusNMaybeFlipScale(checker *C) {
 	newSets := suite.oddSumPair.GenerateCoefficientSets([]coefficient.Relationship{
-		coefficient.MinusMMinusNMaybeFlipScale,
+		coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum,
 	})
 
 	checker.Assert(newSets, HasLen, 1)
