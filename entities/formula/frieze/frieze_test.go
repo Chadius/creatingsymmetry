@@ -21,7 +21,7 @@ func (suite *FriezeFormulaSuite) SetUpTest(checker *C) {
 
 func (suite *FriezeFormulaSuite) TestFriezeFormula(checker *C) {
 	friezeFormula := frieze.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(2, 0),
 				PowerN:                 1,
@@ -41,7 +41,7 @@ func (suite *FriezeFormulaSuite) TestFriezeFormula(checker *C) {
 
 func (suite *FriezeFormulaSuite) TestP211Frieze(checker *C) {
 	friezeFormula := frieze.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(1, 0),
 				PowerN:                 2,
@@ -57,7 +57,7 @@ func (suite *FriezeFormulaSuite) TestP211Frieze(checker *C) {
 
 func (suite *FriezeFormulaSuite) TestP1m1Frieze(checker *C) {
 	friezeFormula := frieze.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(1, 0),
 				PowerN:                 2,
@@ -73,7 +73,7 @@ func (suite *FriezeFormulaSuite) TestP1m1Frieze(checker *C) {
 
 func (suite *FriezeFormulaSuite) TestP11mFrieze(checker *C) {
 	friezeFormula := frieze.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(1, 0),
 				PowerN:                 2,
@@ -89,7 +89,7 @@ func (suite *FriezeFormulaSuite) TestP11mFrieze(checker *C) {
 
 func (suite *FriezeFormulaSuite) TestP11gFrieze(checker *C) {
 	friezeFormula := frieze.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(1, 0),
 				PowerN:                 2,
@@ -105,7 +105,7 @@ func (suite *FriezeFormulaSuite) TestP11gFrieze(checker *C) {
 
 func (suite *FriezeFormulaSuite) TestP11mFriezeIfP11gHasEvenSumPowers (checker *C) {
 	friezeFormula := frieze.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(1, 0),
 				PowerN:                 2,
@@ -121,7 +121,7 @@ func (suite *FriezeFormulaSuite) TestP11mFriezeIfP11gHasEvenSumPowers (checker *
 
 func (suite *FriezeFormulaSuite) TestP2mmFrieze(checker *C) {
 	friezeFormula := frieze.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(1, 0),
 				PowerN:                 2,
@@ -141,7 +141,7 @@ func (suite *FriezeFormulaSuite) TestP2mmFrieze(checker *C) {
 
 func (suite *FriezeFormulaSuite) TestP2mgFrieze(checker *C) {
 	friezeFormula := frieze.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(1, 0),
 				PowerN:                 2,
@@ -161,7 +161,7 @@ func (suite *FriezeFormulaSuite) TestP2mgFrieze(checker *C) {
 
 func (suite *FriezeFormulaSuite) TestP2mmFriezeEvenIfP2mgHasEvenSumPowers(checker *C) {
 	friezeFormula := frieze.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(1, 0),
 				PowerN:                 2,
@@ -181,7 +181,7 @@ func (suite *FriezeFormulaSuite) TestP2mmFriezeEvenIfP2mgHasEvenSumPowers(checke
 
 func (suite *FriezeFormulaSuite) TestP111Frieze(checker *C) {
 	friezeFormula := frieze.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(1, 0),
 				PowerN:                 2,
@@ -197,7 +197,7 @@ func (suite *FriezeFormulaSuite) TestP111Frieze(checker *C) {
 
 func (suite *FriezeFormulaSuite) TestP111FriezeComplexConjugateIgnored(checker *C) {
 	friezeFormula := frieze.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(1, 0),
 				PowerN:                 2,
@@ -214,7 +214,7 @@ func (suite *FriezeFormulaSuite) TestP111FriezeComplexConjugateIgnored(checker *
 
 func (suite *FriezeFormulaSuite) TestContributionOfFriezeFormula(checker *C) {
 	friezeFormula := frieze.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(2, 0),
 				PowerN:                 1,

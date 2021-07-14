@@ -14,7 +14,7 @@ import (
 //    This transforms the input into a circular pattern rotating around the
 //    origin.
 type Formula struct {
-	Terms []*exponential.Term
+	Terms []*exponential.RosetteFriezeTerm
 }
 
 // Calculate applies the Rosette formula to the complex number z.
@@ -33,7 +33,7 @@ func (r Formula) Calculate(z complex128) *formula.CalculationResultForFormula {
 	return result
 }
 
-func (r *Formula) calculateTerm(term *exponential.Term, z complex128) complex128 {
+func (r *Formula) calculateTerm(term *exponential.RosetteFriezeTerm, z complex128) complex128 {
 	sum := complex(0.0,0.0)
 
 	coefficientRelationships := []coefficient.Relationship{coefficient.PlusNPlusM}
@@ -157,7 +157,7 @@ func newRosetteFormulaFromDatastream(data []byte, unmarshal utility.UnmarshalFun
 
 // NewRosetteFormulaFromMarshalObject converts the marshalled object to a usable one.
 func NewRosetteFormulaFromMarshalObject(marshalObject MarshaledFormula) *Formula {
-	terms := []*exponential.Term{}
+	terms := []*exponential.RosetteFriezeTerm{}
 	for _, termMarshal := range marshalObject.Terms {
 		newTerm := exponential.NewTermFromMarshalObject(*termMarshal)
 		terms = append(terms, newTerm)

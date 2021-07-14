@@ -21,10 +21,8 @@ type WallpaperFormula struct {
 	Lattice *formula.LatticeVectorPair
 }
 
-// SetUp adds the locked Eisenstein terms to the formula.
-//   SetUp assumes only the first term of each Wave Packet was given.
-//   The type of wallpaper supplies the paired coefficient relationships
-//     as well as the base vectors.
+// SetUp adds locked Eisenstein terms to the formula based on the relationships.
+//  Note there is NO way to change the multipliers.
 func (wallpaperFormula *WallpaperFormula) SetUp(
 	lockedRelationships []coefficient.Relationship,
 	) {
@@ -36,20 +34,10 @@ func (wallpaperFormula *WallpaperFormula) SetUp(
 
 		newPairings := baseCoefficientPairing.GenerateCoefficientSets(lockedRelationships)
 
-		if real(wavePacket.Terms[0].Multiplier) == 0 && imag(wavePacket.Terms[0].Multiplier) == 0 {
-			wavePacket.Terms[0].Multiplier = complex(1, 0)
-		}
-
 		for _, newCoefficientPair := range newPairings {
-			baseMultiplier := complex(real(wavePacket.Terms[0].Multiplier), imag(wavePacket.Terms[0].Multiplier))
-
-			if newCoefficientPair.NegateMultiplier == true {
-				baseMultiplier = complex(-1 * real(wavePacket.Terms[0].Multiplier), -1 * imag(wavePacket.Terms[0].Multiplier))
-			}
 			newEisenstein := &formula.EisensteinFormulaTerm{
 				PowerN:         newCoefficientPair.PowerN,
 				PowerM:         newCoefficientPair.PowerM,
-				Multiplier: baseMultiplier,
 			}
 			wavePacket.Terms = append(wavePacket.Terms, newEisenstein)
 		}

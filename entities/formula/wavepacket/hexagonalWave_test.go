@@ -147,6 +147,7 @@ func (suite *HexagonalWaveSymmetry) TestP31m(checker *C) {
 							PowerM:         suite.baseWavePacket.Terms[0].PowerN,
 						},
 					},
+					Multiplier: complex(1, 0),
 				},
 			},
 			Multiplier: complex(1, 0),
@@ -308,7 +309,6 @@ func (suite *HexagonalCreatedWithDesiredSymmetry) SetUpTest (checker *C) {
 		{
 			PowerN: 1,
 			PowerM: -2,
-			Multiplier: complex(1, 0),
 		},
 	}
 	suite.wallpaperMultiplier = complex(1, 0)

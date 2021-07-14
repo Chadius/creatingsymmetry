@@ -20,7 +20,7 @@ func (suite *RosetteFormulaTest) SetUpTest(checker *C) {
 
 func (suite *RosetteFormulaTest) TestCalculateRosetteFormula(checker *C) {
 	rosetteFormula := rosette.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(3, 0),
 				PowerN:                 1,
@@ -40,7 +40,7 @@ func (suite *RosetteFormulaTest) TestCalculateRosetteFormula(checker *C) {
 
 func (suite *RosetteFormulaTest) TestMultifoldSymmetry1Term(checker *C) {
 	rosetteFormula := rosette.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(1, 0),
 				PowerN:                 6,
@@ -58,7 +58,7 @@ func (suite *RosetteFormulaTest) TestMultifoldSymmetry1Term(checker *C) {
 
 func (suite *RosetteFormulaTest) TestMultifoldSymmetryIsAlwaysPositive(checker *C) {
 	rosetteFormula := rosette.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(1, 0),
 				PowerN:                 -6,
@@ -76,7 +76,7 @@ func (suite *RosetteFormulaTest) TestMultifoldSymmetryIsAlwaysPositive(checker *
 
 func (suite *RosetteFormulaTest) TestSymmetryUsesGreatestCommonDenominator(checker *C) {
 	rosetteFormula := rosette.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(1, 0),
 				PowerN:                 -6,
@@ -112,7 +112,7 @@ func (suite *RosetteFormulaTest) TestSymmetryUsesGreatestCommonDenominator(check
 
 func (suite *RosetteFormulaTest) TestGetContributionOfRosetteTerm(checker *C) {
 	rosetteFormula := rosette.Formula{
-		Terms: []*exponential.Term{
+		Terms: []*exponential.RosetteFriezeTerm{
 			{
 				Multiplier:             complex(3, 0),
 				PowerN:                 1,

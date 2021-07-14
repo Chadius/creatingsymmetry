@@ -115,14 +115,12 @@ func (suite *SquareCreatedWithDesiredSymmetry) SetUpTest (checker *C) {
 		{
 			PowerN: 1,
 			PowerM: -2,
-			Multiplier: complex(1, 0),
 		},
 	}
 	suite.singleEisensteinEvenSumFormulaTerm = []*formula.EisensteinFormulaTerm{
 		{
 			PowerM: 3,
 			PowerN: -1,
-			Multiplier: complex(1, 0),
 		},
 	}
 	suite.wallpaperMultiplier = complex(1, 0)
@@ -157,8 +155,8 @@ func (suite *SquareCreatedWithDesiredSymmetry) TestCreateWallpaperWithP4gAndOddS
 	checker.Assert(squareFormula.Formula.WavePackets, HasLen, 2)
 	checker.Assert(squareFormula.Formula.WavePackets[0].Terms, HasLen, 4)
 
-	checker.Assert(real(squareFormula.Formula.WavePackets[1].Terms[0].Multiplier), utility.NumericallyCloseEnough{}, real(suite.wallpaperMultiplier) * -1, 1e-6)
-	checker.Assert(imag(squareFormula.Formula.WavePackets[1].Terms[0].Multiplier), utility.NumericallyCloseEnough{}, imag(suite.wallpaperMultiplier) * -1, 1e-6)
+	checker.Assert(real(squareFormula.Formula.WavePackets[1].Multiplier), utility.NumericallyCloseEnough{}, real(suite.wallpaperMultiplier) * -1, 1e-6)
+	checker.Assert(imag(squareFormula.Formula.WavePackets[1].Multiplier), utility.NumericallyCloseEnough{}, imag(suite.wallpaperMultiplier) * -1, 1e-6)
 	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, 1)
 	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, -2)
 
@@ -177,8 +175,8 @@ func (suite *SquareCreatedWithDesiredSymmetry) TestCreateWallpaperWithP4gAndEven
 	checker.Assert(squareFormula.Formula.WavePackets, HasLen, 2)
 	checker.Assert(squareFormula.Formula.WavePackets[0].Terms, HasLen, 4)
 
-	checker.Assert(real(squareFormula.Formula.WavePackets[1].Terms[0].Multiplier), utility.NumericallyCloseEnough{}, real(suite.wallpaperMultiplier), 1e-6)
-	checker.Assert(imag(squareFormula.Formula.WavePackets[1].Terms[0].Multiplier), utility.NumericallyCloseEnough{}, imag(suite.wallpaperMultiplier), 1e-6)
+	checker.Assert(real(squareFormula.Formula.WavePackets[1].Multiplier), utility.NumericallyCloseEnough{}, real(suite.wallpaperMultiplier), 1e-6)
+	checker.Assert(imag(squareFormula.Formula.WavePackets[1].Multiplier), utility.NumericallyCloseEnough{}, imag(suite.wallpaperMultiplier), 1e-6)
 	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, -1)
 	checker.Assert(squareFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, 3)
 
@@ -483,10 +481,9 @@ func (suite *SquareLatticeDetectRelationship) TestP4g (checker *C) {
 						{
 							PowerN: 1,
 							PowerM: -2,
-							Multiplier: complex(-1, 0),
 						},
 					},
-					Multiplier: complex(1, 0),
+					Multiplier: complex(-1, 0),
 				},
 			},
 			Multiplier: complex(1, 0),

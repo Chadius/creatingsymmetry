@@ -82,7 +82,7 @@ func GetWavePacketRelationship(wavePacket1, wavePacket2 *WavePacket) []coefficie
 		return []coefficient.Relationship{}
 	}
 
-	return formula.GetAllPossibleTermRelationships(wavePacket1.Terms[0], wavePacket2.Terms[0])
+	return formula.GetAllPossibleTermRelationships(wavePacket1.Terms[0], wavePacket2.Terms[0], wavePacket1.Multiplier, wavePacket2.Multiplier)
 }
 
 // ContainsRelationship returns true if the target relationship is in the list of relationships.

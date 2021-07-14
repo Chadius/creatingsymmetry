@@ -16,8 +16,8 @@ type TermMarshalable struct {
 	CoefficientRelationships	[]coefficient.Relationship		`json:"coefficient_relationships" yaml:"coefficient_relationships"`
 }
 
-// Term is used in Friezes and Rosettes, applying different calculations to them.
-type Term struct {
+// RosetteFriezeTerm is used in Friezes and Rosettes, applying different calculations to them.
+type RosetteFriezeTerm struct {
 	Multiplier					complex128
 	PowerN						int
 	PowerM						int
@@ -30,17 +30,17 @@ type Term struct {
 }
 
 // NewTermFromYAML reads the data and returns a formula term from it.
-func NewTermFromYAML(data []byte) (*Term, error) {
+func NewTermFromYAML(data []byte) (*RosetteFriezeTerm, error) {
 	return newTermFromDatastream(data, yaml.Unmarshal)
 }
 
 // NewTermFromJSON reads the data and returns a formula term from it.
-func NewTermFromJSON(data []byte) (*Term, error) {
+func NewTermFromJSON(data []byte) (*RosetteFriezeTerm, error) {
 	return newTermFromDatastream(data, json.Unmarshal)
 }
 
 //newTermFromDatastream consumes a given bytestream and tries to create a new object from it.
-func newTermFromDatastream(data []byte, unmarshal utility.UnmarshalFunc) (*Term, error) {
+func newTermFromDatastream(data []byte, unmarshal utility.UnmarshalFunc) (*RosetteFriezeTerm, error) {
 	var unmarshalError error
 	var formulaTermMarshal TermMarshalable
 	unmarshalError = unmarshal(data, &formulaTermMarshal)
@@ -54,8 +54,8 @@ func newTermFromDatastream(data []byte, unmarshal utility.UnmarshalFunc) (*Term,
 }
 
 // NewTermFromMarshalObject creates an object from the marshaled object.
-func NewTermFromMarshalObject(marshalObject TermMarshalable) *Term {
-	return &Term{
+func NewTermFromMarshalObject(marshalObject TermMarshalable) *RosetteFriezeTerm {
+	return &RosetteFriezeTerm{
 		Multiplier:             	complex(marshalObject.Multiplier.Real, marshalObject.Multiplier.Imaginary),
 		PowerN:                 	marshalObject.PowerN,
 		PowerM:                 	marshalObject.PowerM,

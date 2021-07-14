@@ -154,7 +154,6 @@ func (suite *RectangularWaveSymmetry) SetUpTest(checker *C) {
 			{
 				PowerN:         8,
 				PowerM:         -3,
-				Multiplier: complex(1, 0),
 			},
 		},
 		Multiplier: complex(1, 0),
@@ -165,7 +164,6 @@ func (suite *RectangularWaveSymmetry) SetUpTest(checker *C) {
 			{
 				PowerN:         7,
 				PowerM:         -3,
-				Multiplier: complex(1, 0),
 			},
 		},
 		Multiplier: complex(1, 0),
@@ -200,9 +198,9 @@ func (suite *RectangularWaveSymmetry) TestPm(checker *C) {
 						{
 							PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
 							PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
-							Multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
 						},
 					},
+					Multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
 				},
 			},
 			Multiplier: complex(1, 0),
@@ -227,12 +225,12 @@ func (suite *RectangularWaveSymmetry) TestPg(checker *C) {
 						{
 							PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
 							PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
-							Multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
 						},
 					},
+					Multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
 				},
 			},
-			Multiplier: complex(1, 0),
+			Multiplier: complex(1,0),
 		},
 	}
 
@@ -252,12 +250,12 @@ func (suite *RectangularWaveSymmetry) TestPg(checker *C) {
 						{
 							PowerN:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
 							PowerM:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
-							Multiplier: 	suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1,
 						},
 					},
+					Multiplier: 	suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1,
 				},
 			},
-			Multiplier: complex(1, 0),
+			Multiplier: 	complex(1, 0),
 		},
 	}
 
@@ -279,7 +277,6 @@ func (suite *RectangularWaveSymmetry) TestPmmAndPmgWithEvenPowerN(checker *C) {
 						{
 							PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
 							PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
-							Multiplier: complex(1, 0),
 						},
 					},
 					Multiplier: complex(1, 0),
@@ -289,7 +286,6 @@ func (suite *RectangularWaveSymmetry) TestPmmAndPmgWithEvenPowerN(checker *C) {
 						{
 							PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
 							PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
-							Multiplier: complex(1, 0),
 						},
 					},
 					Multiplier: complex(1, 0),
@@ -299,7 +295,6 @@ func (suite *RectangularWaveSymmetry) TestPmmAndPmgWithEvenPowerN(checker *C) {
 						{
 							PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
 							PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM,
-							Multiplier: complex(1, 0),
 						},
 					},
 					Multiplier: complex(1, 0),
@@ -327,30 +322,27 @@ func (suite *RectangularWaveSymmetry) TestPmgWithOddPowerN(checker *C) {
 						{
 							PowerN:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
 							PowerM:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
-							Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
 						},
 					},
-					Multiplier: complex(1, 0),
+					Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
 				},
 				{
 					Terms:[]*formula.EisensteinFormulaTerm{
 						{
 							PowerN:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
 							PowerM:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
-							Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1,
 						},
 					},
-					Multiplier: complex(1, 0),
+					Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1,
 				},
 				{
 					Terms:[]*formula.EisensteinFormulaTerm{
 						{
 							PowerN:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
 							PowerM:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM,
-							Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1,
 						},
 					},
-					Multiplier: complex(1, 0),
+					Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1,
 				},
 			},
 			Multiplier: complex(1, 0),
@@ -375,30 +367,27 @@ func (suite *RectangularWaveSymmetry) TestPgg(checker *C) {
 						{
 							PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
 							PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
-							Multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
 						},
 					},
-					Multiplier: complex(1, 0),
+					Multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
 				},
 				{
 					Terms:[]*formula.EisensteinFormulaTerm{
 						{
 							PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
 							PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
-							Multiplier: -1 * suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
 						},
 					},
-					Multiplier: complex(1, 0),
+					Multiplier: -1 * suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
 				},
 				{
 					Terms:[]*formula.EisensteinFormulaTerm{
 						{
 							PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
 							PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM,
-							Multiplier: -1 * suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
 						},
 					},
-					Multiplier: complex(1, 0),
+					Multiplier: -1 * suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
 				},
 			},
 			Multiplier: complex(1, 0),
@@ -421,30 +410,27 @@ func (suite *RectangularWaveSymmetry) TestPgg(checker *C) {
 						{
 							PowerN:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
 							PowerM:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
-							Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
 						},
 					},
-					Multiplier: complex(1, 0),
+					Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
 				},
 				{
 					Terms:[]*formula.EisensteinFormulaTerm{
 						{
 							PowerN:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
 							PowerM:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
-							Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
 						},
 					},
-					Multiplier: complex(1, 0),
+					Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
 				},
 				{
 					Terms:[]*formula.EisensteinFormulaTerm{
 						{
 							PowerN:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
 							PowerM:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM,
-							Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
 						},
 					},
-					Multiplier: complex(1, 0),
+					Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
 				},
 			},
 			Multiplier: complex(1, 0),
@@ -473,14 +459,12 @@ func (suite *RectangularCreatedWithDesiredSymmetry) SetUpTest (checker *C) {
 		{
 			PowerN:         8,
 			PowerM:         -3,
-			Multiplier: complex(1, 0),
 		},
 	}
 	suite.eisensteinTermWithOddPowerNAndEvenPowerSum = []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:         7,
 				PowerM:         -3,
-				Multiplier: complex(1, 0),
 			},
 		}
 
@@ -522,7 +506,7 @@ func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPg(ch
 	checker.Assert(RectangularFormula.Formula.WavePackets, HasLen, 2)
 	checker.Assert(RectangularFormula.Formula.WavePackets[0].Terms, HasLen, 1)
 
-	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].Multiplier, Equals, suite.wallpaperMultiplier * -1)
+	checker.Assert(RectangularFormula.Formula.WavePackets[1].Multiplier, Equals, suite.wallpaperMultiplier * -1)
 	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerN)
 	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerM * -1)
 
@@ -545,15 +529,15 @@ func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPmm(c
 	checker.Assert(RectangularFormula.Formula.WavePackets, HasLen, 4)
 	checker.Assert(RectangularFormula.Formula.WavePackets[0].Terms, HasLen, 1)
 
-	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].Multiplier, Equals, suite.wallpaperMultiplier)
+	checker.Assert(RectangularFormula.Formula.WavePackets[1].Multiplier, Equals, suite.wallpaperMultiplier)
 	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerN * -1)
 	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerM * -1)
 
-	checker.Assert(RectangularFormula.Formula.WavePackets[2].Terms[0].Multiplier, Equals, suite.wallpaperMultiplier)
+	checker.Assert(RectangularFormula.Formula.WavePackets[2].Multiplier, Equals, suite.wallpaperMultiplier)
 	checker.Assert(RectangularFormula.Formula.WavePackets[2].Terms[0].PowerN, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerN * -1)
 	checker.Assert(RectangularFormula.Formula.WavePackets[2].Terms[0].PowerM, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerM)
 
-	checker.Assert(RectangularFormula.Formula.WavePackets[3].Terms[0].Multiplier, Equals, suite.wallpaperMultiplier)
+	checker.Assert(RectangularFormula.Formula.WavePackets[3].Multiplier, Equals, suite.wallpaperMultiplier)
 	checker.Assert(RectangularFormula.Formula.WavePackets[3].Terms[0].PowerN, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerN)
 	checker.Assert(RectangularFormula.Formula.WavePackets[3].Terms[0].PowerM, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerM * -1)
 
@@ -576,15 +560,15 @@ func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPmg(c
 	checker.Assert(RectangularFormula.Formula.WavePackets, HasLen, 4)
 	checker.Assert(RectangularFormula.Formula.WavePackets[0].Terms, HasLen, 1)
 
-	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].Multiplier, Equals, suite.wallpaperMultiplier)
+	checker.Assert(RectangularFormula.Formula.WavePackets[1].Multiplier, Equals, suite.wallpaperMultiplier)
 	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerN * -1)
 	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerM * -1)
 
-	checker.Assert(RectangularFormula.Formula.WavePackets[2].Terms[0].Multiplier, Equals, suite.wallpaperMultiplier * -1)
+	checker.Assert(RectangularFormula.Formula.WavePackets[2].Multiplier, Equals, suite.wallpaperMultiplier * -1)
 	checker.Assert(RectangularFormula.Formula.WavePackets[2].Terms[0].PowerN, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerN * -1)
 	checker.Assert(RectangularFormula.Formula.WavePackets[2].Terms[0].PowerM, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerM)
 
-	checker.Assert(RectangularFormula.Formula.WavePackets[3].Terms[0].Multiplier, Equals, suite.wallpaperMultiplier * -1)
+	checker.Assert(RectangularFormula.Formula.WavePackets[3].Multiplier, Equals, suite.wallpaperMultiplier * -1)
 	checker.Assert(RectangularFormula.Formula.WavePackets[3].Terms[0].PowerN, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerN)
 	checker.Assert(RectangularFormula.Formula.WavePackets[3].Terms[0].PowerM, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerM * -1)
 
@@ -607,15 +591,15 @@ func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPgg(c
 	checker.Assert(RectangularFormula.Formula.WavePackets, HasLen, 4)
 	checker.Assert(RectangularFormula.Formula.WavePackets[0].Terms, HasLen, 1)
 
-	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].Multiplier, Equals, suite.wallpaperMultiplier)
+	checker.Assert(RectangularFormula.Formula.WavePackets[1].Multiplier, Equals, suite.wallpaperMultiplier)
 	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerN * -1)
 	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerM * -1)
 
-	checker.Assert(RectangularFormula.Formula.WavePackets[2].Terms[0].Multiplier, Equals, suite.wallpaperMultiplier)
+	checker.Assert(RectangularFormula.Formula.WavePackets[2].Multiplier, Equals, suite.wallpaperMultiplier)
 	checker.Assert(RectangularFormula.Formula.WavePackets[2].Terms[0].PowerN, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerN * -1)
 	checker.Assert(RectangularFormula.Formula.WavePackets[2].Terms[0].PowerM, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerM)
 
-	checker.Assert(RectangularFormula.Formula.WavePackets[3].Terms[0].Multiplier, Equals, suite.wallpaperMultiplier)
+	checker.Assert(RectangularFormula.Formula.WavePackets[3].Multiplier, Equals, suite.wallpaperMultiplier)
 	checker.Assert(RectangularFormula.Formula.WavePackets[3].Terms[0].PowerN, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerN)
 	checker.Assert(RectangularFormula.Formula.WavePackets[3].Terms[0].PowerM, Equals, suite.eisensteinTermWithOddPowerNAndEvenPowerSum[0].PowerM * -1)
 
@@ -692,15 +676,15 @@ func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateDesiredSymmetryWit
 	checker.Assert(RectangularFormula.Formula.WavePackets, HasLen, 4)
 	checker.Assert(RectangularFormula.Formula.WavePackets[0].Terms[0].PowerM, Equals, -2)
 
-	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].Multiplier, Equals, complex(1, 0))
+	checker.Assert(RectangularFormula.Formula.WavePackets[1].Multiplier, Equals, complex(1, 0))
 	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].PowerN, Equals, -1)
 	checker.Assert(RectangularFormula.Formula.WavePackets[1].Terms[0].PowerM, Equals, 2)
 
-	checker.Assert(RectangularFormula.Formula.WavePackets[2].Terms[0].Multiplier, Equals, complex(-1, 0))
+	checker.Assert(RectangularFormula.Formula.WavePackets[2].Multiplier, Equals, complex(-1, 0))
 	checker.Assert(RectangularFormula.Formula.WavePackets[2].Terms[0].PowerN, Equals, -1)
 	checker.Assert(RectangularFormula.Formula.WavePackets[2].Terms[0].PowerM, Equals, -2)
 
-	checker.Assert(RectangularFormula.Formula.WavePackets[3].Terms[0].Multiplier, Equals, complex(-1, 0))
+	checker.Assert(RectangularFormula.Formula.WavePackets[3].Multiplier, Equals, complex(-1, 0))
 	checker.Assert(RectangularFormula.Formula.WavePackets[3].Terms[0].PowerN, Equals, 1)
 	checker.Assert(RectangularFormula.Formula.WavePackets[3].Terms[0].PowerM, Equals, 2)
 

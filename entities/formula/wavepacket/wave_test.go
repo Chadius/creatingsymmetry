@@ -31,17 +31,14 @@ func (suite *WaveFormulaTests) SetUpTest(checker *C) {
 			{
 				PowerN:         1,
 				PowerM:         -2,
-				Multiplier: complex(1, 0),
 			},
 			{
 				PowerN:         -2,
 				PowerM:         1,
-				Multiplier: complex(1, 0),
 			},
 			{
 				PowerN:         1,
 				PowerM:         1,
-				Multiplier: complex(1, 0),
 			},
 		},
 		Multiplier: complex(1, 0),
@@ -148,7 +145,6 @@ func (suite *WaveFormulaTests) TestSetUpUsesMultipliers(checker *C) {
 					{
 						PowerN: -3,
 						PowerM: 4,
-						Multiplier: complex(-3, 8),
 					},
 				},
 				Multiplier: complex(5, 2),
@@ -160,7 +156,7 @@ func (suite *WaveFormulaTests) TestSetUpUsesMultipliers(checker *C) {
 
 	wallPaperWithOddSumTerms.SetUp([]coefficient.Relationship{
 		coefficient.PlusNPlusM,
-		coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum,
+		coefficient.MinusMMinusN,
 		coefficient.PlusMMinusSumNAndM,
 	})
 
@@ -169,18 +165,12 @@ func (suite *WaveFormulaTests) TestSetUpUsesMultipliers(checker *C) {
 
 	checker.Assert(wallPaperWithOddSumTerms.WavePackets[0].Terms[1].PowerN, Equals, baseTerm.PowerN)
 	checker.Assert(wallPaperWithOddSumTerms.WavePackets[0].Terms[1].PowerM, Equals, baseTerm.PowerM)
-	checker.Assert(real(wallPaperWithOddSumTerms.WavePackets[0].Terms[1].Multiplier), utility.NumericallyCloseEnough{}, real(baseTerm.Multiplier), 1e-6)
-	checker.Assert(imag(wallPaperWithOddSumTerms.WavePackets[0].Terms[1].Multiplier), utility.NumericallyCloseEnough{}, imag(baseTerm.Multiplier), 1e-6)
 
 	checker.Assert(wallPaperWithOddSumTerms.WavePackets[0].Terms[2].PowerN, Equals, -1 * baseTerm.PowerM)
 	checker.Assert(wallPaperWithOddSumTerms.WavePackets[0].Terms[2].PowerM, Equals, -1 * baseTerm.PowerN)
-	checker.Assert(real(wallPaperWithOddSumTerms.WavePackets[0].Terms[2].Multiplier), utility.NumericallyCloseEnough{}, real(-1 * baseTerm.Multiplier), 1e-6)
-	checker.Assert(imag(wallPaperWithOddSumTerms.WavePackets[0].Terms[2].Multiplier), utility.NumericallyCloseEnough{}, imag(-1 * baseTerm.Multiplier), 1e-6)
 
 	checker.Assert(wallPaperWithOddSumTerms.WavePackets[0].Terms[3].PowerN, Equals, baseTerm.PowerM)
 	checker.Assert(wallPaperWithOddSumTerms.WavePackets[0].Terms[3].PowerM, Equals, -1 * (baseTerm.PowerN + baseTerm.PowerM))
-	checker.Assert(real(wallPaperWithOddSumTerms.WavePackets[0].Terms[3].Multiplier), utility.NumericallyCloseEnough{}, real(baseTerm.Multiplier), 1e-6)
-	checker.Assert(imag(wallPaperWithOddSumTerms.WavePackets[0].Terms[3].Multiplier), utility.NumericallyCloseEnough{}, imag(baseTerm.Multiplier), 1e-6)
 }
 
 type WavePacketRelationshipTest struct {
@@ -211,109 +201,99 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 			{
 				PowerN:     -1,
 				PowerM:     4,
-				Multiplier: complex(2, 1),
 			},
 		},
+		Multiplier: complex(2, 1),
 	}
 	suite.aPlusMPlusNOddWavePacket = &wavepacket.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     4,
 				PowerM:     -1,
-				Multiplier: complex(2, 1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(2, 1),
 	}
 	suite.aMinusNMinusMOddWavePacket = &wavepacket.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     1,
 				PowerM:     -4,
-				Multiplier: complex(2, 1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(2, 1),
 	}
 	suite.aMinusMMinusNOddWavePacket = &wavepacket.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -4,
 				PowerM:     1,
-				Multiplier: complex(2, 1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(2, 1),
 	}
 	suite.aPlusMMinusNOddWavePacket = &wavepacket.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     4,
 				PowerM:     1,
-				Multiplier: complex(2, 1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(2, 1),
 	}
 	suite.aMinusMPlusNOddWavePacket = &wavepacket.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -4,
 				PowerM:     -1,
-				Multiplier: complex(2, 1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(2, 1),
 	}
 	suite.aPlusMPlusNOddNegatedWavePacket = &wavepacket.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     4,
 				PowerM:     -1,
-				Multiplier: complex(-2, -1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(-2, -1),
 	}
 	suite.aMinusMMinusNOddNegatedWavePacket = &wavepacket.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -4,
 				PowerM:     1,
-				Multiplier: complex(-2, -1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(-2, -1),
 	}
 	suite.aPlusMMinusSumNAndMOddWavePacket = &wavepacket.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     4,
 				PowerM:     -3,
-				Multiplier: complex(2, 1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(2, 1),
 	}
 	suite.aMinusSumNAndMPlusNWavePacket = &wavepacket.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -3,
 				PowerM:     -1,
-				Multiplier: complex(2, 1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(2, 1),
 	}
 	suite.aMinusSumNAndMPlusNOddWavePacket = &wavepacket.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -3,
 				PowerM:     -1,
-				Multiplier: complex(2, 1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(2, 1),
 	}
 
 	suite.aPlusNPlusMEvenWavePacket = &wavepacket.WavePacket{
@@ -321,50 +301,45 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 			{
 				PowerN:     -6,
 				PowerM:     2,
-				Multiplier: complex(2, 1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(2, 1),
 	}
 	suite.aPlusMPlusNEvenWavePacket = &wavepacket.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     2,
 				PowerM:     -6,
-				Multiplier: complex(2, 1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(2, 1),
 	}
 	suite.aPlusMPlusNEvenNegatedWavePacket = &wavepacket.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     2,
 				PowerM:     -6,
-				Multiplier: complex(-2, -1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(-2, -1),
 	}
 	suite.aMinusMMinusNEvenWavePacket = &wavepacket.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -2,
 				PowerM:     6,
-				Multiplier: complex(2, 1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(2, 1),
 	}
 	suite.aMinusMMinusNEvenNegatedWavePacket = &wavepacket.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -2,
 				PowerM:     6,
-				Multiplier: complex(-2, -1),
 			},
 		},
-		Multiplier: complex(1, 0),
+		Multiplier: complex(-2, -1),
 	}
 }
 

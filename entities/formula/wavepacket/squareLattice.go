@@ -87,19 +87,16 @@ func newSquareWallpaperFormulaFromDatastream(data []byte, unmarshal utility.Unma
 func NewSquareWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, desiredSymmetry Symmetry) (*SquareWallpaperFormula, error) {
 	newWavePackets := []*WavePacket{}
 	for _, term := range terms {
-		if real(term.Multiplier) == 0 && imag(term.Multiplier) == 0 {
-			term.Multiplier = complex(1, 0)
-		}
 
 		newWavePackets = append(
 			newWavePackets,
 			&WavePacket{
 				Terms:      []*formula.EisensteinFormulaTerm{term},
-				Multiplier: term.Multiplier,
+				Multiplier: wallpaperMultiplier,
 			},
 		)
 
-		newWavePackets = addNewWavePacketsBasedOnSymmetry(term, desiredSymmetry, newWavePackets)
+		newWavePackets = addNewWavePacketsBasedOnSymmetry(term, wallpaperMultiplier, desiredSymmetry, newWavePackets)
 	}
 
 	newBaseWallpaper := &SquareWallpaperFormula{

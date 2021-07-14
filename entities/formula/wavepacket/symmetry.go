@@ -2,18 +2,18 @@ package wavepacket
 
 import "wallpaper/entities/formula"
 
-func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, desiredSymmetry Symmetry, newWavePackets []*WavePacket) []*WavePacket {
+func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, multiplier complex128, desiredSymmetry Symmetry, newWavePackets []*WavePacket) []*WavePacket {
 	powerN := term.PowerN
 	powerM := term.PowerM
 	powerNIsEven := powerN % 2 == 0
 	powerSumIsEven := (powerN + powerM) % 2 == 0
 
-	multiplierMaybeNegatedBasedOnSum := term.Multiplier
+	multiplierMaybeNegatedBasedOnSum := multiplier
 	if !powerSumIsEven {
 		multiplierMaybeNegatedBasedOnSum *= -1
 	}
 
-	multiplierMaybeNegatedBasedOnPowerN := term.Multiplier
+	multiplierMaybeNegatedBasedOnPowerN := multiplier
 	if !powerNIsEven {
 		multiplierMaybeNegatedBasedOnPowerN *= -1
 	}
@@ -26,7 +26,7 @@ func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, desir
 					PowerM: powerN,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplier,
 		})
 	}
 	if desiredSymmetry == Pm {
@@ -37,7 +37,7 @@ func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, desir
 					PowerM: powerM * -1,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplier,
 		})
 	}
 	if desiredSymmetry == Pg {
@@ -46,10 +46,9 @@ func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, desir
 				{
 					PowerN: powerN,
 					PowerM: powerM * -1,
-					Multiplier: multiplierMaybeNegatedBasedOnPowerN,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplierMaybeNegatedBasedOnPowerN,
 		})
 	}
 	if desiredSymmetry == Pmm {
@@ -58,30 +57,27 @@ func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, desir
 				{
 					PowerN: powerN * -1,
 					PowerM: powerM * -1,
-					Multiplier: term.Multiplier,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplier,
 		})
 		newWavePackets = append(newWavePackets, &WavePacket{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
 					PowerN: powerN * -1,
 					PowerM: powerM,
-					Multiplier: term.Multiplier,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplier,
 		})
 		newWavePackets = append(newWavePackets, &WavePacket{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
 					PowerN: powerN,
 					PowerM: powerM * -1,
-					Multiplier: term.Multiplier,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplier,
 		})
 	}
 	if desiredSymmetry == Pmg {
@@ -90,30 +86,27 @@ func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, desir
 				{
 					PowerN: powerN * -1,
 					PowerM: powerM * -1,
-					Multiplier: term.Multiplier,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplier,
 		})
 		newWavePackets = append(newWavePackets, &WavePacket{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
 					PowerN: powerN * -1,
 					PowerM: powerM,
-					Multiplier: multiplierMaybeNegatedBasedOnPowerN,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplierMaybeNegatedBasedOnPowerN,
 		})
 		newWavePackets = append(newWavePackets, &WavePacket{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
 					PowerN: powerN,
 					PowerM: powerM * -1,
-					Multiplier: multiplierMaybeNegatedBasedOnPowerN,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplierMaybeNegatedBasedOnPowerN,
 		})
 	}
 	if desiredSymmetry == Pgg {
@@ -122,30 +115,27 @@ func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, desir
 				{
 					PowerN: powerN * -1,
 					PowerM: powerM * -1,
-					Multiplier: term.Multiplier,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplier,
 		})
 		newWavePackets = append(newWavePackets, &WavePacket{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
 					PowerN: powerN * -1,
 					PowerM: powerM,
-					Multiplier: multiplierMaybeNegatedBasedOnSum,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplierMaybeNegatedBasedOnSum,
 		})
 		newWavePackets = append(newWavePackets, &WavePacket{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
 					PowerN: powerN,
 					PowerM: powerM * -1,
-					Multiplier: multiplierMaybeNegatedBasedOnSum,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplierMaybeNegatedBasedOnSum,
 		})
 	}
 
@@ -157,7 +147,7 @@ func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, desir
 					PowerN: powerM * -1,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplier,
 		})
 	}
 	if desiredSymmetry == P6 {
@@ -168,7 +158,7 @@ func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, desir
 					PowerN: powerN * -1,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplier,
 		})
 	}
 	if desiredSymmetry == P6m || desiredSymmetry == Cmm {
@@ -177,30 +167,27 @@ func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, desir
 				{
 					PowerN: powerN * -1,
 					PowerM: powerM * -1,
-					Multiplier: term.Multiplier,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplier,
 		})
 		newWavePackets = append(newWavePackets, &WavePacket{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
 					PowerN: powerM,
 					PowerM: powerN,
-					Multiplier: term.Multiplier,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplier,
 		})
 		newWavePackets = append(newWavePackets, &WavePacket{
 			Terms: []*formula.EisensteinFormulaTerm{
 				{
 					PowerN: powerM * -1,
 					PowerM: powerN * -1,
-					Multiplier: term.Multiplier,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplier,
 		})
 	}
 
@@ -210,10 +197,9 @@ func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, desir
 				{
 					PowerM: powerN,
 					PowerN: powerM,
-					Multiplier: multiplierMaybeNegatedBasedOnSum,
 				},
 			},
-			Multiplier: term.Multiplier,
+			Multiplier: multiplierMaybeNegatedBasedOnSum,
 		})
 	}
 
