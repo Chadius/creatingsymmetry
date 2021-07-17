@@ -36,6 +36,7 @@ type CreateWallpaperCommand struct {
 	SquareWallpaperFormula *wavepacket.SquareWallpaperFormula       `json:"square_wallpaper_formula" yaml:"square_wallpaper_formula"`
 	RhombicWallpaperFormula *wavepacket.RhombicWallpaperFormula            `json:"rhombic_wallpaper_formula" yaml:"rhombic_wallpaper_formula"`
 	RectangularWallpaperFormula *wavepacket.RectangularWallpaperFormula            `json:"rectangular_wallpaper_formula" yaml:"rectangular_wallpaper_formula"`
+	GenericWallpaperFormula *wavepacket.GenericWallpaperFormula            `json:"generic_wallpaper_formula" yaml:"generic_wallpaper_formula"`
 }
 
 // CreateWallpaperCommandMarshal can be marshaled and converted to a CreateWallpaperCommand
@@ -51,6 +52,7 @@ type CreateWallpaperCommandMarshal struct {
 	SquareWallpaperFormula *wavepacket.WallpaperFormulaMarshalled    `json:"square_wallpaper_formula" yaml:"square_wallpaper_formula"`
 	RhombicWallpaperFormula *wavepacket.RhombicWallpaperFormulaMarshalled       `json:"rhombic_wallpaper_formula" yaml:"rhombic_wallpaper_formula"`
 	RectangularWallpaperFormula *wavepacket.RectangularWallpaperFormulaMarshalled            `json:"rectangular_wallpaper_formula" yaml:"rectangular_wallpaper_formula"`
+	GenericWallpaperFormula *wavepacket.GenericWallpaperFormulaMarshalled            `json:"generic_wallpaper_formula" yaml:"generic_wallpaper_formula"`
 }
 
 // NewCreateWallpaperCommandFromYAML reads the data and returns a CreateWallpaperCommand from it.
@@ -103,6 +105,10 @@ func newCreateWallpaperCommandFromDatastream(data []byte, unmarshal utility.Unma
 
 	if commandToCreateMarshal.RectangularWallpaperFormula != nil {
 		commandToCreate.RectangularWallpaperFormula = wavepacket.NewRectangularWallpaperFormulaFromMarshalObject(*commandToCreateMarshal.RectangularWallpaperFormula)
+	}
+
+	if commandToCreateMarshal.GenericWallpaperFormula != nil {
+		commandToCreate.GenericWallpaperFormula = wavepacket.NewGenericWallpaperFormulaFromMarshalObject(*commandToCreateMarshal.GenericWallpaperFormula)
 	}
 
 	return commandToCreate, nil
