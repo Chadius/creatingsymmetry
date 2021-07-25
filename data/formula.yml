@@ -6,8 +6,8 @@ output_size:
 sample_space:
   minx: -2e0
   miny: -2e0
-  maxx: 0e0
-  maxy: 0e0
+  maxx: 2e0
+  maxy: 2e0
 color_value_space:
   minx: -10e-1
   miny: -10e-1
@@ -149,7 +149,7 @@ skip_rectangular_wallpaper_formula:
           -
             power_n: 3
             power_m: 1
-generic_wallpaper_formula:
+skip_generic_wallpaper_formula:
   vector_width: -2
   vector_height: 0.5
   formula:
@@ -188,3 +188,20 @@ generic_wallpaper_formula:
           -
             power_n: 3
             power_m: 1
+generic_wallpaper_formula:
+  vector_width: -2
+  vector_height: 0.5
+  formula:
+    desired_symmetry: p2
+    multiplier:
+      real: 1
+      imaginary: 0.5
+    wave_packets:
+      -
+        multiplier:
+          real: 2
+          imaginary: 0
+        terms:
+          -
+            power_n: 2
+            power_m: -1

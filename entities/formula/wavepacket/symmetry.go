@@ -202,6 +202,17 @@ func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, multi
 			Multiplier: multiplierMaybeNegatedBasedOnSum,
 		})
 	}
+	if desiredSymmetry == P2 {
+		newWavePackets = append(newWavePackets, &WavePacket{
+			Terms: []*formula.EisensteinFormulaTerm{
+				{
+					PowerN: powerN * -1,
+					PowerM: powerM * -1,
+				},
+			},
+			Multiplier: multiplier,
+		})
+	}
 
 	return newWavePackets
 }
@@ -211,6 +222,8 @@ type Symmetry string
 
 // All possible symmetries for wallpaper patterns, based on crystallography.
 const (
+	P1   Symmetry = "p1"
+	P2   Symmetry = "p2"
 	P3   Symmetry = "p3"
 	P3m1 Symmetry = "p3m1"
 	P31m Symmetry = "p31m"

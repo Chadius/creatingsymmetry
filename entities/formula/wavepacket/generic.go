@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"gopkg.in/yaml.v2"
 	"wallpaper/entities/formula"
+	"wallpaper/entities/formula/coefficient"
 	"wallpaper/entities/utility"
 
 	//"wallpaper/entities/utility"
@@ -48,28 +49,16 @@ func (Generic *GenericWallpaperFormula) Calculate(z complex128) *formula.Calcula
 	return Generic.Formula.Calculate(z)
 }
 
-//// HasSymmetry returns true if the WavePackets involved form symmetry.
-//func (Generic *GenericWallpaperFormula) HasSymmetry(desiredSymmetry Symmetry) bool {
-//	return HasSymmetry(Generic.Formula.WavePackets, desiredSymmetry, map[Symmetry][]coefficient.Relationship {
-//		Pm: {coefficient.PlusNMinusM},
-//		Pg: {coefficient.PlusNMinusMNegateMultiplierIfOddPowerN},
-//		Pmm: {
-//			coefficient.PlusNMinusM,
-//			coefficient.MinusNMinusM,
-//			coefficient.MinusNPlusM,
-//		},
-//		Pmg: {
-//			coefficient.MinusNMinusM,
-//			coefficient.PlusNMinusMNegateMultiplierIfOddPowerN,
-//			coefficient.MinusNPlusMNegateMultiplierIfOddPowerN,
-//		},
-//		Pgg: {
-//			coefficient.MinusNMinusM,
-//			coefficient.PlusNMinusMNegateMultiplierIfOddPowerSum,
-//			coefficient.MinusNPlusMNegateMultiplierIfOddPowerSum,
-//		},
-//	})
-//}
+// HasSymmetry returns true if the WavePackets involved form symmetry.
+func (Generic *GenericWallpaperFormula) HasSymmetry(desiredSymmetry Symmetry) bool {
+	if desiredSymmetry == P1 {
+		return true
+	}
+
+	return HasSymmetry(Generic.Formula.WavePackets, desiredSymmetry, map[Symmetry][]coefficient.Relationship {
+		P2: {coefficient.MinusNMinusM},
+	})
+}
 
 // NewGenericWallpaperFormulaFromJSON reads the data and returns a formula term from it.
 func NewGenericWallpaperFormulaFromJSON(data []byte) (*GenericWallpaperFormula, error) {
@@ -98,19 +87,20 @@ func newGenericWallpaperFormulaFromDatastream(data []byte, unmarshal utility.Unm
 func NewGenericWallpaperFormulaFromMarshalObject(marshalObject GenericWallpaperFormulaMarshalled) *GenericWallpaperFormula {
 	formula := NewWallpaperFormulaFromMarshalObject(*marshalObject.Formula)
 
-	//if marshalObject.Formula.DesiredSymmetry != "" {
-	//	wallpaper, err := NewGenericWallpaperFormulaWithSymmetry(
-	//		formula.WavePackets[0].Terms,
-	//		formula.Multiplier,
-	//		marshalObject.LatticeHeight,
-	//		Symmetry(marshalObject.Formula.DesiredSymmetry),
-	//	)
-	//
-	//	if err != nil {
-	//		return nil
-	//	}
-	//	return wallpaper
-	//}
+	if marshalObject.Formula.DesiredSymmetry != "" {
+		wallpaper, err := NewGenericWallpaperFormulaWithSymmetry(
+			formula.WavePackets[0].Terms,
+			formula.Multiplier,
+			marshalObject.VectorWidth,
+			marshalObject.VectorHeight,
+			Symmetry(marshalObject.Formula.DesiredSymmetry),
+		)
+
+		if err != nil {
+			return nil
+		}
+		return wallpaper
+	}
 
 	return &GenericWallpaperFormula{
 		Formula:       formula,
@@ -119,29 +109,30 @@ func NewGenericWallpaperFormulaFromMarshalObject(marshalObject GenericWallpaperF
 	}
 }
 
-//// NewGenericWallpaperFormulaWithSymmetry will try to create a new GenericWallpaperFormula WavePacket
-////   with the desired Terms, Multiplier and Symmetry.
-//func NewGenericWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, latticeHeight float64, desiredSymmetry Symmetry) (*GenericWallpaperFormula, error) {
-//	newWavePackets := []*WavePacket{}
-//	for _, term := range terms {
-//		newWavePackets = append(
-//			newWavePackets,
-//			&WavePacket{
-//				Terms:      []*formula.EisensteinFormulaTerm{term},
-//				Multiplier: wallpaperMultiplier,
-//			},
-//		)
-//
-//		newWavePackets = addNewWavePacketsBasedOnSymmetry(term, wallpaperMultiplier, desiredSymmetry, newWavePackets)
-//	}
-//
-//	newBaseWallpaper := &GenericWallpaperFormula{
-//		Formula: &WallpaperFormula{
-//			WavePackets: newWavePackets,
-//			Multiplier:  wallpaperMultiplier,
-//		},
-//		LatticeHeight: latticeHeight,
-//	}
-//	newBaseWallpaper.SetUp()
-//	return newBaseWallpaper, nil
-//}
+// NewGenericWallpaperFormulaWithSymmetry will try to create a new GenericWallpaperFormula WavePacket
+//   with the desired Terms, Multiplier and Symmetry.
+func NewGenericWallpaperFormulaWithSymmetry(terms []*formula.EisensteinFormulaTerm, wallpaperMultiplier complex128, vectorWidth float64, vectorHeight float64, desiredSymmetry Symmetry) (*GenericWallpaperFormula, error) {
+	newWavePackets := []*WavePacket{}
+	for _, term := range terms {
+		newWavePackets = append(
+			newWavePackets,
+			&WavePacket{
+				Terms:      []*formula.EisensteinFormulaTerm{term},
+				Multiplier: wallpaperMultiplier,
+			},
+		)
+
+		newWavePackets = addNewWavePacketsBasedOnSymmetry(term, wallpaperMultiplier, desiredSymmetry, newWavePackets)
+	}
+
+	newBaseWallpaper := &GenericWallpaperFormula{
+		Formula: &WallpaperFormula{
+			WavePackets: newWavePackets,
+			Multiplier:  wallpaperMultiplier,
+		},
+		VectorWidth: vectorWidth,
+		VectorHeight: vectorHeight,
+	}
+	newBaseWallpaper.SetUp()
+	return newBaseWallpaper, nil
+}

@@ -393,10 +393,13 @@ func transformCoordinatesForGenericWallpaperFormula(wallpaperFormula *wavepacket
 		fmt.Printf("%d: %e - %e\n", index, minz, maxz)
 	}
 
-	//println("Symmetries found:")
-	//if wallpaperFormula.HasSymmetry(wavepacket.P2) {
-	//	println("  p2")
-	//}
+	println("Symmetries found:")
+	if wallpaperFormula.HasSymmetry(wavepacket.P1) {
+		println("  p1")
+	}
+	if wallpaperFormula.HasSymmetry(wavepacket.P2) {
+		println("  p2")
+	}
 
 	return transformedCoordinates
 }
