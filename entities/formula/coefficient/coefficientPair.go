@@ -53,7 +53,7 @@ func (pairing Pairing) GenerateCoefficientSets(relationships []Relationship) []*
 		},
 		MinusSumNAndMPlusN: {
 			PowerN: -1 * (pairing.PowerN + pairing.PowerM),
-			PowerM: pairing.PowerM,
+			PowerM: pairing.PowerN,
 			NegateMultiplier: false,
 		},
 		PlusNMinusM: {

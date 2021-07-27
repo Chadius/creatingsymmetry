@@ -3,9 +3,9 @@ package frieze
 import (
 	"gopkg.in/yaml.v2"
 	"math/cmplx"
-	"wallpaper/entities/formula"
 	"wallpaper/entities/formula/coefficient"
 	"wallpaper/entities/formula/exponential"
+	"wallpaper/entities/formula/result"
 	"wallpaper/entities/utility"
 )
 
@@ -15,8 +15,8 @@ type Formula struct {
 }
 
 // Calculate applies the Frieze formula to the complex number z.
-func (friezeFormula Formula) Calculate(z complex128) *formula.CalculationResultForFormula {
-	result := &formula.CalculationResultForFormula{
+func (friezeFormula Formula) Calculate(z complex128) *result.CalculationResultForFormula {
+	result := &result.CalculationResultForFormula{
 		Total: complex(0,0),
 		ContributionByTerm: []complex128{},
 	}

@@ -127,7 +127,7 @@ func (suite *CoefficientPairFeatures) TestMinusSumNAndMPlusN(checker *C) {
 
 	checker.Assert(newSets, HasLen, 1)
 	checker.Assert(newSets[0].PowerN, Equals, -(1+3))
-	checker.Assert(newSets[0].PowerM, Equals, 3)
+	checker.Assert(newSets[0].PowerM, Equals, 1)
 	checker.Assert(newSets[0].NegateMultiplier, Equals, false)
 }
 

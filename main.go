@@ -6,15 +6,14 @@ import (
 	"image"
 	"image/color"
 	"image/png"
+	_ "image/png"
 	"io/ioutil"
 	"log"
+	"os"
 	"wallpaper/entities/command"
 	"wallpaper/entities/formula/frieze"
 	"wallpaper/entities/formula/rosette"
-	"wallpaper/entities/formula/wavepacket"
-
-	_ "image/png"
-	"os"
+	"wallpaper/entities/formula/wallpaper"
 	"wallpaper/entities/mathutility"
 )
 
@@ -89,27 +88,15 @@ func outputToFile(outputFilename string, outputImage image.Image) {
 	png.Encode(outputImageFile, outputImage)
 }
 
-func transformCoordinatesForFormula(command *command.CreateWallpaperCommand, scaledCoordinates []complex128) []complex128 {
+func transformCoordinatesForFormula(command *command.CreateSymmetryPattern, scaledCoordinates []complex128) []complex128 {
 	if command.FriezeFormula != nil {
 		return transformCoordinatesForFriezeFormula(command.FriezeFormula, scaledCoordinates)
 	}
 	if command.RosetteFormula != nil {
 		return transformCoordinatesForRosetteFormula(command.RosetteFormula, scaledCoordinates)
 	}
-	if command.HexagonalWallpaperFormula != nil {
-		return transformCoordinatesForHexagonalWallpaperFormula(command.HexagonalWallpaperFormula, scaledCoordinates)
-	}
-	if command.SquareWallpaperFormula != nil {
-		return transformCoordinatesForSquareWallpaperFormula(command.SquareWallpaperFormula, scaledCoordinates)
-	}
-	if command.RhombicWallpaperFormula != nil {
-		return transformCoordinatesForRhombicWallpaperFormula(command.RhombicWallpaperFormula, scaledCoordinates)
-	}
-	if command.RectangularWallpaperFormula != nil {
-		return transformCoordinatesForRectangularWallpaperFormula(command.RectangularWallpaperFormula, scaledCoordinates)
-	}
-	if command.GenericWallpaperFormula != nil {
-		return transformCoordinatesForGenericWallpaperFormula(command.GenericWallpaperFormula, scaledCoordinates)
+	if command.LatticePattern != nil {
+		return transformCoordinatesForLatticePattern(command.LatticePattern, scaledCoordinates)
 	}
 	log.Fatal(errors.New("no formula found"))
 	return []complex128{}
@@ -188,22 +175,22 @@ func transformCoordinatesForRosetteFormula(rosetteFormula *rosette.Formula, scal
 	return transformedCoordinates
 }
 
-func transformCoordinatesForHexagonalWallpaperFormula(wallpaperFormula *wavepacket.HexagonalWallpaperFormula, scaledCoordinates []complex128) []complex128 {
-	wallpaperFormula.SetUp()
+func transformCoordinatesForLatticePattern(latticePattern *wallpaper.Formula, scaledCoordinates []complex128) []complex128 {
+	latticePattern.Setup()
 
 	transformedCoordinates := []complex128{}
 	resultsByTerm := [][]complex128{}
-	for range wallpaperFormula.Formula.WavePackets {
+	for range latticePattern.WavePackets {
 		resultsByTerm = append(resultsByTerm, []complex128{})
 	}
 
 	for _, complexCoordinate := range scaledCoordinates {
-		hexagonalWallpaperResults := wallpaperFormula.Calculate(complexCoordinate)
-		for index, formulaResult := range hexagonalWallpaperResults.ContributionByTerm {
+		latticePatternResults := latticePattern.Calculate(complexCoordinate)
+		for index, formulaResult := range latticePatternResults.ContributionByTerm {
 			resultsByTerm[index] = append(resultsByTerm[index], formulaResult)
 		}
 
-		transformedCoordinate := hexagonalWallpaperResults.Total
+		transformedCoordinate := latticePatternResults.Total
 		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
 	}
 
@@ -214,193 +201,57 @@ func transformCoordinatesForHexagonalWallpaperFormula(wallpaperFormula *wavepack
 	}
 
 	println("Symmetries found:")
-
-	if wallpaperFormula.HasSymmetry(wavepacket.P31m) {
-		println("  p31m")
-	}
-	if wallpaperFormula.HasSymmetry(wavepacket.P3m1) {
-		println("  p3m1")
-	}
-	if wallpaperFormula.HasSymmetry(wavepacket.P6) {
-		println("  p6")
-	}
-	if wallpaperFormula.HasSymmetry(wavepacket.P6m) {
-		println("  p6m")
-	}
-	if wallpaperFormula.HasSymmetry(wavepacket.P3) {
-		println("  p3")
-	}
-
-	return transformedCoordinates
-}
-
-func transformCoordinatesForSquareWallpaperFormula(wallpaperFormula *wavepacket.SquareWallpaperFormula, scaledCoordinates []complex128) []complex128 {
-	wallpaperFormula.SetUp()
-
-	transformedCoordinates := []complex128{}
-	resultsByTerm := [][]complex128{}
-	for range wallpaperFormula.Formula.WavePackets {
-		resultsByTerm = append(resultsByTerm, []complex128{})
-	}
-
-	for _, complexCoordinate := range scaledCoordinates {
-		hexagonalWallpaperResults := wallpaperFormula.Calculate(complexCoordinate)
-		for index, formulaResult := range hexagonalWallpaperResults.ContributionByTerm {
-			resultsByTerm[index] = append(resultsByTerm[index], formulaResult)
-		}
-
-		transformedCoordinate := hexagonalWallpaperResults.Total
-		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
-	}
-
-	println("Min/Max ranges, by Term")
-	for index, results := range resultsByTerm {
-		minz, maxz := mathutility.GetBoundingBox(results)
-		fmt.Printf("%d: %e - %e\n", index, minz, maxz)
-	}
-
-	println("Symmetries found:")
-	if wallpaperFormula.HasSymmetry(wavepacket.P4) {
-		println("  p4")
-	}
-	if wallpaperFormula.HasSymmetry(wavepacket.P4m) {
-		println("  p4m")
-	}
-	if wallpaperFormula.HasSymmetry(wavepacket.P4g) {
-		println("  p4g")
-	}
-
-	return transformedCoordinates
-}
-
-func transformCoordinatesForRhombicWallpaperFormula(wallpaperFormula *wavepacket.RhombicWallpaperFormula, scaledCoordinates []complex128) []complex128 {
-	err := wallpaperFormula.SetUp()
-	if err != nil {
-		println(err.Error())
-	}
-
-	transformedCoordinates := []complex128{}
-	resultsByTerm := [][]complex128{}
-	for range wallpaperFormula.Formula.WavePackets {
-		resultsByTerm = append(resultsByTerm, []complex128{})
-	}
-
-	for _, complexCoordinate := range scaledCoordinates {
-		hexagonalWallpaperResults := wallpaperFormula.Calculate(complexCoordinate)
-		for index, formulaResult := range hexagonalWallpaperResults.ContributionByTerm {
-			resultsByTerm[index] = append(resultsByTerm[index], formulaResult)
-		}
-
-		transformedCoordinate := hexagonalWallpaperResults.Total
-		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
-	}
-
-	println("Min/Max ranges, by Term")
-	for index, results := range resultsByTerm {
-		minz, maxz := mathutility.GetBoundingBox(results)
-		fmt.Printf("%d: %e - %e\n", index, minz, maxz)
-	}
-
-	println("Symmetries found:")
-	if wallpaperFormula.HasSymmetry(wavepacket.Cm) {
-		println("  cm")
-	}
-	if wallpaperFormula.HasSymmetry(wavepacket.Cmm) {
-		println("  cmm")
-	}
-
-	return transformedCoordinates
-}
-
-func transformCoordinatesForRectangularWallpaperFormula(wallpaperFormula *wavepacket.RectangularWallpaperFormula, scaledCoordinates []complex128) []complex128 {
-	err := wallpaperFormula.SetUp()
-	if err != nil {
-		println(err.Error())
-	}
-
-	transformedCoordinates := []complex128{}
-	resultsByTerm := [][]complex128{}
-	for range wallpaperFormula.Formula.WavePackets {
-		resultsByTerm = append(resultsByTerm, []complex128{})
-	}
-
-	for _, complexCoordinate := range scaledCoordinates {
-		hexagonalWallpaperResults := wallpaperFormula.Calculate(complexCoordinate)
-		for index, formulaResult := range hexagonalWallpaperResults.ContributionByTerm {
-			resultsByTerm[index] = append(resultsByTerm[index], formulaResult)
-		}
-
-		transformedCoordinate := hexagonalWallpaperResults.Total
-		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
-	}
-
-	println("Min/Max ranges, by Term")
-	for index, results := range resultsByTerm {
-		minz, maxz := mathutility.GetBoundingBox(results)
-		fmt.Printf("%d: %e - %e\n", index, minz, maxz)
-	}
-
-	println("Symmetries found:")
-	hasSymmetry := false
-	if wallpaperFormula.HasSymmetry(wavepacket.Pm) {
-		println("  pm")
-		hasSymmetry = true
-	}
-	if wallpaperFormula.HasSymmetry(wavepacket.Pg) {
-		println("  pg")
-		hasSymmetry = true
-	}
-	if wallpaperFormula.HasSymmetry(wavepacket.Pmm) {
-		println("  pmm")
-		hasSymmetry = true
-	}
-	if wallpaperFormula.HasSymmetry(wavepacket.Pmg) {
-		println("  pmg")
-		hasSymmetry = true
-	}
-	if wallpaperFormula.HasSymmetry(wavepacket.Pgg) {
-		println("  pgg")
-		hasSymmetry = true
-	}
-	if hasSymmetry == false {
-		println("  none found")
-	}
-	return transformedCoordinates
-}
-
-func transformCoordinatesForGenericWallpaperFormula(wallpaperFormula *wavepacket.GenericWallpaperFormula, scaledCoordinates []complex128) []complex128 {
-	wallpaperFormula.SetUp()
-
-	transformedCoordinates := []complex128{}
-	resultsByTerm := [][]complex128{}
-	for range wallpaperFormula.Formula.WavePackets {
-		resultsByTerm = append(resultsByTerm, []complex128{})
-	}
-
-	for _, complexCoordinate := range scaledCoordinates {
-		genericWallpaperResults := wallpaperFormula.Calculate(complexCoordinate)
-		for index, formulaResult := range genericWallpaperResults.ContributionByTerm {
-			resultsByTerm[index] = append(resultsByTerm[index], formulaResult)
-		}
-
-		transformedCoordinate := genericWallpaperResults.Total
-		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
-	}
-
-	println("Min/Max ranges, by Term")
-	for index, results := range resultsByTerm {
-		minz, maxz := mathutility.GetBoundingBox(results)
-		fmt.Printf("%d: %e - %e\n", index, minz, maxz)
-	}
-
-	println("Symmetries found:")
-	if wallpaperFormula.HasSymmetry(wavepacket.P1) {
+	if latticePattern.HasSymmetry(wallpaper.P1) {
 		println("  p1")
 	}
-	if wallpaperFormula.HasSymmetry(wavepacket.P2) {
+	if latticePattern.HasSymmetry(wallpaper.P2) {
 		println("  p2")
 	}
-
+	if latticePattern.HasSymmetry(wallpaper.P31m) {
+		println("  p31m")
+	}
+	if latticePattern.HasSymmetry(wallpaper.P3m1) {
+		println("  p3m1")
+	}
+	if latticePattern.HasSymmetry(wallpaper.P6) {
+		println("  p6")
+	}
+	if latticePattern.HasSymmetry(wallpaper.P6m) {
+		println("  p6m")
+	}
+	if latticePattern.HasSymmetry(wallpaper.P3) {
+		println("  p3")
+	}
+	if latticePattern.HasSymmetry(wallpaper.P4) {
+		println("  p4")
+	}
+	if latticePattern.HasSymmetry(wallpaper.P4m) {
+		println("  p4m")
+	}
+	if latticePattern.HasSymmetry(wallpaper.P4g) {
+		println("  p4g")
+	}
+	if latticePattern.HasSymmetry(wallpaper.Cm) {
+		println("  cm")
+	}
+	if latticePattern.HasSymmetry(wallpaper.Cmm) {
+		println("  cmm")
+	}
+	if latticePattern.HasSymmetry(wallpaper.Pm) {
+		println("  pm")
+	}
+	if latticePattern.HasSymmetry(wallpaper.Pg) {
+		println("  pg")
+	}
+	if latticePattern.HasSymmetry(wallpaper.Pmm) {
+		println("  pmm")
+	}
+	if latticePattern.HasSymmetry(wallpaper.Pmg) {
+		println("  pmg")
+	}
+	if latticePattern.HasSymmetry(wallpaper.Pgg) {
+		println("  pgg")
+	}
 	return transformedCoordinates
 }
 

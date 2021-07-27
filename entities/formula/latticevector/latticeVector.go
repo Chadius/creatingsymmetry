@@ -1,4 +1,4 @@
-package formula
+package latticevector
 
 import (
 	"errors"
@@ -7,20 +7,14 @@ import (
 	"wallpaper/entities/utility"
 )
 
-// CalculationResultForFormula shows the results of a calculation
-type CalculationResultForFormula struct {
-	Total				complex128
-	ContributionByTerm	[]complex128
+// PairMarshal can be marshaled and converted to a Pair
+type PairMarshal struct {
+	XLatticeVector			*utility.ComplexNumberForMarshal	`json:"x_lattice_vector" yaml:"x_lattice_vector"`
+	YLatticeVector			*utility.ComplexNumberForMarshal	`json:"y_lattice_vector" yaml:"y_lattice_vector"`
 }
 
-// LatticeVectorPairMarshal can be marshaled and converted to a LatticeVectorPair
-type LatticeVectorPairMarshal struct {
-	XLatticeVector			utility.ComplexNumberForMarshal	`json:"x_lattice_vector" yaml:"x_lattice_vector"`
-	YLatticeVector			utility.ComplexNumberForMarshal	`json:"y_lattice_vector" yaml:"y_lattice_vector"`
-}
-
-// LatticeVectorPair defines the shape of the wallpaper lattice.
-type LatticeVectorPair struct {
+// Pair defines the shape of the wallpaper lattice.
+type Pair struct {
 	XLatticeVector			complex128
 	YLatticeVector			complex128
 }
@@ -40,7 +34,7 @@ func vectorsAreCollinear(vector1 complex128, vector2 complex128) bool {
 }
 
 // Validate returns an error if this is an invalid formula.
-func(lattice LatticeVectorPair)Validate() error {
+func(lattice *Pair)Validate() error {
 	if vectorIsZero(lattice.XLatticeVector) || vectorIsZero(lattice.YLatticeVector) {
 		return errors.New(`lattice vectors cannot be (0,0)`)
 	}
@@ -57,7 +51,7 @@ func(lattice LatticeVectorPair)Validate() error {
 }
 
 // ConvertToLatticeCoordinates converts a point from cartesian coordinates to the lattice coordinates
-func (lattice LatticeVectorPair) ConvertToLatticeCoordinates(cartesianPoint complex128) complex128 {
+func (lattice *Pair) ConvertToLatticeCoordinates(cartesianPoint complex128) complex128 {
 
 	vector1 := lattice.XLatticeVector
 	vector2 := lattice.YLatticeVector

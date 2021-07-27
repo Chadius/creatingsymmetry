@@ -4,10 +4,10 @@ output_size:
   width: 800
   height: 600
 sample_space:
-  minx: -2e0
-  miny: -2e0
-  maxx: 2e0
-  maxy: 2e0
+  minx: -8e-1
+  miny: -8e-1
+  maxx: 8e-1
+  maxy: 8e-1
 color_value_space:
   minx: -10e-1
   miny: -10e-1
@@ -188,20 +188,18 @@ skip_generic_wallpaper_formula:
           -
             power_n: 3
             power_m: 1
-generic_wallpaper_formula:
-  vector_width: -2
-  vector_height: 0.5
-  formula:
-    desired_symmetry: p2
-    multiplier:
-      real: 1
-      imaginary: 0.5
-    wave_packets:
-      -
-        multiplier:
-          real: 2
-          imaginary: 0
-        terms:
-          -
-            power_n: 2
-            power_m: -1
+lattice_pattern:
+  lattice_type: hexagonal
+  multiplier:
+    real: 1.0
+    imaginary: 2e-5
+  wave_packets:
+    -
+      multiplier:
+        real: 1
+        imaginary: 0
+      terms:
+        -
+          power_n: 5
+          power_m: 1
+  desired_symmetry: p6

@@ -5,6 +5,7 @@ import (
 	"testing"
 	"wallpaper/entities/formula"
 	"wallpaper/entities/formula/coefficient"
+	"wallpaper/entities/formula/latticevector"
 	"wallpaper/entities/utility"
 )
 
@@ -18,7 +19,7 @@ func (suite *EisensteinFormulaSuite) SetUpTest(checker *C) {
 }
 
 func (suite *EisensteinFormulaSuite) TestCalculateEisensteinTermForGivenPoint(checker *C) {
-	squareLatticePair := formula.LatticeVectorPair{
+	squareLatticePair := latticevector.Pair{
 		XLatticeVector: complex(1, 0),
 		YLatticeVector: complex(0, 1),
 	}

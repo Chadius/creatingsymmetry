@@ -1,17 +1,20 @@
-package formula_test
+package latticevector_test
 
 import (
 	. "gopkg.in/check.v1"
-	"wallpaper/entities/formula"
+	"testing"
+	"wallpaper/entities/formula/latticevector"
 	"wallpaper/entities/utility"
 )
+
+func Test(t *testing.T) { TestingT(t) }
 
 type LatticeVectorSuite struct {}
 
 var _ = Suite(&LatticeVectorSuite{})
 
 func (suite *LatticeVectorSuite) TestVectorCannotBeZero(checker *C) {
-	badLatticeFormula := formula.LatticeVectorPair{
+	badLatticeFormula := latticevector.Pair{
 		XLatticeVector: complex(0, 0),
 		YLatticeVector: complex(0, 1),
 	}
@@ -20,7 +23,7 @@ func (suite *LatticeVectorSuite) TestVectorCannotBeZero(checker *C) {
 }
 
 func (suite *LatticeVectorSuite) TestVectorsCannotBeCollinear(checker *C) {
-	badLatticeFormula := formula.LatticeVectorPair{
+	badLatticeFormula := latticevector.Pair{
 		XLatticeVector: complex(1, 1),
 		YLatticeVector: complex(-2, -2),
 	}
@@ -29,7 +32,7 @@ func (suite *LatticeVectorSuite) TestVectorsCannotBeCollinear(checker *C) {
 }
 
 func (suite *LatticeVectorSuite) TestGoodLatticeVectorsAreValid(checker *C) {
-	squareLatticeFormula := formula.LatticeVectorPair{
+	squareLatticeFormula := latticevector.Pair{
 		XLatticeVector: complex(1, 0),
 		YLatticeVector: complex(0, 1),
 	}
@@ -38,7 +41,7 @@ func (suite *LatticeVectorSuite) TestGoodLatticeVectorsAreValid(checker *C) {
 }
 
 func (suite *LatticeVectorSuite) TestConvertToLatticeVector(checker *C) {
-	squareLatticeFormula := formula.LatticeVectorPair{
+	squareLatticeFormula := latticevector.Pair{
 		XLatticeVector: complex(1, 0),
 		YLatticeVector: complex(0, 1),
 	}
@@ -49,7 +52,7 @@ func (suite *LatticeVectorSuite) TestConvertToLatticeVector(checker *C) {
 }
 
 func (suite *LatticeVectorSuite) TestConvertToLatticeVectorNonPerpendicularVectors(checker *C) {
-	squareLatticeFormula := formula.LatticeVectorPair{
+	squareLatticeFormula := latticevector.Pair{
 		XLatticeVector: complex(0.5, 1),
 		YLatticeVector: complex(0.5, -1),
 	}
@@ -60,7 +63,7 @@ func (suite *LatticeVectorSuite) TestConvertToLatticeVectorNonPerpendicularVecto
 }
 
 func (suite *LatticeVectorSuite) TestConvertToLatticeVectorEvenIfFirstVectorHasZeroRealComponent(checker *C) {
-	squareLatticeFormulaWithFlippedVectors := formula.LatticeVectorPair{
+	squareLatticeFormulaWithFlippedVectors := latticevector.Pair{
 		XLatticeVector: complex(0, 1),
 		YLatticeVector: complex(1, 0),
 	}

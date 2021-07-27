@@ -1,31 +1,29 @@
-package wavepacket_test
+package wallpaper_test
 
 import (
 	. "gopkg.in/check.v1"
 	"math"
 	"math/cmplx"
-	"testing"
 	"wallpaper/entities/formula"
 	"wallpaper/entities/formula/coefficient"
-	"wallpaper/entities/formula/wavepacket"
+	"wallpaper/entities/formula/latticevector"
+	"wallpaper/entities/formula/wallpaper"
 	"wallpaper/entities/utility"
 )
 
-func Test(t *testing.T) { TestingT(t) }
-
 type WaveFormulaTests struct {
-	hexLatticeVectors *formula.LatticeVectorPair
-	hexagonalWavePacket *wavepacket.WavePacket
+	hexLatticeVectors *latticevector.Pair
+	hexagonalWavePacket *wallpaper.WavePacket
 }
 
 var _ = Suite(&WaveFormulaTests{})
 
 func (suite *WaveFormulaTests) SetUpTest(checker *C) {
-	suite.hexLatticeVectors = &formula.LatticeVectorPair{
+	suite.hexLatticeVectors = &latticevector.Pair{
 		XLatticeVector: complex(1,0),
 		YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 	}
-	suite.hexagonalWavePacket = &wavepacket.WavePacket{
+	suite.hexagonalWavePacket = &wallpaper.WavePacket{
 
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
@@ -108,7 +106,7 @@ func (suite *WaveFormulaTests) TestWaveFormulaMarshalFromJson(checker *C) {
 					}
 				]
 	}`)
-	wave, err := wavepacket.NewWaveFormulaFromJSON(jsonByteStream)
+	wave, err := wallpaper.NewWaveFormulaFromJSON(jsonByteStream)
 	checker.Assert(err, IsNil)
 	checker.Assert(real(wave.Multiplier), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
 	checker.Assert(imag(wave.Multiplier), utility.NumericallyCloseEnough{}, 2e-2, 1e-6)
@@ -129,7 +127,7 @@ terms:
       real: -1.0
       imaginary: 2e-2
 `)
-	wave, err := wavepacket.NewWaveFormulaFromYAML(yamlByteStream)
+	wave, err := wallpaper.NewWaveFormulaFromYAML(yamlByteStream)
 	checker.Assert(err, IsNil)
 	checker.Assert(real(wave.Multiplier), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
 	checker.Assert(imag(wave.Multiplier), utility.NumericallyCloseEnough{}, 2e-2, 1e-6)
@@ -137,66 +135,30 @@ terms:
 	checker.Assert(wave.Terms[0].PowerN, Equals, 12)
 }
 
-func (suite *WaveFormulaTests) TestSetUpUsesMultipliers(checker *C) {
-	wallPaperWithOddSumTerms := &wavepacket.WallpaperFormula{
-		WavePackets: []*wavepacket.WavePacket{
-			{
-				Terms: []*formula.EisensteinFormulaTerm{
-					{
-						PowerN: -3,
-						PowerM: 4,
-					},
-				},
-				Multiplier: complex(5, 2),
-			},
-		},
-		Multiplier:  complex(10, 5),
-		Lattice:     nil,
-	}
-
-	wallPaperWithOddSumTerms.SetUp([]coefficient.Relationship{
-		coefficient.PlusNPlusM,
-		coefficient.MinusMMinusN,
-		coefficient.PlusMMinusSumNAndM,
-	})
-
-	baseTerm := wallPaperWithOddSumTerms.WavePackets[0].Terms[0]
-	checker.Assert(wallPaperWithOddSumTerms.WavePackets[0].Terms, HasLen, 4)
-
-	checker.Assert(wallPaperWithOddSumTerms.WavePackets[0].Terms[1].PowerN, Equals, baseTerm.PowerN)
-	checker.Assert(wallPaperWithOddSumTerms.WavePackets[0].Terms[1].PowerM, Equals, baseTerm.PowerM)
-
-	checker.Assert(wallPaperWithOddSumTerms.WavePackets[0].Terms[2].PowerN, Equals, -1 * baseTerm.PowerM)
-	checker.Assert(wallPaperWithOddSumTerms.WavePackets[0].Terms[2].PowerM, Equals, -1 * baseTerm.PowerN)
-
-	checker.Assert(wallPaperWithOddSumTerms.WavePackets[0].Terms[3].PowerN, Equals, baseTerm.PowerM)
-	checker.Assert(wallPaperWithOddSumTerms.WavePackets[0].Terms[3].PowerM, Equals, -1 * (baseTerm.PowerN + baseTerm.PowerM))
-}
-
 type WavePacketRelationshipTest struct {
-	aPlusNPlusMOddWavePacket *wavepacket.WavePacket
-	aPlusMMinusNOddWavePacket *wavepacket.WavePacket
-	aPlusMPlusNOddWavePacket *wavepacket.WavePacket
-	aMinusNMinusMOddWavePacket *wavepacket.WavePacket
-	aMinusMMinusNOddWavePacket *wavepacket.WavePacket
-	aMinusMPlusNOddWavePacket *wavepacket.WavePacket
-	aPlusMPlusNOddNegatedWavePacket *wavepacket.WavePacket
-	aMinusSumNAndMPlusNOddWavePacket *wavepacket.WavePacket
+	aPlusNPlusMOddWavePacket *wallpaper.WavePacket
+	aPlusMMinusNOddWavePacket *wallpaper.WavePacket
+	aPlusMPlusNOddWavePacket *wallpaper.WavePacket
+	aMinusNMinusMOddWavePacket *wallpaper.WavePacket
+	aMinusMMinusNOddWavePacket *wallpaper.WavePacket
+	aMinusMPlusNOddWavePacket *wallpaper.WavePacket
+	aPlusMPlusNOddNegatedWavePacket *wallpaper.WavePacket
+	aMinusSumNAndMPlusNOddWavePacket *wallpaper.WavePacket
 
-	aPlusNPlusMEvenWavePacket *wavepacket.WavePacket
-	aPlusMPlusNEvenWavePacket *wavepacket.WavePacket
-	aPlusMPlusNEvenNegatedWavePacket *wavepacket.WavePacket
-	aMinusMMinusNOddNegatedWavePacket *wavepacket.WavePacket
-	aMinusMMinusNEvenWavePacket *wavepacket.WavePacket
-	aMinusMMinusNEvenNegatedWavePacket *wavepacket.WavePacket
-	aPlusMMinusSumNAndMOddWavePacket *wavepacket.WavePacket
-	aMinusSumNAndMPlusNWavePacket *wavepacket.WavePacket
+	aPlusNPlusMEvenWavePacket *wallpaper.WavePacket
+	aPlusMPlusNEvenWavePacket *wallpaper.WavePacket
+	aPlusMPlusNEvenNegatedWavePacket *wallpaper.WavePacket
+	aMinusMMinusNOddNegatedWavePacket *wallpaper.WavePacket
+	aMinusMMinusNEvenWavePacket *wallpaper.WavePacket
+	aMinusMMinusNEvenNegatedWavePacket *wallpaper.WavePacket
+	aPlusMMinusSumNAndMOddWavePacket *wallpaper.WavePacket
+	aMinusSumNAndMPlusNWavePacket *wallpaper.WavePacket
 }
 
 var _ = Suite(&WavePacketRelationshipTest{})
 
 func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
-	suite.aPlusNPlusMOddWavePacket = &wavepacket.WavePacket{
+	suite.aPlusNPlusMOddWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -1,
@@ -205,7 +167,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		},
 		Multiplier: complex(2, 1),
 	}
-	suite.aPlusMPlusNOddWavePacket = &wavepacket.WavePacket{
+	suite.aPlusMPlusNOddWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     4,
@@ -214,7 +176,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		},
 		Multiplier: complex(2, 1),
 	}
-	suite.aMinusNMinusMOddWavePacket = &wavepacket.WavePacket{
+	suite.aMinusNMinusMOddWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     1,
@@ -223,7 +185,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		},
 		Multiplier: complex(2, 1),
 	}
-	suite.aMinusMMinusNOddWavePacket = &wavepacket.WavePacket{
+	suite.aMinusMMinusNOddWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -4,
@@ -232,7 +194,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		},
 		Multiplier: complex(2, 1),
 	}
-	suite.aPlusMMinusNOddWavePacket = &wavepacket.WavePacket{
+	suite.aPlusMMinusNOddWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     4,
@@ -241,7 +203,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		},
 		Multiplier: complex(2, 1),
 	}
-	suite.aMinusMPlusNOddWavePacket = &wavepacket.WavePacket{
+	suite.aMinusMPlusNOddWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -4,
@@ -250,7 +212,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		},
 		Multiplier: complex(2, 1),
 	}
-	suite.aPlusMPlusNOddNegatedWavePacket = &wavepacket.WavePacket{
+	suite.aPlusMPlusNOddNegatedWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     4,
@@ -259,7 +221,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		},
 		Multiplier: complex(-2, -1),
 	}
-	suite.aMinusMMinusNOddNegatedWavePacket = &wavepacket.WavePacket{
+	suite.aMinusMMinusNOddNegatedWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -4,
@@ -268,7 +230,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		},
 		Multiplier: complex(-2, -1),
 	}
-	suite.aPlusMMinusSumNAndMOddWavePacket = &wavepacket.WavePacket{
+	suite.aPlusMMinusSumNAndMOddWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     4,
@@ -277,7 +239,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		},
 		Multiplier: complex(2, 1),
 	}
-	suite.aMinusSumNAndMPlusNWavePacket = &wavepacket.WavePacket{
+	suite.aMinusSumNAndMPlusNWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -3,
@@ -286,7 +248,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		},
 		Multiplier: complex(2, 1),
 	}
-	suite.aMinusSumNAndMPlusNOddWavePacket = &wavepacket.WavePacket{
+	suite.aMinusSumNAndMPlusNOddWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -3,
@@ -296,7 +258,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(2, 1),
 	}
 
-	suite.aPlusNPlusMEvenWavePacket = &wavepacket.WavePacket{
+	suite.aPlusNPlusMEvenWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -6,
@@ -305,7 +267,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		},
 		Multiplier: complex(2, 1),
 	}
-	suite.aPlusMPlusNEvenWavePacket = &wavepacket.WavePacket{
+	suite.aPlusMPlusNEvenWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     2,
@@ -314,7 +276,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		},
 		Multiplier: complex(2, 1),
 	}
-	suite.aPlusMPlusNEvenNegatedWavePacket = &wavepacket.WavePacket{
+	suite.aPlusMPlusNEvenNegatedWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     2,
@@ -323,7 +285,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		},
 		Multiplier: complex(-2, -1),
 	}
-	suite.aMinusMMinusNEvenWavePacket = &wavepacket.WavePacket{
+	suite.aMinusMMinusNEvenWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -2,
@@ -332,7 +294,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		},
 		Multiplier: complex(2, 1),
 	}
-	suite.aMinusMMinusNEvenNegatedWavePacket = &wavepacket.WavePacket{
+	suite.aMinusMMinusNEvenNegatedWavePacket = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN:     -2,
@@ -345,11 +307,11 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 
 func (suite *WavePacketRelationshipTest) TestLessThanTwoWavePacketsHasNoRelationship(checker *C) {
 	checker.Assert(
-		wavepacket.GetWavePacketRelationship(nil, nil),
+		wallpaper.GetWavePacketRelationship(nil, nil),
 		HasLen, 0)
 
 	checker.Assert(
-		wavepacket.GetWavePacketRelationship(
+		wallpaper.GetWavePacketRelationship(
 			suite.aPlusNPlusMOddWavePacket,
 			nil,
 		),
@@ -357,7 +319,7 @@ func (suite *WavePacketRelationshipTest) TestLessThanTwoWavePacketsHasNoRelation
 }
 
 func (suite *WavePacketRelationshipTest) TestPlusNPlusM(checker *C) {
-	relationshipsFound := wavepacket.GetWavePacketRelationship(
+	relationshipsFound := wallpaper.GetWavePacketRelationship(
 		suite.aPlusNPlusMOddWavePacket,
 		suite.aPlusNPlusMOddWavePacket,
 	)
@@ -367,7 +329,7 @@ func (suite *WavePacketRelationshipTest) TestPlusNPlusM(checker *C) {
 }
 
 func (suite *WavePacketRelationshipTest) TestMinusNMinusM(checker *C) {
-	relationshipsFound := wavepacket.GetWavePacketRelationship(
+	relationshipsFound := wallpaper.GetWavePacketRelationship(
 		suite.aPlusNPlusMOddWavePacket,
 		suite.aMinusNMinusMOddWavePacket,
 	)
@@ -377,7 +339,7 @@ func (suite *WavePacketRelationshipTest) TestMinusNMinusM(checker *C) {
 }
 
 func (suite *WavePacketRelationshipTest) TestMinusMMinusN(checker *C) {
-	relationshipsFound := wavepacket.GetWavePacketRelationship(
+	relationshipsFound := wallpaper.GetWavePacketRelationship(
 		suite.aPlusNPlusMOddWavePacket,
 		suite.aMinusMMinusNOddWavePacket,
 	)
@@ -387,33 +349,33 @@ func (suite *WavePacketRelationshipTest) TestMinusMMinusN(checker *C) {
 }
 
 func (suite *WavePacketRelationshipTest) TestPlusMPlusNMaybeFlipScale(checker *C) {
-	relationshipsFound := wavepacket.GetWavePacketRelationship(
+	relationshipsFound := wallpaper.GetWavePacketRelationship(
 		suite.aPlusNPlusMOddWavePacket,
 		suite.aPlusMPlusNOddNegatedWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 1)
-	checker.Assert(wavepacket.ContainsRelationship(relationshipsFound, coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum), Equals, true)
+	checker.Assert(wallpaper.ContainsRelationship(relationshipsFound, coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum), Equals, true)
 
-	relationshipsFound = wavepacket.GetWavePacketRelationship(
+	relationshipsFound = wallpaper.GetWavePacketRelationship(
 		suite.aPlusNPlusMEvenWavePacket,
 		suite.aPlusMPlusNEvenNegatedWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 0)
 
-	relationshipsFound = wavepacket.GetWavePacketRelationship(
+	relationshipsFound = wallpaper.GetWavePacketRelationship(
 		suite.aPlusNPlusMEvenWavePacket,
 		suite.aPlusMPlusNEvenWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 2)
-	checker.Assert(wavepacket.ContainsRelationship(relationshipsFound, coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum), Equals, true)
-	checker.Assert(wavepacket.ContainsRelationship(relationshipsFound, coefficient.PlusMPlusN), Equals, true)
+	checker.Assert(wallpaper.ContainsRelationship(relationshipsFound, coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum), Equals, true)
+	checker.Assert(wallpaper.ContainsRelationship(relationshipsFound, coefficient.PlusMPlusN), Equals, true)
 }
 
 func (suite *WavePacketRelationshipTest) TestMinusMMinusNMaybeFlipScale(checker *C) {
-	relationshipsFound := wavepacket.GetWavePacketRelationship(
+	relationshipsFound := wallpaper.GetWavePacketRelationship(
 		suite.aPlusNPlusMOddWavePacket,
 		suite.aMinusMMinusNOddNegatedWavePacket,
 	)
@@ -421,16 +383,16 @@ func (suite *WavePacketRelationshipTest) TestMinusMMinusNMaybeFlipScale(checker 
 	checker.Assert(relationshipsFound, HasLen, 1)
 	checker.Assert(relationshipsFound[0], Equals, coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum)
 
-	relationshipsFound = wavepacket.GetWavePacketRelationship(
+	relationshipsFound = wallpaper.GetWavePacketRelationship(
 		suite.aPlusNPlusMEvenWavePacket,
 		suite.aMinusMMinusNEvenWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 2)
-	checker.Assert(wavepacket.ContainsRelationship(relationshipsFound, coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum), Equals, true)
-	checker.Assert(wavepacket.ContainsRelationship(relationshipsFound, coefficient.MinusMMinusN), Equals, true)
+	checker.Assert(wallpaper.ContainsRelationship(relationshipsFound, coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum), Equals, true)
+	checker.Assert(wallpaper.ContainsRelationship(relationshipsFound, coefficient.MinusMMinusN), Equals, true)
 
-	relationshipsFound = wavepacket.GetWavePacketRelationship(
+	relationshipsFound = wallpaper.GetWavePacketRelationship(
 		suite.aPlusNPlusMEvenWavePacket,
 		suite.aMinusMMinusNEvenNegatedWavePacket,
 	)
@@ -439,7 +401,7 @@ func (suite *WavePacketRelationshipTest) TestMinusMMinusNMaybeFlipScale(checker 
 }
 
 func (suite *WavePacketRelationshipTest) TestPlusMMinusSumNAndM(checker *C) {
-	relationshipsFound := wavepacket.GetWavePacketRelationship(
+	relationshipsFound := wallpaper.GetWavePacketRelationship(
 		suite.aPlusNPlusMOddWavePacket,
 		suite.aPlusMMinusSumNAndMOddWavePacket,
 	)
@@ -449,7 +411,7 @@ func (suite *WavePacketRelationshipTest) TestPlusMMinusSumNAndM(checker *C) {
 }
 
 func (suite *WavePacketRelationshipTest) TestMinusSumNAndMPlusN(checker *C) {
-	relationshipsFound := wavepacket.GetWavePacketRelationship(
+	relationshipsFound := wallpaper.GetWavePacketRelationship(
 		suite.aPlusNPlusMOddWavePacket,
 		suite.aMinusSumNAndMPlusNOddWavePacket,
 	)
@@ -459,7 +421,7 @@ func (suite *WavePacketRelationshipTest) TestMinusSumNAndMPlusN(checker *C) {
 }
 
 func (suite *WavePacketRelationshipTest) TestPlusMMinusN(checker *C) {
-	relationshipsFound := wavepacket.GetWavePacketRelationship(
+	relationshipsFound := wallpaper.GetWavePacketRelationship(
 		suite.aPlusNPlusMOddWavePacket,
 		suite.aPlusMMinusNOddWavePacket,
 	)
@@ -469,7 +431,7 @@ func (suite *WavePacketRelationshipTest) TestPlusMMinusN(checker *C) {
 }
 
 func (suite *WavePacketRelationshipTest) TestMinusMPlusN(checker *C) {
-	relationshipsFound := wavepacket.GetWavePacketRelationship(
+	relationshipsFound := wallpaper.GetWavePacketRelationship(
 		suite.aPlusNPlusMOddWavePacket,
 		suite.aMinusMPlusNOddWavePacket,
 	)

@@ -1,10 +1,11 @@
-package wavepacket
+package wallpaper
 
 import (
 	"encoding/json"
 	"gopkg.in/yaml.v2"
 	"wallpaper/entities/formula"
 	"wallpaper/entities/formula/coefficient"
+	"wallpaper/entities/formula/result"
 	"wallpaper/entities/utility"
 )
 
@@ -22,8 +23,8 @@ type WavePacket struct {
 }
 
 // Calculate takes the complex number zInLatticeCoordinates and processes it using the mathematical terms.
-func (waveFormula WavePacket) Calculate(zInLatticeCoordinates complex128) *formula.CalculationResultForFormula {
-	result := &formula.CalculationResultForFormula{
+func (waveFormula WavePacket) Calculate(zInLatticeCoordinates complex128) *result.CalculationResultForFormula {
+	result := &result.CalculationResultForFormula{
 		Total: complex(0,0),
 		ContributionByTerm: []complex128{},
 	}

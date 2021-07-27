@@ -1,7 +1,10 @@
-package wavepacket
+package wallpaper
 
-import "wallpaper/entities/formula"
+import (
+	"wallpaper/entities/formula"
+)
 
+// addNewWavePacketsBasedOnSymmetry creates new WavePackets based on the given term, multiplier and desired symmetry
 func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, multiplier complex128, desiredSymmetry Symmetry, newWavePackets []*WavePacket) []*WavePacket {
 	powerN := term.PowerN
 	powerM := term.PowerM
@@ -236,7 +239,7 @@ const (
 	Cmm  Symmetry = "cmm"
 	Pm   Symmetry = "pm"
 	Pg   Symmetry = "pg"
-	Pgg   Symmetry = "pgg"
-	Pmm   Symmetry = "pmm"
-	Pmg   Symmetry = "pmg"
+	Pgg  Symmetry = "pgg"
+	Pmm  Symmetry = "pmm"
+	Pmg  Symmetry = "pmg"
 )
