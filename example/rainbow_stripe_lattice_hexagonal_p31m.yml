@@ -1,5 +1,5 @@
 sample_source_filename: example/rainbow_stripe.png
-output_filename: example/rainbow_stripe_hexagonal_p31m.png
+output_filename: example/rainbow_stripe_lattice_hexagonal_p31m.png
 output_size:
   width: 198
   height: 198
@@ -13,16 +13,6 @@ color_value_space:
   maxx: 20e-1
   miny: -12e-1
   maxy: 60e-1
-no_frieze_formula:
-  terms:
-  -
-    multiplier:
-      real: -1.0
-      imaginary: 2e-2
-    power_n: 3
-    power_m: 1
-    coefficient_relationships:
-      - "-M-NF(N+M)"
 lattice_pattern:
   lattice_type: hexagonal
   multiplier:

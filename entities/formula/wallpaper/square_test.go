@@ -74,7 +74,6 @@ func (suite *SquareWallpaper) TestCalculationOfPoints (checker *C) {
 }
 
 type SquareWallpaperHasSymmetryTest struct {
-	baseWavePacket *wallpaper.WavePacket // TODO delete this
 	wallpaperMultiplier complex128
 }
 
