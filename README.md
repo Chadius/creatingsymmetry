@@ -1,41 +1,46 @@
-# creating-symmetry
-Create symmetrical wallpapers using math.
+# Symmetrical Pattern Generator
+This program lets you transform an image in to an image with symmetrical pattern. Just supply a base image and a formula to get started.
 
-There are many types of symmetries you can create using a single image.
-- Rotational: You can rotate an image around a single point.
-- Translational: You can move and shift an image in a direction.
-- Mirror: You can make a reflection of an image so everything perpendicular to the mirror line is the same distance away.
+![Image with 7 horizontal stripes creating the rainbow with white on top and black on the bottom. Rainbow Stripe](example/rainbow_stripe.png)
 
-After reading [Creating Symmetry](https://www.amazon.com/Creating-Symmetry-Mathematics-Wallpaper-Patterns/dp/0691161739), I looked around and didn't find a program that would do it. So time to build my own program, in Go.
+![Transformed rainbow stripe image into rosette with 3 rotational symmetry](example/rainbow_stripe_rosette_1.png)
+![Transformed rainbow stripe image into frieze with p11g symmetry, with blue and yellow hourglasses in a green background](example/rainbow_stripe_frieze_p11g.png)
 
-Give it a base image, tweak some parameters, wait for the image to render, keep tweaking it until it looks good.
+TODO: Example starting picture and several pictures here
 
-## NOTES
-Types to support:
+## Installation
+This program is written in [Go](https://golang.org/), so download that first.
 
-Rosette
-Frieze
-17 wallpaper types
-3D shapes
-Hyperbolic
+`go install` will download the other required libraries:
+- yaml
+- ginkgo
+- gomega
+- check
 
-Color changing
+You will also need a source image to generate patterns with. I included one in `source/rainbow_stripe.png`.
 
-### Research notes
-#### Program min and max range
-After calculating the destination you need to
-- Calculate the min & max bounds
-- Interpolate against those ranges to pick from the color wheel
+## How to run
+`make run` Looks for the file `data/formula.yml` to find the source image, the type of pattern to use and other settings.
 
-#### Export preview pics
-Export to a 200x200 stamp that is quick to calculate
-Export with a rotating file name so you can look at old previews
+Rename the `data/formula.yml.example` file to see it in action.
 
-#### Formula stuff
-Make formula objects
+## Types of patterns
+**Rosette** patterns surround the center of the image, expanding outward forever.
 
-### Objects
-Transformation - Rosette, Frieze, Wallpaper, 3D projection
-Merge options
-Projection - Euclidean or Hyperbolic?
-Palette Selection - chooses the color range
+TODO: Show examples of rosettes here.
+
+**Frieze** patterns expand horizontally forever but usually have a finite height.
+
+TODO: Show examples of Friezes here.
+
+**Lattice** patterns tend to repeat using a given 4 sided shape called a lattice. They expand horizontally and vertically. 
+
+TODO: Show examples of Lattices here.
+
+## How to test
+- `make test` Runs the unit tests.
+- `make lint` Runs the linter
+
+## Inspiration
+[Creating Symmetry](https://www.amazon.com/Creating-Symmetry-Mathematics-Wallpaper-Patterns/dp/0691161739) by Frank Farris shows the 
+math behind the patterns and inspired me to make this. Prepare for group theory and lots of complex numbers.

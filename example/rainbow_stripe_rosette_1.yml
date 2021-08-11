@@ -1,28 +1,28 @@
 sample_source_filename: example/rainbow_stripe.png
-output_filename: example/rainbow_stripe_frieze_p11g.png
+output_filename: example/rainbow_stripe_rosette_1.png
 output_size:
   width: 198
   height: 198
 sample_space:
-  minx: -29e-1
-  maxx: 29e-1
-  miny: -9e-1
-  maxy: 9e-1
+  minx: -8e-1
+  miny: -8e-1
+  maxx: 8e-1
+  maxy: 8e-1
 color_value_space:
-  minx: -1.1e1
-  maxx: 1.1e1
-  miny: -1.8e1
-  maxy: 1.8e1
-frieze_formula:
+  minx: -4e1
+  maxx: 4e1
+  miny: -6e1
+  maxy: 2e1
+rosette_formula:
   terms:
-  -
-    multiplier:
+  - multiplier:
       real: -1.0
       imaginary: 2e-2
     power_n: 3
-    power_m: 1
+    power_m: 0
     coefficient_relationships:
-      - "-M-NF(N+M)"
+      - -M-N
+      - "+M+NF(N+M)"
 no_lattice_pattern:
   lattice_type: hexagonal
   multiplier:
