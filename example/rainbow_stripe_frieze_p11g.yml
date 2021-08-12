@@ -23,18 +23,3 @@ frieze_formula:
     power_m: 1
     coefficient_relationships:
       - "-M-NF(N+M)"
-no_lattice_pattern:
-  lattice_type: hexagonal
-  multiplier:
-    real: 1.0
-    imaginary: 2e-5
-  wave_packets:
-    -
-      multiplier:
-        real: 1
-        imaginary: 0
-      terms:
-        -
-          power_n: 5
-          power_m: 1
-  desired_symmetry: p6

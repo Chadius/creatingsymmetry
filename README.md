@@ -5,8 +5,7 @@ This program lets you transform an image in to an image with symmetrical pattern
 
 ![Transformed rainbow stripe image into rosette with 3 rotational symmetry](example/rainbow_stripe_rosette_1.png)
 ![Transformed rainbow stripe image into frieze with p11g symmetry, with blue and yellow hourglasses in a green background](example/rainbow_stripe_frieze_p11g.png)
-
-TODO: Example starting picture and several pictures here
+![Transformed rainbow stripe image into hexagonal lattice with p31m symmetry, with purple, indigo and blue nodes against a transparent background](example/rainbow_stripe_lattice_hexagonal_p31m.png)
 
 ## Installation
 This program is written in [Go](https://golang.org/), so download that first.
@@ -26,14 +25,22 @@ Rename the `data/formula.yml.example` file to see it in action.
 
 ## Types of patterns
 **Rosette** patterns surround the center of the image, expanding outward forever.
+![Transformed rainbow stripe image into rosette with 3 rotational symmetry](example/rainbow_stripe_rosette_1.png)
+
+p3 symmetry [(Link to source file)](example/rainbow_stripe_rosette_1.yml)
 
 TODO: Show examples of rosettes here.
 
 **Frieze** patterns expand horizontally forever but usually have a finite height.
+![Transformed rainbow stripe image into frieze with p11g symmetry, with blue and yellow hourglasses in a green background](example/rainbow_stripe_frieze_p11g.png)
+p11g symmetry [(Link to source file)](example/rainbow_stripe_frieze_p11g.yml)
 
 TODO: Show examples of Friezes here.
 
-**Lattice** patterns tend to repeat using a given 4 sided shape called a lattice. They expand horizontally and vertically. 
+**Lattice** patterns tend to repeat using a given 4 sided shape called a lattice. They expand horizontally and vertically.
+![Transformed rainbow stripe image into hexagonal lattice with p31m symmetry, with purple, indigo and blue nodes against a transparent background](example/rainbow_stripe_lattice_hexagonal_p31m.png)
+
+Hexagonal lattice with p31m symmetry [(Link to source file)](example/rainbow_stripe_lattice_hexagonal_p31m.yml)
 
 TODO: Show examples of Lattices here.
 
