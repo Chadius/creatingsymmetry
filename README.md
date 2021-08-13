@@ -23,6 +23,8 @@ You will also need a source image to generate patterns with. I included one in `
 
 Rename the `data/formula.yml.example` file to see it in action.
 
+Look over [HERE](docs/common_options.md) to see common options used in every symmetry pattern file.
+
 ## Types of patterns
 **Rosette** patterns surround the center of the image, expanding outward forever.
 ![Transformed rainbow stripe image into rosette with 3 rotational symmetry](example/rainbow_stripe_rosette_1.png)
