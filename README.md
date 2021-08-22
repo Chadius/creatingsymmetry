@@ -3,9 +3,11 @@ This program lets you transform an image in to an image with symmetrical pattern
 
 ![Image with 7 horizontal stripes creating the rainbow with white on top and black on the bottom. Rainbow Stripe](example/rainbow_stripe.png)
 
-![Transformed rainbow stripe image into rosette with 3 rotational symmetry](example/rainbow_stripe_rosette_1.png)
-![Transformed rainbow stripe image into frieze with p11g symmetry, with blue and yellow hourglasses in a green background](example/rainbow_stripe_frieze_p11g.png)
-![Transformed rainbow stripe image into hexagonal lattice with p31m symmetry, with purple, indigo and blue nodes against a transparent background](example/rainbow_stripe_lattice_hexagonal_p31m.png)
+![Transformed rainbow stripe image into rosette with 3 rotational symmetry](example/rosettes/rainbow_stripe_rosette_1.png)
+![Transformed rainbow stripe image into frieze with p11g symmetry, with blue and yellow hourglasses in a green background](example/friezes/rainbow_stripe_frieze_p11g.png)
+![Transformed rainbow stripe image into hexagonal lattice with p31m symmetry, with purple, indigo and blue nodes against a transparent background](example/lattices/rainbow_stripe_lattice_hexagonal_p31m.png)
+
+I assume you're comfortable with [Go](https://golang.org/), YAML and a command line. You'll install this in go, write the formulas in YAML, and run this program on the command line to generate patterns.
 
 ## Installation
 This program is written in [Go](https://golang.org/), so download that first.
@@ -26,19 +28,33 @@ Rename the `data/formula.yml.example` file to see it in action.
 Look over [HERE](docs/common_options.md) to see common options used in every symmetry pattern file.
 
 ## Types of patterns
+### Rosette
 **Rosette** patterns surround the center of the image, expanding outward forever.
-![Transformed rainbow stripe image into rosette with 3 rotational symmetry](example/rainbow_stripe_rosette_1.png)
+![Transformed rainbow stripe image into rosette with 3 rotational symmetry, creating three yellow to purple petals on a orange and red striped background](example/rosettes/rainbow_stripe_rosette_1.png)
 
-p3 symmetry [(Link to source file)](example/rainbow_stripe_rosette_1.yml)
+p3 symmetry [(Link to source file)](example/rosettes/rainbow_stripe_rosette_1.yml)
 
+![Transformed rainbow stripe image into rosette with 4 rotational symmetry, creating purple and green petals on a blue background](example/rosettes/rainbow_stripe_rosette_2.png)
+
+p4 symmetry [(Link to source file)](example/rosettes/rainbow_stripe_rosette_2.yml)
+
+![Transformed rainbow stripe image into rosette with 5 rotational symmetry, creating a 10 point mostly green hubcap](example/rosettes/rainbow_stripe_rosette_3.png)
+
+p5 symmetry [(Link to source file)](example/rosettes/rainbow_stripe_rosette_3.yml)
+
+### Frieze
 **Frieze** patterns expand horizontally forever but usually have a finite height.
-![Transformed rainbow stripe image into frieze with p11g symmetry, with blue and yellow hourglasses in a green background](example/rainbow_stripe_frieze_p11g.png)
-p11g symmetry [(Link to source file)](example/rainbow_stripe_frieze_p11g.yml)
 
+![Transformed rainbow stripe image into frieze with p11g symmetry, with blue and yellow hourglasses in a green background](example/friezes/rainbow_stripe_frieze_p11g.png)
+
+p11g symmetry [(Link to source file)](example/friezes/rainbow_stripe_frieze_p11g.yml)
+
+### Lattice
 **Lattice** patterns tend to repeat using a given 4 sided shape called a lattice. They expand horizontally and vertically.
-![Transformed rainbow stripe image into hexagonal lattice with p31m symmetry, with purple, indigo and blue nodes against a transparent background](example/rainbow_stripe_lattice_hexagonal_p31m.png)
 
-Hexagonal lattice with p31m symmetry [(Link to source file)](example/rainbow_stripe_lattice_hexagonal_p31m.yml)
+![Transformed rainbow stripe image into hexagonal lattice with p31m symmetry, with purple, indigo and blue nodes against a transparent background](example/lattices/rainbow_stripe_lattice_hexagonal_p31m.png)
+
+Hexagonal lattice with p31m symmetry [(Link to source file)](example/lattices/rainbow_stripe_lattice_hexagonal_p31m.yml) If you look for repeating points, you may be able to make out the 6 solid blue dots surrounding the seventh central point. The underlying lattice creates a lattice.
 
 ## How to test
 - `make test` Runs the unit tests.
