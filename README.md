@@ -49,12 +49,20 @@ p5 symmetry [(Link to source file)](example/rosettes/rainbow_stripe_rosette_3.ym
 
 p11g symmetry [(Link to source file)](example/friezes/rainbow_stripe_frieze_p11g.yml)
 
+![Transformed rainbow stripe image into frieze with p2111 symmetry, like an orange branch with black notches separated by blue and white droplets](example/friezes/rainbow_stripe_frieze_p211.png)
+
+p211 symmetry [(Link to source file)](example/friezes/rainbow_stripe_frieze_p211.yml)
+
+![Transformed rainbow stripe image into frieze with p2mg symmetry, with multicolored spikes emerging from a green background](example/friezes/rainbow_stripe_frieze_p2mg.png)
+
+p2mg symmetry [(Link to source file)](example/friezes/rainbow_stripe_frieze_p2mg.yml)
+
 ### Lattice
 **Lattice** patterns tend to repeat using a given 4 sided shape called a lattice. They expand horizontally and vertically.
 
 ![Transformed rainbow stripe image into hexagonal lattice with p31m symmetry, with purple, indigo and blue nodes against a transparent background](example/lattices/rainbow_stripe_lattice_hexagonal_p31m.png)
 
-Hexagonal lattice with p31m symmetry [(Link to source file)](example/lattices/rainbow_stripe_lattice_hexagonal_p31m.yml) If you look for repeating points, you may be able to make out the 6 solid blue dots surrounding the seventh central point. The underlying lattice creates a lattice.
+Hexagonal lattice with p31m symmetry [(Link to source file)](example/lattices/rainbow_stripe_lattice_hexagonal_p31m.yml) If you look for repeating points, you may be able to make out the 6 solid blue dots surrounding the seventh central point. The underlying lattice can be stacked in a hexagon pattern.
 
 ## How to test
 - `make test` Runs the unit tests.
