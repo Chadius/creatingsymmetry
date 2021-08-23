@@ -1,0 +1,33 @@
+sample_source_filename: example/rainbow_stripe.png
+output_filename: example/lattices/rainbow_stripe_lattice_rectangular_pmg.png
+output_size:
+  width: 198
+  height: 198
+sample_space:
+  minx: -50e-2
+  maxx: 50e-2
+  miny: -50e-2
+  maxy: 50e-2
+color_value_space:
+  minx: -30e-1
+  maxx: 30e-1
+  miny: -12e0
+  maxy: 8e0
+lattice_pattern:
+  lattice_type: rectangular
+  lattice_size:
+    width: 0
+    height: 1.5
+  multiplier:
+    real: 1.0
+    imaginary: 0
+  wave_packets:
+    -
+      multiplier:
+        real: 1
+        imaginary: 1e0
+      terms:
+        -
+          power_n: 2
+          power_m: -5
+  desired_symmetry: pmg
