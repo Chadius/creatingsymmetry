@@ -24,13 +24,14 @@ How big do you want the resulting image?
 Write an object with `width` and `height` fields, both in pixels.
 
 Examples:
-```output_size:
+```yaml
+output_size:
   width: 500
   height: 300
 ```
 
-### Input space
-Sample mathematical values in this range.
+### Sample space
+Sample mathematical values in this range. You can think of it as zooming in/out your picture.
 
 Symmetry starts from `(minx, miny)`.
 It applies the formula you specify and saves the result.
@@ -49,30 +50,66 @@ Use a smaller input space so you remove the uninteresting 0 values and converge 
 
 Conversely, many values will instead grow so large they will escape to infinity. Your image will have a lot of transparency and maybe a blip of color at the center.
 
-### Sample space
+### Color value space
 The program applied the formula to your input space (see above) and now has a lot of transformed points. Now it has to use those points somehow.
 
-Sample space lets you say: “If the transformed point falls in this range, choose a color from the input image.” The transformed point is linearly mapped across the image, so values close to `(minx, miny)` will pick the upper left corners of the image, while `(maxx, maxy)` will pick the lower right.
+Color value space lets you say: “If the transformed point falls in this range, choose a color from the input image.” The transformed point is linearly mapped across the image, so values close to `(minx, miny)` will pick the upper left corners of the image, while `(maxx, maxy)` will pick the lower right.
+Most colors will be near (0,0), so choose your center where you want to see the majority of your colors.
 
 Symmetry generator won’t pick a color (and keep it transparent) if the transformed point:
 - escaped to infinity (or minus infinity) in X or Y coordinates.
 - is outside of the sample space.
 
-Like the input space, there is no “right” sample space. When you run this script it will show you the range of the transformed points.
+Like the sample space, there is no “right” color value space. When you run this script it will show you the range of the transformed points.
 
-#### Help, my colors are really thin with lots of transparency in the middle.
+##### Examples
+Because the rainbow stripe file is the same horizontally, it doesn't matter what we pick for minx and maxx, as long as our range isn't too narrow.
+So for these examples, we'll focus on miny and maxy.
 
-If your sample space is too small, you may be rejecting too many transformed values. Expand your sample space so it captures more transformed points.
+Let's take a look at a frieze file.
 
-#### Help, the output has too many colors and looks messy.
-If your sample space is too big, the transformed values will come from all over the photo. This might be too noisy.
+It has a balanced color value space, where (0,0) is near the center. The source image is a green stripe at the center, so the majority of the pattern is green.
+```yaml
+color_value_space:
+  minx: -1.1e1
+  maxx: 1.1e1
+  miny: -1.8e1
+  maxy: 1.8e1
+```
 
-Shrink your sample space or move the sample space so it covers a more homogenous area.
+![Transformed rainbow stripe image into frieze with p2mg symmetry, with multicolored spikes emerging from a green background](../example/friezes/rainbow_stripe_frieze_p2mg.png)
 
-#### Help, every output focuses on the center of my input image.
-These formulas tend to transform most values to near 0. If your sample space ranges from (-x, x) and (-y, y), this means (0,0) is the center of the sample space. Most of your output image will have those colors.
+[(Link to formula)](../example/friezes/rainbow_stripe_frieze_p2mg.yml)
 
-Move your sample space over to a different part of the image, so that the center is towards one of the corners. A range of (0, y) will pull the center output color to the top, for example.
+The bottom of the source image is orange/red, so let's shift miny and maxy in a negative direction. This will put most of the 0 values in the orange/red section.
+
+```yaml
+color_value_space:
+  minx: -1.1e1
+  maxx: 1.1e1
+  miny: -2.8e1
+  maxy: 0.8e1
+```
+![Transformed rainbow stripe image into frieze with p2mg symmetry, with multicolored spikes emerging from a checker board orange and red background](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.png)
+
+[(Link to formula)](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.yml)
+
+Now, let's say you want smaller valleys and you want to stretch them out more.
+You can increase the distance between extremes.
+More values will land in that range and will be drawn.
+
+```yaml
+color_value_space:
+  minx: -1.1e1
+  maxx: 1.1e1
+  miny: -5.8e1
+  maxy: 1.8e1
+  ```
+![Transformed rainbow stripe image into frieze with p2mg symmetry, with multicolored spikes emerging from an orange background with red valleys](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_extra_thick.png)
+
+[(Link to formula)](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_extra_thick.yml)
+
+This pulls the red away from the orange, maybe you don't like a checkerboard pattern.
 
 ## Formula
 The transformation part of the file itself varies based on the type. If there are multiple keys it will only transform with one of them. Here’s the priority:
