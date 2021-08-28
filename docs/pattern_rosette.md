@@ -1,17 +1,18 @@
 # Rosette
 
-**Rosette** patterns surround the center of the image, expanding outward.
-
-It's like a flower, where several petals surround the core and extend outward.
+**Rosette** patterns surround the center of the image, expanding outward. 
+Like a flower, rosettes have petals surrounding the core.
 All rosettes have rotational symmetry.
 
 ## Rosette anatomy
 
 ### Central Ring
-Rosettes have a transparent central ring. For these values, the formula transforms them to either undefined or infinity, and this program can't draw those, so it leaves it transparent. Depending on your color space, you can also change the size of the ring. 
+Rosettes have a transparent central ring.
+
+The size of the ring depends on your formula and your color space. 
 
 ### Petals
-Surrounding the ring, you will see some cool details as the original image is warped around the central ring. Flowers have petals surrounding their core, so I'll keep calling these petals.
+Surrounding the ring, you will see the original image warped around the central ring. I call these petals.
 
 Here is one example containing purple and green petals surrounding the ring. There are 4 pairs of petals, creating 8 petals total. 
 
@@ -20,7 +21,7 @@ Here is one example containing purple and green petals surrounding the ring. The
 [(link to formula)](../example/rosettes/rainbow_stripe_rosette_2.yml)
 
 ### Rosette border
-Zooming out will give a smaller ring, but it will also show you how far the pattern can go. At a certain point the formula pushes everything into infinity or undefined values.
+Zooming out will show you how the extent of the pattern.
 
 In this example, you can see 4 purple smudges on the extremities. You can also see 8 spikes and 8 gaps. Because the color space focuses on the blue stripe of the original image, most of this rosette is blue.  
 
@@ -28,16 +29,20 @@ In this example, you can see 4 purple smudges on the extremities. You can also s
 
 [(Link to formula)](../example/rosettes/rainbow_stripe_rosette_2_sample_space_2.yml)
 
-This pattern has 4 way rotational symmetry. I can rotate it 90 degrees and it will look exactly the same.
+By the way, this pattern has 4 way rotational symmetry. That's why there are 4 or 8 of everything.
+I can rotate this image 90 degrees and it will visually look the same, as if I didn't rotate it at all. I can do this 4 times total. The fourth rotation gets me back to the original image.
 
 ## Rosette Symmetry
-All rosettes have rotational symmetry. For example, this pattern has 3 way rotational symmetry. I can rotate it 3 ways without visually changing its look. The red stripes are 120 degrees away from each other.
+All rosettes have rotational symmetry.
+The red stripes are 120 degrees away from each other, 
+so I can rotate this 3 times without visually changing it.
+The third rotation gets me back to the original orientation.
 
 ![Transformed rainbow stripe image into rosette with 3 rotational symmetry, creating three yellow to purple petals on a orange and red striped background](../example/rosettes/rainbow_stripe_rosette_1.png)
 
 [(Link to formula)](../example/rosettes/rainbow_stripe_rosette_1.yml)
 
-This diagram has p3 symmetry. The 3 means we can rotate it 3 times without visually changing the image.
+This diagram has p3 symmetry. The "3" in p3 indicates how many times we can rotate it before returning to our original orientation.
 
 
 ![Transformed rainbow stripe image into rosette with 5 rotational symmetry, creating a 10 point mostly green hubcap](../example/rosettes/rainbow_stripe_rosette_3.png)
@@ -47,15 +52,15 @@ This diagram has p3 symmetry. The 3 means we can rotate it 3 times without visua
 Here is an example of p5 symmetry. There are 5 purple petals, 5 yellow petals, and 10 spikes, with 5 pairs of purple and yellow smudges along the edge.
 
 ## Making your own Rosette Formula
-* Your formula should have a `rosette_formula` key, followed by a series of terms.
-* Multiplier should be non-zero for real and imaginary terms.
-* You'll need to include these two `coefficient_relationships` values for each term.
+* Your formula should have a `rosette_formula` key, followed by a list of `terms`.
+* Each term's `multiplier` should be non-zero for `real` and `imaginary`. Otherwise, the term tends to degenerate and flatten into a single color.
+* Each `term` can include a list of `coefficient_relationships`. This will auto generate more terms with the same multiplier, but different powers.
 ```yaml
       coefficient_relationships:
         - -M-N
         - "+M+NF(N+M)"
 ```
-* `power_n` and `power_m` are integers and will help set up your desired symmetry (see "Rotational Symmetry", below.)
+* Each `term` must have `power_n` and `power_m`. These are non-zero integers and will help set up your desired symmetry (see "Rotational Symmetry", below.)
 
 ### Rotational Symmetry
 The powers of n and m are key to making your desired symmetry. Let's say you want pX symmetry, where X is the number of rotations. 

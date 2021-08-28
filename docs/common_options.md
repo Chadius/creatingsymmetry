@@ -55,10 +55,10 @@ sample_space:
 
 ![Transformed rainbow stripe image into rosette with 4 rotational symmetry, creating purple and green petals on a blue background](../example/rosettes/rainbow_stripe_rosette_2.png)
 
-[(Link to formula)](../example/rosettes/rainbow_stripe_rosette_2.yml)
+[(Formula)](../example/rosettes/rainbow_stripe_rosette_2.yml)
 
-Let's say I want to stretch the horizontal sample space. I want more detail along the horizontal space.
-I will reduce the distance between minx and maxx by half. I won't be able to see as much, though.
+I want to stretch the horizontal sample space and see more detail.
+I will reduce the distance between minx and maxx by half. In exchange for more detail, I don't get to see as much of the overall image.
 
 ```yaml
 sample_space:
@@ -72,8 +72,8 @@ sample_space:
 
 [(Link to formula)](../example/rosettes/rainbow_stripe_rosette_2_sample_space_1.yml)
 
-Let's zoom out and see what the extremes. Give a large distance between the x and y axes.
-We will lose detail but we get to see more of the pattern.
+Let's zoom out and see the extremes. Make a large distance between minx and maxx. Same thing for miny and maxy.
+
 ```yaml
 sample_space:
   minx: -64e-1
@@ -87,24 +87,26 @@ sample_space:
 [(Link to formula)](../example/rosettes/rainbow_stripe_rosette_2_sample_space_2.yml)
 
 ### Color value space
-The program applied the formula to your input space (see above) and now has a lot of transformed points. Now it has to use those points somehow.
+Each transformed point must correspond to a color from the original image.
+With the color value space, you can define how a transformed location will map to a pixel from your original image.
+Transformed points close to `minx` will use the left side of the image, while values close to `maxx` will use the right side.
+Similarly, `miny` values map to the bottom while `maxy` values map to the top.
 
-Color value space lets you say: “If the transformed point falls in this range, choose a color from the input image.” The transformed point is linearly mapped across the image, so values close to `(minx, miny)` will pick the upper left corners of the image, while `(maxx, maxy)` will pick the lower right.
-Most colors will be near (0,0), so choose your center where you want to see the majority of your colors.
+If the transformed value is out of bounds, no color is selected and the pixel will be transparent. Similarly, if the transformed value is infinity or undefined it will be transparent.
 
-Symmetry generator won’t pick a color (and keep it transparent) if the transformed point:
-- escaped to infinity (or minus infinity) in X or Y coordinates.
-- is outside of the sample space.
+Most transformed values will be near (0, 0), the center of color value space. You can control the center of the space to decide on the main color of your pattern. 
 
-Like the sample space, there is no “right” color value space. When you run this script it will show you the range of the transformed points.
+Like the sample space, there is no “right” color value space.
+If your image is mostly transparent, you color value space may be so small everything falls outside of its range and you need to use a larger range.
+Conversely if your image is a single color, your color value space may be too large and your results are rounding to the center of the image.
 
 ##### Examples
-Because the rainbow stripe file is the same horizontally, it doesn't matter what we pick for minx and maxx, as long as our range isn't too narrow.
-So for these examples, we'll focus on miny and maxy.
+Color space is easier to explain in one dimension, so these examples focus on `miny` and `maxy`.
+Also, the source image is a striped pattern, so it doesn't matter what I choose for `minx` and `maxx`.
 
-Let's take a look at a frieze file.
+Let's take a look at a frieze file. Because `miny` and `maxy` have the same distance from the center, the pattern's main color should be the same as the center of the source image.
 
-It has a balanced color value space, where (0,0) is near the center. The source image is a green stripe at the center, so the majority of the pattern is green.
+The green stripe is at the center, so the frieze pattern should be mostly green.
 ```yaml
 color_value_space:
   minx: -1.1e1
@@ -117,7 +119,7 @@ color_value_space:
 
 [(Link to formula)](../example/friezes/rainbow_stripe_frieze_p2mg.yml)
 
-The bottom of the source image is orange/red, so let's shift miny and maxy in a negative direction. This will put most of the 0 values in the orange/red section.
+Let's push the center towards the orange/red part of the source image. That lies near the bottom, so `miny` and `maxy`'s midpoint should be negative.
 
 ```yaml
 color_value_space:
@@ -130,9 +132,9 @@ color_value_space:
 
 [(Link to formula)](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.yml)
 
-Now, let's say you want smaller valleys and you want to stretch them out more.
-You can increase the distance between extremes.
-More values will land in that range and will be drawn.
+Values that fall out of this range become transparent. So if we increase the size of `miny` and `maxy` then more pixels will be drawn.
+Note how the valleys and peaks are more extreme.
+Also note how the orange stripe is dominant. If we expanded the range more, we would get more orange.
 
 ```yaml
 color_value_space:
@@ -147,11 +149,11 @@ color_value_space:
 
 This pulls the red away from the orange, maybe you don't like a checkerboard pattern.
 
-## Formula
-The transformation part of the file itself varies based on the type. If there are multiple keys it will only transform with one of them. Here’s the priority:
+## Transformation Formula
+Only one formula will be rendered at a time. Use exactly one of these keys, based on the transformation formula you want:
 
-- `lattice`
-- `frieze`
-- `rosette`
+* [lattice_formula](docs/pattern_lattice.md)
+* [frieze_formula](docs/pattern_frieze.md)
+* [rosette_formula](docs/pattern_rosette.md)
 
-So if you have a `lattice` and `rosette` section, this will create a lattice pattern.
+The formulas are listed in priority order. So if you include multiple, it will look for a lattice formula first, then frieze and finally rosette.
