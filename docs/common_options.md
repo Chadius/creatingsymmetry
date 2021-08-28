@@ -41,14 +41,50 @@ Then it moves on from minx to maxx and applies the formula again. It will sample
 
 What is the “right” input space varies by formula. If your input space is too large, you may pick uninteresting points that either converge to 0 or escape to infinity (so you’ll get one color or transparency.)
 
-#### Help! My output is a solid blob of just one color!
-Many values you can plug into the formula will converge towards 0. If your input space is too large, your result will be one solid color, usually at the center of your sample space.
+#### Examples
+Let's start with a rosette. They tend to have a hole at the center, a ring, and then some more detail around it.
+The sample space was selected to capture the "petals" that surround the ring.
 
-Use a smaller input space so you remove the uninteresting 0 values and converge on the fun stuff.
+```yaml
+sample_space:
+  minx: -8e-1
+  miny: -8e-1
+  maxx: 8e-1
+  maxy: 8e-1
+```
 
-#### Help! My output is one tiny blob in a transparent background!
+![Transformed rainbow stripe image into rosette with 4 rotational symmetry, creating purple and green petals on a blue background](../example/rosettes/rainbow_stripe_rosette_2.png)
 
-Conversely, many values will instead grow so large they will escape to infinity. Your image will have a lot of transparency and maybe a blip of color at the center.
+[(Link to formula)](../example/rosettes/rainbow_stripe_rosette_2.yml)
+
+Let's say I want to stretch the horizontal sample space. I want more detail along the horizontal space.
+I will reduce the distance between minx and maxx by half. I won't be able to see as much, though.
+
+```yaml
+sample_space:
+  minx: -4e-1
+  miny: -4e-1
+  maxx: 8e-1
+  maxy: 8e-1
+```
+
+![Transformed rainbow stripe image into rosette with 4 rotational symmetry, creating purple and green petals on a blue background](../example/rosettes/rainbow_stripe_rosette_2_sample_space_1.png)
+
+[(Link to formula)](../example/rosettes/rainbow_stripe_rosette_2_sample_space_1.yml)
+
+Let's zoom out and see what the extremes. Give a large distance between the x and y axes.
+We will lose detail but we get to see more of the pattern.
+```yaml
+sample_space:
+  minx: -64e-1
+  miny: -64e-1
+  maxx: 64e-1
+  maxy: 64e-1
+```
+
+![Transformed rainbow stripe image into rosette with 4 rotational symmetry, creating purple and green petals on a blue background](../example/rosettes/rainbow_stripe_rosette_2_sample_space_2.png)
+
+[(Link to formula)](../example/rosettes/rainbow_stripe_rosette_2_sample_space_2.yml)
 
 ### Color value space
 The program applied the formula to your input space (see above) and now has a lot of transformed points. Now it has to use those points somehow.

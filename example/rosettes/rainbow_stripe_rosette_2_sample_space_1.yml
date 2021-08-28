@@ -1,13 +1,13 @@
 sample_source_filename: example/rainbow_stripe.png
-output_filename: example/rosettes/rainbow_stripe_rosette_2_sample_space_2.png
+output_filename: example/rosettes/rainbow_stripe_rosette_2_sample_space_1.png
 output_size:
   width: 198
   height: 198
 sample_space:
-  minx: -64e-1
-  miny: -64e-1
-  maxx: 64e-1
-  maxy: 64e-1
+  minx: -4e-1
+  miny: -8e-1
+  maxx: 4e-1
+  maxy: 8e-1
 color_value_space:
   minx: -4e1
   maxx: 4e1
