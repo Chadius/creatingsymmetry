@@ -93,3 +93,21 @@ Or, `x + iy` becomes `x - iy`.
 If set to true, Rosettes and Friezes will only use each given point. This makes patterns much smaller as points tend to zoom off to infinity or become undefined at much smaller values. But the pattern tends to be more compact, with much more varied detail in the middle.
 
 If you want to try this out, include `ignore_complex_conjugate: true` next to each term.
+
+As an example, I turned the flag on for the blue p4 pattern and nothing else. Note how the ring only has 2 pairs petals, so this pattern is now p2 instead of p4.
+
+![Transformed rainbow stripe image into rosette with 4 rotational symmetry, creating purple and green petals on a blue background](../example/rosettes/rainbow_stripe_rosette_2.png)
+
+[(Original pattern that uses the Complex Conjugate)](../example/rosettes/rainbow_stripe_rosette_2.yml)
+
+![Transformed rainbow stripe image into rosette with 2 rotational symmetry, creating purple and green petals on a blue background](../example/rosettes/rainbow_stripe_rosette_2_ignore_complex_conjugate.png)
+
+[(Ignore Complex Conjugate is set to True)](../example/rosettes/rainbow_stripe_rosette_2_ignore_complex_conjugate.yml)
+
+![Transformed rainbow stripe image into rosette with 2 rotational symmetry, creating purple and green petals on a blue background](../example/rosettes/rainbow_stripe_rosette_2_ignore_complex_conjugate_ring.png)
+
+[(Close up on the ring and petals)](../example/rosettes/rainbow_stripe_rosette_2_ignore_complex_conjugate_ring.yml)
+
+![Transformed rainbow stripe image into rosette with 4 pairs of purple and green notches eating into a circular blue background](../example/rosettes/rainbow_stripe_rosette_2_ignore_complex_conjugate_border.png)
+
+[(Zoomed out to show the borders of the image)](../example/rosettes/rainbow_stripe_rosette_2_ignore_complex_conjugate_border.yml)

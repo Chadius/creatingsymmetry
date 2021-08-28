@@ -1,13 +1,13 @@
 sample_source_filename: example/rainbow_stripe.png
-output_filename: example/rosettes/rainbow_stripe_rosette_2_ignore_complex_conjugate_border.png
+output_filename: example/rosettes/rainbow_stripe_rosette_2_ignore_complex_conjugate.png
 output_size:
   width: 198
   height: 198
 sample_space:
-  minx: -3e-0
-  miny: -3e-0
-  maxx: 3e-0
-  maxy: 3e-0
+  minx: -8e-1
+  miny: -8e-1
+  maxx: 8e-1
+  maxy: 8e-1
 color_value_space:
   minx: -4e1
   maxx: 4e1
