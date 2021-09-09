@@ -4,7 +4,7 @@ This program lets you transform an image in to an image with symmetrical pattern
 ![Image with 7 horizontal stripes creating the rainbow with white on top and black on the bottom. Rainbow Stripe](example/rainbow_stripe.png)
 
 ![Transformed rainbow stripe image into rosette with 3 rotational symmetry](example/rosettes/rainbow_stripe_rosette_1.png)
-![Transformed rainbow stripe image into frieze with p11g symmetry, with blue and yellow hourglasses in a green background](example/friezes/rainbow_stripe_frieze_p11g.png)
+![Transformed rainbow stripe image into frieze with p11g symmetry, with blue and yellow hourglasses in a green background](example/friezes/rainbow_stripe_frieze_p11m_and_p11g.png)
 ![Transformed rainbow stripe image into hexagonal lattice with p31m symmetry, with purple, indigo and blue nodes against a transparent background](example/lattices/rainbow_stripe_lattice_hexagonal_p31m.png)
 
 I assume you're comfortable with [Go](https://golang.org/), YAML and a command line. You'll install this in go, write the formulas in YAML, and run this program on the command line to generate patterns.
@@ -53,9 +53,9 @@ p5 symmetry [(link to formula)](example/rosettes/rainbow_stripe_rosette_3.yml)
 ### Frieze
 **Frieze** patterns expand horizontally forever but usually have a finite height.
 
-![Transformed rainbow stripe image into frieze with p11g symmetry, with blue and yellow hourglasses in a green background](example/friezes/rainbow_stripe_frieze_p11g.png)
+![Transformed rainbow stripe image into frieze with p11g symmetry, with blue and yellow hourglasses in a green background](example/friezes/rainbow_stripe_frieze_p11m_and_p11g.png)
 
-p11g symmetry [(link to formula)](example/friezes/rainbow_stripe_frieze_p11g.yml)
+p11g symmetry [(link to formula)](example/friezes/rainbow_stripe_frieze_p11m_and_p11g.yml)
 
 ![Transformed rainbow stripe image into frieze with p2111 symmetry, like an orange branch with black notches separated by blue and white droplets](example/friezes/rainbow_stripe_frieze_p211.png)
 

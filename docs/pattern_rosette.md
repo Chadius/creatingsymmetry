@@ -60,7 +60,7 @@ Here is an example of p5 symmetry. There are 5 purple petals, 5 yellow petals, a
         - -M-N
         - "+M+NF(N+M)"
 ```
-* Each `term` must have `power_n` and `power_m`. These are non-zero integers and will help set up your desired symmetry (see "Rotational Symmetry", below.)
+* Each `term` must have `power_n` and `power_m`. These are non-zero integers and will help set up your desired symmetry (see "[Rotational Symmetry](#rotational-symmetry)", below.)
 
 ### Rotational Symmetry
 The powers of n and m are key to making your desired symmetry. Let's say you want pX symmetry, where X is the number of rotations. 

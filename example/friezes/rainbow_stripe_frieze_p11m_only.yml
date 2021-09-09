@@ -1,0 +1,33 @@
+sample_source_filename: example/rainbow_stripe.png
+output_filename: example/friezes/rainbow_stripe_frieze_p11m_only.png
+output_size:
+  width: 198
+  height: 198
+sample_space:
+  minx: -8e-0
+  maxx: 8e-0
+  miny: -12e-1
+  maxy: 12e-1
+color_value_space:
+  minx: -1.1e1
+  maxx: 1.1e1
+  miny: -1.5e1
+  maxy: 1.5e1
+frieze_formula:
+  terms:
+    -
+      multiplier:
+        real: -1.0
+        imaginary: 2e-2
+      power_n: 1
+      power_m: 2
+      coefficient_relationships:
+        - -M-N
+    -
+      multiplier:
+        real: 5.0e-2
+        imaginary: 2e-3
+      power_n: 5
+      power_m: -3
+      coefficient_relationships:
+        - -M-N

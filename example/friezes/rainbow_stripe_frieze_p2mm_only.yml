@@ -1,37 +1,37 @@
 sample_source_filename: example/rainbow_stripe.png
-output_filename: example/friezes/rainbow_stripe_frieze_p2mg.png
+output_filename: example/friezes/rainbow_stripe_frieze_p2mm_only.png
 output_size:
   width: 198
   height: 198
 sample_space:
-  minx: -8e0
-  maxx: 8e0
-  miny: -9e-1
-  maxy: 9e-1
+  minx: -92e-1
+  maxx: 92e-1
+  miny: -12e-1
+  maxy: 12e-1
 color_value_space:
   minx: -1.1e1
   maxx: 1.1e1
-  miny: -1.8e1
-  maxy: 1.8e1
+  miny: -18e-2
+  maxy: 10e-2
 frieze_formula:
   terms:
     -
       multiplier:
         real: -1.0
         imaginary: 2e-2
-      power_n: 3
+      power_n: 1
       power_m: 2
       coefficient_relationships:
         - -N-M
-        - "-M-NF(N+M)"
-        - "+M+NF(N+M)"
+        - +M+N
+        - -M-N
     -
       multiplier:
-        real: 5.0e-1
-        imaginary: 10e0
-      power_n: 3
-      power_m: -2
+        real: 6.0e-1
+        imaginary: 2e-2
+      power_n: -1
+      power_m: 2
       coefficient_relationships:
         - -N-M
-        - "-M-NF(N+M)"
-        - "+M+NF(N+M)"
+        - +M+N
+        - -M-N

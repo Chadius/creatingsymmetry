@@ -1,11 +1,11 @@
 sample_source_filename: example/rainbow_stripe.png
-output_filename: example/friezes/rainbow_stripe_frieze_p2mg.png
+output_filename: example/friezes/rainbow_stripe_frieze_p11m_and_p11g_ignore_complex_conjugate.png
 output_size:
   width: 198
   height: 198
 sample_space:
-  minx: -8e0
-  maxx: 8e0
+  minx: -29e-1
+  maxx: 29e-1
   miny: -9e-1
   maxy: 9e-1
 color_value_space:
@@ -20,18 +20,7 @@ frieze_formula:
         real: -1.0
         imaginary: 2e-2
       power_n: 3
-      power_m: 2
+      power_m: 1
+      ignore_complex_conjugate: true
       coefficient_relationships:
-        - -N-M
         - "-M-NF(N+M)"
-        - "+M+NF(N+M)"
-    -
-      multiplier:
-        real: 5.0e-1
-        imaginary: 10e0
-      power_n: 3
-      power_m: -2
-      coefficient_relationships:
-        - -N-M
-        - "-M-NF(N+M)"
-        - "+M+NF(N+M)"
