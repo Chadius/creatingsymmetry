@@ -141,7 +141,7 @@ To create p11m symmetry, add this `coefficient_relationships` field below each t
 ##### p11m only
 This is an example of an image with p11m symmetry. You can draw a horizontal line across the center and fold it in half.
 
-![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../example/friezes/rainbow_stripe_frieze_p11m_only.png)
+![Transformed rainbow stripe image into frieze with p11m symmetry (reflective,) with blue and yellow hourglasses in a green background](../example/friezes/rainbow_stripe_frieze_p11m_only.png)
 
 [(link to formula)](../example/friezes/rainbow_stripe_frieze_p11m_only.yml)
 
@@ -327,3 +327,19 @@ Let's zoom out a bit to get all the detail:
 ![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../example/friezes/rainbow_stripe_frieze_p11m_and_p11g_ignore_complex_conjugate_zoomed.png)
 
 [(link to formula)](../example/friezes/rainbow_stripe_frieze_p11m_and_p11g_ignore_complex_conjugate_zoomed.yml)
+
+## Relation to Rosettes
+[Rosette patterns](./pattern_rosette.md) are circular and surround a central ring. Imagine picking a side of the ring,
+cutting all the way to the outer edge, and then stretching it out until it laid perfectly horizontal. You'd have a frieze pattern.
+
+You may have some fun making a frieze, and then changing the formula to a rosette.
+
+![Transformed rainbow stripe image into frieze with p11m symmetry (reflective,) with blue and yellow hourglasses in a green background](../example/friezes/rainbow_stripe_frieze_p11m_only.png)
+
+[(link to formula)](../example/friezes/rainbow_stripe_frieze_p11m_only.yml)
+
+And here's the same formula, but now in a rosette pattern.
+
+![Transformed rainbow stripe image into rosette based on frieze with with p11m symmetry. with a blue blob on top and yellow blob on the bottom of a green background](../example/friezes/rainbow_stripe_rosette_based_on_frieze_p11m_only.png)
+
+[(link to formula)](../example/friezes/rainbow_stripe_rosette_based_on_frieze_p11m_only.yml)

@@ -1,0 +1,33 @@
+sample_source_filename: example/rainbow_stripe.png
+output_filename: example/rosettes/rainbow_stripe_frieze_based_on_rosette_2.png
+output_size:
+  width: 198
+  height: 198
+sample_space:
+  minx: -1e0
+  miny: -2e0
+  maxx: 1e0
+  maxy: 1e0
+color_value_space:
+  minx: -4e1
+  maxx: 4e1
+  miny: -2.5e0
+  maxy: 4.5e0
+frieze_formula:
+  terms:
+    - multiplier:
+        real: -1.0
+        imaginary: 1e-2
+      power_n: 4
+      power_m: 0
+      coefficient_relationships:
+        - -M-N
+        - "+M+NF(N+M)"
+    - multiplier:
+        real: 1.0e-2
+        imaginary: 0
+      power_n: 6
+      power_m: 2
+      coefficient_relationships:
+        - -M-N
+        - "+M+NF(N+M)"

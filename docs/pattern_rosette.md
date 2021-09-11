@@ -51,6 +51,25 @@ This diagram has p3 symmetry. The "3" in p3 indicates how many times we can rota
 
 Here is an example of p5 symmetry. There are 5 purple petals, 5 yellow petals, and 10 spikes, with 5 pairs of purple and yellow smudges along the edge.
 
+## Relation to Friezes
+[Frieze patterns](./pattern_frieze.md) draw a horizontal pattern that extends forever. Imagine grabbing the left and right
+sides, and then folding the frieze so there is a circular gap in the middle. You would make a rosette.
+
+Rosettes and Friezes are mathematically similar, so you might have fun changing a `rosette_formula` to a `frieze_pattern`.
+Here is an example rosette:
+
+You may have some fun making a frieze, and then changing the formula to a rosette.
+
+![Transformed rainbow stripe image into rosette with 4 rotational symmetry, creating purple and green petals on a blue background](../example/rosettes/rainbow_stripe_rosette_2.png)
+
+[(link to formula)](../example/rosettes/rainbow_stripe_rosette_2.yml)
+
+And here's the same formula, but now in a frieze pattern.
+
+![Transformed rainbow stripe image into frieze with p11m symmetry. with blue and purple wavy background buoyed with yellow and white valleys](../example/rosettes/rainbow_stripe_frieze_based_on_rosette_2.png)
+
+[(link to formula)](../example/rosettes/rainbow_stripe_frieze_based_on_rosette_2.yml)
+
 ## Making your own Rosette Formula
 * Your formula should have a `rosette_formula` key, followed by a list of `terms`.
 * Each term's `multiplier` should be non-zero for `real` and `imaginary`. Otherwise, the term tends to degenerate and flatten into a single color.
