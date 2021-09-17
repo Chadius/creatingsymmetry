@@ -1,5 +1,5 @@
 # Symmetrical Pattern Generator
-This program lets you transform an image in to an image with symmetrical pattern. Just supply a base image and a formula to get started.
+This program lets you transform an image into an image with symmetrical pattern. Just supply a base image and a formula to get started.
 
 ![Image with 7 horizontal stripes creating the rainbow with white on top and black on the bottom. Rainbow Stripe](example/rainbow_stripe.png)
 
@@ -7,7 +7,7 @@ This program lets you transform an image in to an image with symmetrical pattern
 ![Transformed rainbow stripe image into frieze with p11g symmetry, with blue and yellow hourglasses in a green background](example/friezes/rainbow_stripe_frieze_p11m_and_p11g.png)
 ![Transformed rainbow stripe image into hexagonal lattice with p31m symmetry, with purple, indigo and blue nodes against a transparent background](example/lattices/rainbow_stripe_lattice_hexagonal_p31m.png)
 
-I assume you're comfortable with [Go](https://golang.org/), YAML and a command line. You'll install this in go, write the formulas in YAML, and run `make run` on a command line to generate pretty patterns.
+I assume you're comfortable with [Go](https://golang.org/), YAML and a command line. You'll install this in Go, write the formulas in YAML, and run `make run` on a command line to generate pretty patterns.
 
 ## Important pages
 * [Common Options](docs/common_options.md)
@@ -31,14 +31,24 @@ You will need a source image. [A rainbow stripe pattern is included](example/rai
 ![Rainbow Stripe with white stripe on top and black stripe on the bottom](example/rainbow_stripe.png)
 
 ## How to run
-Open your command line and type:
-`make run`
+
+Copy the example formula, and run the program.
+
+```shell script
+cp data/formula.yml.example data/formula.yml
+make run
+open out/example_image.png
+```
+
+### What happened?
 
 This will look for the file `data/formula.yml` to find the required settings:
 - The name of the source image
 - The name and size of the output image
 - The formula that transforms the source into the output
 - Numerical ranges used with the formula
+
+The example formula writes your image to `out/example_image.png`.
 
 All options (except the formula) are described [here.](docs/common_options.md)
 

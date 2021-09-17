@@ -9,6 +9,7 @@ import (
 	_ "image/png"
 	"io/ioutil"
 	"log"
+	"path/filepath"
 	"os"
 	"wallpaper/entities/command"
 	"wallpaper/entities/formula/frieze"
@@ -80,6 +81,10 @@ func main() {
 }
 
 func outputToFile(outputFilename string, outputImage image.Image) {
+    err := os.MkdirAll(filepath.Dir(outputFilename), 0777)
+    if err != nil {
+        panic(err)
+    }
 	outputImageFile, err := os.Create(outputFilename)
 	if err != nil {
 		panic(err)

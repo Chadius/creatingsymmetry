@@ -1,5 +1,5 @@
 sample_source_filename: example/rainbow_stripe.png
-output_filename: example/friezes/rainbow_stripe_frieze_p111_only.png
+output_filename: out/friezes/rainbow_stripe_frieze_p111_only.png
 output_size:
   width: 198
   height: 198
