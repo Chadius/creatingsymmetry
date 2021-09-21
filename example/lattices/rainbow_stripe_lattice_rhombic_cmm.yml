@@ -1,5 +1,5 @@
 sample_source_filename: example/rainbow_stripe.png
-output_filename: example/lattices/rainbow_stripe_lattice_rhombic_cmm.png
+output_filename: out/lattices/rainbow_stripe_lattice_rhombic_cmm.png
 output_size:
   width: 198
   height: 198
