@@ -1,8 +1,8 @@
 package wallpaper
 
 import (
-	"wallpaper/entities/formula/coefficient"
-	"wallpaper/entities/formula/latticevector"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/formula/latticevector"
 )
 
 // createVectorsForSquareWallpaper creates two vectors of a fixed shape and size.

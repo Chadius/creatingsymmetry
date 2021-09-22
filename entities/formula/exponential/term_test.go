@@ -3,9 +3,9 @@ package exponential_test
 import (
 	. "gopkg.in/check.v1"
 	"testing"
-	"wallpaper/entities/formula/coefficient"
-	"wallpaper/entities/formula/exponential"
-	"wallpaper/entities/utility"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/formula/exponential"
+	"github.com/Chadius/creating-symmetry/entities/utility"
 )
 
 func Test(t *testing.T) { TestingT(t) }

@@ -2,11 +2,11 @@ package command
 
 import (
 	"encoding/json"
+	"github.com/Chadius/creating-symmetry/entities/formula/frieze"
+	"github.com/Chadius/creating-symmetry/entities/formula/rosette"
+	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
+	"github.com/Chadius/creating-symmetry/entities/utility"
 	"gopkg.in/yaml.v2"
-	"wallpaper/entities/formula/frieze"
-	"wallpaper/entities/formula/rosette"
-	"wallpaper/entities/formula/wallpaper"
-	"wallpaper/entities/utility"
 )
 
 // ComplexNumberCorners notes the sides of a rectangle drawn in the complex space.

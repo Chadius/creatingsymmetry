@@ -4,8 +4,8 @@ import (
 	. "gopkg.in/check.v1"
 	"math"
 	"testing"
-	"wallpaper/entities/formula"
-	"wallpaper/entities/formula/wallpaper"
+	"github.com/Chadius/creating-symmetry/entities/formula"
+	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
 )
 
 func Test(t *testing.T) { TestingT(t) }

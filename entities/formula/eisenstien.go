@@ -5,8 +5,8 @@ import (
 	"gopkg.in/yaml.v2"
 	"math"
 	"math/cmplx"
-	"wallpaper/entities/formula/coefficient"
-	"wallpaper/entities/utility"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/utility"
 )
 
 // EisensteinFormulaTermMarshal can be marshaled and converted to a EisensteinFormulaTerm

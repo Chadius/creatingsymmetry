@@ -3,11 +3,11 @@ package wallpaper
 import (
 	"encoding/json"
 	"gopkg.in/yaml.v2"
-	eisensteinFormula "wallpaper/entities/formula"
-	"wallpaper/entities/formula/coefficient"
-	"wallpaper/entities/formula/latticevector"
-	"wallpaper/entities/formula/result"
-	"wallpaper/entities/utility"
+	eisensteinFormula "github.com/Chadius/creating-symmetry/entities/formula"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/formula/latticevector"
+	"github.com/Chadius/creating-symmetry/entities/formula/result"
+	"github.com/Chadius/creating-symmetry/entities/utility"
 )
 
 // DimensionsMarshal tracks the width and height

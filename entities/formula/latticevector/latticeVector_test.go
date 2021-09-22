@@ -3,8 +3,8 @@ package latticevector_test
 import (
 	. "gopkg.in/check.v1"
 	"testing"
-	"wallpaper/entities/formula/latticevector"
-	"wallpaper/entities/utility"
+	"github.com/Chadius/creating-symmetry/entities/formula/latticevector"
+	"github.com/Chadius/creating-symmetry/entities/utility"
 )
 
 func Test(t *testing.T) { TestingT(t) }

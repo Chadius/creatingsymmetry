@@ -4,7 +4,7 @@ import (
 	. "gopkg.in/check.v1"
 	"math/cmplx"
 	"testing"
-	"wallpaper/entities/mathutility"
+	"github.com/Chadius/creating-symmetry/entities/mathutility"
 )
 
 func Test(t *testing.T) { TestingT(t) }

@@ -3,10 +3,10 @@ package formula_test
 import (
 	. "gopkg.in/check.v1"
 	"testing"
-	"wallpaper/entities/formula"
-	"wallpaper/entities/formula/coefficient"
-	"wallpaper/entities/formula/latticevector"
-	"wallpaper/entities/utility"
+	"github.com/Chadius/creating-symmetry/entities/formula"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/formula/latticevector"
+	"github.com/Chadius/creating-symmetry/entities/utility"
 )
 
 func Test(t *testing.T) { TestingT(t) }

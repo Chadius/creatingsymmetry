@@ -3,8 +3,8 @@ package command_test
 import (
 	. "gopkg.in/check.v1"
 	"testing"
-	"wallpaper/entities/command"
-	"wallpaper/entities/formula/wallpaper"
+	"github.com/Chadius/creating-symmetry/entities/command"
+	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
 )
 
 func Test(t *testing.T) { TestingT(t) }

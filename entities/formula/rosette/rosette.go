@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"gopkg.in/yaml.v2"
 	"math/cmplx"
-	"wallpaper/entities/formula/coefficient"
-	"wallpaper/entities/formula/exponential"
-	"wallpaper/entities/formula/result"
-	"wallpaper/entities/utility"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/formula/exponential"
+	"github.com/Chadius/creating-symmetry/entities/formula/result"
+	"github.com/Chadius/creating-symmetry/entities/utility"
 )
 
 // Formula uses a collection of z^m terms to calculate results.

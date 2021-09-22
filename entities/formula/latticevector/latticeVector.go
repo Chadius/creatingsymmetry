@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"wallpaper/entities/utility"
+	"github.com/Chadius/creating-symmetry/entities/utility"
 )
 
 // PairMarshal can be marshaled and converted to a Pair

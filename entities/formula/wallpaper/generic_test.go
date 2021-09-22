@@ -4,9 +4,9 @@ import (
 	. "gopkg.in/check.v1"
 	"math"
 	"math/cmplx"
-	"wallpaper/entities/formula"
-	"wallpaper/entities/formula/wallpaper"
-	"wallpaper/entities/utility"
+	"github.com/Chadius/creating-symmetry/entities/formula"
+	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
+	"github.com/Chadius/creating-symmetry/entities/utility"
 )
 
 type GenericWallpaper struct {

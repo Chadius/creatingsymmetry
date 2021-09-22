@@ -3,7 +3,7 @@ package coefficient_test
 import (
 	. "gopkg.in/check.v1"
 	"testing"
-	"wallpaper/entities/formula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 )
 
 func Test(t *testing.T) { TestingT(t) }

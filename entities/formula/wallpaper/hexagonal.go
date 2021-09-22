@@ -2,8 +2,8 @@ package wallpaper
 
 import (
 	"math"
-	"wallpaper/entities/formula/coefficient"
-	"wallpaper/entities/formula/latticevector"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/formula/latticevector"
 )
 
 // createVectorsForHexagonalWallpaper creates two vectors of a fixed shape and size.

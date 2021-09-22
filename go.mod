@@ -1,4 +1,4 @@
-module wallpaper
+module github.com/Chadius/creating-symmetry
 
 go 1.15
 

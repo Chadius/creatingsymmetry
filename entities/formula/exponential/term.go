@@ -3,8 +3,8 @@ package exponential
 import (
 	"encoding/json"
 	"gopkg.in/yaml.v2"
-	"wallpaper/entities/formula/coefficient"
-	"wallpaper/entities/utility"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/utility"
 )
 
 // TermMarshalable is an object that can be easily marshaled to and from data streams.

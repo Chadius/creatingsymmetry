@@ -4,6 +4,11 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"github.com/Chadius/creating-symmetry/entities/command"
+	"github.com/Chadius/creating-symmetry/entities/formula/frieze"
+	"github.com/Chadius/creating-symmetry/entities/formula/rosette"
+	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
+	"github.com/Chadius/creating-symmetry/entities/mathutility"
 	"image"
 	"image/color"
 	"image/png"
@@ -12,11 +17,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"wallpaper/entities/command"
-	"wallpaper/entities/formula/frieze"
-	"wallpaper/entities/formula/rosette"
-	"wallpaper/entities/formula/wallpaper"
-	"wallpaper/entities/mathutility"
 )
 
 func main() {

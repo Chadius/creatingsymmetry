@@ -3,10 +3,10 @@ package wallpaper
 import (
 	"encoding/json"
 	"gopkg.in/yaml.v2"
-	"wallpaper/entities/formula"
-	"wallpaper/entities/formula/coefficient"
-	"wallpaper/entities/formula/result"
-	"wallpaper/entities/utility"
+	"github.com/Chadius/creating-symmetry/entities/formula"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/formula/result"
+	"github.com/Chadius/creating-symmetry/entities/utility"
 )
 
 // Marshal can be marshaled and converted to a EisensteinFormulaTerm

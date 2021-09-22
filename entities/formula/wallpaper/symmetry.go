@@ -1,7 +1,7 @@
 package wallpaper
 
 import (
-	"wallpaper/entities/formula"
+	"github.com/Chadius/creating-symmetry/entities/formula"
 )
 
 // addNewWavePacketsBasedOnSymmetry creates new WavePackets based on the given term, multiplier and desired symmetry
