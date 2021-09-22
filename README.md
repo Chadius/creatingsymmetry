@@ -18,17 +18,21 @@ I assume you're comfortable with [Go](https://golang.org/), YAML and a command l
 ## Installation
 This program is written in [Go](https://golang.org/), so download that first.
 
-Once that is done, you can check out this repository, open a terminal and navigate to this codebase.
+Once that is done, you can use go to get this project for you:
+`go get https://github.com/Chadius/creating-symmetry/`
+
+You will need a source image. [A rainbow stripe pattern is included](example/rainbow_stripe.png) in this repository and used throughout these docs.
+
+![Rainbow Stripe with white stripe on top and black stripe on the bottom](example/rainbow_stripe.png)
+
+### I can't to use go get
+If `go get` doesn't work you can check out this repository directly. Then open a terminal and navigate to the folder this code lies in.
 
 Run `go install` and it will download the other required libraries:
 - yaml
 - ginkgo
 - gomega
 - check
-
-You will need a source image. [A rainbow stripe pattern is included](example/rainbow_stripe.png) in this repository and used throughout these docs.
-
-![Rainbow Stripe with white stripe on top and black stripe on the bottom](example/rainbow_stripe.png)
 
 ## How to run
 
