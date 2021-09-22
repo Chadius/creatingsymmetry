@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"image"
 	"image/color"
@@ -9,8 +10,8 @@ import (
 	_ "image/png"
 	"io/ioutil"
 	"log"
-	"path/filepath"
 	"os"
+	"path/filepath"
 	"wallpaper/entities/command"
 	"wallpaper/entities/formula/frieze"
 	"wallpaper/entities/formula/rosette"
@@ -19,8 +20,13 @@ import (
 )
 
 func main() {
-	createWallpaperYAML, err := ioutil.ReadFile("data/formula.yml")
+	formulaFilename := "data/formula.yml"
+	flag.StringVar(&formulaFilename, "f", "data/formula.yml", "The filename of the formula file. Defaults to data/formula.yml")
+	flag.Parse()
+
+	createWallpaperYAML, err := ioutil.ReadFile(formulaFilename)
 	if err != nil {
+println(formulaFilename)
 		log.Fatal(err)
 	}
 	wallpaperCommand, err := command.NewCreateWallpaperCommandFromYAML(createWallpaperYAML)
@@ -35,17 +41,6 @@ func main() {
 	outputFilename := wallpaperCommand.OutputFilename
 	colorValueBoundMin := complex(wallpaperCommand.ColorValueSpace.MinX, wallpaperCommand.ColorValueSpace.MinY)
 	colorValueBoundMax := complex(wallpaperCommand.ColorValueSpace.MaxX, wallpaperCommand.ColorValueSpace.MaxY)
-
-	//sampleSpaceMin := complex(-1e0, -1e0)
-	//sampleSpaceMax := complex(1e0, 1e0)
-	////outputWidth := 800
-	////outputHeight := 450
-	//outputWidth := 3840
-	//outputHeight := 2160
-	//colorSourceFilename := "exampleImage/brownie.png"
-	//outputFilename := "exampleImage/newBrownie.png"
-	//colorValueBoundMin := complex(-2e5, -2e5)
-	//colorValueBoundMax := complex(5e5, 5e5)
 
 	reader, err := os.Open(colorSourceFilename)
 	if err != nil {

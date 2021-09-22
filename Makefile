@@ -6,8 +6,10 @@ help:
 .DEFAULT_GOAL=help
 .PHONY=help
 
-run: ## Run the script
-	go run .
+FORMULA_FILENAME="data/formula.yml"
+
+run: ## Run the script with default arguments
+	go run . -f $(FORMULA_FILENAME)
 test: ## Test all files
 	go test -v ./...
 lint: ## Lint all the files

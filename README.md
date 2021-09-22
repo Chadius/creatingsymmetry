@@ -37,24 +37,26 @@ Copy the example formula, and run the program.
 ```shell script
 cp data/formula.yml.example data/formula.yml
 make run
-open out/example_image.png
 ```
 
+When you run `make run`, it will generate this [orange and red rosette pattern](#rosette):
+
+![Transformed rainbow stripe image into rosette with 3 rotational symmetry, creating three yellow to purple petals on a orange and red striped background](example/rosettes/rainbow_stripe_rosette_1.png)
+
+You can open `out/example_image.png` to see the results. (on a Mac, you can also type `open out/example_image.png` to open it in Preview.)
+
 ### What happened?
-
-This will look for the file `data/formula.yml` to find the required settings:
-- The name of the source image
-- The name and size of the output image
-- The formula that transforms the source into the output
-- Numerical ranges used with the formula
-
+This program looks for the file `data/formula.yml` to answer these questions:
+- What image do you want to transform?
+- How do you want to transform the image?
+- Where is the result stored?
 The example formula writes your image to `out/example_image.png`.
 
-All options (except the formula) are described [here.](docs/common_options.md)
-
-### Example
-If you learn better by example, try renaming [data/formula.yml.example](./data/formula.yml.example) to `data/formula.yml`.
-When you run `make run`, it will generate the [orange and red pattern](#rosette) you see below.
+## Command Line Options
+```
+  -f string
+    	The filename of the formula file. Defaults to ./data/formula.yml (default "formula")
+```
 
 ## Types of patterns
 ### Rosette
@@ -118,5 +120,5 @@ If you plan to mess around with the code itself, here are 2 more make commands t
 - `make lint` Runs the linter.
 
 ## Inspiration
-[Creating Symmetry by Frank Farris](https://www.amazon.com/Creating-Symmetry-Mathematics-Wallpaper-Patterns/dp/0691161739) 
+<cite>[Creating Symmetry by Frank Farris](https://www.amazon.com/Creating-Symmetry-Mathematics-Wallpaper-Patterns/dp/0691161739)</cite>
 merges math and art to create beautiful patterns and is worth the read. Prepare for Group Theory and Complex Numbers!
