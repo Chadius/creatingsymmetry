@@ -11,10 +11,10 @@ import (
 
 // ComplexNumberCorners notes the sides of a rectangle drawn in the complex space.
 type ComplexNumberCorners struct {
-	MinX	float64	`json:"minx" yaml:"minx"`
-	MinY	float64	`json:"miny" yaml:"miny"`
-	MaxX	float64	`json:"maxx" yaml:"maxx"`
-	MaxY	float64	`json:"maxy" yaml:"maxy"`
+	XMin float64 `json:"x_min" yaml:"x_min"`
+	YMin float64 `json:"y_min" yaml:"y_min"`
+	XMax float64 `json:"x_max" yaml:"x_max"`
+	YMax float64 `json:"y_max" yaml:"y_max"`
 }
 
 // WidthHeightDimensions is a width + height combination.
@@ -25,11 +25,11 @@ type WidthHeightDimensions struct {
 
 // CreateSymmetryPattern records the desired command to generate.
 type CreateSymmetryPattern struct {
-	SampleSpace				  ComplexNumberCorners               `json:"sample_space" yaml:"sample_space"`
-	OutputImageSize			  WidthHeightDimensions              `json:"output_size" yaml:"output_size"`
+	PatternViewport ComplexNumberCorners  `json:"pattern_viewport" yaml:"pattern_viewport"`
+	OutputImageSize WidthHeightDimensions `json:"output_size" yaml:"output_size"`
 	SampleSourceFilename	  string                                `json:"sample_source_filename" yaml:"sample_source_filename"`
-	OutputFilename			  string                              `json:"output_filename" yaml:"output_filename"`
-	ColorValueSpace			  ComplexNumberCorners               `json:"color_value_space" yaml:"color_value_space"`
+	OutputFilename     string               `json:"output_filename" yaml:"output_filename"`
+	EyedropperBoundary ComplexNumberCorners `json:"eyedropper_boundary" yaml:"eyedropper_boundary"`
 
 	RosetteFormula			  *rosette.Formula                    `json:"rosette_formula" yaml:"rosette_formula"`
 	FriezeFormula			  *frieze.Formula                      `json:"frieze_formula" yaml:"frieze_formula"`
@@ -38,11 +38,11 @@ type CreateSymmetryPattern struct {
 
 // CreateWallpaperCommandMarshal can be marshaled and converted to a CreateSymmetryPattern
 type CreateWallpaperCommandMarshal struct {
-	SampleSpace				ComplexNumberCorners                  `json:"sample_space" yaml:"sample_space"`
-	OutputImageSize			WidthHeightDimensions                 `json:"output_size" yaml:"output_size"`
+	PatternViewport ComplexNumberCorners  `json:"pattern_viewport" yaml:"pattern_viewport"`
+	OutputImageSize WidthHeightDimensions `json:"output_size" yaml:"output_size"`
 	SampleSourceFilename	string                                   `json:"sample_source_filename" yaml:"sample_source_filename"`
-	OutputFilename			string                                 `json:"output_filename" yaml:"output_filename"`
-	ColorValueSpace			ComplexNumberCorners                  `json:"color_value_space" yaml:"color_value_space"`
+	OutputFilename     string               `json:"output_filename" yaml:"output_filename"`
+	EyedropperBoundary ComplexNumberCorners `json:"eyedropper_boundary" yaml:"eyedropper_boundary"`
 
 	RosetteFormula			*rosette.MarshaledFormula              `json:"rosette_formula" yaml:"rosette_formula"`
 	FriezeFormula			*frieze.MarshaledFormula                `json:"frieze_formula" yaml:"frieze_formula"`
@@ -70,11 +70,11 @@ func newCreateWallpaperCommandFromDatastream(data []byte, unmarshal utility.Unma
 	}
 
 	commandToCreate := &CreateSymmetryPattern{
-		SampleSpace:          commandToCreateMarshal.SampleSpace,
+		PatternViewport:      commandToCreateMarshal.PatternViewport,
 		OutputImageSize:      commandToCreateMarshal.OutputImageSize,
 		SampleSourceFilename: commandToCreateMarshal.SampleSourceFilename,
 		OutputFilename:       commandToCreateMarshal.OutputFilename,
-		ColorValueSpace:      commandToCreateMarshal.ColorValueSpace,
+		EyedropperBoundary:   commandToCreateMarshal.EyedropperBoundary,
 	}
 
 	if commandToCreateMarshal.RosetteFormula != nil {

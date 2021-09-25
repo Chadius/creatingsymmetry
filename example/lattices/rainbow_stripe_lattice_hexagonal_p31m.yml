@@ -3,16 +3,16 @@ output_filename: out/lattices/rainbow_stripe_lattice_hexagonal_p31m.png
 output_size:
   width: 198
   height: 198
-sample_space:
-  minx: -18e-1
-  maxx: 18e-1
-  miny: -18e-1
-  maxy: 18e-1
-color_value_space:
-  minx: -10e-1
-  maxx: 20e-1
-  miny: -12e-1
-  maxy: 60e-1
+pattern_viewport:
+  x_min: -18e-1
+  x_max: 18e-1
+  y_min: -18e-1
+  y_max: 18e-1
+eyedropper_boundary:
+  x_min: -10e-1
+  x_max: 20e-1
+  y_min: -12e-1
+  y_max: 60e-1
 lattice_pattern:
   lattice_type: hexagonal
   multiplier:

@@ -3,16 +3,16 @@ output_filename: out/friezes/rainbow_stripe_frieze_p11m_and_p11g_ignore_complex_
 output_size:
   width: 198
   height: 198
-sample_space:
-  minx: -29e-1
-  maxx: 29e-1
-  miny: -9e-1
-  maxy: 9e-1
-color_value_space:
-  minx: -1.1e1
-  maxx: 1.1e1
-  miny: -1.8e1
-  maxy: 1.8e1
+pattern_viewport:
+  x_min: -29e-1
+  x_max: 29e-1
+  y_min: -9e-1
+  y_max: 9e-1
+eyedropper_boundary:
+  x_min: -1.1e1
+  x_max: 1.1e1
+  y_min: -1.8e1
+  y_max: 1.8e1
 frieze_formula:
   terms:
     -

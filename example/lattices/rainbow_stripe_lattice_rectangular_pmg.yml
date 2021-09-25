@@ -3,16 +3,16 @@ output_filename: out/lattices/rainbow_stripe_lattice_rectangular_pmg.png
 output_size:
   width: 198
   height: 198
-sample_space:
-  minx: -50e-2
-  maxx: 50e-2
-  miny: -50e-2
-  maxy: 50e-2
-color_value_space:
-  minx: -30e-1
-  maxx: 30e-1
-  miny: -12e0
-  maxy: 8e0
+pattern_viewport:
+  x_min: -50e-2
+  x_max: 50e-2
+  y_min: -50e-2
+  y_max: 50e-2
+eyedropper_boundary:
+  x_min: -30e-1
+  x_max: 30e-1
+  y_min: -12e0
+  y_max: 8e0
 lattice_pattern:
   lattice_type: rectangular
   lattice_size:

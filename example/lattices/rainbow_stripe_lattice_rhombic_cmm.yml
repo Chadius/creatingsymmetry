@@ -3,16 +3,16 @@ output_filename: out/lattices/rainbow_stripe_lattice_rhombic_cmm.png
 output_size:
   width: 198
   height: 198
-sample_space:
-  minx: -100e-2
-  maxx: 100e-2
-  miny: -100e-2
-  maxy: 100e-2
-color_value_space:
-  minx: -30e-1
-  maxx: 30e-1
-  miny: -18e0
-  maxy: 2e0
+pattern_viewport:
+  x_min: -100e-2
+  x_max: 100e-2
+  y_min: -100e-2
+  y_max: 100e-2
+eyedropper_boundary:
+  x_min: -30e-1
+  x_max: 30e-1
+  y_min: -18e0
+  y_max: 2e0
 lattice_pattern:
   lattice_type: rhombic
   lattice_size:

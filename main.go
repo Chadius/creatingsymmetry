@@ -33,14 +33,14 @@ println(formulaFilename)
 	if err != nil {
 		log.Fatal(err)
 	}
-	sampleSpaceMin := complex(wallpaperCommand.SampleSpace.MinX, wallpaperCommand.SampleSpace.MinY)
-	sampleSpaceMax := complex(wallpaperCommand.SampleSpace.MaxX, wallpaperCommand.SampleSpace.MaxY)
+	sampleSpaceMin := complex(wallpaperCommand.PatternViewport.XMin, wallpaperCommand.PatternViewport.YMin)
+	sampleSpaceMax := complex(wallpaperCommand.PatternViewport.XMax, wallpaperCommand.PatternViewport.YMax)
 	outputWidth := wallpaperCommand.OutputImageSize.Width
 	outputHeight := wallpaperCommand.OutputImageSize.Height
 	colorSourceFilename := wallpaperCommand.SampleSourceFilename
 	outputFilename := wallpaperCommand.OutputFilename
-	colorValueBoundMin := complex(wallpaperCommand.ColorValueSpace.MinX, wallpaperCommand.ColorValueSpace.MinY)
-	colorValueBoundMax := complex(wallpaperCommand.ColorValueSpace.MaxX, wallpaperCommand.ColorValueSpace.MaxY)
+	colorValueBoundMin := complex(wallpaperCommand.EyedropperBoundary.XMin, wallpaperCommand.EyedropperBoundary.YMin)
+	colorValueBoundMax := complex(wallpaperCommand.EyedropperBoundary.XMax, wallpaperCommand.EyedropperBoundary.YMax)
 
 	reader, err := os.Open(colorSourceFilename)
 	if err != nil {

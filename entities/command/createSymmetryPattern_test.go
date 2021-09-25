@@ -1,10 +1,10 @@
 package command_test
 
 import (
-	. "gopkg.in/check.v1"
-	"testing"
 	"github.com/Chadius/creating-symmetry/entities/command"
 	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
+	. "gopkg.in/check.v1"
+	"testing"
 )
 
 func Test(t *testing.T) { TestingT(t) }
@@ -23,16 +23,16 @@ output_filename: output.png
 output_size:
   width: 800
   height: 600
-sample_space:
-  minx: 0
-  miny: 0
-  maxx: 1e-10
-  maxy: 3e5
-color_value_space:
-  minx: -50
-  miny: 9001
-  maxx: -1e-1
-  maxy: 2e10
+pattern_viewport:
+  x_min: 0
+  y_min: 0
+  x_max: 1e-10
+  y_max: 3e5
+eyedropper_boundary:
+  x_min: -50
+  y_min: 9001
+  x_max: -1e-1
+  y_max: 2e10
 rosette_formula:
   terms:
     -
@@ -65,15 +65,15 @@ rosette_formula:
 	checker.Assert(wallpaperCommand.OutputImageSize.Width, Equals, 800)
 	checker.Assert(wallpaperCommand.OutputImageSize.Height, Equals, 600)
 
-	checker.Assert(wallpaperCommand.SampleSpace.MinX, Equals, 0.0)
-	checker.Assert(wallpaperCommand.SampleSpace.MinY, Equals, 0.0)
-	checker.Assert(wallpaperCommand.SampleSpace.MaxX, Equals, 1e-10)
-	checker.Assert(wallpaperCommand.SampleSpace.MaxY, Equals, 3e5)
+	checker.Assert(wallpaperCommand.PatternViewport.XMin, Equals, 0.0)
+	checker.Assert(wallpaperCommand.PatternViewport.YMin, Equals, 0.0)
+	checker.Assert(wallpaperCommand.PatternViewport.XMax, Equals, 1e-10)
+	checker.Assert(wallpaperCommand.PatternViewport.YMax, Equals, 3e5)
 
-	checker.Assert(wallpaperCommand.ColorValueSpace.MinX, Equals, -50.0)
-	checker.Assert(wallpaperCommand.ColorValueSpace.MinY, Equals, 9001.0)
-	checker.Assert(wallpaperCommand.ColorValueSpace.MaxX, Equals, -1e-1)
-	checker.Assert(wallpaperCommand.ColorValueSpace.MaxY, Equals, 2e10)
+	checker.Assert(wallpaperCommand.EyedropperBoundary.XMin, Equals, -50.0)
+	checker.Assert(wallpaperCommand.EyedropperBoundary.YMin, Equals, 9001.0)
+	checker.Assert(wallpaperCommand.EyedropperBoundary.XMax, Equals, -1e-1)
+	checker.Assert(wallpaperCommand.EyedropperBoundary.YMax, Equals, 2e10)
 
 	checker.Assert(wallpaperCommand.RosetteFormula.Terms, HasLen, 2)
 }
@@ -86,17 +86,17 @@ func (suite *CreateWallpaperCommandSuite) TestCreateFromJSON(checker *C) {
 				  "width": 800,
 				  "height": 600
 				},
-				"sample_space": {
-				  "minx": 0,
-				  "miny": 0,
-				  "maxx": 1e-10,
-				  "maxy": 3e5
+				"pattern_viewport": {
+				  "x_min": 0,
+				  "y_min": 0,
+				  "x_max": 1e-10,
+				  "y_max": 3e5
 				},
-				"color_value_space": {
-				  "minx": -50,
-				  "miny": 9001,
-				  "maxx": -1e-1,
-				  "maxy": 2e10
+				"eyedropper_boundary": {
+				  "x_min": -50,
+				  "y_min": 9001,
+				  "x_max": -1e-1,
+				  "y_max": 2e10
 				},
 				"frieze_formula": {
 					"terms": [
@@ -135,15 +135,15 @@ func (suite *CreateWallpaperCommandSuite) TestCreateFromJSON(checker *C) {
 	checker.Assert(wallpaperCommand.OutputImageSize.Width, Equals, 800)
 	checker.Assert(wallpaperCommand.OutputImageSize.Height, Equals, 600)
 
-	checker.Assert(wallpaperCommand.SampleSpace.MinX, Equals, 0.0)
-	checker.Assert(wallpaperCommand.SampleSpace.MinY, Equals, 0.0)
-	checker.Assert(wallpaperCommand.SampleSpace.MaxX, Equals, 1e-10)
-	checker.Assert(wallpaperCommand.SampleSpace.MaxY, Equals, 3e5)
+	checker.Assert(wallpaperCommand.PatternViewport.XMin, Equals, 0.0)
+	checker.Assert(wallpaperCommand.PatternViewport.YMin, Equals, 0.0)
+	checker.Assert(wallpaperCommand.PatternViewport.XMax, Equals, 1e-10)
+	checker.Assert(wallpaperCommand.PatternViewport.YMax, Equals, 3e5)
 
-	checker.Assert(wallpaperCommand.ColorValueSpace.MinX, Equals, -50.0)
-	checker.Assert(wallpaperCommand.ColorValueSpace.MinY, Equals, 9001.0)
-	checker.Assert(wallpaperCommand.ColorValueSpace.MaxX, Equals, -1e-1)
-	checker.Assert(wallpaperCommand.ColorValueSpace.MaxY, Equals, 2e10)
+	checker.Assert(wallpaperCommand.EyedropperBoundary.XMin, Equals, -50.0)
+	checker.Assert(wallpaperCommand.EyedropperBoundary.YMin, Equals, 9001.0)
+	checker.Assert(wallpaperCommand.EyedropperBoundary.XMax, Equals, -1e-1)
+	checker.Assert(wallpaperCommand.EyedropperBoundary.YMax, Equals, 2e10)
 
 	checker.Assert(wallpaperCommand.FriezeFormula.Terms, HasLen, 2)
 }
@@ -154,16 +154,16 @@ output_filename: output.png
 output_size:
   width: 800
   height: 600
-sample_space:
-  minx: 0
-  miny: 0
-  maxx: 1e-10
-  maxy: 3e5
-color_value_space:
-  minx: -50
-  miny: 9001
-  maxx: -1e-1
-  maxy: 2e10
+pattern_viewport:
+  x_min: 0
+  y_min: 0
+  x_max: 1e-10
+  y_max: 3e5
+eyedropper_boundary:
+  x_min: -50
+  y_min: 9001
+  x_max: -1e-1
+  y_max: 2e10
 lattice_pattern:
   lattice_type: generic
   lattice_size:

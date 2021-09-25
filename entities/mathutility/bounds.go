@@ -27,25 +27,25 @@ func ScaleValueBetweenTwoRanges(value, oldRangeMin, oldRangeMax, newRangeMin, ne
 //   The second number is the maximum (all numbers have a real & imaginary component less than or equal to it)
 //   If numbers is an empty slice, returns (0+0i, 0+0i)
 func GetBoundingBox(numbers []complex128) (complex128, complex128) {
-	minX, minY, maxX, maxY := 0.0, 0.0, 0.0, 0.0
+	xMin, yMin, xMax, yMax := 0.0, 0.0, 0.0, 0.0
 	for _, number := range numbers {
 		if cmplx.IsInf(number) {
 			continue
 		}
 
-		if real(number) < minX {
-			minX = real(number)
+		if real(number) < xMin {
+			xMin = real(number)
 		}
-		if real(number) > maxX {
-			maxX = real(number)
+		if real(number) > xMax {
+			xMax = real(number)
 		}
 
-		if imag(number) < minY {
-			minY = imag(number)
+		if imag(number) < yMin {
+			yMin = imag(number)
 		}
-		if imag(number) > maxY {
-			maxY = imag(number)
+		if imag(number) > yMax {
+			yMax = imag(number)
 		}
 	}
-	return complex(minX, minY), complex(maxX, maxY)
+	return complex(xMin, yMin), complex(xMax, yMax)
 }

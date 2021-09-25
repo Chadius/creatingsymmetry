@@ -3,16 +3,16 @@ output_filename: out/rosettes/rainbow_stripe_rosette_2_ignore_complex_conjugate_
 output_size:
   width: 198
   height: 198
-sample_space:
-  minx: -3e-0
-  miny: -3e-0
-  maxx: 3e-0
-  maxy: 3e-0
-color_value_space:
-  minx: -4e1
-  maxx: 4e1
-  miny: -2.5e1
-  maxy: 4.5e1
+pattern_viewport:
+  x_min: -3e-0
+  y_min: -3e-0
+  x_max: 3e-0
+  y_max: 3e-0
+eyedropper_boundary:
+  x_min: -4e1
+  x_max: 4e1
+  y_min: -2.5e1
+  y_max: 4.5e1
 rosette_formula:
   terms:
     - multiplier:

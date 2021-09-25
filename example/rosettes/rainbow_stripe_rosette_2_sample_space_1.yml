@@ -3,16 +3,16 @@ output_filename: out/rosettes/rainbow_stripe_rosette_2_sample_space_1.png
 output_size:
   width: 198
   height: 198
-sample_space:
-  minx: -4e-1
-  miny: -8e-1
-  maxx: 4e-1
-  maxy: 8e-1
-color_value_space:
-  minx: -4e1
-  maxx: 4e1
-  miny: -2.5e1
-  maxy: 4.5e1
+pattern_viewport:
+  x_min: -4e-1
+  y_min: -8e-1
+  x_max: 4e-1
+  y_max: 8e-1
+eyedropper_boundary:
+  x_min: -4e1
+  x_max: 4e1
+  y_min: -2.5e1
+  y_max: 4.5e1
 rosette_formula:
   terms:
     - multiplier:

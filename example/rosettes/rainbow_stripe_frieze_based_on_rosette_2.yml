@@ -3,16 +3,16 @@ output_filename: out/rosettes/rainbow_stripe_frieze_based_on_rosette_2.png
 output_size:
   width: 198
   height: 198
-sample_space:
-  minx: -1e0
-  miny: -2e0
-  maxx: 1e0
-  maxy: 1e0
-color_value_space:
-  minx: -4e1
-  maxx: 4e1
-  miny: -2.5e0
-  maxy: 4.5e0
+pattern_viewport:
+  x_min: -1e0
+  y_min: -2e0
+  x_max: 1e0
+  y_max: 1e0
+eyedropper_boundary:
+  x_min: -4e1
+  x_max: 4e1
+  y_min: -2.5e0
+  y_max: 4.5e0
 frieze_formula:
   terms:
     - multiplier:

@@ -3,16 +3,16 @@ output_filename: out/friezes/rainbow_stripe_frieze_p2mm_only.png
 output_size:
   width: 198
   height: 198
-sample_space:
-  minx: -92e-1
-  maxx: 92e-1
-  miny: -12e-1
-  maxy: 12e-1
-color_value_space:
-  minx: -1.1e1
-  maxx: 1.1e1
-  miny: -18e-2
-  maxy: 10e-2
+pattern_viewport:
+  x_min: -92e-1
+  x_max: 92e-1
+  y_min: -12e-1
+  y_max: 12e-1
+eyedropper_boundary:
+  x_min: -1.1e1
+  x_max: 1.1e1
+  y_min: -18e-2
+  y_max: 10e-2
 frieze_formula:
   terms:
     -
