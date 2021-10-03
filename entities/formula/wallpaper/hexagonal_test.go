@@ -1,12 +1,12 @@
 package wallpaper_test
 
 import (
-	. "gopkg.in/check.v1"
-	"math"
-	"math/cmplx"
 	"github.com/Chadius/creating-symmetry/entities/formula"
 	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
 	"github.com/Chadius/creating-symmetry/entities/utility"
+	. "gopkg.in/check.v1"
+	"math"
+	"math/cmplx"
 )
 
 type HexagonalWallpaper struct {
@@ -15,16 +15,16 @@ type HexagonalWallpaper struct {
 
 var _ = Suite(&HexagonalWallpaper{})
 
-func (suite *HexagonalWallpaper) SetUpTest (checker *C) {
+func (suite *HexagonalWallpaper) SetUpTest(checker *C) {
 	suite.newFormula = &wallpaper.Formula{
-		LatticeType:     wallpaper.Hexagonal,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Hexagonal,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  2,
 			Height: -0.5,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(1, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(1, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
@@ -40,7 +40,7 @@ func (suite *HexagonalWallpaper) SetUpTest (checker *C) {
 	suite.newFormula.Setup()
 }
 
-func (suite *HexagonalWallpaper) TestSetupCreatesLatticeVectors (checker *C) {
+func (suite *HexagonalWallpaper) TestSetupCreatesLatticeVectors(checker *C) {
 	checker.Assert(real(suite.newFormula.Lattice.XLatticeVector), utility.NumericallyCloseEnough{}, 1, 1e-6)
 	checker.Assert(imag(suite.newFormula.Lattice.XLatticeVector), utility.NumericallyCloseEnough{}, 0, 1e-6)
 
@@ -48,7 +48,7 @@ func (suite *HexagonalWallpaper) TestSetupCreatesLatticeVectors (checker *C) {
 	checker.Assert(imag(suite.newFormula.Lattice.YLatticeVector), utility.NumericallyCloseEnough{}, math.Sqrt(3.0)/2.0, 1e-6)
 }
 
-func (suite *HexagonalWallpaper) TestSetupAddsLockedPairs (checker *C) {
+func (suite *HexagonalWallpaper) TestSetupAddsLockedPairs(checker *C) {
 	checker.Assert(suite.newFormula.WavePackets[0].Terms, HasLen, 3)
 	checker.Assert(suite.newFormula.WavePackets[0].Terms[1].PowerN, Equals, -2)
 	checker.Assert(suite.newFormula.WavePackets[0].Terms[1].PowerM, Equals, 1)
@@ -56,20 +56,20 @@ func (suite *HexagonalWallpaper) TestSetupAddsLockedPairs (checker *C) {
 	checker.Assert(suite.newFormula.WavePackets[0].Terms[2].PowerM, Equals, 1)
 }
 
-func (suite *HexagonalWallpaper) TestCalculationOfPoints (checker *C) {
-	calculation := suite.newFormula.Calculate(complex(math.Sqrt(3), -1 * math.Sqrt(3)))
+func (suite *HexagonalWallpaper) TestCalculationOfPoints(checker *C) {
+	calculation := suite.newFormula.Calculate(complex(math.Sqrt(3), -1*math.Sqrt(3)))
 	total := calculation.Total
 
-	expectedAnswer := (cmplx.Exp(complex(0, 2 * math.Pi * (3 + math.Sqrt(3)))) +
-		cmplx.Exp(complex(0, 2 * math.Pi * (-2 * math.Sqrt(3)))) +
-		cmplx.Exp(complex(0, 2 * math.Pi * (-3 + math.Sqrt(3))))) / 3
+	expectedAnswer := (cmplx.Exp(complex(0, 2*math.Pi*(3+math.Sqrt(3)))) +
+		cmplx.Exp(complex(0, 2*math.Pi*(-2*math.Sqrt(3)))) +
+		cmplx.Exp(complex(0, 2*math.Pi*(-3+math.Sqrt(3))))) / 3
 
 	checker.Assert(real(total), utility.NumericallyCloseEnough{}, real(expectedAnswer), 1e-6)
 	checker.Assert(imag(total), utility.NumericallyCloseEnough{}, imag(expectedAnswer), 1e-6)
 }
 
 type HexagonalWallpaperHasSymmetryTest struct {
-	baseWavePacket *wallpaper.WavePacket
+	baseWavePacket      *wallpaper.WavePacket
 	wallpaperMultiplier complex128
 }
 
@@ -77,10 +77,10 @@ var _ = Suite(&HexagonalWallpaperHasSymmetryTest{})
 
 func (suite *HexagonalWallpaperHasSymmetryTest) SetUpTest(checker *C) {
 	suite.baseWavePacket = &wallpaper.WavePacket{
-		Terms:[]*formula.EisensteinFormulaTerm{
+		Terms: []*formula.EisensteinFormulaTerm{
 			{
-				PowerN:         8,
-				PowerM:         -3,
+				PowerN: 8,
+				PowerM: -3,
 			},
 		},
 		Multiplier: complex(1, 0),
@@ -91,11 +91,11 @@ func (suite *HexagonalWallpaperHasSymmetryTest) SetUpTest(checker *C) {
 
 func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalWillAlwaysHaveP3(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Hexagonal,
-		LatticeSize:     nil,
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		LatticeType: wallpaper.Hexagonal,
+		LatticeSize: nil,
+		Lattice:     nil,
+		Multiplier:  complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 		},
 	}
@@ -112,17 +112,17 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalWillAlwaysHaveP3(ch
 
 func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP31m(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Hexagonal,
-		LatticeSize:     nil,
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		LatticeType: wallpaper.Hexagonal,
+		LatticeSize: nil,
+		Lattice:     nil,
+		Multiplier:  complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacket.Terms[0].PowerM * -1,
-						PowerM:         suite.baseWavePacket.Terms[0].PowerN * -1,
+						PowerN: suite.baseWavePacket.Terms[0].PowerM * -1,
+						PowerM: suite.baseWavePacket.Terms[0].PowerN * -1,
 					},
 				},
 				Multiplier: suite.baseWavePacket.Multiplier,
@@ -141,17 +141,17 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 
 func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP3m1(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Hexagonal,
-		LatticeSize:     nil,
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		LatticeType: wallpaper.Hexagonal,
+		LatticeSize: nil,
+		Lattice:     nil,
+		Multiplier:  complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacket.Terms[0].PowerM * -1,
-						PowerM:         suite.baseWavePacket.Terms[0].PowerN * -1,
+						PowerN: suite.baseWavePacket.Terms[0].PowerM * -1,
+						PowerM: suite.baseWavePacket.Terms[0].PowerN * -1,
 					},
 				},
 				Multiplier: complex(1, 0),
@@ -170,17 +170,17 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 
 func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP6(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Hexagonal,
-		LatticeSize:     nil,
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		LatticeType: wallpaper.Hexagonal,
+		LatticeSize: nil,
+		Lattice:     nil,
+		Multiplier:  complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacket.Terms[0].PowerN * -1,
-						PowerM:         suite.baseWavePacket.Terms[0].PowerM * -1,
+						PowerN: suite.baseWavePacket.Terms[0].PowerN * -1,
+						PowerM: suite.baseWavePacket.Terms[0].PowerM * -1,
 					},
 				},
 				Multiplier: complex(1, 0),
@@ -199,17 +199,17 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 
 func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP6m(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Hexagonal,
-		LatticeSize:     nil,
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		LatticeType: wallpaper.Hexagonal,
+		LatticeSize: nil,
+		Lattice:     nil,
+		Multiplier:  complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacket.Terms[0].PowerN * -1,
-						PowerM:         suite.baseWavePacket.Terms[0].PowerM * -1,
+						PowerN: suite.baseWavePacket.Terms[0].PowerN * -1,
+						PowerM: suite.baseWavePacket.Terms[0].PowerM * -1,
 					},
 				},
 				Multiplier: suite.baseWavePacket.Multiplier,
@@ -217,8 +217,8 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacket.Terms[0].PowerM,
-						PowerM:         suite.baseWavePacket.Terms[0].PowerN,
+						PowerN: suite.baseWavePacket.Terms[0].PowerM,
+						PowerM: suite.baseWavePacket.Terms[0].PowerN,
 					},
 				},
 				Multiplier: suite.baseWavePacket.Multiplier,
@@ -226,8 +226,8 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacket.Terms[0].PowerM * -1,
-						PowerM:         suite.baseWavePacket.Terms[0].PowerN * -1,
+						PowerN: suite.baseWavePacket.Terms[0].PowerM * -1,
+						PowerM: suite.baseWavePacket.Terms[0].PowerN * -1,
 					},
 				},
 				Multiplier: suite.baseWavePacket.Multiplier,
@@ -245,15 +245,15 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 }
 
 type HexagonalCreatedWithDesiredSymmetry struct {
-	baseWavePacket *wallpaper.WavePacket
+	baseWavePacket      *wallpaper.WavePacket
 	wallpaperMultiplier complex128
 }
 
 var _ = Suite(&HexagonalCreatedWithDesiredSymmetry{})
 
-func (suite *HexagonalCreatedWithDesiredSymmetry) SetUpTest (checker *C) {
+func (suite *HexagonalCreatedWithDesiredSymmetry) SetUpTest(checker *C) {
 	suite.baseWavePacket = &wallpaper.WavePacket{
-		Terms:[]*formula.EisensteinFormulaTerm{
+		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN: 1,
 				PowerM: -2,
@@ -266,9 +266,9 @@ func (suite *HexagonalCreatedWithDesiredSymmetry) SetUpTest (checker *C) {
 
 func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithP31m(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Hexagonal,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		LatticeType: wallpaper.Hexagonal,
+		Multiplier:  complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 		},
 		DesiredSymmetry: wallpaper.P31m,
@@ -288,9 +288,9 @@ func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithP31m(ch
 
 func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithP3m1(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Hexagonal,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		LatticeType: wallpaper.Hexagonal,
+		Multiplier:  complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 		},
 		DesiredSymmetry: wallpaper.P3m1,
@@ -309,9 +309,9 @@ func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithP3m1(ch
 
 func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithP6(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Hexagonal,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		LatticeType: wallpaper.Hexagonal,
+		Multiplier:  complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 		},
 		DesiredSymmetry: wallpaper.P6,
@@ -330,9 +330,9 @@ func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithP6(chec
 
 func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithP6m(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Hexagonal,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		LatticeType: wallpaper.Hexagonal,
+		Multiplier:  complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 		},
 		DesiredSymmetry: wallpaper.P6m,

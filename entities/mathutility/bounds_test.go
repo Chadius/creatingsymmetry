@@ -1,10 +1,10 @@
 package mathutility_test
 
 import (
+	"github.com/Chadius/creating-symmetry/entities/mathutility"
 	. "gopkg.in/check.v1"
 	"math/cmplx"
 	"testing"
-	"github.com/Chadius/creating-symmetry/entities/mathutility"
 )
 
 func Test(t *testing.T) { TestingT(t) }
@@ -23,7 +23,7 @@ func (suite *BoundsTestSuite) TestBoundAgainstMinValueWhenLess(checker *C) {
 		-100.0,
 		100.0,
 		0,
-		200.0) - 0 < 0.01, Equals, true)
+		200.0)-0 < 0.01, Equals, true)
 }
 
 func (suite *BoundsTestSuite) TestBoundAgainstMinValueWhenEqual(checker *C) {
@@ -32,7 +32,7 @@ func (suite *BoundsTestSuite) TestBoundAgainstMinValueWhenEqual(checker *C) {
 		-100.0,
 		100.0,
 		0,
-		200.0) - 0 < 0.01, Equals, true)
+		200.0)-0 < 0.01, Equals, true)
 }
 
 func (suite *BoundsTestSuite) TestBoundAgainstMaxValueWhenGreater(checker *C) {
@@ -41,7 +41,7 @@ func (suite *BoundsTestSuite) TestBoundAgainstMaxValueWhenGreater(checker *C) {
 		-100.0,
 		100.0,
 		0,
-		200.0) - 200 < 0.01, Equals, true)
+		200.0)-200 < 0.01, Equals, true)
 }
 
 func (suite *BoundsTestSuite) TestBoundAgainstMaxValueWhenEqual(checker *C) {
@@ -50,7 +50,7 @@ func (suite *BoundsTestSuite) TestBoundAgainstMaxValueWhenEqual(checker *C) {
 		-100.0,
 		100.0,
 		0,
-		200.0) - 200 < 0.01, Equals, true)
+		200.0)-200 < 0.01, Equals, true)
 }
 
 func (suite *BoundsTestSuite) TestScaleNewRange(checker *C) {
@@ -59,7 +59,7 @@ func (suite *BoundsTestSuite) TestScaleNewRange(checker *C) {
 		-100.0,
 		100.0,
 		0,
-		200.0) - 100 < 0.01, Equals, true)
+		200.0)-100 < 0.01, Equals, true)
 }
 
 func (suite *BoundsTestSuite) TestBoundingBoxCalculation(checker *C) {
@@ -78,19 +78,19 @@ func (suite *BoundsTestSuite) TestBoundingBoxCalculation(checker *C) {
 
 	min, max := mathutility.GetBoundingBox(lotsOfComplexNumbers)
 
-	checker.Assert(real(min)- -100 < 0.01, Equals, true)
-	checker.Assert(imag(min)- -100.2 < 0.01, Equals, true)
-	checker.Assert(real(max)- 9000.1 < 0.01, Equals, true)
-	checker.Assert(imag(max)- 25.5 < 0.01, Equals, true)
+	checker.Assert(real(min) - -100 < 0.01, Equals, true)
+	checker.Assert(imag(min) - -100.2 < 0.01, Equals, true)
+	checker.Assert(real(max)-9000.1 < 0.01, Equals, true)
+	checker.Assert(imag(max)-25.5 < 0.01, Equals, true)
 }
 
 func (suite *BoundsTestSuite) TestBoundingBoxDefault(checker *C) {
 	min, max := mathutility.GetBoundingBox([]complex128{})
 
-	checker.Assert(real(min)- 0 < 0.01, Equals, true)
-	checker.Assert(imag(min)- 0 < 0.01, Equals, true)
-	checker.Assert(real(max)- 0 < 0.01, Equals, true)
-	checker.Assert(imag(max)- 0 < 0.01, Equals, true)
+	checker.Assert(real(min)-0 < 0.01, Equals, true)
+	checker.Assert(imag(min)-0 < 0.01, Equals, true)
+	checker.Assert(real(max)-0 < 0.01, Equals, true)
+	checker.Assert(imag(max)-0 < 0.01, Equals, true)
 }
 
 func (suite *BoundsTestSuite) TestBoundingBoxIgnoresInfinity(checker *C) {
@@ -102,8 +102,8 @@ func (suite *BoundsTestSuite) TestBoundingBoxIgnoresInfinity(checker *C) {
 	}
 	min, max := mathutility.GetBoundingBox(lotsOfComplexNumbers)
 
-	checker.Assert(real(min)- -10 < 0.01, Equals, true)
-	checker.Assert(imag(min)- -10 < 0.01, Equals, true)
-	checker.Assert(real(max)- 10 < 0.01, Equals, true)
-	checker.Assert(imag(max)- 10 < 0.01, Equals, true)
+	checker.Assert(real(min) - -10 < 0.01, Equals, true)
+	checker.Assert(imag(min) - -10 < 0.01, Equals, true)
+	checker.Assert(real(max)-10 < 0.01, Equals, true)
+	checker.Assert(imag(max)-10 < 0.01, Equals, true)
 }

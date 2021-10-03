@@ -19,33 +19,33 @@ type ComplexNumberCorners struct {
 
 // WidthHeightDimensions is a width + height combination.
 type WidthHeightDimensions struct {
-	Width 	int `json:"width" yaml:"width"`
-	Height	int `json:"height" yaml:"height"`
+	Width  int `json:"width" yaml:"width"`
+	Height int `json:"height" yaml:"height"`
 }
 
 // CreateSymmetryPattern records the desired command to generate.
 type CreateSymmetryPattern struct {
-	PatternViewport ComplexNumberCorners  `json:"pattern_viewport" yaml:"pattern_viewport"`
-	OutputImageSize WidthHeightDimensions `json:"output_size" yaml:"output_size"`
-	SampleSourceFilename	  string                                `json:"sample_source_filename" yaml:"sample_source_filename"`
-	OutputFilename     string               `json:"output_filename" yaml:"output_filename"`
-	EyedropperBoundary ComplexNumberCorners `json:"eyedropper_boundary" yaml:"eyedropper_boundary"`
+	PatternViewport      ComplexNumberCorners  `json:"pattern_viewport" yaml:"pattern_viewport"`
+	OutputImageSize      WidthHeightDimensions `json:"output_size" yaml:"output_size"`
+	SampleSourceFilename string                `json:"sample_source_filename" yaml:"sample_source_filename"`
+	OutputFilename       string                `json:"output_filename" yaml:"output_filename"`
+	EyedropperBoundary   ComplexNumberCorners  `json:"eyedropper_boundary" yaml:"eyedropper_boundary"`
 
-	RosetteFormula			  *rosette.Formula                    `json:"rosette_formula" yaml:"rosette_formula"`
-	FriezeFormula			  *frieze.Formula                      `json:"frieze_formula" yaml:"frieze_formula"`
+	RosetteFormula *rosette.Formula   `json:"rosette_formula" yaml:"rosette_formula"`
+	FriezeFormula  *frieze.Formula    `json:"frieze_formula" yaml:"frieze_formula"`
 	LatticePattern *wallpaper.Formula `json:"lattice_pattern" yaml:"lattice_pattern"`
 }
 
 // CreateWallpaperCommandMarshal can be marshaled and converted to a CreateSymmetryPattern
 type CreateWallpaperCommandMarshal struct {
-	PatternViewport ComplexNumberCorners  `json:"pattern_viewport" yaml:"pattern_viewport"`
-	OutputImageSize WidthHeightDimensions `json:"output_size" yaml:"output_size"`
-	SampleSourceFilename	string                                   `json:"sample_source_filename" yaml:"sample_source_filename"`
-	OutputFilename     string               `json:"output_filename" yaml:"output_filename"`
-	EyedropperBoundary ComplexNumberCorners `json:"eyedropper_boundary" yaml:"eyedropper_boundary"`
+	PatternViewport      ComplexNumberCorners  `json:"pattern_viewport" yaml:"pattern_viewport"`
+	OutputImageSize      WidthHeightDimensions `json:"output_size" yaml:"output_size"`
+	SampleSourceFilename string                `json:"sample_source_filename" yaml:"sample_source_filename"`
+	OutputFilename       string                `json:"output_filename" yaml:"output_filename"`
+	EyedropperBoundary   ComplexNumberCorners  `json:"eyedropper_boundary" yaml:"eyedropper_boundary"`
 
-	RosetteFormula			*rosette.MarshaledFormula              `json:"rosette_formula" yaml:"rosette_formula"`
-	FriezeFormula			*frieze.MarshaledFormula                `json:"frieze_formula" yaml:"frieze_formula"`
+	RosetteFormula *rosette.MarshaledFormula `json:"rosette_formula" yaml:"rosette_formula"`
+	FriezeFormula  *frieze.MarshaledFormula  `json:"frieze_formula" yaml:"frieze_formula"`
 	LatticePattern *wallpaper.FormulaMarshal `json:"lattice_pattern" yaml:"lattice_pattern"`
 }
 
@@ -78,11 +78,11 @@ func newCreateWallpaperCommandFromDatastream(data []byte, unmarshal utility.Unma
 	}
 
 	if commandToCreateMarshal.RosetteFormula != nil {
-		commandToCreate.RosetteFormula  = rosette.NewRosetteFormulaFromMarshalObject(*commandToCreateMarshal.RosetteFormula)
+		commandToCreate.RosetteFormula = rosette.NewRosetteFormulaFromMarshalObject(*commandToCreateMarshal.RosetteFormula)
 	}
 
 	if commandToCreateMarshal.FriezeFormula != nil {
-		commandToCreate.FriezeFormula  = frieze.NewFriezeFormulaFromMarshalObject(*commandToCreateMarshal.FriezeFormula)
+		commandToCreate.FriezeFormula = frieze.NewFriezeFormulaFromMarshalObject(*commandToCreateMarshal.FriezeFormula)
 	}
 
 	if commandToCreateMarshal.LatticePattern != nil {

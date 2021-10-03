@@ -8,8 +8,8 @@ import (
 func addNewWavePacketsBasedOnSymmetry(term *formula.EisensteinFormulaTerm, multiplier complex128, desiredSymmetry Symmetry, newWavePackets []*WavePacket) []*WavePacket {
 	powerN := term.PowerN
 	powerM := term.PowerM
-	powerNIsEven := powerN % 2 == 0
-	powerSumIsEven := (powerN + powerM) % 2 == 0
+	powerNIsEven := powerN%2 == 0
+	powerSumIsEven := (powerN+powerM)%2 == 0
 
 	multiplierMaybeNegatedBasedOnSum := multiplier
 	if !powerSumIsEven {

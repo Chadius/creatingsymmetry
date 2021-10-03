@@ -1,12 +1,12 @@
 package frieze
 
 import (
-	"gopkg.in/yaml.v2"
-	"math/cmplx"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/formula/exponential"
 	"github.com/Chadius/creating-symmetry/entities/formula/result"
 	"github.com/Chadius/creating-symmetry/entities/utility"
+	"gopkg.in/yaml.v2"
+	"math/cmplx"
 )
 
 // Formula is used to generate frieze patterns.
@@ -17,7 +17,7 @@ type Formula struct {
 // Calculate applies the Frieze formula to the complex number z.
 func (friezeFormula Formula) Calculate(z complex128) *result.CalculationResultForFormula {
 	result := &result.CalculationResultForFormula{
-		Total: complex(0,0),
+		Total:              complex(0, 0),
 		ContributionByTerm: []complex128{},
 	}
 
@@ -31,13 +31,13 @@ func (friezeFormula Formula) Calculate(z complex128) *result.CalculationResultFo
 }
 
 func (friezeFormula *Formula) calculateTerm(term *exponential.RosetteFriezeTerm, z complex128) complex128 {
-	sum := complex(0.0,0.0)
+	sum := complex(0.0, 0.0)
 
 	coefficientRelationships := []coefficient.Relationship{coefficient.PlusNPlusM}
 	coefficientRelationships = append(coefficientRelationships, term.CoefficientRelationships...)
 	coefficientSets := coefficient.Pairing{
-		PowerN:     term.PowerN,
-		PowerM:     term.PowerM,
+		PowerN: term.PowerN,
+		PowerM: term.PowerM,
 	}.GenerateCoefficientSets(coefficientRelationships)
 
 	for _, relationshipSet := range coefficientSets {
@@ -82,7 +82,7 @@ func (friezeFormula Formula) AnalyzeForSymmetry() *Symmetry {
 			symmetriesFound.P2mg = false
 		}
 
-		powerSumIsEven := (term.PowerN + term.PowerM) % 2 == 0
+		powerSumIsEven := (term.PowerN+term.PowerM)%2 == 0
 
 		containsMinusNMinusM := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.MinusNMinusM)
 		containsMinusMMinusN := coefficientRelationshipsIncludes(term.CoefficientRelationships, coefficient.MinusMMinusN)
@@ -106,10 +106,9 @@ func (friezeFormula Formula) AnalyzeForSymmetry() *Symmetry {
 		if !(containsMinusMMinusN || containsMinusMMinusNAndPowerSumIsEven) {
 			symmetriesFound.P11m = false
 		}
-		if !(
-			containsMinusNMinusM &&
-				(containsPlusMPlusN || containsPlusMPlusNAndPowerSumIsEven) &&
-				(containsMinusMMinusN || containsMinusMMinusNAndPowerSumIsEven)) {
+		if !(containsMinusNMinusM &&
+			(containsPlusMPlusN || containsPlusMPlusNAndPowerSumIsEven) &&
+			(containsMinusMMinusN || containsMinusMMinusNAndPowerSumIsEven)) {
 			symmetriesFound.P2mm = false
 		}
 		if !(containsMinusNMinusM && containsPlusMPlusNAndPowerSumIsOdd && containsMinusMMinusNAndPowerSumIsOdd) {
@@ -122,13 +121,13 @@ func (friezeFormula Formula) AnalyzeForSymmetry() *Symmetry {
 
 // CalculateEulerTerm calculates e^(i*n*z) * e^(-i*m*zConj)
 func CalculateEulerTerm(z complex128, power1, power2 int, scale complex128, ignoreComplexConjugate bool) complex128 {
-	eRaisedToTheNZi := cmplx.Exp(complex(0,1) * z * complex(float64(power1), 0))
+	eRaisedToTheNZi := cmplx.Exp(complex(0, 1) * z * complex(float64(power1), 0))
 	if ignoreComplexConjugate {
 		return eRaisedToTheNZi * scale
 	}
 
-	complexConjugate := complex(real(z), -1 * imag(z))
-	eRaisedToTheNegativeMZConji := cmplx.Exp(complexConjugate * complex(0, -1 * float64(power2)))
+	complexConjugate := complex(real(z), -1*imag(z))
+	eRaisedToTheNegativeMZConji := cmplx.Exp(complexConjugate * complex(0, -1*float64(power2)))
 	return eRaisedToTheNZi * eRaisedToTheNegativeMZConji * scale
 }
 

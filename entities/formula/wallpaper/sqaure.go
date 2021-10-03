@@ -27,7 +27,7 @@ func checksForSymmetryForSquareType(formula *Formula, targetSymmetry Symmetry) b
 		return true
 	}
 
-	return HasSymmetry(formula.WavePackets, targetSymmetry, map[Symmetry][]coefficient.Relationship {
+	return HasSymmetry(formula.WavePackets, targetSymmetry, map[Symmetry][]coefficient.Relationship{
 		P4m: {coefficient.PlusMPlusN},
 		P4g: {coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum},
 	})

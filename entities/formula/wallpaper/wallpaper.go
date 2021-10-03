@@ -2,30 +2,30 @@ package wallpaper
 
 import (
 	"encoding/json"
-	"gopkg.in/yaml.v2"
 	eisensteinFormula "github.com/Chadius/creating-symmetry/entities/formula"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/formula/latticevector"
 	"github.com/Chadius/creating-symmetry/entities/formula/result"
 	"github.com/Chadius/creating-symmetry/entities/utility"
+	"gopkg.in/yaml.v2"
 )
 
 // DimensionsMarshal tracks the width and height
 type DimensionsMarshal struct {
-	Width	float64	`json:"width" yaml:"width"`
-	Height	float64	`json:"height" yaml:"height"`
+	Width  float64 `json:"width" yaml:"width"`
+	Height float64 `json:"height" yaml:"height"`
 }
 
 // Dimensions tracks the width and height
 type Dimensions struct {
-	Width	float64
-	Height	float64
+	Width  float64
+	Height float64
 }
 
 // FormulaMarshal can be created from data streams and used to create Formula objects.
 type FormulaMarshal struct {
-	LatticeType     string                           `json:"lattice_type" yaml:"lattice_type"`
-	LatticeSize     *DimensionsMarshal               `json:"lattice_size" yaml:"lattice_size"`
+	LatticeType     string                          `json:"lattice_type" yaml:"lattice_type"`
+	LatticeSize     *DimensionsMarshal              `json:"lattice_size" yaml:"lattice_size"`
 	Multiplier      utility.ComplexNumberForMarshal `json:"multiplier" yaml:"multiplier"`
 	WavePackets     []*Marshal                      `json:"wave_packets" yaml:"wave_packets"`
 	DesiredSymmetry string                          `json:"desired_symmetry" yaml:"desired_symmetry"`
@@ -49,10 +49,10 @@ const (
 
 // Formula stores the information needed to create wallpapers using a Lattice.
 type Formula struct {
-	LatticeType LatticeType
-	LatticeSize *Dimensions
-	Lattice *latticevector.Pair
-	Multiplier complex128
+	LatticeType     LatticeType
+	LatticeSize     *Dimensions
+	Lattice         *latticevector.Pair
+	Multiplier      complex128
 	WavePackets     []*WavePacket
 	DesiredSymmetry Symmetry
 }
@@ -82,7 +82,7 @@ func newFormulaFromDatastream(data []byte, unmarshal utility.UnmarshalFunc) (*Fo
 // NewFormulaFromMarshalObject converts a marshaled formula into a formula object
 func NewFormulaFromMarshalObject(marshaledFormula FormulaMarshal) *Formula {
 	wavePackets := []*WavePacket{}
-	for _,packet := range marshaledFormula.WavePackets {
+	for _, packet := range marshaledFormula.WavePackets {
 		newWavePacket := NewWaveFormulaFromMarshalObject(*packet)
 		wavePackets = append(wavePackets, newWavePacket)
 	}
@@ -100,11 +100,11 @@ func NewFormulaFromMarshalObject(marshaledFormula FormulaMarshal) *Formula {
 	}
 
 	return &Formula{
-		LatticeType: LatticeType(marshaledFormula.LatticeType),
-		LatticeSize: &Dimensions{Width: latticeWidth, Height: latticeHeight},
-		Lattice: &latticevector.Pair{ XLatticeVector: complex(0,0), YLatticeVector: complex(0,0) },
-		Multiplier: complex(marshaledFormula.Multiplier.Real, marshaledFormula.Multiplier.Imaginary),
-		WavePackets: wavePackets,
+		LatticeType:     LatticeType(marshaledFormula.LatticeType),
+		LatticeSize:     &Dimensions{Width: latticeWidth, Height: latticeHeight},
+		Lattice:         &latticevector.Pair{XLatticeVector: complex(0, 0), YLatticeVector: complex(0, 0)},
+		Multiplier:      complex(marshaledFormula.Multiplier.Real, marshaledFormula.Multiplier.Imaginary),
+		WavePackets:     wavePackets,
 		DesiredSymmetry: desiredSymmetry,
 	}
 }
@@ -129,10 +129,10 @@ func (formula *Formula) createVectors() error {
 	type VectorCreator func(formula *Formula) error
 
 	vectorCreatorBasedOnLatticeType := map[LatticeType]VectorCreator{
-		Generic: createVectorsForGenericWallpaper,
-		Hexagonal: createVectorsForHexagonalWallpaper,
-		Rhombic: createVectorsForRhombicWallpaper,
-		Square: createVectorsForSquareWallpaper,
+		Generic:     createVectorsForGenericWallpaper,
+		Hexagonal:   createVectorsForHexagonalWallpaper,
+		Rhombic:     createVectorsForRhombicWallpaper,
+		Square:      createVectorsForSquareWallpaper,
 		Rectangular: createVectorsForRectangularWallpaper,
 	}
 
@@ -154,8 +154,8 @@ func (formula *Formula) lockEisensteinTerms() {
 
 	lockedCoefficientPairsBasedOnLatticeType := map[LatticeType]EisensteinCreator{
 		Hexagonal: lockCoefficientPairsForHexagonalWallpaper,
-		Rhombic: lockCoefficientPairsForRhombicWallpaper,
-		Square: lockCoefficientPairsForSquareWallpaper,
+		Rhombic:   lockCoefficientPairsForRhombicWallpaper,
+		Square:    lockCoefficientPairsForSquareWallpaper,
 	}
 
 	lockedCoefficientPairsBasedOnLatticeType[formula.LatticeType](formula)
@@ -175,8 +175,8 @@ func (formula *Formula) lockEisensteinTermsBasedOnRelationship(
 
 		for _, newCoefficientPair := range newPairings {
 			newEisenstein := &eisensteinFormula.EisensteinFormulaTerm{
-				PowerN:         newCoefficientPair.PowerN,
-				PowerM:         newCoefficientPair.PowerM,
+				PowerN: newCoefficientPair.PowerN,
+				PowerM: newCoefficientPair.PowerM,
 			}
 			wavePacket.Terms = append(wavePacket.Terms, newEisenstein)
 		}
@@ -206,10 +206,10 @@ func (formula *Formula) HasSymmetry(targetSymmetry Symmetry) bool {
 	type SymmetryChecker func(formula *Formula, targetSymmetry Symmetry) bool
 
 	checksForSymmetryBasedOnLatticeType := map[LatticeType]SymmetryChecker{
-		Generic: checksForSymmetryForGenericType,
-		Hexagonal: checksForSymmetryForHexagonalType,
-		Rhombic: checksForSymmetryForRhombicType,
-		Square: checksForSymmetryForSquareType,
+		Generic:     checksForSymmetryForGenericType,
+		Hexagonal:   checksForSymmetryForHexagonalType,
+		Rhombic:     checksForSymmetryForRhombicType,
+		Square:      checksForSymmetryForSquareType,
 		Rectangular: checksForSymmetryForRectangularType,
 	}
 
@@ -221,7 +221,7 @@ func (formula *Formula) HasSymmetry(targetSymmetry Symmetry) bool {
 // As well as the final numerical result.
 func (formula *Formula) Calculate(z complex128) *result.CalculationResultForFormula {
 	result := &result.CalculationResultForFormula{
-		Total: complex(0,0),
+		Total:              complex(0, 0),
 		ContributionByTerm: []complex128{},
 	}
 

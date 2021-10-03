@@ -1,9 +1,9 @@
 package wallpaper
 
 import (
-	"math"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/formula/latticevector"
+	"math"
 )
 
 // createVectorsForHexagonalWallpaper creates two vectors of a fixed shape and size.
@@ -27,7 +27,7 @@ func checksForSymmetryForHexagonalType(formula *Formula, targetSymmetry Symmetry
 		return true
 	}
 
-	return HasSymmetry(formula.WavePackets, targetSymmetry, map[Symmetry][]coefficient.Relationship {
+	return HasSymmetry(formula.WavePackets, targetSymmetry, map[Symmetry][]coefficient.Relationship{
 		P31m: {coefficient.PlusMPlusN},
 		P3m1: {coefficient.MinusMMinusN},
 		P6:   {coefficient.MinusNMinusM},

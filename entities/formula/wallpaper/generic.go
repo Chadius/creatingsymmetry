@@ -15,7 +15,7 @@ func createVectorsForGenericWallpaper(formula *Formula) error {
 }
 
 func checksForSymmetryForGenericType(formula *Formula, targetSymmetry Symmetry) bool {
-	return HasSymmetry(formula.WavePackets, targetSymmetry, map[Symmetry][]coefficient.Relationship {
+	return HasSymmetry(formula.WavePackets, targetSymmetry, map[Symmetry][]coefficient.Relationship{
 		P2: {coefficient.MinusNMinusM},
 	})
 }

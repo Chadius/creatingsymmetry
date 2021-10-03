@@ -2,30 +2,30 @@ package wallpaper
 
 import (
 	"encoding/json"
-	"gopkg.in/yaml.v2"
 	"github.com/Chadius/creating-symmetry/entities/formula"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/formula/result"
 	"github.com/Chadius/creating-symmetry/entities/utility"
+	"gopkg.in/yaml.v2"
 )
 
 // Marshal can be marshaled and converted to a EisensteinFormulaTerm
 type Marshal struct {
-	Terms []*formula.EisensteinFormulaTermMarshal `json:"terms" yaml:"terms"`
-	Multiplier utility.ComplexNumberForMarshal    `json:"multiplier" yaml:"multiplier"`
+	Terms      []*formula.EisensteinFormulaTermMarshal `json:"terms" yaml:"terms"`
+	Multiplier utility.ComplexNumberForMarshal         `json:"multiplier" yaml:"multiplier"`
 }
 
 // WavePacket for Waves mathematically creates repeating, cyclical mathematical patterns
 //   in 2D space, similar to waves on the ocean.
 type WavePacket struct {
-	Terms 			[]*formula.EisensteinFormulaTerm
-	Multiplier 		complex128
+	Terms      []*formula.EisensteinFormulaTerm
+	Multiplier complex128
 }
 
 // Calculate takes the complex number zInLatticeCoordinates and processes it using the mathematical terms.
 func (waveFormula WavePacket) Calculate(zInLatticeCoordinates complex128) *result.CalculationResultForFormula {
 	result := &result.CalculationResultForFormula{
-		Total: complex(0,0),
+		Total:              complex(0, 0),
 		ContributionByTerm: []complex128{},
 	}
 
@@ -66,14 +66,14 @@ func newWaveFormulaFromDatastream(data []byte, unmarshal utility.UnmarshalFunc) 
 // NewWaveFormulaFromMarshalObject converts the marshaled intermediary object into a usable object.
 func NewWaveFormulaFromMarshalObject(marshalObject Marshal) *WavePacket {
 	formulaTerms := []*formula.EisensteinFormulaTerm{}
-	for _,term := range marshalObject.Terms {
+	for _, term := range marshalObject.Terms {
 		newEisenstein := formula.NewEisensteinFormulaTermFromMarshalObject(*term)
 		formulaTerms = append(formulaTerms, newEisenstein)
 	}
 
 	return &WavePacket{
-		Terms: 		formulaTerms,
-		Multiplier:	complex(marshalObject.Multiplier.Real, marshalObject.Multiplier.Imaginary),
+		Terms:      formulaTerms,
+		Multiplier: complex(marshalObject.Multiplier.Real, marshalObject.Multiplier.Imaginary),
 	}
 }
 
@@ -121,7 +121,7 @@ func CanWavePacketsBeGroupedAmongCoefficientRelationships(wavePackets []*WavePac
 
 			for _, relationshipToLookFor := range desiredRelationships {
 				if ContainsRelationship(relationshipsFound, relationshipToLookFor) {
-					wavePacketsMatched[indexA + offsetB + 1] = true
+					wavePacketsMatched[indexA+offsetB+1] = true
 					relationshipWasFound[relationshipToLookFor] = true
 					break
 				}
@@ -142,7 +142,7 @@ func CanWavePacketsBeGroupedAmongCoefficientRelationships(wavePackets []*WavePac
 // HasSymmetry returns true if the WavePackets involved form the desired symmetry.
 func HasSymmetry(wavePackets []*WavePacket, desiredSymmetry Symmetry, desiredSymmetryToCoefficients map[Symmetry][]coefficient.Relationship) bool {
 	numberOfWavePackets := len(wavePackets)
-	if numberOfWavePackets < 2 || numberOfWavePackets % 2 == 1 {
+	if numberOfWavePackets < 2 || numberOfWavePackets%2 == 1 {
 		return false
 	}
 

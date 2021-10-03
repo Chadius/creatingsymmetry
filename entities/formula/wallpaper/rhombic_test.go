@@ -1,12 +1,12 @@
 package wallpaper_test
 
 import (
-	. "gopkg.in/check.v1"
-	"math"
-	"math/cmplx"
 	"github.com/Chadius/creating-symmetry/entities/formula"
 	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
 	"github.com/Chadius/creating-symmetry/entities/utility"
+	. "gopkg.in/check.v1"
+	"math"
+	"math/cmplx"
 )
 
 type RhombicWallpaper struct {
@@ -15,16 +15,16 @@ type RhombicWallpaper struct {
 
 var _ = Suite(&RhombicWallpaper{})
 
-func (suite *RhombicWallpaper) SetUpTest (checker *C) {
+func (suite *RhombicWallpaper) SetUpTest(checker *C) {
 	suite.newFormula = &wallpaper.Formula{
-		LatticeType:     wallpaper.Rhombic,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rhombic,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  2,
 			Height: 1,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(1, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(1, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
@@ -40,7 +40,7 @@ func (suite *RhombicWallpaper) SetUpTest (checker *C) {
 	suite.newFormula.Setup()
 }
 
-func (suite *RhombicWallpaper) TestSetupCreatesLatticeVectors (checker *C) {
+func (suite *RhombicWallpaper) TestSetupCreatesLatticeVectors(checker *C) {
 	checker.Assert(real(suite.newFormula.Lattice.XLatticeVector), utility.NumericallyCloseEnough{}, 0.5, 1e-6)
 	checker.Assert(imag(suite.newFormula.Lattice.XLatticeVector), utility.NumericallyCloseEnough{}, 1.0, 1e-6)
 
@@ -48,26 +48,25 @@ func (suite *RhombicWallpaper) TestSetupCreatesLatticeVectors (checker *C) {
 	checker.Assert(imag(suite.newFormula.Lattice.YLatticeVector), utility.NumericallyCloseEnough{}, -1.0, 1e-6)
 }
 
-func (suite *RhombicWallpaper) TestSetupAddsLockedPairs (checker *C) {
+func (suite *RhombicWallpaper) TestSetupAddsLockedPairs(checker *C) {
 	checker.Assert(suite.newFormula.WavePackets[0].Terms, HasLen, 2)
 	checker.Assert(suite.newFormula.WavePackets[0].Terms[1].PowerN, Equals, suite.newFormula.WavePackets[0].Terms[0].PowerM)
 	checker.Assert(suite.newFormula.WavePackets[0].Terms[1].PowerM, Equals, suite.newFormula.WavePackets[0].Terms[0].PowerN)
 }
 
-func (suite *RhombicWallpaper) TestCalculationOfPoints (checker *C) {
+func (suite *RhombicWallpaper) TestCalculationOfPoints(checker *C) {
 	calculation := suite.newFormula.Calculate(complex(0.75, -0.25))
 	total := calculation.Total
 
-	expectedAnswer := (
-		cmplx.Exp(complex(0, math.Pi * -9 / 4)) +
-		cmplx.Exp(complex(0, math.Pi * -3 / 4))) / 2
+	expectedAnswer := (cmplx.Exp(complex(0, math.Pi*-9/4)) +
+		cmplx.Exp(complex(0, math.Pi*-3/4))) / 2
 
 	checker.Assert(real(total), utility.NumericallyCloseEnough{}, real(expectedAnswer), 1e-6)
 	checker.Assert(imag(total), utility.NumericallyCloseEnough{}, imag(expectedAnswer), 1e-6)
 }
 
 type RhombicWallpaperHasSymmetryTest struct {
-	baseWavePacket *wallpaper.WavePacket
+	baseWavePacket      *wallpaper.WavePacket
 	wallpaperMultiplier complex128
 }
 
@@ -75,10 +74,10 @@ var _ = Suite(&RhombicWallpaperHasSymmetryTest{})
 
 func (suite *RhombicWallpaperHasSymmetryTest) SetUpTest(checker *C) {
 	suite.baseWavePacket = &wallpaper.WavePacket{
-		Terms:[]*formula.EisensteinFormulaTerm{
+		Terms: []*formula.EisensteinFormulaTerm{
 			{
-				PowerN:         8,
-				PowerM:         -3,
+				PowerN: 8,
+				PowerM: -3,
 			},
 		},
 		Multiplier: complex(1, 0),
@@ -89,14 +88,14 @@ func (suite *RhombicWallpaperHasSymmetryTest) SetUpTest(checker *C) {
 
 func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicHasNoSymmetry(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Rhombic,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rhombic,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0.5,
 			Height: 1,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 		},
 	}
@@ -110,20 +109,20 @@ func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicHasNoSymmetry(checker *
 
 func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicMayHaveSymmetryForCm(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Rhombic,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rhombic,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0.5,
 			Height: 1,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacket.Terms[0].PowerM,
-						PowerM:         suite.baseWavePacket.Terms[0].PowerN,
+						PowerN: suite.baseWavePacket.Terms[0].PowerM,
+						PowerM: suite.baseWavePacket.Terms[0].PowerN,
 					},
 				},
 				Multiplier: suite.baseWavePacket.Multiplier,
@@ -139,20 +138,20 @@ func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicMayHaveSymmetryForCm(ch
 
 func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicMayHaveSymmetryForCmm(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Rhombic,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rhombic,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0.5,
 			Height: 1,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacket.Terms[0].PowerM,
-						PowerM:         suite.baseWavePacket.Terms[0].PowerN,
+						PowerN: suite.baseWavePacket.Terms[0].PowerM,
+						PowerM: suite.baseWavePacket.Terms[0].PowerN,
 					},
 				},
 				Multiplier: suite.baseWavePacket.Multiplier,
@@ -160,8 +159,8 @@ func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicMayHaveSymmetryForCmm(c
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacket.Terms[0].PowerM * -1,
-						PowerM:         suite.baseWavePacket.Terms[0].PowerN * -1,
+						PowerN: suite.baseWavePacket.Terms[0].PowerM * -1,
+						PowerM: suite.baseWavePacket.Terms[0].PowerN * -1,
 					},
 				},
 				Multiplier: suite.baseWavePacket.Multiplier,
@@ -169,8 +168,8 @@ func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicMayHaveSymmetryForCmm(c
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacket.Terms[0].PowerN * -1,
-						PowerM:         suite.baseWavePacket.Terms[0].PowerM * -1,
+						PowerN: suite.baseWavePacket.Terms[0].PowerN * -1,
+						PowerM: suite.baseWavePacket.Terms[0].PowerM * -1,
 					},
 				},
 				Multiplier: suite.baseWavePacket.Multiplier,
@@ -185,15 +184,15 @@ func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicMayHaveSymmetryForCmm(c
 }
 
 type RhombicCreatedWithDesiredSymmetry struct {
-	baseWavePacket *wallpaper.WavePacket
+	baseWavePacket      *wallpaper.WavePacket
 	wallpaperMultiplier complex128
 }
 
 var _ = Suite(&RhombicCreatedWithDesiredSymmetry{})
 
-func (suite *RhombicCreatedWithDesiredSymmetry) SetUpTest (checker *C) {
+func (suite *RhombicCreatedWithDesiredSymmetry) SetUpTest(checker *C) {
 	suite.baseWavePacket = &wallpaper.WavePacket{
-		Terms:[]*formula.EisensteinFormulaTerm{
+		Terms: []*formula.EisensteinFormulaTerm{
 			{
 				PowerN: 1,
 				PowerM: -2,
@@ -206,13 +205,13 @@ func (suite *RhombicCreatedWithDesiredSymmetry) SetUpTest (checker *C) {
 
 func (suite *RhombicCreatedWithDesiredSymmetry) TestCreateWallpaperWithCm(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Rhombic,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rhombic,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0.5,
 			Height: 1,
 		},
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 		},
 		DesiredSymmetry: wallpaper.Cm,
@@ -232,13 +231,13 @@ func (suite *RhombicCreatedWithDesiredSymmetry) TestCreateWallpaperWithCm(checke
 
 func (suite *RhombicCreatedWithDesiredSymmetry) TestCreateWallpaperWithCmm(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Rhombic,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rhombic,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0.5,
 			Height: 1,
 		},
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 		},
 		DesiredSymmetry: wallpaper.Cmm,
@@ -249,12 +248,12 @@ func (suite *RhombicCreatedWithDesiredSymmetry) TestCreateWallpaperWithCmm(check
 	checker.Assert(newFormula.WavePackets, HasLen, 4)
 	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 2)
 
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacket.Terms[0].PowerN * -1)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacket.Terms[0].PowerM * -1)
+	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacket.Terms[0].PowerN*-1)
+	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacket.Terms[0].PowerM*-1)
 	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerN, Equals, suite.baseWavePacket.Terms[0].PowerM)
 	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerM, Equals, suite.baseWavePacket.Terms[0].PowerN)
-	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerN, Equals, suite.baseWavePacket.Terms[0].PowerM * -1)
-	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerM, Equals, suite.baseWavePacket.Terms[0].PowerN * -1)
+	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerN, Equals, suite.baseWavePacket.Terms[0].PowerM*-1)
+	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerM, Equals, suite.baseWavePacket.Terms[0].PowerN*-1)
 
 	checker.Assert(newFormula.HasSymmetry(wallpaper.Cm), Equals, true)
 	checker.Assert(newFormula.HasSymmetry(wallpaper.Cmm), Equals, true)

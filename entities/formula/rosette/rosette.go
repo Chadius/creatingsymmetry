@@ -2,12 +2,12 @@ package rosette
 
 import (
 	"encoding/json"
-	"gopkg.in/yaml.v2"
-	"math/cmplx"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/formula/exponential"
 	"github.com/Chadius/creating-symmetry/entities/formula/result"
 	"github.com/Chadius/creating-symmetry/entities/utility"
+	"gopkg.in/yaml.v2"
+	"math/cmplx"
 )
 
 // Formula uses a collection of z^m terms to calculate results.
@@ -20,7 +20,7 @@ type Formula struct {
 // Calculate applies the Rosette formula to the complex number z.
 func (r Formula) Calculate(z complex128) *result.CalculationResultForFormula {
 	result := &result.CalculationResultForFormula{
-		Total: complex(0,0),
+		Total:              complex(0, 0),
 		ContributionByTerm: []complex128{},
 	}
 
@@ -34,13 +34,13 @@ func (r Formula) Calculate(z complex128) *result.CalculationResultForFormula {
 }
 
 func (r *Formula) calculateTerm(term *exponential.RosetteFriezeTerm, z complex128) complex128 {
-	sum := complex(0.0,0.0)
+	sum := complex(0.0, 0.0)
 
 	coefficientRelationships := []coefficient.Relationship{coefficient.PlusNPlusM}
 	coefficientRelationships = append(coefficientRelationships, term.CoefficientRelationships...)
 	coefficientSets := coefficient.Pairing{
-		PowerN:     term.PowerN,
-		PowerM:     term.PowerM,
+		PowerN: term.PowerN,
+		PowerM: term.PowerM,
 	}.GenerateCoefficientSets(coefficientRelationships)
 
 	for _, relationshipSet := range coefficientSets {
@@ -84,12 +84,12 @@ func (r Formula) calculateMultifoldSymmetry(symmetriesFound *Symmetry) {
 	} else if len(termPowerDifferences) > 1 {
 		var currentGreatestCommonDenominator int
 		for index := range termPowerDifferences {
-			if index >= len(termPowerDifferences) - 1 {
+			if index >= len(termPowerDifferences)-1 {
 				break
 			}
 			currentGreatestCommonDenominator = getGreatestCommonDenominator(
 				termPowerDifferences[index],
-				termPowerDifferences[index + 1])
+				termPowerDifferences[index+1])
 		}
 		symmetriesFound.Multifold = currentGreatestCommonDenominator
 	}
@@ -121,7 +121,7 @@ func CalculateExponentTerm(z complex128, power1, power2 int, scale complex128, i
 		return zRaisedToN * scale
 	}
 
-	complexConjugate := complex(real(z), -1 * imag(z))
+	complexConjugate := complex(real(z), -1*imag(z))
 	complexConjugateRaisedToM := cmplx.Pow(complexConjugate, complex(float64(power2), 0))
 	return zRaisedToN * complexConjugateRaisedToM * scale
 }

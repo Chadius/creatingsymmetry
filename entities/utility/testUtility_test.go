@@ -1,9 +1,9 @@
 package utility_test
 
 import (
+	"github.com/Chadius/creating-symmetry/entities/utility"
 	. "gopkg.in/check.v1"
 	"testing"
-	"github.com/Chadius/creating-symmetry/entities/utility"
 )
 
 func Test(t *testing.T) { TestingT(t) }
@@ -32,7 +32,7 @@ func (suite *CloseEnoughTests) TestVeryDifferentNumbersAreNotCloseEnough(checker
 		interfaceOfFloats[index] = flo
 	}
 
-	result, err := numericallyCloseEnoughCheck.Check( interfaceOfFloats, []string{"obtained", "expected", "tolerance"})
+	result, err := numericallyCloseEnoughCheck.Check(interfaceOfFloats, []string{"obtained", "expected", "tolerance"})
 
 	checker.Assert(result, Equals, false)
 	checker.Assert(err, Equals, "0.000000 and 10.000000 are outside of tolerance 0.100000")

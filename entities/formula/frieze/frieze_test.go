@@ -1,18 +1,18 @@
 package frieze_test
 
 import (
-	. "gopkg.in/check.v1"
-	"math"
-	"testing"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/formula/exponential"
 	"github.com/Chadius/creating-symmetry/entities/formula/frieze"
 	"github.com/Chadius/creating-symmetry/entities/utility"
+	. "gopkg.in/check.v1"
+	"math"
+	"testing"
 )
 
 func Test(t *testing.T) { TestingT(t) }
 
-type FriezeFormulaSuite struct {}
+type FriezeFormulaSuite struct{}
 
 var _ = Suite(&FriezeFormulaSuite{})
 
@@ -23,10 +23,10 @@ func (suite *FriezeFormulaSuite) TestFriezeFormula(checker *C) {
 	friezeFormula := frieze.Formula{
 		Terms: []*exponential.RosetteFriezeTerm{
 			{
-				Multiplier:             complex(2, 0),
-				PowerN:                 1,
-				PowerM:                 0,
-				IgnoreComplexConjugate: false,
+				Multiplier:               complex(2, 0),
+				PowerN:                   1,
+				PowerM:                   0,
+				IgnoreComplexConjugate:   false,
 				CoefficientRelationships: []coefficient.Relationship{coefficient.PlusMPlusN},
 			},
 		},
@@ -34,7 +34,7 @@ func (suite *FriezeFormulaSuite) TestFriezeFormula(checker *C) {
 	result := friezeFormula.Calculate(complex(math.Pi/6, 1))
 	total := result.Total
 
-	expectedResult := complex(math.Exp(-1), 0) * complex(math.Sqrt(3) * 2, 0)
+	expectedResult := complex(math.Exp(-1), 0) * complex(math.Sqrt(3)*2, 0)
 	checker.Assert(real(total), utility.NumericallyCloseEnough{}, real(expectedResult), 1e-6)
 	checker.Assert(imag(total), utility.NumericallyCloseEnough{}, imag(expectedResult), 1e-6)
 }
@@ -43,10 +43,10 @@ func (suite *FriezeFormulaSuite) TestP211Frieze(checker *C) {
 	friezeFormula := frieze.Formula{
 		Terms: []*exponential.RosetteFriezeTerm{
 			{
-				Multiplier:             complex(1, 0),
-				PowerN:                 2,
-				PowerM:                 0,
-				IgnoreComplexConjugate: false,
+				Multiplier:               complex(1, 0),
+				PowerN:                   2,
+				PowerM:                   0,
+				IgnoreComplexConjugate:   false,
 				CoefficientRelationships: []coefficient.Relationship{coefficient.MinusNMinusM},
 			},
 		},
@@ -59,10 +59,10 @@ func (suite *FriezeFormulaSuite) TestP1m1Frieze(checker *C) {
 	friezeFormula := frieze.Formula{
 		Terms: []*exponential.RosetteFriezeTerm{
 			{
-				Multiplier:             complex(1, 0),
-				PowerN:                 2,
-				PowerM:                 0,
-				IgnoreComplexConjugate: false,
+				Multiplier:               complex(1, 0),
+				PowerN:                   2,
+				PowerM:                   0,
+				IgnoreComplexConjugate:   false,
 				CoefficientRelationships: []coefficient.Relationship{coefficient.PlusMPlusN},
 			},
 		},
@@ -75,10 +75,10 @@ func (suite *FriezeFormulaSuite) TestP11mFrieze(checker *C) {
 	friezeFormula := frieze.Formula{
 		Terms: []*exponential.RosetteFriezeTerm{
 			{
-				Multiplier:             complex(1, 0),
-				PowerN:                 2,
-				PowerM:                 0,
-				IgnoreComplexConjugate: false,
+				Multiplier:               complex(1, 0),
+				PowerN:                   2,
+				PowerM:                   0,
+				IgnoreComplexConjugate:   false,
 				CoefficientRelationships: []coefficient.Relationship{coefficient.MinusMMinusN},
 			},
 		},
@@ -91,10 +91,10 @@ func (suite *FriezeFormulaSuite) TestP11gFrieze(checker *C) {
 	friezeFormula := frieze.Formula{
 		Terms: []*exponential.RosetteFriezeTerm{
 			{
-				Multiplier:             complex(1, 0),
-				PowerN:                 2,
-				PowerM:                 1,
-				IgnoreComplexConjugate: false,
+				Multiplier:               complex(1, 0),
+				PowerN:                   2,
+				PowerM:                   1,
+				IgnoreComplexConjugate:   false,
 				CoefficientRelationships: []coefficient.Relationship{coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum},
 			},
 		},
@@ -103,14 +103,14 @@ func (suite *FriezeFormulaSuite) TestP11gFrieze(checker *C) {
 	checker.Assert(symmetriesDetected.P11g, Equals, true)
 }
 
-func (suite *FriezeFormulaSuite) TestP11mFriezeIfP11gHasEvenSumPowers (checker *C) {
+func (suite *FriezeFormulaSuite) TestP11mFriezeIfP11gHasEvenSumPowers(checker *C) {
 	friezeFormula := frieze.Formula{
 		Terms: []*exponential.RosetteFriezeTerm{
 			{
-				Multiplier:             complex(1, 0),
-				PowerN:                 2,
-				PowerM:                 0,
-				IgnoreComplexConjugate: false,
+				Multiplier:               complex(1, 0),
+				PowerN:                   2,
+				PowerM:                   0,
+				IgnoreComplexConjugate:   false,
 				CoefficientRelationships: []coefficient.Relationship{coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum},
 			},
 		},
@@ -183,10 +183,10 @@ func (suite *FriezeFormulaSuite) TestP111Frieze(checker *C) {
 	friezeFormula := frieze.Formula{
 		Terms: []*exponential.RosetteFriezeTerm{
 			{
-				Multiplier:             complex(1, 0),
-				PowerN:                 2,
-				PowerM:                 0,
-				IgnoreComplexConjugate: false,
+				Multiplier:               complex(1, 0),
+				PowerN:                   2,
+				PowerM:                   0,
+				IgnoreComplexConjugate:   false,
 				CoefficientRelationships: []coefficient.Relationship{},
 			},
 		},
@@ -199,10 +199,10 @@ func (suite *FriezeFormulaSuite) TestP111FriezeComplexConjugateIgnored(checker *
 	friezeFormula := frieze.Formula{
 		Terms: []*exponential.RosetteFriezeTerm{
 			{
-				Multiplier:             complex(1, 0),
-				PowerN:                 2,
-				PowerM:                 0,
-				IgnoreComplexConjugate: true,
+				Multiplier:               complex(1, 0),
+				PowerN:                   2,
+				PowerM:                   0,
+				IgnoreComplexConjugate:   true,
 				CoefficientRelationships: []coefficient.Relationship{coefficient.MinusNMinusM},
 			},
 		},
@@ -231,7 +231,7 @@ func (suite *FriezeFormulaSuite) TestContributionOfFriezeFormula(checker *C) {
 	checker.Assert(result.ContributionByTerm, HasLen, 1)
 	contributionByFirstTerm := result.ContributionByTerm[0]
 
-	expectedResult := complex(math.Exp(-1), 0) * complex(math.Sqrt(3) * 2, 0)
+	expectedResult := complex(math.Exp(-1), 0) * complex(math.Sqrt(3)*2, 0)
 	checker.Assert(real(contributionByFirstTerm), utility.NumericallyCloseEnough{}, real(expectedResult), 1e-6)
 	checker.Assert(imag(contributionByFirstTerm), utility.NumericallyCloseEnough{}, imag(expectedResult), 1e-6)
 }

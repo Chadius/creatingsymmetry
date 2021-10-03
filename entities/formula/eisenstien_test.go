@@ -1,17 +1,17 @@
 package formula_test
 
 import (
-	. "gopkg.in/check.v1"
-	"testing"
 	"github.com/Chadius/creating-symmetry/entities/formula"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/formula/latticevector"
 	"github.com/Chadius/creating-symmetry/entities/utility"
+	. "gopkg.in/check.v1"
+	"testing"
 )
 
 func Test(t *testing.T) { TestingT(t) }
 
-type EisensteinFormulaSuite struct {}
+type EisensteinFormulaSuite struct{}
 
 var _ = Suite(&EisensteinFormulaSuite{})
 
@@ -24,7 +24,7 @@ func (suite *EisensteinFormulaSuite) TestCalculateEisensteinTermForGivenPoint(ch
 		YLatticeVector: complex(0, 1),
 	}
 
-	latticeCoordinate := squareLatticePair.ConvertToLatticeCoordinates(complex(1.0,1.5))
+	latticeCoordinate := squareLatticePair.ConvertToLatticeCoordinates(complex(1.0, 1.5))
 
 	eisenstein := formula.EisensteinFormulaTerm{
 		PowerN: 1,
@@ -59,65 +59,65 @@ power_m: -10
 }
 
 type EisensteinRelationshipTest struct {
-	aPlusNPlusMOddTerm *formula.EisensteinFormulaTerm
-	aPlusMMinusNOddTerm *formula.EisensteinFormulaTerm
-	aPlusMPlusNOddTerm *formula.EisensteinFormulaTerm
-	aMinusNMinusMOddTerm *formula.EisensteinFormulaTerm
-	aMinusMMinusNOddTerm *formula.EisensteinFormulaTerm
-	aMinusMPlusNOddTerm *formula.EisensteinFormulaTerm
-	aPlusNPlusMEvenTerm *formula.EisensteinFormulaTerm
-	aPlusMPlusNEvenTerm *formula.EisensteinFormulaTerm
-	aMinusMMinusNEvenTerm *formula.EisensteinFormulaTerm
+	aPlusNPlusMOddTerm         *formula.EisensteinFormulaTerm
+	aPlusMMinusNOddTerm        *formula.EisensteinFormulaTerm
+	aPlusMPlusNOddTerm         *formula.EisensteinFormulaTerm
+	aMinusNMinusMOddTerm       *formula.EisensteinFormulaTerm
+	aMinusMMinusNOddTerm       *formula.EisensteinFormulaTerm
+	aMinusMPlusNOddTerm        *formula.EisensteinFormulaTerm
+	aPlusNPlusMEvenTerm        *formula.EisensteinFormulaTerm
+	aPlusMPlusNEvenTerm        *formula.EisensteinFormulaTerm
+	aMinusMMinusNEvenTerm      *formula.EisensteinFormulaTerm
 	aPlusMMinusSumNAndMOddTerm *formula.EisensteinFormulaTerm
-	aMinusSumNAndMPlusN *formula.EisensteinFormulaTerm
+	aMinusSumNAndMPlusN        *formula.EisensteinFormulaTerm
 }
 
 var _ = Suite(&EisensteinRelationshipTest{})
 
 func (suite *EisensteinRelationshipTest) SetUpTest(checker *C) {
 	suite.aPlusNPlusMOddTerm = &formula.EisensteinFormulaTerm{
-		PowerN:     -1,
-		PowerM:     2,
+		PowerN: -1,
+		PowerM: 2,
 	}
 	suite.aPlusMPlusNOddTerm = &formula.EisensteinFormulaTerm{
-		PowerN:     2,
-		PowerM:     -1,
+		PowerN: 2,
+		PowerM: -1,
 	}
 	suite.aMinusNMinusMOddTerm = &formula.EisensteinFormulaTerm{
-		PowerN:     1,
-		PowerM:     -2,
+		PowerN: 1,
+		PowerM: -2,
 	}
 	suite.aMinusMMinusNOddTerm = &formula.EisensteinFormulaTerm{
-		PowerN:     -2,
-		PowerM:     1,
+		PowerN: -2,
+		PowerM: 1,
 	}
 	suite.aPlusMMinusNOddTerm = &formula.EisensteinFormulaTerm{
-		PowerN:     2,
-		PowerM:     1,
+		PowerN: 2,
+		PowerM: 1,
 	}
 	suite.aMinusMPlusNOddTerm = &formula.EisensteinFormulaTerm{
-		PowerN:     -2,
-		PowerM:     -1,
+		PowerN: -2,
+		PowerM: -1,
 	}
 	suite.aMinusSumNAndMPlusN = &formula.EisensteinFormulaTerm{
-		PowerN:     -1,
-		PowerM:     -1,
+		PowerN: -1,
+		PowerM: -1,
 	}
 	suite.aPlusMMinusSumNAndMOddTerm = &formula.EisensteinFormulaTerm{
-		PowerN:     2,
-		PowerM:     -1,
+		PowerN: 2,
+		PowerM: -1,
 	}
 	suite.aPlusNPlusMEvenTerm = &formula.EisensteinFormulaTerm{
-		PowerN:     -6,
-		PowerM:     2,
+		PowerN: -6,
+		PowerM: 2,
 	}
 	suite.aPlusMPlusNEvenTerm = &formula.EisensteinFormulaTerm{
-		PowerN:     2,
-		PowerM:     -6,
+		PowerN: 2,
+		PowerM: -6,
 	}
 	suite.aMinusMMinusNEvenTerm = &formula.EisensteinFormulaTerm{
-		PowerN:     -2,
-		PowerM:     6,
+		PowerN: -2,
+		PowerM: 6,
 	}
 }
 

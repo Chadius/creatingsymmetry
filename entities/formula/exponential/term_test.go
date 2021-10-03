@@ -1,16 +1,16 @@
 package exponential_test
 
 import (
-	. "gopkg.in/check.v1"
-	"testing"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/formula/exponential"
 	"github.com/Chadius/creating-symmetry/entities/utility"
+	. "gopkg.in/check.v1"
+	"testing"
 )
 
 func Test(t *testing.T) { TestingT(t) }
 
-type ExponentialTerm struct {}
+type ExponentialTerm struct{}
 
 var _ = Suite(&ExponentialTerm{})
 

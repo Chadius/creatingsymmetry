@@ -1,17 +1,17 @@
 package rosette_test
 
 import (
-	. "gopkg.in/check.v1"
-	"testing"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/formula/exponential"
 	"github.com/Chadius/creating-symmetry/entities/formula/rosette"
 	"github.com/Chadius/creating-symmetry/entities/utility"
+	. "gopkg.in/check.v1"
+	"testing"
 )
 
 func Test(t *testing.T) { TestingT(t) }
 
-type RosetteFormulaTest struct {}
+type RosetteFormulaTest struct{}
 
 var _ = Suite(&RosetteFormulaTest{})
 
@@ -32,7 +32,7 @@ func (suite *RosetteFormulaTest) TestCalculateRosetteFormula(checker *C) {
 			},
 		},
 	}
-	result := rosetteFormula.Calculate(complex(2,1))
+	result := rosetteFormula.Calculate(complex(2, 1))
 	total := result.Total
 	checker.Assert(real(total), utility.NumericallyCloseEnough{}, 12, 1e-6)
 	checker.Assert(imag(total), utility.NumericallyCloseEnough{}, 0, 1e-6)
@@ -101,7 +101,7 @@ func (suite *RosetteFormulaTest) TestSymmetryUsesGreatestCommonDenominator(check
 				PowerM:                 0,
 				IgnoreComplexConjugate: false,
 				CoefficientRelationships: []coefficient.Relationship{
-						coefficient.PlusMPlusN,
+					coefficient.PlusMPlusN,
 				},
 			},
 		},
@@ -124,7 +124,7 @@ func (suite *RosetteFormulaTest) TestGetContributionOfRosetteTerm(checker *C) {
 			},
 		},
 	}
-	result := rosetteFormula.Calculate(complex(2,1))
+	result := rosetteFormula.Calculate(complex(2, 1))
 	checker.Assert(result.ContributionByTerm, HasLen, 1)
 	contributionByFirstTerm := result.ContributionByTerm[0]
 	checker.Assert(real(contributionByFirstTerm), utility.NumericallyCloseEnough{}, 12, 1e-6)

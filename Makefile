@@ -12,7 +12,8 @@ run: ## Run the script with default arguments
 	go run . -f $(FORMULA_FILENAME)
 test: ## Test all files
 	go test -v ./...
-lint: ## Lint all the files
+lint: ## Lint and format all the files
 	golint ./...
+	gofmt -w ./..
 delete-merged-branches: ## Delete all local branches merged to main, unless they start with dev
 	git branch --merged | grep -i -v -E "main|master|dev"| xargs git branch -d

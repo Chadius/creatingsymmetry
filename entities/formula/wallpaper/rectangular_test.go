@@ -1,12 +1,12 @@
 package wallpaper_test
 
 import (
-	. "gopkg.in/check.v1"
-	"math"
-	"math/cmplx"
 	"github.com/Chadius/creating-symmetry/entities/formula"
 	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
 	"github.com/Chadius/creating-symmetry/entities/utility"
+	. "gopkg.in/check.v1"
+	"math"
+	"math/cmplx"
 )
 
 type RectangularWallpaper struct {
@@ -15,16 +15,16 @@ type RectangularWallpaper struct {
 
 var _ = Suite(&RectangularWallpaper{})
 
-func (suite *RectangularWallpaper) SetUpTest (checker *C) {
+func (suite *RectangularWallpaper) SetUpTest(checker *C) {
 	suite.newFormula = &wallpaper.Formula{
-		LatticeType:     wallpaper.Rectangular,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rectangular,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  2,
 			Height: 0.5,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(1, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(1, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
@@ -40,7 +40,7 @@ func (suite *RectangularWallpaper) SetUpTest (checker *C) {
 	suite.newFormula.Setup()
 }
 
-func (suite *RectangularWallpaper) TestSetupCreatesLatticeVectors (checker *C) {
+func (suite *RectangularWallpaper) TestSetupCreatesLatticeVectors(checker *C) {
 	checker.Assert(real(suite.newFormula.Lattice.XLatticeVector), utility.NumericallyCloseEnough{}, 1, 1e-6)
 	checker.Assert(imag(suite.newFormula.Lattice.XLatticeVector), utility.NumericallyCloseEnough{}, 0, 1e-6)
 
@@ -48,11 +48,11 @@ func (suite *RectangularWallpaper) TestSetupCreatesLatticeVectors (checker *C) {
 	checker.Assert(imag(suite.newFormula.Lattice.YLatticeVector), utility.NumericallyCloseEnough{}, 0.5, 1e-6)
 }
 
-func (suite *RectangularWallpaper) TestCalculationOfPoints (checker *C) {
+func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 	calculation := suite.newFormula.Calculate(complex(0.75, -0.25))
 	total := calculation.Total
 
-	expectedAnswer := cmplx.Exp(complex(0, math.Pi * 7 / 2))
+	expectedAnswer := cmplx.Exp(complex(0, math.Pi*7/2))
 
 	checker.Assert(real(total), utility.NumericallyCloseEnough{}, real(expectedAnswer), 1e-6)
 	checker.Assert(imag(total), utility.NumericallyCloseEnough{}, imag(expectedAnswer), 1e-6)
@@ -61,26 +61,26 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints (checker *C) {
 type RectangularWallpaperHasSymmetryTest struct {
 	baseWavePacketWithEvenPowerNAndOddPowerSum *wallpaper.WavePacket
 	baseWavePacketWithOddPowerNAndEvenPowerSum *wallpaper.WavePacket
-	wallpaperMultiplier complex128
+	wallpaperMultiplier                        complex128
 }
 
 var _ = Suite(&RectangularWallpaperHasSymmetryTest{})
 
 func (suite *RectangularWallpaperHasSymmetryTest) SetUpTest(checker *C) {
 	suite.baseWavePacketWithEvenPowerNAndOddPowerSum = &wallpaper.WavePacket{
-		Terms:[]*formula.EisensteinFormulaTerm{
+		Terms: []*formula.EisensteinFormulaTerm{
 			{
-				PowerN:         8,
-				PowerM:         -3,
+				PowerN: 8,
+				PowerM: -3,
 			},
 		},
 		Multiplier: complex(1, 0),
 	}
 	suite.baseWavePacketWithOddPowerNAndEvenPowerSum = &wallpaper.WavePacket{
-		Terms:[]*formula.EisensteinFormulaTerm{
+		Terms: []*formula.EisensteinFormulaTerm{
 			{
-				PowerN:         7,
-				PowerM:         -3,
+				PowerN: 7,
+				PowerM: -3,
 			},
 		},
 		Multiplier: complex(1, 0),
@@ -90,14 +90,14 @@ func (suite *RectangularWallpaperHasSymmetryTest) SetUpTest(checker *C) {
 
 func (suite *RectangularWallpaperHasSymmetryTest) TestRectangularHasNoSymmetry(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Rectangular,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rectangular,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0,
 			Height: 1.5,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithEvenPowerNAndOddPowerSum,
 		},
 	}
@@ -113,20 +113,20 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestRectangularHasNoSymmetry(c
 
 func (suite *RectangularWallpaperHasSymmetryTest) TestRectangularMayHaveSymmetryForPm(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Rectangular,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rectangular,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0,
 			Height: 1.5,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithEvenPowerNAndOddPowerSum,
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
-						PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
+						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
+						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
 					},
 				},
 				Multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
@@ -145,20 +145,20 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestRectangularMayHaveSymmetry
 
 func (suite *RectangularWallpaperHasSymmetryTest) TestRectangularMayHaveSymmetryForPg(checker *C) {
 	newFormulaWithEvenPowerN := wallpaper.Formula{
-		LatticeType:     wallpaper.Rectangular,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rectangular,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0,
 			Height: 1.5,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithEvenPowerNAndOddPowerSum,
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
-						PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
+						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
+						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
 					},
 				},
 				Multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
@@ -175,20 +175,20 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestRectangularMayHaveSymmetry
 	checker.Assert(newFormulaWithEvenPowerN.HasSymmetry(wallpaper.Pgg), Equals, false)
 
 	newFormulaWithOddPowerN := wallpaper.Formula{
-		LatticeType:     wallpaper.Rectangular,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rectangular,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0,
 			Height: 1.5,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
-						PowerM:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
+						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
+						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
 					},
 				},
 				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1,
@@ -207,38 +207,38 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestRectangularMayHaveSymmetry
 
 func (suite *RectangularWallpaperHasSymmetryTest) TestPmmAndPmgWithEvenPowerN(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Rectangular,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rectangular,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0,
 			Height: 1.5,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithEvenPowerNAndOddPowerSum,
 			{
-				Terms:[]*formula.EisensteinFormulaTerm{
+				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
-						PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
+						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
+						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
 					},
 				},
 				Multiplier: complex(1, 0),
 			},
 			{
-				Terms:[]*formula.EisensteinFormulaTerm{
+				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
-						PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
+						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
+						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
 					},
 				},
 				Multiplier: complex(1, 0),
 			},
 			{
-				Terms:[]*formula.EisensteinFormulaTerm{
+				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
-						PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM,
+						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
+						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM,
 					},
 				},
 				Multiplier: complex(1, 0),
@@ -257,38 +257,38 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPmmAndPmgWithEvenPowerN(ch
 
 func (suite *RectangularWallpaperHasSymmetryTest) TestPmgWithOddPowerN(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Rectangular,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rectangular,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0,
 			Height: 1.5,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 			{
-				Terms:[]*formula.EisensteinFormulaTerm{
+				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
-						PowerM:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
+						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
+						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
 					},
 				},
 				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
 			},
 			{
-				Terms:[]*formula.EisensteinFormulaTerm{
+				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
-						PowerM:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
+						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
+						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
 					},
 				},
 				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1,
 			},
 			{
-				Terms:[]*formula.EisensteinFormulaTerm{
+				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
-						PowerM:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM,
+						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
+						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM,
 					},
 				},
 				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1,
@@ -307,38 +307,38 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPmgWithOddPowerN(checker *
 
 func (suite *RectangularWallpaperHasSymmetryTest) TestPgg(checker *C) {
 	newFormulaWithOddPowerSum := wallpaper.Formula{
-		LatticeType:     wallpaper.Rectangular,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rectangular,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0,
 			Height: 1.5,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithEvenPowerNAndOddPowerSum,
 			{
-				Terms:[]*formula.EisensteinFormulaTerm{
+				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
-						PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
+						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
+						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
 					},
 				},
 				Multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
 			},
 			{
-				Terms:[]*formula.EisensteinFormulaTerm{
+				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
-						PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
+						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
+						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
 					},
 				},
 				Multiplier: -1 * suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
 			},
 			{
-				Terms:[]*formula.EisensteinFormulaTerm{
+				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
-						PowerM:         suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM,
+						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
+						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM,
 					},
 				},
 				Multiplier: -1 * suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
@@ -355,38 +355,38 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPgg(checker *C) {
 	checker.Assert(newFormulaWithOddPowerSum.HasSymmetry(wallpaper.Pgg), Equals, true)
 
 	newFormulaWithEvenPowerSum := wallpaper.Formula{
-		LatticeType:     wallpaper.Rectangular,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rectangular,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0,
 			Height: 1.5,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 			{
-				Terms:[]*formula.EisensteinFormulaTerm{
+				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
-						PowerM:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
+						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
+						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
 					},
 				},
 				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
 			},
 			{
-				Terms:[]*formula.EisensteinFormulaTerm{
+				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
-						PowerM:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
+						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
+						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
 					},
 				},
 				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
 			},
 			{
-				Terms:[]*formula.EisensteinFormulaTerm{
+				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
-						PowerM:         suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM,
+						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
+						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM,
 					},
 				},
 				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
@@ -409,7 +409,7 @@ type RectangularCreatedWithDesiredSymmetry struct {
 
 var _ = Suite(&RectangularCreatedWithDesiredSymmetry{})
 
-func (suite *RectangularCreatedWithDesiredSymmetry) SetUpTest (checker *C) {
+func (suite *RectangularCreatedWithDesiredSymmetry) SetUpTest(checker *C) {
 	suite.baseWavePacketWithOddPowerNAndEvenPowerSum = &wallpaper.WavePacket{
 		Terms: []*formula.EisensteinFormulaTerm{
 			{
@@ -423,13 +423,13 @@ func (suite *RectangularCreatedWithDesiredSymmetry) SetUpTest (checker *C) {
 
 func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPm(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Rectangular,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rectangular,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0,
 			Height: 2.0,
 		},
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 		},
 		DesiredSymmetry: wallpaper.Pm,
@@ -442,7 +442,7 @@ func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPm(ch
 
 	checker.Assert(newFormula.WavePackets[1].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
 	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1)
+	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
 
 	checker.Assert(newFormula.HasSymmetry(wallpaper.Pm), Equals, true)
 	checker.Assert(newFormula.HasSymmetry(wallpaper.Pg), Equals, false)
@@ -453,13 +453,13 @@ func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPm(ch
 
 func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPg(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Rectangular,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rectangular,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0,
 			Height: 2.0,
 		},
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 		},
 		DesiredSymmetry: wallpaper.Pg,
@@ -470,9 +470,9 @@ func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPg(ch
 	checker.Assert(newFormula.WavePackets, HasLen, 2)
 	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 1)
 
-	checker.Assert(newFormula.WavePackets[1].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1)
+	checker.Assert(newFormula.WavePackets[1].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier*-1)
 	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1)
+	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
 
 	checker.Assert(newFormula.HasSymmetry(wallpaper.Pm), Equals, false)
 	checker.Assert(newFormula.HasSymmetry(wallpaper.Pg), Equals, true)
@@ -483,13 +483,13 @@ func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPg(ch
 
 func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPmm(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Rectangular,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rectangular,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0,
 			Height: 2.0,
 		},
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 		},
 		DesiredSymmetry: wallpaper.Pmm,
@@ -501,20 +501,20 @@ func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPmm(c
 	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 1)
 
 	checker.Assert(newFormula.WavePackets[1].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1)
+	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN*-1)
+	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
 
 	checker.Assert(newFormula.WavePackets[1].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1)
+	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN*-1)
+	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
 
 	checker.Assert(newFormula.WavePackets[2].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1)
+	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN*-1)
 	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM)
 
 	checker.Assert(newFormula.WavePackets[3].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
 	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN)
-	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1)
+	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
 
 	checker.Assert(newFormula.HasSymmetry(wallpaper.Pm), Equals, true)
 	checker.Assert(newFormula.HasSymmetry(wallpaper.Pg), Equals, false)
@@ -525,13 +525,13 @@ func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPmm(c
 
 func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPmg(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Rectangular,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rectangular,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0,
 			Height: 2.0,
 		},
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 		},
 		DesiredSymmetry: wallpaper.Pmg,
@@ -543,16 +543,16 @@ func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPmg(c
 	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 1)
 
 	checker.Assert(newFormula.WavePackets[1].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1)
+	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN*-1)
+	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
 
-	checker.Assert(newFormula.WavePackets[2].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1)
-	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1)
+	checker.Assert(newFormula.WavePackets[2].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier*-1)
+	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN*-1)
 	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM)
 
-	checker.Assert(newFormula.WavePackets[3].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1)
+	checker.Assert(newFormula.WavePackets[3].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier*-1)
 	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN)
-	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1)
+	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
 
 	checker.Assert(newFormula.HasSymmetry(wallpaper.Pm), Equals, false)
 	checker.Assert(newFormula.HasSymmetry(wallpaper.Pg), Equals, true)
@@ -563,13 +563,13 @@ func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPmg(c
 
 func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPgg(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Rectangular,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Rectangular,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0,
 			Height: 2.0,
 		},
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 		},
 		DesiredSymmetry: wallpaper.Pgg,
@@ -581,16 +581,16 @@ func (suite *RectangularCreatedWithDesiredSymmetry) TestCreateWallpaperWithPgg(c
 	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 1)
 
 	checker.Assert(newFormula.WavePackets[1].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1)
+	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN*-1)
+	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
 
 	checker.Assert(newFormula.WavePackets[2].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1)
+	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN*-1)
 	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM)
 
 	checker.Assert(newFormula.WavePackets[3].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
 	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN)
-	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1)
+	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
 
 	checker.Assert(newFormula.HasSymmetry(wallpaper.Pm), Equals, true)
 	checker.Assert(newFormula.HasSymmetry(wallpaper.Pg), Equals, false)

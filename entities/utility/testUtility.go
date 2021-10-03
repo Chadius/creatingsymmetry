@@ -8,7 +8,7 @@ import (
 )
 
 // NumericallyCloseEnough asserts the two given numbers are within tolerance.
-type NumericallyCloseEnough struct {}
+type NumericallyCloseEnough struct{}
 
 // Info returns information for the NumericallyCloseEnough
 func (checker NumericallyCloseEnough) Info() *check.CheckerInfo {
@@ -33,7 +33,7 @@ func (checker NumericallyCloseEnough) Check(params []interface{}, names []string
 	v = reflect.Indirect(v)
 	tolerance := v.Convert(floatType).Float()
 
-	if math.Abs(obtained - expected) < tolerance {
+	if math.Abs(obtained-expected) < tolerance {
 		return true, ""
 	}
 

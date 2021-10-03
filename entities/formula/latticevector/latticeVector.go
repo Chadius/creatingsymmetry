@@ -3,20 +3,20 @@ package latticevector
 import (
 	"errors"
 	"fmt"
-	"math"
 	"github.com/Chadius/creating-symmetry/entities/utility"
+	"math"
 )
 
 // PairMarshal can be marshaled and converted to a Pair
 type PairMarshal struct {
-	XLatticeVector			*utility.ComplexNumberForMarshal	`json:"x_lattice_vector" yaml:"x_lattice_vector"`
-	YLatticeVector			*utility.ComplexNumberForMarshal	`json:"y_lattice_vector" yaml:"y_lattice_vector"`
+	XLatticeVector *utility.ComplexNumberForMarshal `json:"x_lattice_vector" yaml:"x_lattice_vector"`
+	YLatticeVector *utility.ComplexNumberForMarshal `json:"y_lattice_vector" yaml:"y_lattice_vector"`
 }
 
 // Pair defines the shape of the wallpaper lattice.
 type Pair struct {
-	XLatticeVector			complex128
-	YLatticeVector			complex128
+	XLatticeVector complex128
+	YLatticeVector complex128
 }
 
 func vectorIsZero(vector complex128) bool {
@@ -30,11 +30,11 @@ func vectorsAreCollinear(vector1 complex128, vector2 complex128) bool {
 	lengthOfVector2 := math.Sqrt((real(vector2) * real(vector2)) + (imag(vector2) * imag(vector2)))
 
 	tolerance := 1e-8
-	return math.Abs(absoluteValueDotProduct - (lengthOfVector1 * lengthOfVector2)) < tolerance
+	return math.Abs(absoluteValueDotProduct-(lengthOfVector1*lengthOfVector2)) < tolerance
 }
 
 // Validate returns an error if this is an invalid formula.
-func(lattice *Pair)Validate() error {
+func (lattice *Pair) Validate() error {
 	if vectorIsZero(lattice.XLatticeVector) || vectorIsZero(lattice.YLatticeVector) {
 		return errors.New(`lattice vectors cannot be (0,0)`)
 	}

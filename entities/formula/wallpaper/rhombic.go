@@ -9,7 +9,7 @@ import (
 func createVectorsForRhombicWallpaper(formula *Formula) error {
 	formula.Lattice = &latticevector.Pair{
 		XLatticeVector: complex(0.5, formula.LatticeSize.Height),
-		YLatticeVector: complex(0.5, formula.LatticeSize.Height * -1),
+		YLatticeVector: complex(0.5, formula.LatticeSize.Height*-1),
 	}
 	return nil
 }
@@ -21,7 +21,7 @@ func lockCoefficientPairsForRhombicWallpaper(formula *Formula) {
 }
 
 func checksForSymmetryForRhombicType(formula *Formula, targetSymmetry Symmetry) bool {
-	return HasSymmetry(formula.WavePackets, targetSymmetry, map[Symmetry][]coefficient.Relationship {
+	return HasSymmetry(formula.WavePackets, targetSymmetry, map[Symmetry][]coefficient.Relationship{
 		Cm: {coefficient.PlusMPlusN},
 		Cmm: {
 			coefficient.MinusNMinusM,

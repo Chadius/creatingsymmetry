@@ -15,7 +15,7 @@ func createVectorsForRectangularWallpaper(formula *Formula) error {
 }
 
 func checksForSymmetryForRectangularType(formula *Formula, targetSymmetry Symmetry) bool {
-	return HasSymmetry(formula.WavePackets, targetSymmetry, map[Symmetry][]coefficient.Relationship {
+	return HasSymmetry(formula.WavePackets, targetSymmetry, map[Symmetry][]coefficient.Relationship{
 		Pm: {coefficient.PlusNMinusM},
 		Pg: {coefficient.PlusNMinusMNegateMultiplierIfOddPowerN},
 		Pmm: {

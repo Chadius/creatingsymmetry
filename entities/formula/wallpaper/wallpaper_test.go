@@ -1,16 +1,16 @@
 package wallpaper_test
 
 import (
+	"github.com/Chadius/creating-symmetry/entities/formula"
+	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
 	. "gopkg.in/check.v1"
 	"math"
 	"testing"
-	"github.com/Chadius/creating-symmetry/entities/formula"
-	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
 )
 
 func Test(t *testing.T) { TestingT(t) }
 
-type WallpaperMarshalTest struct {}
+type WallpaperMarshalTest struct{}
 
 var _ = Suite(&WallpaperMarshalTest{})
 
@@ -97,7 +97,7 @@ func (suite *WallpaperMarshalTest) TestCreateFormulaFromJSON(checker *C) {
 	checker.Assert(formula.WavePackets[0].Terms[0].PowerM, Equals, -2)
 }
 
-type MakeNewFormulaBasedOnLatticeShape struct {}
+type MakeNewFormulaBasedOnLatticeShape struct{}
 
 var _ = Suite(&MakeNewFormulaBasedOnLatticeShape{})
 
@@ -105,14 +105,14 @@ func (suite *MakeNewFormulaBasedOnLatticeShape) SetUpTest(checker *C) {}
 
 func (suite *MakeNewFormulaBasedOnLatticeShape) TestMakeGenericFormula(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Generic,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Generic,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0.5,
 			Height: 2.3,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			{
 				Multiplier: complex(1, 0),
 				Terms: []*formula.EisensteinFormulaTerm{
@@ -129,7 +129,7 @@ func (suite *MakeNewFormulaBasedOnLatticeShape) TestMakeGenericFormula(checker *
 	err := newFormula.Setup()
 	checker.Assert(err, IsNil)
 
-	checker.Assert(newFormula.Lattice.XLatticeVector, Equals, complex(1, 0 ))
+	checker.Assert(newFormula.Lattice.XLatticeVector, Equals, complex(1, 0))
 	checker.Assert(newFormula.Lattice.YLatticeVector, Equals, complex(0.5, 2.3))
 
 	checker.Assert(newFormula.WavePackets, HasLen, 1)
@@ -141,11 +141,11 @@ func (suite *MakeNewFormulaBasedOnLatticeShape) TestMakeGenericFormula(checker *
 
 func (suite *MakeNewFormulaBasedOnLatticeShape) TestMakeHexagonalFormula(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Hexagonal,
-		LatticeSize:     nil,
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		LatticeType: wallpaper.Hexagonal,
+		LatticeSize: nil,
+		Lattice:     nil,
+		Multiplier:  complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			{
 				Multiplier: complex(1, 0),
 				Terms: []*formula.EisensteinFormulaTerm{
@@ -162,7 +162,7 @@ func (suite *MakeNewFormulaBasedOnLatticeShape) TestMakeHexagonalFormula(checker
 	err := newFormula.Setup()
 	checker.Assert(err, IsNil)
 
-	checker.Assert(newFormula.Lattice.XLatticeVector, Equals, complex(1, 0 ))
+	checker.Assert(newFormula.Lattice.XLatticeVector, Equals, complex(1, 0))
 	checker.Assert(newFormula.Lattice.YLatticeVector, Equals, complex(-0.5, math.Sqrt(3.0)/2.0))
 
 	checker.Assert(newFormula.WavePackets, HasLen, 1)
@@ -177,14 +177,14 @@ func (suite *MakeNewFormulaBasedOnLatticeShape) TestMakeHexagonalFormula(checker
 
 func (suite *MakeNewFormulaBasedOnLatticeShape) TestSetupThrowsAnErrorIfVectorsAreZero(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Generic,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Generic,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  0,
 			Height: 0,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			{
 				Multiplier: complex(1, 0),
 				Terms: []*formula.EisensteinFormulaTerm{
@@ -204,14 +204,14 @@ func (suite *MakeNewFormulaBasedOnLatticeShape) TestSetupThrowsAnErrorIfVectorsA
 
 func (suite *MakeNewFormulaBasedOnLatticeShape) TestSetupThrowsAnErrorIfVectorsAreCollinear(checker *C) {
 	newFormula := wallpaper.Formula{
-		LatticeType:     wallpaper.Generic,
-		LatticeSize:     &wallpaper.Dimensions{
+		LatticeType: wallpaper.Generic,
+		LatticeSize: &wallpaper.Dimensions{
 			Width:  -10,
 			Height: 0,
 		},
-		Lattice:         nil,
-		Multiplier:      complex(2, 0),
-		WavePackets:     []*wallpaper.WavePacket{
+		Lattice:    nil,
+		Multiplier: complex(2, 0),
+		WavePackets: []*wallpaper.WavePacket{
 			{
 				Multiplier: complex(1, 0),
 				Terms: []*formula.EisensteinFormulaTerm{

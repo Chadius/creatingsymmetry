@@ -1,16 +1,16 @@
 package coefficient_test
 
 import (
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	. "gopkg.in/check.v1"
 	"testing"
-	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 )
 
 func Test(t *testing.T) { TestingT(t) }
 
 type CoefficientPairFeatures struct {
 	evenSumPair *coefficient.Pairing
-	oddSumPair *coefficient.Pairing
+	oddSumPair  *coefficient.Pairing
 }
 
 var _ = Suite(&CoefficientPairFeatures{})
@@ -126,7 +126,7 @@ func (suite *CoefficientPairFeatures) TestMinusSumNAndMPlusN(checker *C) {
 	})
 
 	checker.Assert(newSets, HasLen, 1)
-	checker.Assert(newSets[0].PowerN, Equals, -(1+3))
+	checker.Assert(newSets[0].PowerN, Equals, -(1 + 3))
 	checker.Assert(newSets[0].PowerM, Equals, 1)
 	checker.Assert(newSets[0].NegateMultiplier, Equals, false)
 }
@@ -262,4 +262,3 @@ func (suite *CoefficientPairFeatures) TestMinusNPlusMNegateMultiplierIfOddPowerS
 	checker.Assert(newSetsWithOddSumPower[0].PowerM, Equals, 2)
 	checker.Assert(newSetsWithOddSumPower[0].NegateMultiplier, Equals, true)
 }
-

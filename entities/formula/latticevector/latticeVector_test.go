@@ -1,15 +1,15 @@
 package latticevector_test
 
 import (
-	. "gopkg.in/check.v1"
-	"testing"
 	"github.com/Chadius/creating-symmetry/entities/formula/latticevector"
 	"github.com/Chadius/creating-symmetry/entities/utility"
+	. "gopkg.in/check.v1"
+	"testing"
 )
 
 func Test(t *testing.T) { TestingT(t) }
 
-type LatticeVectorSuite struct {}
+type LatticeVectorSuite struct{}
 
 var _ = Suite(&LatticeVectorSuite{})
 
@@ -46,7 +46,7 @@ func (suite *LatticeVectorSuite) TestConvertToLatticeVector(checker *C) {
 		YLatticeVector: complex(0, 1),
 	}
 
-	latticeCoordinate := squareLatticeFormula.ConvertToLatticeCoordinates(complex(1.0,2.0))
+	latticeCoordinate := squareLatticeFormula.ConvertToLatticeCoordinates(complex(1.0, 2.0))
 	checker.Assert(real(latticeCoordinate), utility.NumericallyCloseEnough{}, 1.0, 1e-6)
 	checker.Assert(imag(latticeCoordinate), utility.NumericallyCloseEnough{}, 2.0, 1e-6)
 }
@@ -68,7 +68,7 @@ func (suite *LatticeVectorSuite) TestConvertToLatticeVectorEvenIfFirstVectorHasZ
 		YLatticeVector: complex(1, 0),
 	}
 
-	latticeCoordinate := squareLatticeFormulaWithFlippedVectors.ConvertToLatticeCoordinates(complex(1.0,2.0))
+	latticeCoordinate := squareLatticeFormulaWithFlippedVectors.ConvertToLatticeCoordinates(complex(1.0, 2.0))
 	checker.Assert(real(latticeCoordinate), utility.NumericallyCloseEnough{}, 2.0, 1e-6)
 	checker.Assert(imag(latticeCoordinate), utility.NumericallyCloseEnough{}, 1.0, 1e-6)
 }

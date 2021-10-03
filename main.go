@@ -26,7 +26,6 @@ func main() {
 
 	createWallpaperYAML, err := ioutil.ReadFile(formulaFilename)
 	if err != nil {
-println(formulaFilename)
 		log.Fatal(err)
 	}
 	wallpaperCommand, err := command.NewCreateWallpaperCommandFromYAML(createWallpaperYAML)
@@ -44,7 +43,7 @@ println(formulaFilename)
 
 	reader, err := os.Open(colorSourceFilename)
 	if err != nil {
-	  log.Fatal(err)
+		log.Fatal(err)
 	}
 	defer reader.Close()
 
@@ -53,7 +52,7 @@ println(formulaFilename)
 		log.Fatal(err)
 	}
 
-	destinationBounds := image.Rect(0,0, outputWidth, outputHeight)
+	destinationBounds := image.Rect(0, 0, outputWidth, outputHeight)
 	destinationCoordinates := flattenCoordinates(destinationBounds)
 
 	scaledCoordinates := scaleDestinationPixels(
@@ -76,10 +75,10 @@ println(formulaFilename)
 }
 
 func outputToFile(outputFilename string, outputImage image.Image) {
-    err := os.MkdirAll(filepath.Dir(outputFilename), 0777)
-    if err != nil {
-        panic(err)
-    }
+	err := os.MkdirAll(filepath.Dir(outputFilename), 0777)
+	if err != nil {
+		panic(err)
+	}
 	outputImageFile, err := os.Create(outputFilename)
 	if err != nil {
 		panic(err)
@@ -257,7 +256,7 @@ func transformCoordinatesForLatticePattern(latticePattern *wallpaper.Formula, sc
 
 func flattenCoordinates(destinationBounds image.Rectangle) []complex128 {
 	flattenedCoordinates := []complex128{}
-	for destinationY := destinationBounds.Min.Y ; destinationY < destinationBounds.Max.Y; destinationY++ {
+	for destinationY := destinationBounds.Min.Y; destinationY < destinationBounds.Max.Y; destinationY++ {
 		for destinationX := destinationBounds.Min.X; destinationX < destinationBounds.Max.X; destinationX++ {
 			flattenedCoordinates = append(flattenedCoordinates, complex(float64(destinationX), float64(destinationY)))
 		}
@@ -294,16 +293,16 @@ func colorDestinationImage(
 	transformedCoordinates []complex128,
 	colorValueBoundMin complex128,
 	colorValueBoundMax complex128,
-	) {
+) {
 	sourceImageBounds := sourceImage.Bounds()
 	for index, transformedCoordinate := range transformedCoordinates {
 		var sourceColorR, sourceColorG, sourceColorB, sourceColorA uint32
 
 		if real(transformedCoordinate) < real(colorValueBoundMin) ||
 			imag(transformedCoordinate) < imag(colorValueBoundMin) ||
-		real(transformedCoordinate) > real(colorValueBoundMax) ||
+			real(transformedCoordinate) > real(colorValueBoundMax) ||
 			imag(transformedCoordinate) > imag(colorValueBoundMax) {
-			sourceColorR,sourceColorG,sourceColorB,sourceColorA = 0,0,0,0
+			sourceColorR, sourceColorG, sourceColorB, sourceColorA = 0, 0, 0, 0
 		} else {
 			sourceImagePixelX := int(mathutility.ScaleValueBetweenTwoRanges(
 				float64(real(transformedCoordinate)),
@@ -329,10 +328,10 @@ func colorDestinationImage(
 			destinationPixelX,
 			destinationPixelY,
 			color.NRGBA{
-				R: uint8(sourceColorR>>8),
-				G: uint8(sourceColorG>>8),
-				B: uint8(sourceColorB>>8),
-				A: uint8(sourceColorA>>8),
+				R: uint8(sourceColorR >> 8),
+				G: uint8(sourceColorG >> 8),
+				B: uint8(sourceColorB >> 8),
+				A: uint8(sourceColorA >> 8),
 			},
 		)
 	}
