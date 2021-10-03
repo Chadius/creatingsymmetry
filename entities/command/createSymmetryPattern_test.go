@@ -18,11 +18,7 @@ func (suite *CreateWallpaperCommandSuite) SetUpTest(checker *C) {
 }
 
 func (suite *CreateWallpaperCommandSuite) TestCreateFromYAML(checker *C) {
-	yamlByteStream := []byte(`sample_source_filename: input.png
-output_filename: output.png
-output_size:
-  width: 800
-  height: 600
+	yamlByteStream := []byte(`
 pattern_viewport:
   x_min: 0
   y_min: 0
@@ -59,11 +55,6 @@ rosette_formula:
 `)
 	wallpaperCommand, err := command.NewCreateWallpaperCommandFromYAML(yamlByteStream)
 	checker.Assert(err, IsNil)
-	checker.Assert(wallpaperCommand.SampleSourceFilename, Equals, "input.png")
-
-	checker.Assert(wallpaperCommand.OutputFilename, Equals, "output.png")
-	checker.Assert(wallpaperCommand.OutputImageSize.Width, Equals, 800)
-	checker.Assert(wallpaperCommand.OutputImageSize.Height, Equals, 600)
 
 	checker.Assert(wallpaperCommand.PatternViewport.XMin, Equals, 0.0)
 	checker.Assert(wallpaperCommand.PatternViewport.YMin, Equals, 0.0)
@@ -80,12 +71,6 @@ rosette_formula:
 
 func (suite *CreateWallpaperCommandSuite) TestCreateFromJSON(checker *C) {
 	jsonByteStream := []byte(`{
-				"sample_source_filename": "input.png",
-				"output_filename": "output.png",
-				"output_size": {
-				  "width": 800,
-				  "height": 600
-				},
 				"pattern_viewport": {
 				  "x_min": 0,
 				  "y_min": 0,
@@ -129,11 +114,6 @@ func (suite *CreateWallpaperCommandSuite) TestCreateFromJSON(checker *C) {
 			}`)
 	wallpaperCommand, err := command.NewCreateWallpaperCommandFromJSON(jsonByteStream)
 	checker.Assert(err, IsNil)
-	checker.Assert(wallpaperCommand.SampleSourceFilename, Equals, "input.png")
-
-	checker.Assert(wallpaperCommand.OutputFilename, Equals, "output.png")
-	checker.Assert(wallpaperCommand.OutputImageSize.Width, Equals, 800)
-	checker.Assert(wallpaperCommand.OutputImageSize.Height, Equals, 600)
 
 	checker.Assert(wallpaperCommand.PatternViewport.XMin, Equals, 0.0)
 	checker.Assert(wallpaperCommand.PatternViewport.YMin, Equals, 0.0)
@@ -149,11 +129,7 @@ func (suite *CreateWallpaperCommandSuite) TestCreateFromJSON(checker *C) {
 }
 
 func (suite *CreateWallpaperCommandSuite) TestMarshalWallpaperFormula(checker *C) {
-	yamlByteStream := []byte(`sample_source_filename: input.png
-output_filename: output.png
-output_size:
-  width: 800
-  height: 600
+	yamlByteStream := []byte(`
 pattern_viewport:
   x_min: 0
   y_min: 0
@@ -197,5 +173,4 @@ lattice_pattern:
 	checker.Assert(wallpaperCommand.LatticePattern.LatticeSize.Height, Equals, 0.3)
 
 	checker.Assert(wallpaperCommand.LatticePattern.WavePackets, HasLen, 1)
-
 }

@@ -1,8 +1,6 @@
 # Where is the formula file located?
 By default, this program looks for `data/formula.yml`.
 It should contain:
-- The name of the [source image](#input-image)
-- The [name](#output-filename) and [size](#output-resolution) of the output image
 - The [formula](#transformation-formula) that transforms the source into the output
 - Numerical ranges used with the formula
   - [pattern viewport](#pattern-viewport)
@@ -52,32 +50,6 @@ Manipulating the `pattern_viewport` and `eyedropper_boundary` will zoom in on di
 
 ## Common options
 Every formula file contains these options.
-
-### Sample Source Filename
-The name of the image file. JPG and PNG are supported, as well as any format Go lang’s `Image` library supports.
-
-Examples:
-- `example/rainbow_stripe.png`
-- `input/iceCreamSundae.jpg`
-
-### Output Filename
-The name of the output filename. All output files are in PNG format.
-
-`ouput/rainbow_stripe_frieze.png`
-
-#### Output Resolution
-How big do you want the resulting image?
-- Bigger images give more detail.
-- Smaller images render faster.
-
-Write an object with `width` and `height` fields, both in pixels.
-
-Examples:
-```yaml
-output_size:
-  width: 500
-  height: 300
-```
 
 ### pattern viewport
 Which part of the output image will we look at?

@@ -1,4 +1,4 @@
-# Symmetrical Pattern Generator
+# Creating Symmetry
 This program lets you transform an image into an image with symmetrical pattern. Just supply a base image and a formula to get started.
 
 ![Image with 7 horizontal stripes creating the rainbow with white on top and black on the bottom. Rainbow Stripe](example/rainbow_stripe.png)
@@ -50,17 +50,53 @@ When you run `make run`, it will generate this [orange and red rosette pattern](
 You can open `out/example_image.png` to see the results. (on a Mac, you can also type `open out/example_image.png` to open it in Preview.)
 
 ### What happened?
-This program looks for the file `data/formula.yml` to answer these questions:
+This program needs answers to these questions:
 - What image do you want to transform?
 - How do you want to transform the image?
 - Where is the result stored?
-The example formula writes your image to `out/example_image.png`.
+
+`make run` expands into this command:
+- `go run main.go -in example/rainbow_stripe.png -f data/formula.yml -out out/example_image.png`
+
+And follows these steps:
+- Transform this image: `example/rainbow_stripe.png`
+- Transform it with these instructions: `data/formula.yml`
+- Store the result in this image: `out/example_image.png`.
 
 ## Command Line Options
 ```
-  -f string
+  -source, -in
+        Source filename, the image you want to transform.
+  -out
+        Output filename, where the result is stored.
+  -size
+        Output resolution, the size of the final image.
+  -f, -formula
     	The filename of the formula file. Defaults to ./data/formula.yml (default "formula")
 ```
+
+### Source Filename
+The name of the image file. JPG and PNG are supported, as well as any format Go lang’s `Image` library supports.
+
+Examples:
+- `-source example/rainbow_stripe.png`
+- `-in input/iceCreamSundae.jpg`
+
+### Output Filename
+The name of the output filename. All output files are in PNG format.
+
+`-out ouput/rainbow_stripe_frieze.png`
+
+#### Output Resolution
+How big do you want the resulting image?
+- Bigger images give more detail.
+- Smaller images render faster.
+
+Supply a pair of integers, separated with a single x.
+
+Examples:
+`-size 200x200`
+`-size 300x50`
 
 ## Types of patterns
 ### Rosette
@@ -121,7 +157,7 @@ All red blobs should look the same, but due to the low resolution rounding error
 ## How to test
 If you plan to mess around with the code itself, here are 2 more make commands that will come in handy:
 - `make test` Runs the unit tests.
-- `make lint` Runs the linter.
+- `make lint` Runs the linter and formats files.
 
 ## Inspiration
 <cite>[Creating Symmetry by Frank Farris](https://www.amazon.com/Creating-Symmetry-Mathematics-Wallpaper-Patterns/dp/0691161739)</cite>

@@ -1,8 +1,3 @@
-sample_source_filename: example/rainbow_stripe.png
-output_filename: out/lattices/rainbow_stripe_lattice_rectangular_pmg.png
-output_size:
-  width: 198
-  height: 198
 pattern_viewport:
   x_min: -50e-2
   x_max: 50e-2

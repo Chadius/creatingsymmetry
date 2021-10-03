@@ -17,14 +17,64 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
+	"strings"
 )
 
 func main() {
-	formulaFilename := "data/formula.yml"
-	flag.StringVar(&formulaFilename, "f", "data/formula.yml", "The filename of the formula file. Defaults to data/formula.yml")
-	flag.Parse()
+	filenameArguments := extractFilenameArguments()
+	wallpaperCommand, err := loadFormulaFile(filenameArguments)
+	destinationBounds, destinationCoordinates := getDestinationBoundary(filenameArguments)
+	scaledCoordinates := scaleDestinationToPatternViewport(wallpaperCommand, destinationBounds, destinationCoordinates)
+	transformedCoordinates := transformCoordinatesAndReport(wallpaperCommand, scaledCoordinates)
+	outputImage := eyedropperFinalColorAndSaveToImage(wallpaperCommand, err, filenameArguments, destinationCoordinates, transformedCoordinates)
+	outputToFile(filenameArguments.OutputFilename, outputImage)
+}
 
-	createWallpaperYAML, err := ioutil.ReadFile(formulaFilename)
+// eyedropperFinalColorAndSaveToImage uses the EyedropperBoundary to select the colors in the output image.
+//   It returns an image buffer.
+func eyedropperFinalColorAndSaveToImage(wallpaperCommand *command.CreateSymmetryPattern, err error, filenameArguments *FilenameArguments, destinationCoordinates []complex128, transformedCoordinates []complex128) *image.NRGBA {
+	colorValueBoundMin := complex(wallpaperCommand.EyedropperBoundary.XMin, wallpaperCommand.EyedropperBoundary.YMin)
+	colorValueBoundMax := complex(wallpaperCommand.EyedropperBoundary.XMax, wallpaperCommand.EyedropperBoundary.YMax)
+	colorSourceImage := openSourceImage(err, filenameArguments)
+	outputImage := image.NewNRGBA(image.Rect(0, 0, filenameArguments.OutputWidth, filenameArguments.OutputHeight))
+	colorDestinationImage(outputImage, colorSourceImage, destinationCoordinates, transformedCoordinates, colorValueBoundMin, colorValueBoundMax)
+	return outputImage
+}
+
+// transformCoordinatesAndReport applies the formula on the destination
+//   returning a flat array of coordinates.
+//   It also reports on the bounding box.
+func transformCoordinatesAndReport(wallpaperCommand *command.CreateSymmetryPattern, scaledCoordinates []complex128) []complex128 {
+	transformedCoordinates := transformCoordinatesForFormula(wallpaperCommand, scaledCoordinates)
+	zMin, zMax := mathutility.GetBoundingBox(transformedCoordinates)
+	println(zMin)
+	println(zMax)
+	return transformedCoordinates
+}
+
+func scaleDestinationToPatternViewport(wallpaperCommand *command.CreateSymmetryPattern, destinationBounds image.Rectangle, destinationCoordinates []complex128) []complex128 {
+	patternViewportMin := complex(wallpaperCommand.PatternViewport.XMin, wallpaperCommand.PatternViewport.YMin)
+	patternViewportMax := complex(wallpaperCommand.PatternViewport.XMax, wallpaperCommand.PatternViewport.YMax)
+	scaledCoordinates := scaleDestinationPixels(
+		destinationBounds,
+		destinationCoordinates,
+		patternViewportMin,
+		patternViewportMax,
+	)
+	return scaledCoordinates
+}
+
+// getDestinationBoundary uses the Argument's OutputWidth and OutputHeight to return
+//  a Rectangular buffer of those dimensions, and a flat array of the individual pixels.
+func getDestinationBoundary(filenameArguments *FilenameArguments) (image.Rectangle, []complex128) {
+	destinationBounds := image.Rect(0, 0, filenameArguments.OutputWidth, filenameArguments.OutputHeight)
+	destinationCoordinates := flattenCoordinates(destinationBounds)
+	return destinationBounds, destinationCoordinates
+}
+
+func loadFormulaFile(filenameArguments *FilenameArguments) (*command.CreateSymmetryPattern, error) {
+	createWallpaperYAML, err := ioutil.ReadFile(filenameArguments.FormulaFilename)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -32,16 +82,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	sampleSpaceMin := complex(wallpaperCommand.PatternViewport.XMin, wallpaperCommand.PatternViewport.YMin)
-	sampleSpaceMax := complex(wallpaperCommand.PatternViewport.XMax, wallpaperCommand.PatternViewport.YMax)
-	outputWidth := wallpaperCommand.OutputImageSize.Width
-	outputHeight := wallpaperCommand.OutputImageSize.Height
-	colorSourceFilename := wallpaperCommand.SampleSourceFilename
-	outputFilename := wallpaperCommand.OutputFilename
-	colorValueBoundMin := complex(wallpaperCommand.EyedropperBoundary.XMin, wallpaperCommand.EyedropperBoundary.YMin)
-	colorValueBoundMax := complex(wallpaperCommand.EyedropperBoundary.XMax, wallpaperCommand.EyedropperBoundary.YMax)
+	return wallpaperCommand, err
+}
 
-	reader, err := os.Open(colorSourceFilename)
+func openSourceImage(err error, filenameArguments *FilenameArguments) image.Image {
+	reader, err := os.Open(filenameArguments.SourceImageFilename)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,27 +96,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	destinationBounds := image.Rect(0, 0, outputWidth, outputHeight)
-	destinationCoordinates := flattenCoordinates(destinationBounds)
-
-	scaledCoordinates := scaleDestinationPixels(
-		destinationBounds,
-		destinationCoordinates,
-		sampleSpaceMin,
-		sampleSpaceMax,
-	)
-
-	transformedCoordinates := transformCoordinatesForFormula(wallpaperCommand, scaledCoordinates)
-	minz, maxz := mathutility.GetBoundingBox(transformedCoordinates)
-	println(minz)
-	println(maxz)
-
-	// Consider how to give a preview image? What's the picture ration
-	outputImage := image.NewNRGBA(image.Rect(0, 0, outputWidth, outputHeight))
-	colorDestinationImage(outputImage, colorSourceImage, destinationCoordinates, transformedCoordinates, colorValueBoundMin, colorValueBoundMax)
-
-	outputToFile(outputFilename, outputImage)
+	return colorSourceImage
 }
 
 func outputToFile(outputFilename string, outputImage image.Image) {
@@ -254,6 +279,8 @@ func transformCoordinatesForLatticePattern(latticePattern *wallpaper.Formula, sc
 	return transformedCoordinates
 }
 
+// flattenCoordinates returns an array of coordinates (using complex128 for each pair.)
+//   Each item in the array ranges from (0,0) to (destinationBounds.Min.X,destinationBounds.Min.Y).
 func flattenCoordinates(destinationBounds image.Rectangle) []complex128 {
 	flattenedCoordinates := []complex128{}
 	for destinationY := destinationBounds.Min.Y; destinationY < destinationBounds.Max.Y; destinationY++ {
@@ -264,18 +291,19 @@ func flattenCoordinates(destinationBounds image.Rectangle) []complex128 {
 	return flattenedCoordinates
 }
 
+// scaleDestinationPixels returns a list of pairs of float64. Each pair is mapped from the viewPort to the destinationBoundary.
 func scaleDestinationPixels(destinationBounds image.Rectangle, destinationCoordinates []complex128, viewPortMin complex128, viewPortMax complex128) []complex128 {
 	scaledCoordinates := []complex128{}
 	for _, destinationCoordinate := range destinationCoordinates {
 		destinationScaledX := mathutility.ScaleValueBetweenTwoRanges(
-			float64(real(destinationCoordinate)),
+			real(destinationCoordinate),
 			float64(destinationBounds.Min.X),
 			float64(destinationBounds.Max.X),
 			real(viewPortMin),
 			real(viewPortMax),
 		)
 		destinationScaledY := mathutility.ScaleValueBetweenTwoRanges(
-			float64(imag(destinationCoordinate)),
+			imag(destinationCoordinate),
 			float64(destinationBounds.Min.Y),
 			float64(destinationBounds.Max.Y),
 			imag(viewPortMin),
@@ -286,6 +314,8 @@ func scaleDestinationPixels(destinationBounds image.Rectangle, destinationCoordi
 	return scaledCoordinates
 }
 
+// colorDestinationImage maps each transformed coordinate to a color
+//   inside the Eyedropper Boundary.
 func colorDestinationImage(
 	destinationImage *image.NRGBA,
 	sourceImage image.Image,
@@ -334,5 +364,64 @@ func colorDestinationImage(
 				A: uint8(sourceColorA >> 8),
 			},
 		)
+	}
+}
+
+func checkSourceArgument(sourceImageFilename string) {
+	if sourceImageFilename == "" {
+		log.Fatal("missing source filename")
+	}
+}
+
+func checkOutputArgument(outputFilename, outputDimensions string) (int, int) {
+	if outputFilename == "" {
+		log.Fatal("missing output filename")
+	}
+
+	outputWidth, widthErr := strconv.Atoi(strings.Split(outputDimensions, "x")[0])
+	if widthErr != nil {
+		log.Fatal(widthErr)
+	}
+
+	outputHeight, heightErr := strconv.Atoi(strings.Split(outputDimensions, "x")[1])
+	if heightErr != nil {
+		log.Fatal(heightErr)
+	}
+
+	return outputWidth, outputHeight
+}
+
+// FilenameArguments assume the user provides filenames to create a pattern.
+type FilenameArguments struct {
+	FormulaFilename     string
+	OutputFilename      string
+	OutputHeight        int
+	OutputWidth         int
+	SourceImageFilename string
+}
+
+func extractFilenameArguments() *FilenameArguments {
+	var sourceImageFilename, outputFilename, outputDimensions string
+	formulaFilename := "data/formula.yml"
+	flag.StringVar(&formulaFilename, "f", "data/formula.yml", "See -formula")
+	flag.StringVar(&formulaFilename, "formula", "data/formula.yml", "The filename of the formula file. Defaults to data/formula.yml")
+
+	flag.StringVar(&sourceImageFilename, "in", "", "See -source. Required.")
+	flag.StringVar(&sourceImageFilename, "source", "", "Source filename. Required.")
+
+	flag.StringVar(&outputFilename, "out", "", "Output filename. Required.")
+	outputDimensions = "200x200"
+	flag.StringVar(&outputDimensions, "size", "200x200", "Output size in pixels, separated with an x. Default to 200x200.")
+	flag.Parse()
+
+	checkSourceArgument(sourceImageFilename)
+	outputWidth, outputHeight := checkOutputArgument(outputFilename, outputDimensions)
+
+	return &FilenameArguments{
+		FormulaFilename:     formulaFilename,
+		OutputFilename:      outputFilename,
+		OutputHeight:        outputHeight,
+		OutputWidth:         outputWidth,
+		SourceImageFilename: sourceImageFilename,
 	}
 }
