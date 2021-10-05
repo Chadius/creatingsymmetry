@@ -28,7 +28,9 @@ TODO show how to automatically set up P31m symmetry
 TODO show how to manually set up P31m symmetry
 
 ## P3m1
-TODO Provide P3m1 image
+![Transformed rainbow stripe image into hexagonal lattice with P3m1 symmetry, multiple rows of green and yellow spheres](../example/lattices/rainbow_stripe_lattice_hexagonal_p3m1.png)
+
+[(link to formula)](../example/lattices/rainbow_stripe_lattice_hexagonal_p3m1.yml)
 
 P3m1 images reflect around a vertical axis, like a book.
 
@@ -38,7 +40,9 @@ TODO show formula secret sauce
 TODO show formula manual sauce
 
 ## P6
-TODO Provide image
+![Transformed rainbow stripe image into hexagonal lattice with P6 symmetry, 6 circles with 3 holes surrounding a single holed circle](../example/lattices/rainbow_stripe_lattice_hexagonal_p6.png)
+
+[(link to formula)](../example/lattices/rainbow_stripe_lattice_hexagonal_p6.yml)
 
 P6 indicates the image can be rotated 6 times without any visual difference.
 So, you can rotate it 60, 120, and 180 degrees in either direction without a visual change.
@@ -51,7 +55,8 @@ TODO show formula secret sauce
 TODO show formula manual sauce
 
 ## P6m
-TODO Provide image
+![Transformed rainbow stripe image into hexagonal lattice with P6 symmetry, 6 circles surround a central circle. 3 above and 3 below. The surrounding circles have 3 holes like a power outlet and the central circle has one hole.](../example/lattices/rainbow_stripe_lattice_hexagonal_p6m.png)
+[(link to formula)](../example/lattices/rainbow_stripe_lattice_hexagonal_p6m.yml)
 
 P6m images not only have 6 way rotation, but they also reflect.
 
