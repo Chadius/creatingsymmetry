@@ -2,15 +2,52 @@
 Imagine a 4 sided figure, like a square or rectangle. Tile them on top of each other and to the side.
 Now, stretch the source image across those four points. That's a lattice. 
 
-Here are 5 lattice-based patterns.
+# Symmetry Types
+## Translational
+All lattice based patterns have translational symmetry.
+The lattice is always aligned across 2 axes, so if you scroll the pattern along those directions you will see the pattern repeat.
+
+![Transformed rainbow stripe image into rectangular lattice with pmg symmetry, with green and orange round rectangules on a yellow background](../example/lattices/rainbow_stripe_lattice_rectangular_pmg.png)
+
+In this example, the axes are horizontal and vertical. You can move up, down, left or right.
+
+TODO Show symmetry
+
+## Reflective
+These types look the same if you flip them over a line.
+- Some reflective lines are along the x-axis. You can fold the top of the image to the bottom of the image.
+- Some reflective lines are along the y-axis. You can fold the left of the image to the right of the image.
+
+![Transformed rainbow stripe image into a square lattice with p4m symmetry, forming a tilted purple and blue checkerboard pattern](../example/lattices/rainbow_stripe_lattice_square_p4m.png)
+
+In this example, you can draw a line across the middle, from top to bottom. You'll see the left side matches the right side.
+
+TODO Show symmetry
+
+You can also draw a line from left to right. The top matches the bottom.
+
+TODO Show symmetry
+
+## Rotational
+All patterns can be rotated 360 degrees without visual changes.
+But some can be rotated at 60, 90, 120 or 180 degrees and look the same.
+
+![Transformed rainbow stripe image into hexagonal lattice with P6 symmetry, 6 circles with 3 holes surrounding a single holed circle](../example/lattices/rainbow_stripe_lattice_hexagonal_p6.png)
+
+This pattern has 6 way rotational symmetry. Rotate it 60 degrees and the image will look the same.
+
+![Transformed rainbow stripe image into hexagonal lattice with P6 symmetry, 6 circles surround a central circle. 3 above and 3 below. The surrounding circles have 3 holes like a power outlet and the central circle has one hole.](../docs/lattice_symmetry/rainbow_stripe_lattice_hexagonal_p6_symmetry_6_rotation.png)
+
+# Lattice types
+There are 5 lattice-based patterns that lead to 17 types of symmetry.
 
 ## Hexagonal
+More information [HERE](lattice_hexagonal.md)
+
 ![Transformed rainbow stripe image into hexagonal lattice with p31m symmetry, with purple, indigo and blue nodes against a transparent background](../example/lattices/rainbow_stripe_lattice_hexagonal_p31m.png)
 
 Hexagonal lattice with p31m symmetry [(link to formula)](../example/lattices/rainbow_stripe_lattice_hexagonal_p31m.yml)
 The four sided lattice is tilted, so look for the solid blue points. Stacked enough times it connects 7 of them.
-
-More information [HERE](lattice_hexagonal.md)
 
 ## Rectangular
 ![Transformed rainbow stripe image into rectangular lattice with pmg symmetry, with green and orange round rectangules on a yellow background](../example/lattices/rainbow_stripe_lattice_rectangular_pmg.png)

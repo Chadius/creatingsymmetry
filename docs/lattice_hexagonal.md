@@ -8,23 +8,50 @@ A Hexagonal lattice is a 4 sided polygon tilted at 60 degrees. You can stack 6 o
 Here's a lattice and the underlying hexagonal shape.
 
 # Formula file
+After adding [common options](./common_options.md) to your formula file, you can create the actual formula.
+
+You can either copy one of the examples and modify it, or you can follow these instructions:
+- Start the pattern with `lattice_pattern:`
+- Add `lattice_type: hexagonal` as child key/value.
+- Add a `multiplier` with non-zero `real` and `imaginary` keys.
+- (Optional) If you want symmetry, add a `desired_symmetry` key with the notation. (i.e `p31m`, `p3m1`, `p6`, `p6m`)
+
+Note: If the `multiplier`'s `real` or `imaginary` parts are 0, the pattern will flatten into a single color.
+
+- Now you add an array of `wave_packet` objects.
+- Each wave packet has a `multiplier`. The multiplier should have non-zero `real` and `imaginary` parts.
+- Now add a list of `terms` objects.
+- Each term must have `power_n` and `power_m`. These are non-zero integers.
 
 # Symmetry
 ## P3
 All hexagonal lattices have 3 way rotational symmetry. You can rotate the image 120 degrees in either direction, and it will look the same as the original.
+
+If you don't want any other type of symmetry:
+- Don't use `desired_symmetry`.
+- Make the wave packet multipliers different.
+- Change the `power_m` and `power_n` for each term. Make sure another term didn't swap the order, negate the terms, or both.
 
 ## P31m
 ![Transformed rainbow stripe image into hexagonal lattice with p31m symmetry, with purple, indigo and blue nodes against a transparent background](../example/lattices/rainbow_stripe_lattice_hexagonal_p31m.png)
 
 [(link to formula)](../example/lattices/rainbow_stripe_lattice_hexagonal_p31m.yml)
 
-You can reflect P31m symmetry around a horizontal axis.
+You can reflect p31m symmetry around a horizontal axis.
 
 ![Previous picture with a black horizontal line down the center, demonstrating the symmetrical mirror effect](../docs/lattice_symmetry/rainbow_stripe_lattice_hexagonal_p31m_symmetry.png)
 
-TODO show how to automatically set up P31m symmetry
+To create p31m symmetry, add `desired_symmetry: p31m` to your `lattice_formula` section.
 
-TODO show how to manually set up P31m symmetry
+#### Manual formula
+For each wave packet, there must a corresponding wave packet. Copy the first wave packet and make these changes:
+- The multipliers should stay the same.
+- Swap the order of `power_n` and `power_m`.
+- Negate `power_n` and `power_m`.
+
+In other words:
+- `power_n = original_power_m * -1`
+- `power_m = original_power_n * -1`
 
 ## P3m1
 ![Transformed rainbow stripe image into hexagonal lattice with P3m1 symmetry, multiple rows of green and yellow spheres](../example/lattices/rainbow_stripe_lattice_hexagonal_p3m1.png)
@@ -44,11 +71,9 @@ TODO show formula manual sauce
 [(link to formula)](../example/lattices/rainbow_stripe_lattice_hexagonal_p6.yml)
 
 P6 indicates the image can be rotated 6 times without any visual difference.
-So, you can rotate it 60, 120, and 180 degrees in either direction without a visual change.
+So, you can rotate it 60, 120, and 180 degrees in either direction without a visual change. P6 images also have P2 and P3 symmetry.
 
-P6 images also have P2 and P3 symmetry.
-
-TODO draw the symmetry
+![Transformed rainbow stripe image into hexagonal lattice with P6 symmetry, 6 circles surround a central circle. 3 above and 3 below. The surrounding circles have 3 holes like a power outlet and the central circle has one hole.](../docs/lattice_symmetry/rainbow_stripe_lattice_hexagonal_p6_symmetry_6_rotation.png)
 
 TODO show formula secret sauce
 TODO show formula manual sauce
@@ -60,7 +85,13 @@ TODO show formula manual sauce
 
 P6m images not only have 6 way rotation, but they also reflect.
 
-TODO draw the symmetry
+Compare to the [P6m](#p6) example. The three-pronged balls can fold over a horizontal line while maintaining symmetry.
+
+![Transformed rainbow stripe image into hexagonal lattice with P6 symmetry, 6 circles surround a central circle. 3 above and 3 below. The surrounding circles have 3 holes like a power outlet and the central circle has one hole.](../docs/lattice_symmetry/rainbow_stripe_lattice_hexagonal_p6m_symmetry_horizontal.png)
+
+This is still has P6 symmetry, so it has 2, 3 and 6 way rotational symmetry.
+
+![Transformed rainbow stripe image into hexagonal lattice with P6 symmetry, 6 circles surround a central circle. 3 above and 3 below. The surrounding circles have 3 holes like a power outlet and the central circle has one hole.](../docs/lattice_symmetry/rainbow_stripe_lattice_hexagonal_p6m_symmetry_6_rotation.png)
 
 TODO show formula secret sauce
 TODO show formula manual sauce

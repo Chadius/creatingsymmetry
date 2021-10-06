@@ -19,22 +19,18 @@ All Frieze patterns have translational symmetry.
 
 ![Transformed rainbow stripe image into frieze with p111 symmetry, like a row of melting pudding pops](../example/friezes/rainbow_stripe_frieze_p111_only.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_frieze_p111_only.yml)
+If you look at one of the red-black peaks and move to the side, you'll see another one.  
 
 ## Reflective
 These types look the same if you flip them over a line. Usually you'll see them reflect over the x-axis (so the tops match the bottoms.) 
 
 ![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../example/friezes/rainbow_stripe_frieze_p11m_and_p11g.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_frieze_p11m_and_p11g.yml)
-
 ## Glide
 Glides combine translation and reflective features. These translate the top usually by half a unit and reflect over the x-axis.
-Often you can get a checkerbooard pattern, like the Orange/Red boxes in this example.
+Often you can get a checkerboard pattern, like the Orange/Red boxes in this example.
 
 ![Transformed rainbow stripe image into frieze with p2mg symmetry (glide,) with multicolored spikes emerging from a checker board orange and red background](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.png)
-
-[(Link to formula)](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.yml)
 
 # Create your Frieze Formula
 * Your formula should have a `frieze_formula` key, followed by a list of `terms`.
@@ -52,7 +48,7 @@ The easiest way is to use `coefficient_relationships` to automatically generate 
 Set the `power_n` and `power_m` of each `term` to create a term and then add relationships.
 
 There are 7 ways to make symmetrical friezes.
-Symmetries are listed using crystallograpic notation.
+Symmetries are listed using crystallographic notation.
 ### p111
 p111 is the generic case with no symmetry besides translation.
 - Set each term's `Multiplier`, `power_n` and `power_m` to whatever you want.
