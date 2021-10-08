@@ -11,7 +11,7 @@ The lattice is always aligned across 2 axes, so if you scroll the pattern along 
 
 In this example, the axes are horizontal and vertical. You can move up, down, left or right.
 
-TODO Show symmetry
+![Preceding image with arrows drawn, showing the center of the green rectangles](../docs/lattice_symmetry/rainbow_stripe_lattice_rectangular_pmg_symmetry_translational.png)
 
 ## Reflective
 These types look the same if you flip them over a line.
@@ -22,11 +22,15 @@ These types look the same if you flip them over a line.
 
 In this example, you can draw a line across the middle, from top to bottom. You'll see the left side matches the right side.
 
-TODO Show symmetry
+![Preceding image with a vertical line, showing the left is a reflection of the right](../docs/lattice_symmetry/rainbow_stripe_lattice_square_p4m_reflective_yaxis.png)
 
 You can also draw a line from left to right. The top matches the bottom.
 
-TODO Show symmetry
+![Preceding image with a horizontal line, showing the top is a reflection of the bottom](../docs/lattice_symmetry/rainbow_stripe_lattice_square_p4m_reflective_xaxis.png)
+
+This example also has diagonal reflections.
+
+![Preceding image with a diagonal line, showing the corners reflect on the corresponding corner](../docs/lattice_symmetry/rainbow_stripe_lattice_square_p4m_reflective_diagonal.png)
 
 ## Rotational
 All patterns can be rotated 360 degrees without visual changes.
@@ -70,8 +74,6 @@ The lattice is based on a rhombus, where all sides are the same length but not a
 
 ## Generic
 ![Transformed rainbow stripe image into generic lattice with p2 symmetry. Orange pattern with tilted holes are like a grilled cheese sandwich](../example/lattices/rainbow_stripe_lattice_generic_p2.png)
-
-Grilled cheese, anyone?
 
 Generic lattice with p2 symmetry [(link to formula)](../example/lattices/rainbow_stripe_lattice_generic_p2.yml)
 Generic lattices are freeform. They are guaranteed to be stackable and may have 180-degree symmetrical rotation.
