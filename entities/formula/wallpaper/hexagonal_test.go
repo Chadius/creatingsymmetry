@@ -121,8 +121,8 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 			{
 				Terms: []*formula.EisensteinFormulaTerm{
 					{
-						PowerN: suite.baseWavePacket.Terms[0].PowerM * -1,
-						PowerM: suite.baseWavePacket.Terms[0].PowerN * -1,
+						PowerN: suite.baseWavePacket.Terms[0].PowerM,
+						PowerM: suite.baseWavePacket.Terms[0].PowerN,
 					},
 				},
 				Multiplier: suite.baseWavePacket.Multiplier,
@@ -133,8 +133,8 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 	checker.Assert(err, IsNil)
 
 	checker.Assert(newFormula.HasSymmetry(wallpaper.P3), Equals, true)
-	checker.Assert(newFormula.HasSymmetry(wallpaper.P31m), Equals, false)
-	checker.Assert(newFormula.HasSymmetry(wallpaper.P3m1), Equals, true)
+	checker.Assert(newFormula.HasSymmetry(wallpaper.P31m), Equals, true)
+	checker.Assert(newFormula.HasSymmetry(wallpaper.P3m1), Equals, false)
 	checker.Assert(newFormula.HasSymmetry(wallpaper.P6), Equals, false)
 	checker.Assert(newFormula.HasSymmetry(wallpaper.P6m), Equals, false)
 }

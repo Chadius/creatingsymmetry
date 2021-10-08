@@ -42,7 +42,7 @@ This pattern has 6 way rotational symmetry. Rotate it 60 degrees and the image w
 There are 5 lattice-based patterns that lead to 17 types of symmetry.
 
 ## Hexagonal
-More information [HERE](lattice_hexagonal.md)
+More information [>HERE<](lattice_hexagonal.md)
 
 ![Transformed rainbow stripe image into hexagonal lattice with p31m symmetry, with purple, indigo and blue nodes against a transparent background](../example/lattices/rainbow_stripe_lattice_hexagonal_p31m.png)
 
