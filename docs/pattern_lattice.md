@@ -73,6 +73,8 @@ Rhombic lattice with cmm symmetry [(link to formula)](../example/lattices/rainbo
 The lattice is based on a rhombus, where all sides are the same length but not at a square. There are rounding errors since the resolution is so small, but all of the red shapes should be exactly the same.
 
 ## Generic
+More information [>HERE<](lattice_generic.md)
+
 ![Transformed rainbow stripe image into generic lattice with p2 symmetry. Orange pattern with tilted holes are like a grilled cheese sandwich](../example/lattices/rainbow_stripe_lattice_generic_p2.png)
 
 Generic lattice with p2 symmetry [(link to formula)](../example/lattices/rainbow_stripe_lattice_generic_p2.yml)
