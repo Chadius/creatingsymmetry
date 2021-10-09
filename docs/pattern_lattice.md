@@ -75,6 +75,8 @@ You can find out more about Square patterns [here.](lattice_square.md)
 Rhombic lattice with cmm symmetry [(link to formula)](../example/lattices/rainbow_stripe_lattice_rhombic_cmm.yml)
 The lattice is based on a rhombus, where all sides are the same length but not at a square. There are rounding errors since the resolution is so small, but all of the red shapes should be exactly the same.
 
+Build your own Rhombic patterns [here.](lattice_rhombic.md)
+
 ## Generic
 ![Transformed rainbow stripe image into generic lattice with p2 symmetry. Orange pattern with tilted holes are like a grilled cheese sandwich](../example/lattices/rainbow_stripe_lattice_generic_p2.png)
 

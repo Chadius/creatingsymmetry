@@ -23,8 +23,8 @@ You can either copy one of the examples and modify it, or you can follow these i
 Note: If the `multiplier`'s `real` or `imaginary` parts are 0, the pattern will flatten into a single color.
 
 ## Add a lattice_size
-1. Add a `width`. Longer numbers mean skinnier lattices.
-1. Add a `height`. Longer numbers mean shorter lattices.
+1. Add a `width`. This is a non-zero number. Greater numbers mean skinnier lattices.
+1. Add a `height`. This is a non-zero number. Greater numbers mean shorter lattices.
 
 ```
 lattice_size:
