@@ -29,7 +29,7 @@ Note: If the `multiplier`'s `real` or `imaginary` parts are 0, the pattern will 
 Every lattice based pattern has one or more wave packets.
 
 1. Each wave packet has a `multiplier`. The multiplier should have non-zero `real` and `imaginary` parts.
-2. Now add a list of `terms` objects.
+2. Now add a list of `terms` objects. If you're using `desired_symmetry`, only add one term per wave packet.
 3. Each term must have `power_n` and `power_m`. These are non-zero integers.
 
 # Symmetry
@@ -86,7 +86,7 @@ In other words:
 - `power_m = original_power_n`
 
 ## p4g and p4m
-Some formulas will generate p4g and p4m symmetry. If each term's `power_n` and `power_m` have an even sum, you will get both.
+Some formulas will generate p4g and p4m symmetry. If each term's `power_n` and `power_m` have an even sum, the pattern will have all of these symmetries.
 
 ![Transformed rainbow stripe image into a square lattice with p4m symmetry, forming a tilted purple and blue checkerboard pattern](../example/lattices/rainbow_stripe_lattice_square_p4m_and_p4g.png)
 

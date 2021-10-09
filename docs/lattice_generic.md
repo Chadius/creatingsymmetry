@@ -36,7 +36,7 @@ lattice_size:
 Every lattice based pattern has one or more wave packets.
 
 1. Each wave packet has a `multiplier`. The multiplier should have non-zero `real` and `imaginary` parts.
-2. Now add a list of `terms` objects.
+2. Now add a list of `terms` objects. If you're using `desired_symmetry`, only add one term per wave packet.
 3. Each term must have `power_n` and `power_m`. These are non-zero integers.
 
 # Symmetry

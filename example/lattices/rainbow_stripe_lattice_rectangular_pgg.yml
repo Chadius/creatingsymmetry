@@ -1,0 +1,35 @@
+pattern_viewport:
+  x_min: -600e-3
+  y_min: -600e-3
+  x_max: 600e-3
+  y_max: 600e-3
+eyedropper_boundary:
+  x_min: 0e0
+  y_min: -50e-2
+  x_max: 1e0
+  y_max: 90e-2
+lattice_pattern:
+  lattice_type: rectangular
+  lattice_size:
+    height: 0.6
+  multiplier:
+    real: 1e0
+    imaginary: 1e-5
+  desired_symmetry: pgg
+  wave_packets:
+    -
+      multiplier:
+        real: 1e-2
+        imaginary: 1e-2
+      terms:
+        -
+          power_n: -3
+          power_m: -2
+    -
+      multiplier:
+        real: 9e-3
+        imaginary: 1e-1
+      terms:
+        -
+          power_n: 5
+          power_m: -2

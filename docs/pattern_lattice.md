@@ -7,7 +7,7 @@ Now, stretch the source image across those four points. That's a lattice.
 All lattice based patterns have translational symmetry.
 The lattice is always aligned across 2 axes, so if you scroll the pattern along those directions you will see the pattern repeat.
 
-![Transformed rainbow stripe image into rectangular lattice with pmg symmetry, with green and orange round rectangules on a yellow background](../example/lattices/rainbow_stripe_lattice_rectangular_pmg.png)
+![Transformed rainbow stripe image into rectangular lattice with pmg symmetry, with green and orange round rectangles on a yellow background](../example/lattices/rainbow_stripe_lattice_rectangular_pmg.png)
 
 In this example, the axes are horizontal and vertical. You can move up, down, left or right.
 
@@ -59,6 +59,8 @@ Learn more about hexagonal lattices [here.](lattice_hexagonal.md)
 
 Rectangular lattice with pmg symmetry [(link to formula)](../example/lattices/rainbow_stripe_lattice_rectangular_pmg.yml).
 There is a lattice that connects the centers of 4 orange and green rectangles. The lattice is stacked throughout the pattern to make it repeat.
+
+Interested in more about rectangular lattices? Click [here.](lattice_rectangular.md)
 
 ## Square
 ![Transformed rainbow stripe image into a square lattice with p4m symmetry, forming a tilted purple and blue checkerboard pattern](../example/lattices/rainbow_stripe_lattice_square_p4m_and_p4g.png)
