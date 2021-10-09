@@ -1,0 +1,48 @@
+pattern_viewport:
+  x_min: -2e0
+  y_min: -2e0
+  x_max: 2e0
+  y_max: 2e0
+eyedropper_boundary:
+  x_min: -10e-1
+  y_min: -65e-2
+  x_max: 10e-1
+  y_max: 125e-2
+lattice_pattern:
+  lattice_type: square
+  multiplier:
+    real: 1.0
+    imaginary: 2e-1
+  wave_packets:
+    -
+      multiplier:
+        real: 1
+        imaginary: 1e-3
+      terms:
+        -
+          power_n: 1
+          power_m: -2
+    -
+      multiplier:
+        real: 1
+        imaginary: 1e-3
+      terms:
+        -
+          power_n: -2
+          power_m: 1
+    -
+      multiplier:
+        real: -2e-1
+        imaginary: 1e-3
+      terms:
+        -
+          power_n: 2
+          power_m: -3
+    -
+      multiplier:
+        real: 2e-1
+        imaginary: 1e-3
+      terms:
+        -
+          power_n: -3
+          power_m: 2

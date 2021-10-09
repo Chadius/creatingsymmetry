@@ -5,15 +5,15 @@ pattern_viewport:
   y_max: 20e-1
 eyedropper_boundary:
   x_min: 0e0
-  y_min: -5e-2
+  y_min: -30e-2
   x_max: 1e0
-  y_max: 8e-2
+  y_max: 40e-2
 lattice_pattern:
   lattice_type: square
   multiplier:
     real: 1e0
     imaginary: 1e-2
-  desired_symmetry: p4m
+  desired_symmetry: p4g
   wave_packets:
     -
       multiplier:
@@ -24,7 +24,7 @@ lattice_pattern:
           power_n: 3
           power_m: -2
         -
-          power_n: -6
+          power_n: -3
           power_m: 1
     -
       multiplier:
