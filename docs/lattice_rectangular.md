@@ -6,7 +6,7 @@ A square is a special type of rectangular lattice, where all 4 sides have equal 
 
 rectangular lattice with cmm symmetry [(link to formula)](../example/lattices/rainbow_stripe_lattice_rectangular_pmg.yml)
 
-TODO Show rectangular lattice
+![Above picture with the outline of a rectangular lattice.](../docs/lattice_symmetry/rainbow_stripe_lattice_rectangular_lattice.png)
 
 Here's a lattice and the underlying rectangular shape.
 
