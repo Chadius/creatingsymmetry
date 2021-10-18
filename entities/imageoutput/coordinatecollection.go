@@ -1,5 +1,7 @@
 package imageoutput
 
+import "math/cmplx"
+
 type CoordinateCollection struct {
 	coordinates *[]complex128
 }
@@ -9,11 +11,18 @@ func (c *CoordinateCollection) Coordinates() *[]complex128 {
 	return c.coordinates
 }
 
+func coordinateIsAtInfinity(coordinate complex128) bool {
+	if cmplx.IsInf(coordinate) {
+		return true
+	}
+	return false
+}
+
 // MinimumX returns the lowest x coordinate in the collection.
 func (c *CoordinateCollection) MinimumX() float64 {
 	minimumX := real((*c.coordinates)[0])
 	for _, coordinate := range *c.coordinates {
-		if real(coordinate) < minimumX {
+		if !coordinateIsAtInfinity(coordinate) && real(coordinate) < minimumX {
 			minimumX = real(coordinate)
 		}
 	}
@@ -24,7 +33,7 @@ func (c *CoordinateCollection) MinimumX() float64 {
 func (c *CoordinateCollection) MaximumX() float64 {
 	maximumX := real((*c.coordinates)[0])
 	for _, coordinate := range *c.coordinates {
-		if real(coordinate) > maximumX {
+		if !coordinateIsAtInfinity(coordinate) && real(coordinate) > maximumX {
 			maximumX = real(coordinate)
 		}
 	}
@@ -35,7 +44,7 @@ func (c *CoordinateCollection) MaximumX() float64 {
 func (c *CoordinateCollection) MinimumY() float64 {
 	minimumY := imag((*c.coordinates)[0])
 	for _, coordinate := range *c.coordinates {
-		if imag(coordinate) < minimumY {
+		if !coordinateIsAtInfinity(coordinate) && imag(coordinate) < minimumY {
 			minimumY = imag(coordinate)
 		}
 	}
@@ -46,7 +55,7 @@ func (c *CoordinateCollection) MinimumY() float64 {
 func (c *CoordinateCollection) MaximumY() float64 {
 	maximumY := imag((*c.coordinates)[0])
 	for _, coordinate := range *c.coordinates {
-		if imag(coordinate) > maximumY {
+		if !coordinateIsAtInfinity(coordinate) && imag(coordinate) > maximumY {
 			maximumY = imag(coordinate)
 		}
 	}

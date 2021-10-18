@@ -8,6 +8,7 @@ import (
 	"github.com/Chadius/creating-symmetry/entities/formula/frieze"
 	"github.com/Chadius/creating-symmetry/entities/formula/rosette"
 	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
+	"github.com/Chadius/creating-symmetry/entities/imageoutput"
 	"github.com/Chadius/creating-symmetry/entities/mathutility"
 	"image"
 	"image/color"
@@ -34,12 +35,13 @@ func main() {
 // eyedropperFinalColorAndSaveToImage uses the EyedropperBoundary to select the colors in the output image.
 //   It returns an image buffer.
 func eyedropperFinalColorAndSaveToImage(wallpaperCommand *command.CreateSymmetryPattern, err error, filenameArguments *FilenameArguments, destinationCoordinates []complex128, transformedCoordinates []complex128) *image.NRGBA {
-	colorValueBoundMin := complex(wallpaperCommand.EyedropperBoundary.XMin, wallpaperCommand.EyedropperBoundary.YMin)
-	colorValueBoundMax := complex(wallpaperCommand.EyedropperBoundary.XMax, wallpaperCommand.EyedropperBoundary.YMax)
-	colorSourceImage := openSourceImage(err, filenameArguments)
-	outputImage := image.NewNRGBA(image.Rect(0, 0, filenameArguments.OutputWidth, filenameArguments.OutputHeight))
-	colorDestinationImage(outputImage, colorSourceImage, destinationCoordinates, transformedCoordinates, colorValueBoundMin, colorValueBoundMax)
-	return outputImage
+	//colorValueBoundMin := complex(wallpaperCommand.EyedropperBoundary.XMin, wallpaperCommand.EyedropperBoundary.YMin)
+	//colorValueBoundMax := complex(wallpaperCommand.EyedropperBoundary.XMax, wallpaperCommand.EyedropperBoundary.YMax)
+	//colorSourceImage := openSourceImage(err, filenameArguments)
+	//outputImage := image.NewNRGBA(image.Rect(0, 0, filenameArguments.OutputWidth, filenameArguments.OutputHeight))
+	//colorDestinationImage(outputImage, colorSourceImage, destinationCoordinates, transformedCoordinates, colorValueBoundMin, colorValueBoundMax)
+	return helperForMapTransformedPointsToOutputImageBuffer(wallpaperCommand, filenameArguments, transformedCoordinates)
+	//return outputImage
 }
 
 // transformCoordinatesAndReport applies the formula on the destination
@@ -424,4 +426,50 @@ func extractFilenameArguments() *FilenameArguments {
 		OutputWidth:         outputWidth,
 		SourceImageFilename: sourceImageFilename,
 	}
+}
+
+// helperForMapTransformedPointsToOutputImageBuffer should be deleted once I refactor main.
+func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSymmetryPattern, arguments *FilenameArguments, transformedCoordinates []complex128) *image.NRGBA {
+	var err error
+	colorSourceImage := openSourceImage(err, arguments)
+	eyedropper := imageoutput.EyedropperFactory().
+		WithLeftSide(int(command.EyedropperBoundary.XMin)).
+		WithRightSide(int(command.EyedropperBoundary.XMax)).
+		WithTopSide(int(command.EyedropperBoundary.YMin)).
+		WithBottomSide(int(command.EyedropperBoundary.YMax)).
+		WithImage(&colorSourceImage).
+		Build()
+
+	transformedCoordinateCollection := imageoutput.CoordinateCollectionFactory().
+		WithCoordinates(&transformedCoordinates).
+		Build()
+
+	// TODO: Add a pivotal tracker story to make a new object to represent an image file.
+
+	return MapTransformedPointsToOutputImageBuffer(eyedropper, transformedCoordinateCollection, arguments)
+}
+
+// MapTransformedPointsToOutputImageBuffer Uses the transformed points, source image and eyedropper to return an output image buffer.
+func MapTransformedPointsToOutputImageBuffer(eyedropper *imageoutput.Eyedropper, transformedCoordinates *imageoutput.CoordinateCollection, arguments *FilenameArguments) *image.NRGBA{
+	colorData := eyedropper.ConvertCoordinatesToColors(transformedCoordinates)
+	outputImage := image.NewNRGBA(image.Rect(0, 0, arguments.OutputWidth, arguments.OutputHeight))
+
+	for index, colorToAdd := range *colorData {
+		destinationPixelX := index % arguments.OutputWidth
+		destinationPixelY := index / arguments.OutputWidth
+
+		sourceColorR, sourceColorG, sourceColorB, sourceColorA := colorToAdd.RGBA()
+
+		outputImage.Set(
+			destinationPixelX,
+			destinationPixelY,
+			color.NRGBA{
+				R: uint8(sourceColorR >> 8),
+				G: uint8(sourceColorG >> 8),
+				B: uint8(sourceColorB >> 8),
+				A: uint8(sourceColorA >> 8),
+			},
+		)
+	}
+	return outputImage
 }

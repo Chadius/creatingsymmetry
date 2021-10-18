@@ -46,6 +46,32 @@ func (e *Eyedropper) ConvertCoordinatesToColors(collection *CoordinateCollection
 	var convertedColors []color.Color
 	convertedColors = []color.Color{}
 
+	//println(imag((*collection.Coordinates())[1]))
+
+	//eyedropperY := mathutility.ScaleValueBetweenTwoRanges(
+	//	imag((*collection.Coordinates())[0]),
+	//	collection.MinimumY(),
+	//	collection.MaximumY(),
+	//	float64(e.TopSide()),
+	//	float64(e.BottomSide()),
+	//)
+	//println("---")
+	//
+	//value := imag((*collection.Coordinates())[1])
+	//oldRangeMin := collection.MinimumY()
+	//oldRangeMax := collection.MaximumY()
+	//newRangeMin := float64(e.TopSide())
+	//newRangeMax := float64(e.BottomSide())
+	//distanceAcrossOldRange := oldRangeMax - oldRangeMin
+	//println(distanceAcrossOldRange)
+	//valueDistanceAcrossOldRange := value - oldRangeMin
+	//println(valueDistanceAcrossOldRange)
+	//ratioAcrossRange := valueDistanceAcrossOldRange / distanceAcrossOldRange
+	//println(ratioAcrossRange)
+	//distanceAcrossNewRange := newRangeMax - newRangeMin
+	//println(distanceAcrossNewRange)
+	//println ((ratioAcrossRange * distanceAcrossNewRange) + newRangeMin)
+
 	for _, coordinate := range *collection.Coordinates() {
 		newColor := e.convertCoordinateToColor(coordinate, collection)
 		convertedColors = append(convertedColors, newColor)
