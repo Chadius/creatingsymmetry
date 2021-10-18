@@ -3,7 +3,7 @@ pattern_viewport:
   y_min: -20e-1
   x_max: 20e-1
   y_max: 20e-1
-eyedropper_boundary:
+coordinate_threshold:
   x_min: 0e0
   y_min: -5e-2
   x_max: 1e0

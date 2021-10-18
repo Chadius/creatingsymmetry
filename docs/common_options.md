@@ -9,44 +9,45 @@ It should contain:
 ## How does it work?
 1. The input numerical range is used to create input pattern viewport.
 2. Using the formula, it transforms the input.
-3. The transformed point is used in the eyedropper boundary to figure out what color each point should take from the source image.
+3. A threshold is applied to filter transformed points that are out of range.
+4. Using an eyedropper, the transformed points are mapped to the source image to figure out what color should be used.
 
 ### Example
 - We have a `100x100` sample image. 
 - We want a `200x200` output image.
 - Our formula doubles the given `(x,y)` coordinates.
 - The pattern viewport is from `(0,0)` to `(10,10)`.
-- Our eyedropper boundary is from `(0,0)` to `(40,40)`
+- The threshold filter is from `(0,0)` to `(40,40)`
+- The eyedropper boundary is from `(0,0)` to `(200,200)`
 
 The pattern viewport will be sampled 200x200 times since that's the resolution of the output image.
 So each sample will have a difference of 1/20 from the previous.  
 
 Starting with `(0,0)`:
 - The formula doubles the coordinates `(0,0)` to `(0,0)`.
-- This falls within the eyedropper boundary.
-- `(0,0)` in the eyedropper boundary lines up with the top left corner.
+- This satisfies the threshold filter.
+- The eyedropper maps `(0,0)` to `(0,0)`.
+- `(0,0)` in the source image lines up with the top left corner.
 - This will draw the same color as the top left corner of the source image.
 
 Next sample is `(1/20,0)`:
 - The formula doubles the coordinates `(1/20,0)` to `(2/20,0)`.
-- This falls within the eyedropper boundary.
-- `(2/20,0)` in the eyedropper boundary lines up with somewhere near the top left corner.
+- This satisfies the threshold filter.
+- The eyedropper will map `(2/20,0)` to somewhere near the top left corner.
 - This will draw the same color as near the top left corner of the source image.
 
 Let's look at this sample `(5,2)`: 
 - The formula doubles the coordinates `(5,2)` to `(10,4)`.
-- This falls within the eyedropper boundary.
-- `(10,4)` in the eyedropper boundary lines up with somewhere in the top left quadrant.
+- This satisfies the threshold filter.
+- The eyedropper maps `(10,4)` to somewhere in the top left quadrant.
 - This will draw the same color of as the one spot in the top left quadrant of the source image.
 
 The last sample `(10, 10)`:
 - The formula doubles the coordinates `(10, 10)` to `(20, 20)`.
-- This falls within the eyedropper boundary.
-- `(20,20)` is the center of the eyedropper boundary.
-- This will draw the same color that lies at the center of the source image.
+- This satisfies the threshold filter.
+- Eyedropper maps `(20,20)` to the center of the image.
 
 The samples chosen will draw from the top left corner of the source image to the center.
-Manipulating the `pattern_viewport` and `eyedropper_boundary` will zoom in on different regions.
 
 ## Common options
 Every formula file contains these options.
@@ -117,24 +118,32 @@ pattern_viewport:
 
 [(Link to formula)](../example/rosettes/rainbow_stripe_rosette_2_sample_space_2.yml)
 
-### Eyedropper Boundary
-The transformed [pattern viewport](#sample-space) rarely lines up with the source image's resolution.
+### Coordinate Threshold
+The transformed [pattern viewport](#sample-space) has many results, covering a wide numerical range. Sometimes you want to focus on a single mathematical range and ignore the rest. Coordinate Threshold to the rescue.
 
-Pick the part of the source image to sample by adjusting the Eyedropper Boundary.
+```yaml
+coordinate_threshold:
+  x_min: -4e1
+  x_max: 4e1
+  y_min: -6e1
+  y_max: 2e1
+```
+
+`x_min`, `x_max`, `y_min`, `y_max` define the limits of the threshold.
+
+These coordinates will not satisfy the filter and will turn transparent:
+- X is less than `x_min`.
+- X is more than `x_max`.
+- Y is less than `y_min`.
+- Y is more than `y_max`.
+- X or Y is Infinity.
+- X or Y is Not a Number (or undefined).
+
 You'll need to pay attention to the terminal output to see the absolute ranges of the transformed points.
 
-- Any transformed values near `x_min` will use the left side of the source image.
-- Any transformed values near `x_max` will use the right side of the source image.
-- Any transformed values near `y_min` will use the top side of the source image.
-- Any transformed values near `y_max` will use the bottom side of the source image.
-- Any transformed value that is out of bounds will be transparent.
-- Any transformed value that is infinity/undefined will be transparent.
-
-Most transformed values converge around a central point, so you can use the midway point of the eyedropper boundary to determine the main color of the result.
-
-Like the pattern viewport, there is no “right” eyedropper boundary.
-- If your eyedropper boundary is too small, the transformed values will fall outside, and you'll have a transparent image.
-- If your eyedropper boundary is too big, the transformed values converged to one point. Your image will be the color of that point.
+Like the pattern viewport, there is no “right” Coordinate Threshold.
+- If your Coordinate Threshold is too small, the transformed values will fall outside, and you'll have a transparent image.
+- If your Coordinate Threshold is too big, there is too much uniform noise. Your image will be a single color.
 
 ##### Examples
 Eyedropper Boundary is easier to explain in one dimension, so these examples focus on `y_min` and `y_max`.
@@ -143,7 +152,7 @@ Let's take a look at a frieze file. Because `y_min` and `y_max` have the same di
 
 The green stripe is at the center, so the frieze pattern should be mostly green.
 ```yaml
-eyedropper_boundary:
+coordinate_threshold:
   x_min: -1.1e1
   x_max: 1.1e1
   y_min: -1.8e1
@@ -157,7 +166,7 @@ eyedropper_boundary:
 Let's push the center towards the orange/red part of the source image. That lies near the bottom, so `y_min` and `y_max`'s midpoint should be negative.
 
 ```yaml
-eyedropper_boundary:
+coordinate_threshold:
   x_min: -1.1e1
   x_max: 1.1e1
   y_min: -2.8e1
@@ -172,7 +181,7 @@ Note how the valleys and peaks are more extreme.
 Also note how the orange stripe is dominant. If we expanded the range more, we would get more orange.
 
 ```yaml
-eyedropper_boundary:
+coordinate_threshold:
   x_min: -1.1e1
   x_max: 1.1e1
   y_min: -5.8e1
@@ -181,6 +190,19 @@ eyedropper_boundary:
 ![Transformed rainbow stripe image into frieze with p2mg symmetry, with multicolored spikes emerging from an orange background with red valleys](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_extra_thick.png)
 
 [(Link to formula)](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_extra_thick.yml)
+
+### Eyedropper Boundary
+Which part of the source image do you want to use? Pick the part of the source image to sample by adjusting the Eyedropper.
+
+```yaml
+eyedropper:
+  left: 0
+  right: 200
+  top: 0
+  bottom: 250
+```
+
+In this example, `(100, 125)` is the center of the image. Most of your transformed coordinates will be mapped near the center, so most of the pattern will look like the center.
 
 ## Transformation Formula
 Only one formula will be rendered at a time. Use exactly one of these keys, based on the transformation formula you want:
