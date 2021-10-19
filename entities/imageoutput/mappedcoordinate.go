@@ -51,9 +51,9 @@ func (m *MappedCoordinate) HasMappedCoordinate() bool {
 }
 
 // StoreMappedCoordinate sets the coordinate's mapped coordinates.
-func (m *MappedCoordinate) StoreMappedCoordinate(complexCoordinates complex128) {
-	m.mappedCoordinateX = real(complexCoordinates)
-	m.mappedCoordinateY = imag(complexCoordinates)
+func (m *MappedCoordinate) StoreMappedCoordinate(x, y float64) {
+	m.mappedCoordinateX = x
+	m.mappedCoordinateY = y
 	m.hasMappedCoordinates = true
 }
 

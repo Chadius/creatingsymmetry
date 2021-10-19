@@ -34,7 +34,7 @@ func (e *Eyedropper) BottomSide() int {
 	return e.bottomBoundary
 }
 
-// Image returns the source image
+//Image returns the source image
 func (e *Eyedropper) Image() *image.Image {
 	return e.sourceImage
 }
@@ -46,32 +46,6 @@ func (e *Eyedropper) ConvertCoordinatesToColors(collection *CoordinateCollection
 	var convertedColors []color.Color
 	convertedColors = []color.Color{}
 
-	//println(imag((*collection.Coordinates())[1]))
-
-	//eyedropperY := mathutility.ScaleValueBetweenTwoRanges(
-	//	imag((*collection.Coordinates())[0]),
-	//	collection.MinimumY(),
-	//	collection.MaximumY(),
-	//	float64(e.TopSide()),
-	//	float64(e.BottomSide()),
-	//)
-	//println("---")
-	//
-	//value := imag((*collection.Coordinates())[1])
-	//oldRangeMin := collection.MinimumY()
-	//oldRangeMax := collection.MaximumY()
-	//newRangeMin := float64(e.TopSide())
-	//newRangeMax := float64(e.BottomSide())
-	//distanceAcrossOldRange := oldRangeMax - oldRangeMin
-	//println(distanceAcrossOldRange)
-	//valueDistanceAcrossOldRange := value - oldRangeMin
-	//println(valueDistanceAcrossOldRange)
-	//ratioAcrossRange := valueDistanceAcrossOldRange / distanceAcrossOldRange
-	//println(ratioAcrossRange)
-	//distanceAcrossNewRange := newRangeMax - newRangeMin
-	//println(distanceAcrossNewRange)
-	//println ((ratioAcrossRange * distanceAcrossNewRange) + newRangeMin)
-
 	for _, coordinate := range *collection.Coordinates() {
 		newColor := e.convertCoordinateToColor(coordinate, collection)
 		convertedColors = append(convertedColors, newColor)
@@ -80,9 +54,37 @@ func (e *Eyedropper) ConvertCoordinatesToColors(collection *CoordinateCollection
 	return &convertedColors
 }
 
-func (e *Eyedropper) convertCoordinateToColor(coordinate complex128, collection *CoordinateCollection) color.Color {
+// MapCoordinatesToEyedropperBoundary maps each coordinate from its minimum and maximum to the eyedropper's boundary.
+//   Only coordinates that satisfied their filter will be updated.
+func (e *Eyedropper) MapCoordinatesToEyedropperBoundary(collection *CoordinateCollection) {
+	for _, coordinate := range *collection.Coordinates() {
+		if !coordinate.SatisfiesFilter() {
+			continue
+		}
+
+		eyedropperX := mathutility.ScaleValueBetweenTwoRanges(
+			coordinate.X(),
+			collection.MinimumX(),
+			collection.MaximumX(),
+			float64(e.LeftSide()),
+			float64(e.RightSide()),
+		)
+
+		eyedropperY := mathutility.ScaleValueBetweenTwoRanges(
+			coordinate.Y(),
+			collection.MinimumY(),
+			collection.MaximumY(),
+			float64(e.TopSide()),
+			float64(e.BottomSide()),
+		)
+
+		coordinate.StoreMappedCoordinate(eyedropperX, eyedropperY)
+	}
+}
+
+func (e *Eyedropper) convertCoordinateToColor(coordinate *MappedCoordinate, collection *CoordinateCollection) color.Color {
 	eyedropperX := mathutility.ScaleValueBetweenTwoRanges(
-		real(coordinate),
+		coordinate.X(),
 		collection.MinimumX(),
 		collection.MaximumX(),
 		float64(e.LeftSide()),
@@ -90,7 +92,7 @@ func (e *Eyedropper) convertCoordinateToColor(coordinate complex128, collection 
 	)
 
 	eyedropperY := mathutility.ScaleValueBetweenTwoRanges(
-		imag(coordinate),
+		coordinate.Y(),
 		collection.MinimumY(),
 		collection.MaximumY(),
 		float64(e.TopSide()),

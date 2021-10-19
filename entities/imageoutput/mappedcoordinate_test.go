@@ -39,7 +39,7 @@ func (suite *MappedCoordinateTest) TestMarkCoordinateAsFiltered(checker *C) {
 func (suite *MappedCoordinateTest) TestStoreMappedCoordinate(checker *C) {
 	coordinate := imageoutput.NewMappedCoordinate(100e0, -20e-3)
 	checker.Assert(coordinate.HasMappedCoordinate(), Equals, false)
-	coordinate.StoreMappedCoordinate(complex(2e0, -3e-3))
+	coordinate.StoreMappedCoordinate(2e0, -3e-3)
 	checker.Assert(coordinate.HasMappedCoordinate(), Equals, true)
 
 	x, y := coordinate.MappedCoordinate()
