@@ -1,7 +1,7 @@
 package imageoutput
 
 type CoordinateCollectionFactoryOptions struct {
-	coordinates *[]complex128
+	coordinates *[]*MappedCoordinate
 }
 
 // CoordinateCollectionFactory creates a CoordinateCollectionFactoryOptions with default values.
@@ -14,7 +14,7 @@ func CoordinateCollectionFactory() *CoordinateCollectionFactoryOptions {
 }
 
 // WithCoordinates sets the coordinates stored in the collection.
-func (c *CoordinateCollectionFactoryOptions) WithCoordinates(coordinates *[]complex128) *CoordinateCollectionFactoryOptions {
+func (c *CoordinateCollectionFactoryOptions) WithCoordinates(coordinates *[]*MappedCoordinate) *CoordinateCollectionFactoryOptions {
 	c.coordinates = coordinates
 	return c
 }

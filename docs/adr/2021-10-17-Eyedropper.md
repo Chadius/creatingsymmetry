@@ -25,6 +25,7 @@ It can tell the minimum and maximum non-filtered, non-infinity Coordinates
 Has settings for min x/y and max x/y
 Can apply filter against MappedCoordinates
 Will mark filtered Coordinates
+If omitted, include all values
 
 ### Eyedropper
 Only looks at Coordinates that were not filtered and have no infinity
