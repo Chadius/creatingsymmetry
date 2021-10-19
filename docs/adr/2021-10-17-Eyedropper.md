@@ -11,17 +11,17 @@ The second item is an Eyedropper.
 
 # What is it
 ## New classes
-###MappedCoordinate
+### MappedCoordinate
 Holds an x and y coordinate
 Knows if it was filtered
-Knows if it is inifinity
+Knows if it is infinity
 Holds an eyedropped x and y coordinate
 
-###MappedCoordinates
+### MappedCoordinates
 Holds an array of Coordinates
 It can tell the minimum and maximum non-filtered, non-infinity Coordinates
 
-###CoordinateFilter
+### CoordinateFilter
 Has settings for min x/y and max x/y
 Can apply filter against MappedCoordinates
 Will mark filtered Coordinates
