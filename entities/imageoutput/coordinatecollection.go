@@ -1,5 +1,7 @@
 package imageoutput
 
+import "math"
+
 type CoordinateCollection struct {
 	coordinates *[]*MappedCoordinate
 }
@@ -11,10 +13,13 @@ func (c *CoordinateCollection) Coordinates() *[]*MappedCoordinate {
 
 // MinimumX returns the lowest x coordinate in the collection.
 func (c *CoordinateCollection) MinimumX() float64 {
-	minimumX := (*c.coordinates)[0].X()
+	foundCandidate := false
+	minimumX := math.NaN()
 	for _, coordinate := range *c.coordinates {
-		if !coordinate.IsAtInfinity() && !coordinate.IsFiltered() && coordinate.X() < minimumX {
+		coordinateIsValid := !coordinate.IsAtInfinity() && coordinate.SatisfiesFilter()
+		if coordinateIsValid && (!foundCandidate || (coordinate.X() < minimumX)) {
 			minimumX = coordinate.X()
+			foundCandidate = true
 		}
 	}
 	return minimumX
@@ -22,10 +27,13 @@ func (c *CoordinateCollection) MinimumX() float64 {
 
 // MaximumX returns the greatest x coordinate in the collection.
 func (c *CoordinateCollection) MaximumX() float64 {
-	maximumX := (*c.coordinates)[0].X()
+	foundCandidate := false
+	maximumX := math.NaN()
 	for _, coordinate := range *c.coordinates {
-		if !coordinate.IsAtInfinity() && !coordinate.IsFiltered() && coordinate.X() > maximumX {
+		coordinateIsValid := !coordinate.IsAtInfinity() && coordinate.SatisfiesFilter()
+		if coordinateIsValid && (!foundCandidate || coordinate.X() > maximumX) {
 			maximumX = coordinate.X()
+			foundCandidate = true
 		}
 	}
 	return maximumX
@@ -33,10 +41,13 @@ func (c *CoordinateCollection) MaximumX() float64 {
 
 // MinimumY returns the lowest y coordinate in the collection.
 func (c *CoordinateCollection) MinimumY() float64 {
-	minimumY := (*c.coordinates)[0].Y()
+	foundCandidate := false
+	minimumY := math.NaN()
 	for _, coordinate := range *c.coordinates {
-		if !coordinate.IsAtInfinity() && !coordinate.IsFiltered() && coordinate.Y() < minimumY {
+		coordinateIsValid := !coordinate.IsAtInfinity() && coordinate.SatisfiesFilter()
+		if coordinateIsValid && (!foundCandidate || coordinate.Y() < minimumY) {
 			minimumY = coordinate.Y()
+			foundCandidate = true
 		}
 	}
 	return minimumY
@@ -44,10 +55,13 @@ func (c *CoordinateCollection) MinimumY() float64 {
 
 // MaximumY returns the greatest y coordinate in the collection.
 func (c *CoordinateCollection) MaximumY() float64 {
-	maximumY := (*c.coordinates)[0].Y()
+	foundCandidate := false
+	maximumY := math.NaN()
 	for _, coordinate := range *c.coordinates {
-		if !coordinate.IsAtInfinity() && !coordinate.IsFiltered() && coordinate.Y() > maximumY {
+		coordinateIsValid := !coordinate.IsAtInfinity() && coordinate.SatisfiesFilter()
+		if coordinateIsValid && (!foundCandidate || coordinate.Y() > maximumY) {
 			maximumY = coordinate.Y()
+			foundCandidate = true
 		}
 	}
 	return maximumY

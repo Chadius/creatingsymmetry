@@ -5,7 +5,7 @@ import "math"
 type MappedCoordinate struct {
 	x float64
 	y float64
-	wasFiltered bool
+	satisfiedFilter bool
 	hasMappedCoordinates bool
 	mappedCoordinateX float64
 	mappedCoordinateY float64
@@ -16,7 +16,7 @@ func NewMappedCoordinate(x, y float64) *MappedCoordinate {
 	return &MappedCoordinate{
 		x: x,
 		y: y,
-		wasFiltered: false,
+		satisfiedFilter: false,
 	}
 }
 
@@ -35,14 +35,14 @@ func (m *MappedCoordinate) IsAtInfinity() bool {
 	return math.IsInf(m.X(),0) || math.IsInf(m.Y(),0)
 }
 
-// MarkAsFiltered marks this coordinate as filtered.
-func (m *MappedCoordinate) MarkAsFiltered() {
-	m.wasFiltered = true
+// MarkAsSatisfyingFilter marks this coordinate as satisfying the filter.
+func (m *MappedCoordinate) MarkAsSatisfyingFilter() {
+	m.satisfiedFilter = true
 }
 
-// IsFiltered returns the filtered status.
-func (m *MappedCoordinate) IsFiltered() bool {
-	return m.wasFiltered
+// SatisfiesFilter returns the filtered status.
+func (m *MappedCoordinate) SatisfiesFilter() bool {
+	return m.satisfiedFilter
 }
 
 // HasMappedCoordinate returns true if this coordinate stored another mapped coordinate

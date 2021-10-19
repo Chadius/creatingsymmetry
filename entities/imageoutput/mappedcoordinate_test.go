@@ -31,9 +31,9 @@ func (suite *MappedCoordinateTest) TestChecksIfOnePartIsInfinity(checker *C) {
 
 func (suite *MappedCoordinateTest) TestMarkCoordinateAsFiltered(checker *C) {
 	coordinate := imageoutput.NewMappedCoordinate(100e0, -20e-3)
-	checker.Assert(coordinate.IsFiltered(), Equals, false)
-	coordinate.MarkAsFiltered()
-	checker.Assert(coordinate.IsFiltered(), Equals, true)
+	checker.Assert(coordinate.SatisfiesFilter(), Equals, false)
+	coordinate.MarkAsSatisfyingFilter()
+	checker.Assert(coordinate.SatisfiesFilter(), Equals, true)
 }
 
 func (suite *MappedCoordinateTest) TestStoreMappedCoordinate(checker *C) {

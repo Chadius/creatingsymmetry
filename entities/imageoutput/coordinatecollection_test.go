@@ -35,10 +35,36 @@ func (suite *CoordinateCollectionTests) TestReturnsMinimumAndMaximums(checker *C
 		imageoutput.NewMappedCoordinate(0, 200),
 	}
 	collection := imageoutput.CoordinateCollectionFactory().WithCoordinates(&coordinates).Build()
+	(*collection.Coordinates())[0].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[1].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[2].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[3].MarkAsSatisfyingFilter()
 	checker.Assert(collection.MinimumX(), Equals, float64(-10))
 	checker.Assert(collection.MaximumX(), Equals, float64(20))
 	checker.Assert(collection.MinimumY(), Equals, float64(-100))
 	checker.Assert(collection.MaximumY(), Equals, float64(200))
+}
+
+func (suite *CoordinateCollectionTests) TestReturnsMinimumAndMaximumsRespectingSatisfiedFilter(checker *C) {
+	coordinates := []*imageoutput.MappedCoordinate{
+		imageoutput.NewMappedCoordinate(-1, 0),
+		imageoutput.NewMappedCoordinate(1, 0),
+		imageoutput.NewMappedCoordinate(0, -2),
+		imageoutput.NewMappedCoordinate(0, 2),
+		imageoutput.NewMappedCoordinate(-100, 0),
+		imageoutput.NewMappedCoordinate(100, 0),
+		imageoutput.NewMappedCoordinate(0, -100),
+		imageoutput.NewMappedCoordinate(0, 100),
+	}
+	collection := imageoutput.CoordinateCollectionFactory().WithCoordinates(&coordinates).Build()
+	(*collection.Coordinates())[0].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[1].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[2].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[3].MarkAsSatisfyingFilter()
+	checker.Assert(collection.MinimumX(), Equals, float64(-1))
+	checker.Assert(collection.MaximumX(), Equals, float64(1))
+	checker.Assert(collection.MinimumY(), Equals, float64(-2))
+	checker.Assert(collection.MaximumY(), Equals, float64(2))
 }
 
 func (suite *CoordinateCollectionTests) TestReturnsMinimumAndMaximumsIgnoringInfinity(checker *C) {
@@ -53,30 +79,27 @@ func (suite *CoordinateCollectionTests) TestReturnsMinimumAndMaximumsIgnoringInf
 		imageoutput.NewMappedCoordinate(math.Inf(-1), 100),
 	}
 	collection := imageoutput.CoordinateCollectionFactory().WithCoordinates(&coordinates).Build()
+	(*collection.Coordinates())[0].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[1].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[2].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[3].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[4].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[5].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[6].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[7].MarkAsSatisfyingFilter()
 	checker.Assert(collection.MinimumX(), Equals, float64(-1))
 	checker.Assert(collection.MaximumX(), Equals, float64(1))
 	checker.Assert(collection.MinimumY(), Equals, float64(-2))
 	checker.Assert(collection.MaximumY(), Equals, float64(2))
 }
 
-func (suite *CoordinateCollectionTests) TestReturnsMinimumAndMaximumsIgnoringFiltered(checker *C) {
+func (suite *CoordinateCollectionTests) TestReturnsNaNMinimumIfAllCoordinatesAreInvalid(checker *C) {
 	coordinates := []*imageoutput.MappedCoordinate{
-		imageoutput.NewMappedCoordinate(-1, 0),
-		imageoutput.NewMappedCoordinate(1, 0),
-		imageoutput.NewMappedCoordinate(0, -2),
-		imageoutput.NewMappedCoordinate(0, 2),
-		imageoutput.NewMappedCoordinate(-100, 0),
-		imageoutput.NewMappedCoordinate(100, 0),
-		imageoutput.NewMappedCoordinate(0, -100),
-		imageoutput.NewMappedCoordinate(0, 100),
+		imageoutput.NewMappedCoordinate(math.Inf(-1), -10),
+		imageoutput.NewMappedCoordinate(20, 0),
 	}
 	collection := imageoutput.CoordinateCollectionFactory().WithCoordinates(&coordinates).Build()
-	(*collection.Coordinates())[4].MarkAsFiltered()
-	(*collection.Coordinates())[5].MarkAsFiltered()
-	(*collection.Coordinates())[6].MarkAsFiltered()
-	(*collection.Coordinates())[7].MarkAsFiltered()
-	checker.Assert(collection.MinimumX(), Equals, float64(-1))
-	checker.Assert(collection.MaximumX(), Equals, float64(1))
-	checker.Assert(collection.MinimumY(), Equals, float64(-2))
-	checker.Assert(collection.MaximumY(), Equals, float64(2))
+	(*collection.Coordinates())[0].MarkAsSatisfyingFilter()
+	checker.Assert(math.IsNaN(collection.MinimumX()), Equals, true)
+	checker.Assert(math.IsNaN(collection.MinimumY()), Equals, true)
 }
