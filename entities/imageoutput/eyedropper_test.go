@@ -139,41 +139,39 @@ func (suite *EyedropperTests) TestMapCoordinateToSourceImageCoordinate(checker *
 }
 
 func (suite *EyedropperTests) TestEyedropperMapsCoordinatesAndSamplesSourceImage(checker *C) {
-	sourceColors := image.NewNRGBA(image.Rect(0, 0, 1, 1))
+	sourceColors := image.NewNRGBA(image.Rect(0, 0, 2, 2))
 	sourceColors.Set(0, 0, color.NRGBA{
-		R: uint8(1 >> 8),
+		R: uint8(255),
 		G: 0,
 		B: 0,
-		A: uint8(8 >> 8),
+		A: uint8(255),
 	})
 	sourceColors.Set(1, 0, color.NRGBA{
 		R: 0,
-		G: uint8(1 >> 8),
+		G: uint8(255),
 		B: 0,
-		A: uint8(8 >> 8),
+		A: uint8(255),
 	})
 	sourceColors.Set(0, 1, color.NRGBA{
 		R: 0,
 		G: 0,
-		B: uint8(1 >> 8),
-		A: uint8(8 >> 8),
+		B: uint8(255),
+		A: uint8(255),
 	})
 	sourceColors.Set(1, 1, color.NRGBA{
 		R: 0,
 		G: 0,
 		B: 0,
-		A: uint8(8 >> 8),
+		A: uint8(255),
 	})
-	sourceImage := sourceColors.SubImage(image.Rect(0,0,1,1))
+	sourceImage := sourceColors.SubImage(image.Rect(0,0,2,2))
 
 	coordinates := []*imageoutput.MappedCoordinate{
 		imageoutput.NewMappedCoordinate(0, 0),
 		imageoutput.NewMappedCoordinate(1, 0),
 		imageoutput.NewMappedCoordinate(0, 1),
 		imageoutput.NewMappedCoordinate(1, 1),
-		imageoutput.NewMappedCoordinate(-1, 0),
 		imageoutput.NewMappedCoordinate(2, 0),
-		imageoutput.NewMappedCoordinate(0, -1),
 		imageoutput.NewMappedCoordinate(0, 2),
 	}
 	collection := imageoutput.CoordinateCollectionFactory().WithCoordinates(&coordinates).Build()
@@ -183,10 +181,8 @@ func (suite *EyedropperTests) TestEyedropperMapsCoordinatesAndSamplesSourceImage
 	(*collection.Coordinates())[3].MarkAsSatisfyingFilter()
 	(*collection.Coordinates())[4].MarkAsSatisfyingFilter()
 	(*collection.Coordinates())[5].MarkAsSatisfyingFilter()
-	(*collection.Coordinates())[6].MarkAsSatisfyingFilter()
-	(*collection.Coordinates())[7].MarkAsSatisfyingFilter()
 
-	eyedropper := imageoutput.EyedropperFactory().WithLeftSide(0).WithRightSide(2).WithTopSide(0).WithBottomSide(2).WithImage(&sourceImage).Build()
+	eyedropper := imageoutput.EyedropperFactory().WithLeftSide(0).WithRightSide(3).WithTopSide(0).WithBottomSide(3).WithImage(&sourceImage).Build()
 	convertedColors := eyedropper.ConvertCoordinatesToColors(collection)
 
 	var sourceR, sourceG, sourceB, sourceA uint32
@@ -225,13 +221,65 @@ func (suite *EyedropperTests) TestEyedropperMapsCoordinatesAndSamplesSourceImage
 
 	outputR, outputG, outputB, outputA = (*convertedColors)[5].RGBA()
 	checker.Assert(outputA, Equals, uint32(0))
-
-	outputR, outputG, outputB, outputA = (*convertedColors)[6].RGBA()
-	checker.Assert(outputA, Equals, uint32(0))
-
-	outputR, outputG, outputB, outputA = (*convertedColors)[7].RGBA()
-	checker.Assert(outputA, Equals, uint32(0))
 }
 
-// Test the intermediary step to map to a pixel in the output image
-// Do not convert if the coordinate is invalid
+func (suite *EyedropperTests) TestEyedropperDoesNotMapInvalidCoordinates(checker *C) {
+	sourceColors := image.NewNRGBA(image.Rect(0, 0, 2, 2))
+	sourceColors.Set(0, 0, color.NRGBA{
+		R: uint8(255),
+		G: 0,
+		B: 0,
+		A: uint8(255),
+	})
+	sourceColors.Set(1, 0, color.NRGBA{
+		R: 0,
+		G: uint8(255),
+		B: 0,
+		A: uint8(255),
+	})
+	sourceColors.Set(0, 1, color.NRGBA{
+		R: 0,
+		G: 0,
+		B: uint8(255),
+		A: uint8(255),
+	})
+	sourceColors.Set(1, 1, color.NRGBA{
+		R: 0,
+		G: 0,
+		B: 0,
+		A: uint8(255),
+	})
+	sourceImage := sourceColors.SubImage(image.Rect(0,0,2,2))
+
+	coordinates := []*imageoutput.MappedCoordinate{
+		imageoutput.NewMappedCoordinate(0, 0),
+		imageoutput.NewMappedCoordinate(1, 0),
+		imageoutput.NewMappedCoordinate(0, 1),
+		imageoutput.NewMappedCoordinate(1, 1),
+		imageoutput.NewMappedCoordinate(0, 0),
+		imageoutput.NewMappedCoordinate(0, math.Inf(1)),
+		imageoutput.NewMappedCoordinate(math.Inf(-1), 0),
+	}
+	collection := imageoutput.CoordinateCollectionFactory().WithCoordinates(&coordinates).Build()
+	(*collection.Coordinates())[0].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[1].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[2].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[3].MarkAsSatisfyingFilter()
+
+	(*collection.Coordinates())[5].MarkAsSatisfyingFilter()
+	(*collection.Coordinates())[6].MarkAsSatisfyingFilter()
+
+	eyedropper := imageoutput.EyedropperFactory().WithLeftSide(0).WithRightSide(2).WithTopSide(0).WithBottomSide(2).WithImage(&sourceImage).Build()
+	convertedColors := eyedropper.ConvertCoordinatesToColors(collection)
+
+	var outputA uint32
+
+	_,_,_, outputA = (*convertedColors)[4].RGBA()
+	checker.Assert(outputA, Equals, uint32(0))
+
+	_,_,_, outputA = (*convertedColors)[5].RGBA()
+	checker.Assert(outputA, Equals, uint32(0))
+
+	_,_,_, outputA = (*convertedColors)[6].RGBA()
+	checker.Assert(outputA, Equals, uint32(0))
+}

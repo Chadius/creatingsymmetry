@@ -45,12 +45,27 @@ func (e *Eyedropper) Image() *image.Image {
 func (e *Eyedropper) ConvertCoordinatesToColors(collection *CoordinateCollection) *[]color.Color {
 	var convertedColors []color.Color
 	convertedColors = []color.Color{}
+	e.MapCoordinatesToEyedropperBoundary(collection)
 
 	for _, coordinate := range *collection.Coordinates() {
-		newColor := e.convertCoordinateToColor(coordinate, collection)
+		newColor := color.NRGBA{
+			R: uint8(0 >> 8),
+			G: uint8(0 >> 8),
+			B: uint8(0 >> 8),
+			A: uint8(0 >> 8),
+		}
+		if coordinate.HasMappedCoordinate() {
+			mappedCoordinateX, mappedCoordinateY := coordinate.MappedCoordinate()
+			sourceColorR, sourceColorG, sourceColorB, sourceColorA := (*e.Image()).At(int(mappedCoordinateX), int(mappedCoordinateY)).RGBA()
+			newColor = color.NRGBA{
+				R: uint8(sourceColorR >> 8),
+				G: uint8(sourceColorG >> 8),
+				B: uint8(sourceColorB >> 8),
+				A: uint8(sourceColorA >> 8),
+			}
+		}
 		convertedColors = append(convertedColors, newColor)
 	}
-
 	return &convertedColors
 }
 
@@ -59,6 +74,9 @@ func (e *Eyedropper) ConvertCoordinatesToColors(collection *CoordinateCollection
 func (e *Eyedropper) MapCoordinatesToEyedropperBoundary(collection *CoordinateCollection) {
 	for _, coordinate := range *collection.Coordinates() {
 		if !coordinate.SatisfiesFilter() {
+			continue
+		}
+		if coordinate.IsAtInfinity() {
 			continue
 		}
 
