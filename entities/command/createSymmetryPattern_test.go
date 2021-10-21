@@ -24,7 +24,7 @@ pattern_viewport:
   y_min: 0
   x_max: 1e-10
   y_max: 3e5
-eyedropper_boundary:
+coordinate_threshold:
   x_min: -50
   y_min: 9001
   x_max: -1e-1
@@ -61,10 +61,10 @@ rosette_formula:
 	checker.Assert(wallpaperCommand.PatternViewport.XMax, Equals, 1e-10)
 	checker.Assert(wallpaperCommand.PatternViewport.YMax, Equals, 3e5)
 
-	checker.Assert(wallpaperCommand.EyedropperBoundary.XMin, Equals, -50.0)
-	checker.Assert(wallpaperCommand.EyedropperBoundary.YMin, Equals, 9001.0)
-	checker.Assert(wallpaperCommand.EyedropperBoundary.XMax, Equals, -1e-1)
-	checker.Assert(wallpaperCommand.EyedropperBoundary.YMax, Equals, 2e10)
+	checker.Assert(wallpaperCommand.CoordinateThreshold.XMin, Equals, -50.0)
+	checker.Assert(wallpaperCommand.CoordinateThreshold.YMin, Equals, 9001.0)
+	checker.Assert(wallpaperCommand.CoordinateThreshold.XMax, Equals, -1e-1)
+	checker.Assert(wallpaperCommand.CoordinateThreshold.YMax, Equals, 2e10)
 
 	checker.Assert(wallpaperCommand.RosetteFormula.Terms, HasLen, 2)
 }
@@ -77,7 +77,7 @@ func (suite *CreateWallpaperCommandSuite) TestCreateFromJSON(checker *C) {
 				  "x_max": 1e-10,
 				  "y_max": 3e5
 				},
-				"eyedropper_boundary": {
+				"coordinate_threshold": {
 				  "x_min": -50,
 				  "y_min": 9001,
 				  "x_max": -1e-1,
@@ -120,10 +120,10 @@ func (suite *CreateWallpaperCommandSuite) TestCreateFromJSON(checker *C) {
 	checker.Assert(wallpaperCommand.PatternViewport.XMax, Equals, 1e-10)
 	checker.Assert(wallpaperCommand.PatternViewport.YMax, Equals, 3e5)
 
-	checker.Assert(wallpaperCommand.EyedropperBoundary.XMin, Equals, -50.0)
-	checker.Assert(wallpaperCommand.EyedropperBoundary.YMin, Equals, 9001.0)
-	checker.Assert(wallpaperCommand.EyedropperBoundary.XMax, Equals, -1e-1)
-	checker.Assert(wallpaperCommand.EyedropperBoundary.YMax, Equals, 2e10)
+	checker.Assert(wallpaperCommand.CoordinateThreshold.XMin, Equals, -50.0)
+	checker.Assert(wallpaperCommand.CoordinateThreshold.YMin, Equals, 9001.0)
+	checker.Assert(wallpaperCommand.CoordinateThreshold.XMax, Equals, -1e-1)
+	checker.Assert(wallpaperCommand.CoordinateThreshold.YMax, Equals, 2e10)
 
 	checker.Assert(wallpaperCommand.FriezeFormula.Terms, HasLen, 2)
 }
@@ -135,7 +135,7 @@ pattern_viewport:
   y_min: 0
   x_max: 1e-10
   y_max: 3e5
-eyedropper_boundary:
+coordinate_threshold:
   x_min: -50
   y_min: 9001
   x_max: -1e-1

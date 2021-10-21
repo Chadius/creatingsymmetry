@@ -46,7 +46,7 @@ The last sample `(10, 10)`:
 - This will draw the same color that lies at the center of the source image.
 
 The samples chosen will draw from the top left corner of the source image to the center.
-Manipulating the `pattern_viewport` and `eyedropper_boundary` will zoom in on different regions.
+Manipulating the `pattern_viewport` and `coordinate_threshold` will zoom in on different regions.
 
 ## Common options
 Every formula file contains these options.
@@ -143,7 +143,7 @@ Let's take a look at a frieze file. Because `y_min` and `y_max` have the same di
 
 The green stripe is at the center, so the frieze pattern should be mostly green.
 ```yaml
-eyedropper_boundary:
+coordinate_threshold:
   x_min: -1.1e1
   x_max: 1.1e1
   y_min: -1.8e1
@@ -157,7 +157,7 @@ eyedropper_boundary:
 Let's push the center towards the orange/red part of the source image. That lies near the bottom, so `y_min` and `y_max`'s midpoint should be negative.
 
 ```yaml
-eyedropper_boundary:
+coordinate_threshold:
   x_min: -1.1e1
   x_max: 1.1e1
   y_min: -2.8e1
@@ -172,7 +172,7 @@ Note how the valleys and peaks are more extreme.
 Also note how the orange stripe is dominant. If we expanded the range more, we would get more orange.
 
 ```yaml
-eyedropper_boundary:
+coordinate_threshold:
   x_min: -1.1e1
   x_max: 1.1e1
   y_min: -5.8e1

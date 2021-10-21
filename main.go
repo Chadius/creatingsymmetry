@@ -32,11 +32,11 @@ func main() {
 	outputToFile(filenameArguments.OutputFilename, outputImage)
 }
 
-// eyedropperFinalColorAndSaveToImage uses the EyedropperBoundary to select the colors in the output image.
+// eyedropperFinalColorAndSaveToImage uses the CoordinateThreshold to select the colors in the output image.
 //   It returns an image buffer.
 func eyedropperFinalColorAndSaveToImage(wallpaperCommand *command.CreateSymmetryPattern, err error, filenameArguments *FilenameArguments, destinationCoordinates []complex128, transformedCoordinates []complex128) *image.NRGBA {
-	//colorValueBoundMin := complex(wallpaperCommand.EyedropperBoundary.XMin, wallpaperCommand.EyedropperBoundary.YMin)
-	//colorValueBoundMax := complex(wallpaperCommand.EyedropperBoundary.XMax, wallpaperCommand.EyedropperBoundary.YMax)
+	//colorValueBoundMin := complex(wallpaperCommand.CoordinateThreshold.XMin, wallpaperCommand.CoordinateThreshold.YMin)
+	//colorValueBoundMax := complex(wallpaperCommand.CoordinateThreshold.XMax, wallpaperCommand.CoordinateThreshold.YMax)
 	//colorSourceImage := openSourceImage(err, filenameArguments)
 	//outputImage := image.NewNRGBA(image.Rect(0, 0, filenameArguments.OutputWidth, filenameArguments.OutputHeight))
 	//colorDestinationImage(outputImage, colorSourceImage, destinationCoordinates, transformedCoordinates, colorValueBoundMin, colorValueBoundMax)
@@ -433,12 +433,12 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 	var err error
 	colorSourceImage := openSourceImage(err, arguments)
 
-	// TODO Rename EyedropperBoundary
+	// TODO Rename CoordinateThreshold
 	filter := imageoutput.CoordinateFilterFactory().
-		WithMinimumX(command.EyedropperBoundary.XMin).
-		WithMaximumX(command.EyedropperBoundary.XMax).
-		WithMinimumY(command.EyedropperBoundary.YMin).
-		WithMaximumY(command.EyedropperBoundary.YMax).
+		WithMinimumX(command.CoordinateThreshold.XMin).
+		WithMaximumX(command.CoordinateThreshold.XMax).
+		WithMinimumY(command.CoordinateThreshold.YMin).
+		WithMaximumY(command.CoordinateThreshold.YMax).
 		Build()
 
 	// TODO Read Eyedropper Sides from a formula file
