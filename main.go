@@ -463,8 +463,6 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 		WithComplexNumbers(&transformedCoordinates).
 		Build()
 
-	// TODO: Add a pivotal tracker story to make a new object to represent an image file.
-
 	return MapTransformedPointsToOutputImageBuffer(eyedropper, transformedCoordinateCollection, arguments, filter)
 }
 

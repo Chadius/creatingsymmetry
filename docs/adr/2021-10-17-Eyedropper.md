@@ -38,10 +38,10 @@ Works with MappedCoordinates and gets the color from the image at that point
 Returns an image
 
 # What can we do now?
+Can shape the eyedropper to be a circle, or to loop when it is outside the image.
+Need to rewrite docs to explain both objects.
 
 # Caveats that will trigger future change
-Introduced a performance hit.
-
-May need to rewrite the collection as a single object.
+Performance hit is too great
 
 # NOTES

@@ -74,6 +74,11 @@ func (e *Eyedropper) ConvertCoordinatesToColors(collection *CoordinateCollection
 // MapCoordinatesToEyedropperBoundary maps each coordinate from its minimum and maximum to the eyedropper's boundary.
 //   Only coordinates that satisfied their filter will be updated.
 func (e *Eyedropper) MapCoordinatesToEyedropperBoundary(collection *CoordinateCollection) {
+	collectionMinimumX := collection.MinimumX()
+	collectionMaximumX := collection.MaximumX()
+	collectionMinimumY := collection.MinimumY()
+	collectionMaximumY := collection.MaximumY()
+
 	for _, coordinate := range *collection.Coordinates() {
 		if !coordinate.SatisfiesFilter() {
 			continue
@@ -84,16 +89,16 @@ func (e *Eyedropper) MapCoordinatesToEyedropperBoundary(collection *CoordinateCo
 
 		eyedropperX := mathutility.ScaleValueBetweenTwoRanges(
 			coordinate.X(),
-			collection.MinimumX(),
-			collection.MaximumX(),
+			collectionMinimumX,
+			collectionMaximumX,
 			float64(e.LeftSide()),
 			float64(e.RightSide()),
 		)
 
 		eyedropperY := mathutility.ScaleValueBetweenTwoRanges(
 			coordinate.Y(),
-			collection.MinimumY(),
-			collection.MaximumY(),
+			collectionMinimumY,
+			collectionMaximumY,
 			float64(e.TopSide()),
 			float64(e.BottomSide()),
 		)
