@@ -38,3 +38,21 @@ func (suite *CoordinateFilterTests) TestFilterMarksMappedCoordinates(checker *C)
 	checker.Assert(coordinateThatDoesNotSatisfyFilterBecauseItIsOutsideInYDirection.SatisfiesFilter(), Equals, false)
 	checker.Assert(coordinateThatDoesNotSatisfyFilterBecauseItIsAtInfinity.SatisfiesFilter(), Equals, false)
 }
+
+func (suite *CoordinateFilterTests) TestFilterMarksCoordinateCollection(checker *C) {
+	coordinates := []*imageoutput.MappedCoordinate{
+		imageoutput.NewMappedCoordinate(-10, 20),
+		imageoutput.NewMappedCoordinate(20, 0),
+		imageoutput.NewMappedCoordinate(0, -100),
+		imageoutput.NewMappedCoordinate(0, 200),
+	}
+	collection := imageoutput.CoordinateCollectionFactory().WithCoordinates(&coordinates).Build()
+
+	filter := imageoutput.CoordinateFilterFactory().WithMinimumX(0).WithMaximumX(25).WithMinimumY(-6e6).WithMaximumY(50).Build()
+	filter.FilterAndMarkMappedCoordinateCollection(collection)
+
+	checker.Assert((*collection.Coordinates())[0].SatisfiesFilter(), Equals, false)
+	checker.Assert((*collection.Coordinates())[1].SatisfiesFilter(), Equals, true)
+	checker.Assert((*collection.Coordinates())[2].SatisfiesFilter(), Equals, true)
+	checker.Assert((*collection.Coordinates())[3].SatisfiesFilter(), Equals, false)
+}

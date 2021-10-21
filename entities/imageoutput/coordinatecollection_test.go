@@ -22,6 +22,25 @@ func (suite *CoordinateCollectionFactoryTests) TestSetupCreateDataRangeWithArray
 	checker.Assert(collection.Coordinates(), Equals, &coordinates)
 }
 
+func (suite *CoordinateCollectionFactoryTests) TestSetupCreateDataRangeWithComplexNumbers(checker *C) {
+	coordinates := []complex128{
+		complex(-10, 20),
+		complex(20, 0),
+		complex(0, -100),
+		complex(0, 200),
+	}
+	collection := imageoutput.CoordinateCollectionFactory().WithComplexNumbers(&coordinates).Build()
+	checker.Assert(*collection.Coordinates(), HasLen, 4)
+	checker.Assert((*collection.Coordinates())[0].X(), Equals, -10.0)
+	checker.Assert((*collection.Coordinates())[0].Y(), Equals, 20.0)
+	checker.Assert((*collection.Coordinates())[1].X(), Equals, 20.0)
+	checker.Assert((*collection.Coordinates())[1].Y(), Equals, 0.0)
+	checker.Assert((*collection.Coordinates())[2].X(), Equals, 0.0)
+	checker.Assert((*collection.Coordinates())[2].Y(), Equals, -100.0)
+	checker.Assert((*collection.Coordinates())[3].X(), Equals, 0.0)
+	checker.Assert((*collection.Coordinates())[3].Y(), Equals, 200.0)
+}
+
 type CoordinateCollectionTests struct {
 }
 

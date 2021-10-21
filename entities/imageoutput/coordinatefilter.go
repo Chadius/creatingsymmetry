@@ -27,9 +27,10 @@ func (c *CoordinateFilter) MaximumY() float64 {
 	return c.maximumY
 }
 
-// FilterAndMarkMappedCoordinate checks if the coordinate satisfies the filter. Then it marks the coordinate if it was filtered out.
+// FilterAndMarkMappedCoordinate checks if the coordinate satisfies the filter.
+//   Then it marks the coordinate if it satisfied the filtered out.
 func (c *CoordinateFilter) FilterAndMarkMappedCoordinate(coordinate *MappedCoordinate) {
-	if coordinate.IsAtInfinity() {
+	if !coordinate.CanBeCompared() {
 		return
 	}
 
@@ -49,4 +50,12 @@ func (c *CoordinateFilter) FilterAndMarkMappedCoordinate(coordinate *MappedCoord
 		return
 	}
 	coordinate.MarkAsSatisfyingFilter()
+}
+
+// FilterAndMarkMappedCoordinateCollection checks all coordinates against the filter.
+//   Then it marks each coordinate if it satisfied the filter.
+func (c *CoordinateFilter) FilterAndMarkMappedCoordinateCollection(collection *CoordinateCollection) {
+	for _, coordinateToFiler := range *collection.Coordinates() {
+		c.FilterAndMarkMappedCoordinate(coordinateToFiler)
+	}
 }

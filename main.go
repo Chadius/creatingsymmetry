@@ -433,6 +433,7 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 	var err error
 	colorSourceImage := openSourceImage(err, arguments)
 
+	// TODO Rename EyedropperBoundary
 	filter := imageoutput.CoordinateFilterFactory().
 		WithMinimumX(command.EyedropperBoundary.XMin).
 		WithMaximumX(command.EyedropperBoundary.XMax).
@@ -440,6 +441,7 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 		WithMaximumY(command.EyedropperBoundary.YMax).
 		Build()
 
+	// TODO Read Eyedropper Sides from a formula file
 	eyedropper := imageoutput.EyedropperFactory().
 		WithLeftSide(colorSourceImage.Bounds().Min.X).
 		WithRightSide(colorSourceImage.Bounds().Max.X).
@@ -448,17 +450,8 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 		WithImage(&colorSourceImage).
 		Build()
 
-	// TODO Make a new collection from a list of complex128
-	transformedMappedCoordinates := []*imageoutput.MappedCoordinate{}
-	for _, transformedCoordinate := range transformedCoordinates {
-		transformedMappedCoordinates = append(transformedMappedCoordinates, imageoutput.NewMappedCoordinate(
-			real(transformedCoordinate),
-			imag(transformedCoordinate),
-		))
-	}
-
 	transformedCoordinateCollection := imageoutput.CoordinateCollectionFactory().
-		WithCoordinates(&transformedMappedCoordinates).
+		WithComplexNumbers(&transformedCoordinates).
 		Build()
 
 	// TODO: Add a pivotal tracker story to make a new object to represent an image file.
@@ -468,11 +461,7 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 
 // MapTransformedPointsToOutputImageBuffer Uses the transformed points, source image and eyedropper to return an output image buffer.
 func MapTransformedPointsToOutputImageBuffer(eyedropper *imageoutput.Eyedropper, transformedCoordinates *imageoutput.CoordinateCollection, arguments *FilenameArguments, filter *imageoutput.CoordinateFilter) *image.NRGBA{
-	// TODO Check against NaN coordinates
-	// TODO Make a filter function against an entire collection
-	for _, coordinateToFiler := range *transformedCoordinates.Coordinates() {
-		filter.FilterAndMarkMappedCoordinate(coordinateToFiler)
-	}
+	filter.FilterAndMarkMappedCoordinateCollection(transformedCoordinates)
 
 	colorData := eyedropper.ConvertCoordinatesToColors(transformedCoordinates)
 	outputImage := image.NewNRGBA(image.Rect(0, 0, arguments.OutputWidth, arguments.OutputHeight))
@@ -480,18 +469,10 @@ func MapTransformedPointsToOutputImageBuffer(eyedropper *imageoutput.Eyedropper,
 	for index, colorToAdd := range *colorData {
 		destinationPixelX := index % arguments.OutputWidth
 		destinationPixelY := index / arguments.OutputWidth
-
-		sourceColorR, sourceColorG, sourceColorB, sourceColorA := colorToAdd.RGBA()
-
 		outputImage.Set(
 			destinationPixelX,
 			destinationPixelY,
-			color.NRGBA{
-				R: uint8(sourceColorR >> 8),
-				G: uint8(sourceColorG >> 8),
-				B: uint8(sourceColorB >> 8),
-				A: uint8(sourceColorA >> 8),
-			},
+			colorToAdd,
 		)
 	}
 	return outputImage

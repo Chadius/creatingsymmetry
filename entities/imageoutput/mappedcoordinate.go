@@ -30,9 +30,14 @@ func (m *MappedCoordinate) Y() float64 {
 	return m.y
 }
 
-// IsAtInfinity returns true if either x or y coordinate is at infinity.
-func (m *MappedCoordinate) IsAtInfinity() bool {
-	return math.IsInf(m.X(),0) || math.IsInf(m.Y(),0)
+// CanBeCompared returns true if either x and y coordinate can be compared.
+//   This means neither are Infinity nor NaN.
+func (m *MappedCoordinate) CanBeCompared() bool {
+	return !(
+		math.IsInf(m.X(),0) ||
+			math.IsInf(m.Y(),0) ||
+			math.IsNaN(m.X()) ||
+			math.IsNaN(m.Y()))
 }
 
 // MarkAsSatisfyingFilter marks this coordinate as satisfying the filter.

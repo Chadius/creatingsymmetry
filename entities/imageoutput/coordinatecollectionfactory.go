@@ -19,6 +19,21 @@ func (c *CoordinateCollectionFactoryOptions) WithCoordinates(coordinates *[]*Map
 	return c
 }
 
+// WithComplexNumbers sets the coordinates stored in the collection using complex numbers.
+//  The real portion is used as the x coordinate.
+//  The imaginary portion is used as the y coordinate.
+func (c *CoordinateCollectionFactoryOptions) WithComplexNumbers(complexNumbers *[]complex128) *CoordinateCollectionFactoryOptions {
+	newCoordinates := []*MappedCoordinate{}
+	for _, complexNumber := range *complexNumbers {
+		newCoordinates = append(newCoordinates, NewMappedCoordinate(
+			real(complexNumber),
+			imag(complexNumber),
+		))
+	}
+	c.coordinates = &newCoordinates
+	return c
+}
+
 // Build uses the PowerFactoryOptions to create a power.
 func (c *CoordinateCollectionFactoryOptions) Build() *CoordinateCollection {
 	return &CoordinateCollection{

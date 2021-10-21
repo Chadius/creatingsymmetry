@@ -16,7 +16,7 @@ func (c *CoordinateCollection) MinimumX() float64 {
 	foundCandidate := false
 	minimumX := math.NaN()
 	for _, coordinate := range *c.coordinates {
-		coordinateIsValid := !coordinate.IsAtInfinity() && coordinate.SatisfiesFilter()
+		coordinateIsValid := coordinate.CanBeCompared() && coordinate.SatisfiesFilter()
 		if coordinateIsValid && (!foundCandidate || (coordinate.X() < minimumX)) {
 			minimumX = coordinate.X()
 			foundCandidate = true
@@ -30,7 +30,7 @@ func (c *CoordinateCollection) MaximumX() float64 {
 	foundCandidate := false
 	maximumX := math.NaN()
 	for _, coordinate := range *c.coordinates {
-		coordinateIsValid := !coordinate.IsAtInfinity() && coordinate.SatisfiesFilter()
+		coordinateIsValid := coordinate.CanBeCompared() && coordinate.SatisfiesFilter()
 		if coordinateIsValid && (!foundCandidate || coordinate.X() > maximumX) {
 			maximumX = coordinate.X()
 			foundCandidate = true
@@ -44,7 +44,7 @@ func (c *CoordinateCollection) MinimumY() float64 {
 	foundCandidate := false
 	minimumY := math.NaN()
 	for _, coordinate := range *c.coordinates {
-		coordinateIsValid := !coordinate.IsAtInfinity() && coordinate.SatisfiesFilter()
+		coordinateIsValid := coordinate.CanBeCompared() && coordinate.SatisfiesFilter()
 		if coordinateIsValid && (!foundCandidate || coordinate.Y() < minimumY) {
 			minimumY = coordinate.Y()
 			foundCandidate = true
@@ -58,7 +58,7 @@ func (c *CoordinateCollection) MaximumY() float64 {
 	foundCandidate := false
 	maximumY := math.NaN()
 	for _, coordinate := range *c.coordinates {
-		coordinateIsValid := !coordinate.IsAtInfinity() && coordinate.SatisfiesFilter()
+		coordinateIsValid := coordinate.CanBeCompared() && coordinate.SatisfiesFilter()
 		if coordinateIsValid && (!foundCandidate || coordinate.Y() > maximumY) {
 			maximumY = coordinate.Y()
 			foundCandidate = true

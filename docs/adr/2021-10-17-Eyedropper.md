@@ -40,5 +40,8 @@ Returns an image
 # What can we do now?
 
 # Caveats that will trigger future change
+Introduced a performance hit.
+
+May need to rewrite the collection as a single object.
 
 # NOTES

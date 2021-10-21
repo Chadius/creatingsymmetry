@@ -20,13 +20,19 @@ func (suite *MappedCoordinateTest) TestCreateMappedCoordinate(checker *C) {
 	checker.Assert(coordinate.Y(), Equals, -20e-3)
 }
 
-func (suite *MappedCoordinateTest) TestChecksIfOnePartIsInfinity(checker *C) {
+func (suite *MappedCoordinateTest) TestChecksIfOnePartCannotBeCompared(checker *C) {
 	coordinate := imageoutput.NewMappedCoordinate(100e0, -20e-3)
-	checker.Assert(coordinate.IsAtInfinity(), Equals, false)
+	checker.Assert(coordinate.CanBeCompared(), Equals, true)
 	coordinateWithXInfinity := imageoutput.NewMappedCoordinate(math.Inf(1), -20e-3)
-	checker.Assert(coordinateWithXInfinity.IsAtInfinity(), Equals, true)
+	checker.Assert(coordinateWithXInfinity.CanBeCompared(), Equals, false)
 	coordinateWithYInfinity := imageoutput.NewMappedCoordinate(100e0, math.Inf(-1))
-	checker.Assert(coordinateWithYInfinity.IsAtInfinity(), Equals, true)
+	checker.Assert(coordinateWithYInfinity.CanBeCompared(), Equals, false)
+
+	coordinateWithXNan := imageoutput.NewMappedCoordinate(math.NaN(), 0)
+	checker.Assert(coordinateWithXNan.CanBeCompared(), Equals, false)
+
+	coordinateWithYNan := imageoutput.NewMappedCoordinate(0, math.NaN())
+	checker.Assert(coordinateWithYNan.CanBeCompared(), Equals, false)
 }
 
 func (suite *MappedCoordinateTest) TestMarkCoordinateAsFiltered(checker *C) {

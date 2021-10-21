@@ -48,12 +48,7 @@ func (e *Eyedropper) ConvertCoordinatesToColors(collection *CoordinateCollection
 	e.MapCoordinatesToEyedropperBoundary(collection)
 
 	for _, coordinate := range *collection.Coordinates() {
-		newColor := color.NRGBA{
-			R: uint8(0 >> 8),
-			G: uint8(0 >> 8),
-			B: uint8(0 >> 8),
-			A: uint8(0 >> 8),
-		}
+		var newColor color.NRGBA
 		if coordinate.HasMappedCoordinate() {
 			mappedCoordinateX, mappedCoordinateY := coordinate.MappedCoordinate()
 			sourceColorR, sourceColorG, sourceColorB, sourceColorA := (*e.Image()).At(int(mappedCoordinateX), int(mappedCoordinateY)).RGBA()
@@ -62,6 +57,13 @@ func (e *Eyedropper) ConvertCoordinatesToColors(collection *CoordinateCollection
 				G: uint8(sourceColorG >> 8),
 				B: uint8(sourceColorB >> 8),
 				A: uint8(sourceColorA >> 8),
+			}
+		} else {
+			newColor = color.NRGBA{
+				R: uint8(0 >> 8),
+				G: uint8(0 >> 8),
+				B: uint8(0 >> 8),
+				A: uint8(0 >> 8),
 			}
 		}
 		convertedColors = append(convertedColors, newColor)
@@ -76,7 +78,7 @@ func (e *Eyedropper) MapCoordinatesToEyedropperBoundary(collection *CoordinateCo
 		if !coordinate.SatisfiesFilter() {
 			continue
 		}
-		if coordinate.IsAtInfinity() {
+		if !coordinate.CanBeCompared() {
 			continue
 		}
 
