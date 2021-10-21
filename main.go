@@ -35,12 +35,13 @@ func main() {
 // eyedropperFinalColorAndSaveToImage uses the EyedropperBoundary to select the colors in the output image.
 //   It returns an image buffer.
 func eyedropperFinalColorAndSaveToImage(wallpaperCommand *command.CreateSymmetryPattern, err error, filenameArguments *FilenameArguments, destinationCoordinates []complex128, transformedCoordinates []complex128) *image.NRGBA {
-	colorValueBoundMin := complex(wallpaperCommand.EyedropperBoundary.XMin, wallpaperCommand.EyedropperBoundary.YMin)
-	colorValueBoundMax := complex(wallpaperCommand.EyedropperBoundary.XMax, wallpaperCommand.EyedropperBoundary.YMax)
-	colorSourceImage := openSourceImage(err, filenameArguments)
-	outputImage := image.NewNRGBA(image.Rect(0, 0, filenameArguments.OutputWidth, filenameArguments.OutputHeight))
-	colorDestinationImage(outputImage, colorSourceImage, destinationCoordinates, transformedCoordinates, colorValueBoundMin, colorValueBoundMax)
-	return outputImage
+	//colorValueBoundMin := complex(wallpaperCommand.EyedropperBoundary.XMin, wallpaperCommand.EyedropperBoundary.YMin)
+	//colorValueBoundMax := complex(wallpaperCommand.EyedropperBoundary.XMax, wallpaperCommand.EyedropperBoundary.YMax)
+	//colorSourceImage := openSourceImage(err, filenameArguments)
+	//outputImage := image.NewNRGBA(image.Rect(0, 0, filenameArguments.OutputWidth, filenameArguments.OutputHeight))
+	//colorDestinationImage(outputImage, colorSourceImage, destinationCoordinates, transformedCoordinates, colorValueBoundMin, colorValueBoundMax)
+	//return outputImage
+	return helperForMapTransformedPointsToOutputImageBuffer(wallpaperCommand, filenameArguments, transformedCoordinates)
 }
 
 // transformCoordinatesAndReport applies the formula on the destination
@@ -434,7 +435,7 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 
 	filter := imageoutput.CoordinateFilterFactory().
 		WithMinimumX(command.EyedropperBoundary.XMin).
-		WithMaximumX(command.EyedropperBoundary.XMin).
+		WithMaximumX(command.EyedropperBoundary.XMax).
 		WithMinimumY(command.EyedropperBoundary.YMin).
 		WithMaximumY(command.EyedropperBoundary.YMax).
 		Build()
@@ -467,6 +468,7 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 
 // MapTransformedPointsToOutputImageBuffer Uses the transformed points, source image and eyedropper to return an output image buffer.
 func MapTransformedPointsToOutputImageBuffer(eyedropper *imageoutput.Eyedropper, transformedCoordinates *imageoutput.CoordinateCollection, arguments *FilenameArguments, filter *imageoutput.CoordinateFilter) *image.NRGBA{
+	// TODO Check against NaN coordinates
 	// TODO Make a filter function against an entire collection
 	for _, coordinateToFiler := range *transformedCoordinates.Coordinates() {
 		filter.FilterAndMarkMappedCoordinate(coordinateToFiler)

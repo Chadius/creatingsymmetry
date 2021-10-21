@@ -48,6 +48,5 @@ func (c *CoordinateFilter) FilterAndMarkMappedCoordinate(coordinate *MappedCoord
 	if coordinate.Y() > c.MaximumY() {
 		return
 	}
-
 	coordinate.MarkAsSatisfyingFilter()
 }
