@@ -17,10 +17,19 @@ type ComplexNumberCorners struct {
 	YMax float64 `json:"y_max" yaml:"y_max"`
 }
 
+// PixelCorners note the sides of a rectangle in integer space.
+type PixelCorners struct {
+	LeftSide int `json:"left" yaml:"left"`
+	RightSide int `json:"right" yaml:"right"`
+	TopSide int `json:"top" yaml:"top"`
+	BottomSide int `json:"bottom" yaml:"bottom"`
+}
+
 // CreateSymmetryPattern records the desired command to generate.
 type CreateSymmetryPattern struct {
 	PatternViewport     ComplexNumberCorners `json:"pattern_viewport" yaml:"pattern_viewport"`
 	CoordinateThreshold ComplexNumberCorners `json:"coordinate_threshold" yaml:"coordinate_threshold"`
+	Eyedropper *PixelCorners `json:"eyedropper" yaml:"eyedropper"`
 
 	RosetteFormula *rosette.Formula   `json:"rosette_formula" yaml:"rosette_formula"`
 	FriezeFormula  *frieze.Formula    `json:"frieze_formula" yaml:"frieze_formula"`
@@ -31,6 +40,7 @@ type CreateSymmetryPattern struct {
 type CreateWallpaperCommandMarshal struct {
 	PatternViewport     ComplexNumberCorners `json:"pattern_viewport" yaml:"pattern_viewport"`
 	CoordinateThreshold ComplexNumberCorners `json:"coordinate_threshold" yaml:"coordinate_threshold"`
+	Eyedropper *PixelCorners `json:"eyedropper" yaml:"eyedropper"`
 
 	RosetteFormula *rosette.MarshaledFormula `json:"rosette_formula" yaml:"rosette_formula"`
 	FriezeFormula  *frieze.MarshaledFormula  `json:"frieze_formula" yaml:"frieze_formula"`
@@ -60,6 +70,7 @@ func newCreateWallpaperCommandFromDatastream(data []byte, unmarshal utility.Unma
 	commandToCreate := &CreateSymmetryPattern{
 		PatternViewport:     commandToCreateMarshal.PatternViewport,
 		CoordinateThreshold: commandToCreateMarshal.CoordinateThreshold,
+		Eyedropper: commandToCreateMarshal.Eyedropper,
 	}
 
 	if commandToCreateMarshal.RosetteFormula != nil {

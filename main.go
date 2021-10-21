@@ -433,7 +433,6 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 	var err error
 	colorSourceImage := openSourceImage(err, arguments)
 
-	// TODO Rename CoordinateThreshold
 	filter := imageoutput.CoordinateFilterFactory().
 		WithMinimumX(command.CoordinateThreshold.XMin).
 		WithMaximumX(command.CoordinateThreshold.XMax).
@@ -441,14 +440,24 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 		WithMaximumY(command.CoordinateThreshold.YMax).
 		Build()
 
-	// TODO Read Eyedropper Sides from a formula file
-	eyedropper := imageoutput.EyedropperFactory().
-		WithLeftSide(colorSourceImage.Bounds().Min.X).
-		WithRightSide(colorSourceImage.Bounds().Max.X).
-		WithTopSide(colorSourceImage.Bounds().Min.Y).
-		WithBottomSide(colorSourceImage.Bounds().Max.Y).
-		WithImage(&colorSourceImage).
-		Build()
+	var eyedropper *imageoutput.Eyedropper
+	if command.Eyedropper != nil {
+		eyedropper = imageoutput.EyedropperFactory().
+			WithLeftSide(command.Eyedropper.LeftSide).
+			WithRightSide(command.Eyedropper.RightSide).
+			WithTopSide(command.Eyedropper.TopSide).
+			WithBottomSide(command.Eyedropper.BottomSide).
+			WithImage(&colorSourceImage).
+			Build()
+	} else {
+		eyedropper = imageoutput.EyedropperFactory().
+			WithLeftSide(colorSourceImage.Bounds().Min.X).
+			WithRightSide(colorSourceImage.Bounds().Max.X).
+			WithTopSide(colorSourceImage.Bounds().Min.Y).
+			WithBottomSide(colorSourceImage.Bounds().Max.Y).
+			WithImage(&colorSourceImage).
+			Build()
+	}
 
 	transformedCoordinateCollection := imageoutput.CoordinateCollectionFactory().
 		WithComplexNumbers(&transformedCoordinates).
