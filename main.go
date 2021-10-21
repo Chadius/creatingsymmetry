@@ -8,6 +8,7 @@ import (
 	"github.com/Chadius/creating-symmetry/entities/formula/frieze"
 	"github.com/Chadius/creating-symmetry/entities/formula/rosette"
 	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
+	"github.com/Chadius/creating-symmetry/entities/imageoutput"
 	"github.com/Chadius/creating-symmetry/entities/mathutility"
 	"image"
 	"image/color"
@@ -424,4 +425,72 @@ func extractFilenameArguments() *FilenameArguments {
 		OutputWidth:         outputWidth,
 		SourceImageFilename: sourceImageFilename,
 	}
+}
+
+
+func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSymmetryPattern, arguments *FilenameArguments, transformedCoordinates []complex128) *image.NRGBA {
+	var err error
+	colorSourceImage := openSourceImage(err, arguments)
+
+	filter := imageoutput.CoordinateFilterFactory().
+		WithMinimumX(command.EyedropperBoundary.XMin).
+		WithMaximumX(command.EyedropperBoundary.XMin).
+		WithMinimumY(command.EyedropperBoundary.YMin).
+		WithMaximumY(command.EyedropperBoundary.YMax).
+		Build()
+
+	eyedropper := imageoutput.EyedropperFactory().
+		WithLeftSide(colorSourceImage.Bounds().Min.X).
+		WithRightSide(colorSourceImage.Bounds().Max.X).
+		WithTopSide(colorSourceImage.Bounds().Min.Y).
+		WithBottomSide(colorSourceImage.Bounds().Max.Y).
+		WithImage(&colorSourceImage).
+		Build()
+
+	// TODO Make a new collection from a list of complex128
+	transformedMappedCoordinates := []*imageoutput.MappedCoordinate{}
+	for _, transformedCoordinate := range transformedCoordinates {
+		transformedMappedCoordinates = append(transformedMappedCoordinates, imageoutput.NewMappedCoordinate(
+			real(transformedCoordinate),
+			imag(transformedCoordinate),
+		))
+	}
+
+	transformedCoordinateCollection := imageoutput.CoordinateCollectionFactory().
+		WithCoordinates(&transformedMappedCoordinates).
+		Build()
+
+	// TODO: Add a pivotal tracker story to make a new object to represent an image file.
+
+	return MapTransformedPointsToOutputImageBuffer(eyedropper, transformedCoordinateCollection, arguments, filter)
+}
+
+// MapTransformedPointsToOutputImageBuffer Uses the transformed points, source image and eyedropper to return an output image buffer.
+func MapTransformedPointsToOutputImageBuffer(eyedropper *imageoutput.Eyedropper, transformedCoordinates *imageoutput.CoordinateCollection, arguments *FilenameArguments, filter *imageoutput.CoordinateFilter) *image.NRGBA{
+	// TODO Make a filter function against an entire collection
+	for _, coordinateToFiler := range *transformedCoordinates.Coordinates() {
+		filter.FilterAndMarkMappedCoordinate(coordinateToFiler)
+	}
+
+	colorData := eyedropper.ConvertCoordinatesToColors(transformedCoordinates)
+	outputImage := image.NewNRGBA(image.Rect(0, 0, arguments.OutputWidth, arguments.OutputHeight))
+
+	for index, colorToAdd := range *colorData {
+		destinationPixelX := index % arguments.OutputWidth
+		destinationPixelY := index / arguments.OutputWidth
+
+		sourceColorR, sourceColorG, sourceColorB, sourceColorA := colorToAdd.RGBA()
+
+		outputImage.Set(
+			destinationPixelX,
+			destinationPixelY,
+			color.NRGBA{
+				R: uint8(sourceColorR >> 8),
+				G: uint8(sourceColorG >> 8),
+				B: uint8(sourceColorB >> 8),
+				A: uint8(sourceColorA >> 8),
+			},
+		)
+	}
+	return outputImage
 }
