@@ -28,19 +28,13 @@ func main() {
 	destinationBounds, destinationCoordinates := getDestinationBoundary(filenameArguments)
 	scaledCoordinates := scaleDestinationToPatternViewport(wallpaperCommand, destinationBounds, destinationCoordinates)
 	transformedCoordinates := transformCoordinatesAndReport(wallpaperCommand, scaledCoordinates)
-	outputImage := eyedropperFinalColorAndSaveToImage(wallpaperCommand, err, filenameArguments, destinationCoordinates, transformedCoordinates)
+	outputImage := eyedropperFinalColorAndSaveToImage(wallpaperCommand, filenameArguments, destinationCoordinates, transformedCoordinates)
 	outputToFile(filenameArguments.OutputFilename, outputImage)
 }
 
 // eyedropperFinalColorAndSaveToImage uses the CoordinateThreshold to select the colors in the output image.
 //   It returns an image buffer.
-func eyedropperFinalColorAndSaveToImage(wallpaperCommand *command.CreateSymmetryPattern, err error, filenameArguments *FilenameArguments, destinationCoordinates []complex128, transformedCoordinates []complex128) *image.NRGBA {
-	//colorValueBoundMin := complex(wallpaperCommand.CoordinateThreshold.XMin, wallpaperCommand.CoordinateThreshold.YMin)
-	//colorValueBoundMax := complex(wallpaperCommand.CoordinateThreshold.XMax, wallpaperCommand.CoordinateThreshold.YMax)
-	//colorSourceImage := openSourceImage(err, filenameArguments)
-	//outputImage := image.NewNRGBA(image.Rect(0, 0, filenameArguments.OutputWidth, filenameArguments.OutputHeight))
-	//colorDestinationImage(outputImage, colorSourceImage, destinationCoordinates, transformedCoordinates, colorValueBoundMin, colorValueBoundMax)
-	//return outputImage
+func eyedropperFinalColorAndSaveToImage(wallpaperCommand *command.CreateSymmetryPattern, filenameArguments *FilenameArguments, destinationCoordinates []complex128, transformedCoordinates []complex128) *image.NRGBA {
 	return helperForMapTransformedPointsToOutputImageBuffer(wallpaperCommand, filenameArguments, transformedCoordinates)
 }
 
@@ -87,7 +81,7 @@ func loadFormulaFile(filenameArguments *FilenameArguments) (*command.CreateSymme
 	return wallpaperCommand, err
 }
 
-func openSourceImage(err error, filenameArguments *FilenameArguments) image.Image {
+func openSourceImage(filenameArguments *FilenameArguments) image.Image {
 	reader, err := os.Open(filenameArguments.SourceImageFilename)
 	if err != nil {
 		log.Fatal(err)
@@ -430,8 +424,7 @@ func extractFilenameArguments() *FilenameArguments {
 
 
 func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSymmetryPattern, arguments *FilenameArguments, transformedCoordinates []complex128) *image.NRGBA {
-	var err error
-	colorSourceImage := openSourceImage(err, arguments)
+	colorSourceImage := openSourceImage(arguments)
 
 	filter := imageoutput.CoordinateFilterFactory().
 		WithMinimumX(command.CoordinateThreshold.XMin).
