@@ -30,7 +30,7 @@ func (term EisensteinFormulaTerm) PowerSumIsEven() bool {
 // Calculate uses the Eisenstein formula on the complex number z.
 // Calculate(z) = e ^ (2 PI i * (nX + mY))
 //  where n amd m are PowerN and PowerM,
-//  and X and Y are the real and imag parts of (zInLatticeCoordinates)
+//  and TransformedX and TransformedY are the real and imag parts of (zInLatticeCoordinates)
 func (term EisensteinFormulaTerm) Calculate(zInLatticeCoordinates complex128) complex128 {
 	powerMultiplier := (float64(term.PowerN) * real(zInLatticeCoordinates)) +
 		(float64(term.PowerM) * imag(zInLatticeCoordinates))

@@ -22,10 +22,10 @@ func (suite *CoordinateFilterTests) TestCreateFilterWithBoundaries(checker *C) {
 func (suite *CoordinateFilterTests) TestFilterMarksMappedCoordinates(checker *C) {
 	filter := imageoutput.CoordinateFilterBuilder().WithMinimumX(-1e-5).WithMaximumX(2e1).WithMinimumY(-6e6).WithMaximumY(5e2).Build()
 
-	coordinateThatSatisfiesFilter := imageoutput.NewMappedCoordinate(1e1, 2e2)
-	coordinateThatDoesNotSatisfyFilterBecauseItIsOutsideInXDirection := imageoutput.NewMappedCoordinate(-1e1, 2e2)
-	coordinateThatDoesNotSatisfyFilterBecauseItIsOutsideInYDirection := imageoutput.NewMappedCoordinate(1e1, 2e5)
-	coordinateThatDoesNotSatisfyFilterBecauseItIsAtInfinity := imageoutput.NewMappedCoordinate(0, math.Inf(1))
+	coordinateThatSatisfiesFilter := imageoutput.NewMappedCoordinateUsingTransformedCoordinates(1e1, 2e2)
+	coordinateThatDoesNotSatisfyFilterBecauseItIsOutsideInXDirection := imageoutput.NewMappedCoordinateUsingTransformedCoordinates(-1e1, 2e2)
+	coordinateThatDoesNotSatisfyFilterBecauseItIsOutsideInYDirection := imageoutput.NewMappedCoordinateUsingTransformedCoordinates(1e1, 2e5)
+	coordinateThatDoesNotSatisfyFilterBecauseItIsAtInfinity := imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, math.Inf(1))
 
 	filter.FilterAndMarkMappedCoordinate(coordinateThatSatisfiesFilter)
 	filter.FilterAndMarkMappedCoordinate(coordinateThatDoesNotSatisfyFilterBecauseItIsOutsideInXDirection)
@@ -40,10 +40,10 @@ func (suite *CoordinateFilterTests) TestFilterMarksMappedCoordinates(checker *C)
 
 func (suite *CoordinateFilterTests) TestFilterMarksCoordinateCollection(checker *C) {
 	coordinates := []*imageoutput.MappedCoordinate{
-		imageoutput.NewMappedCoordinate(-10, 20),
-		imageoutput.NewMappedCoordinate(20, 0),
-		imageoutput.NewMappedCoordinate(0, -100),
-		imageoutput.NewMappedCoordinate(0, 200),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(-10, 20),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(20, 0),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, -100),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, 200),
 	}
 	collection := imageoutput.CoordinateCollectionBuilder().WithCoordinates(&coordinates).Build()
 

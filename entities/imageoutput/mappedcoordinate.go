@@ -4,40 +4,82 @@ import "math"
 
 // MappedCoordinate stores the journey of an individual coordinate.
 type MappedCoordinate struct {
-	x                    float64
-	y                    float64
+	outputImageX    int
+	outputImageY      int
+	transformedX         float64
+	transformedY         float64
 	satisfiedFilter      bool
 	hasMappedCoordinates bool
 	mappedCoordinateX    float64
 	mappedCoordinateY    float64
 }
 
-// NewMappedCoordinate returns a new mapped coordinate at the given x and y location.
-func NewMappedCoordinate(x, y float64) *MappedCoordinate {
+// NewMappedCoordinateUsingOutputImageCoordinates returns a new mapped coordinate at the given outputImageX and outputImageY location.
+func NewMappedCoordinateUsingOutputImageCoordinates(outputImageX, outputImageY int) *MappedCoordinate {
 	return &MappedCoordinate{
-		x:               x,
-		y:               y,
+		outputImageX:    outputImageX,
+		outputImageY:    outputImageY,
+	}
+}
+
+// NewMappedCoordinateUsingTransformedCoordinates returns a new mapped coordinate at the given transformedX and transformedY location.
+func NewMappedCoordinateUsingTransformedCoordinates(transformedX, transformedY float64) *MappedCoordinate {
+	return &MappedCoordinate{
+		transformedX:    transformedX,
+		transformedY:    transformedY,
 		satisfiedFilter: false,
 	}
 }
 
-// X returns the X coordinate.
-func (m *MappedCoordinate) X() float64 {
-	return m.x
+// OutputImageX returns the OutputImageX coordinate.
+func (m *MappedCoordinate) OutputImageX() int {
+	return m.outputImageX
 }
 
-// Y returns the Y coordinate.
-func (m *MappedCoordinate) Y() float64 {
-	return m.y
+// OutputImageY returns the OutputImageY coordinate.
+func (m *MappedCoordinate) OutputImageY() int {
+	return m.outputImageY
 }
 
-// CanBeCompared returns true if either x and y coordinate can be compared.
+// TransformedX returns the TransformedX coordinate.
+func (m *MappedCoordinate) TransformedX() float64 {
+	return m.transformedX
+}
+
+// TransformedY returns the TransformedY coordinate.
+func (m *MappedCoordinate) TransformedY() float64 {
+	return m.transformedY
+}
+
+// UpdateTransformedCoordinates will update transformedX and transformedY coordinates.
+func (m *MappedCoordinate) UpdateTransformedCoordinates (x, y float64) {
+	m.transformedX = x
+	m.transformedY = y
+}
+
+// PatternViewportX returns the PatternViewportX coordinate.
+func (m *MappedCoordinate) PatternViewportX() float64 {
+	return m.transformedX
+}
+
+// PatternViewportY returns the PatternViewportY coordinate.
+func (m *MappedCoordinate) PatternViewportY() float64 {
+	return m.transformedY
+}
+
+// UpdatePatternViewportCoordinates will update transformedX and transformedY coordinates.
+func (m *MappedCoordinate) UpdatePatternViewportCoordinates (x, y float64) {
+	m.transformedX = x
+	m.transformedY = y
+}
+
+// CanBeCompared returns true if either transformedX and transformedY coordinate can be compared.
 //   This means neither are Infinity nor NaN.
 func (m *MappedCoordinate) CanBeCompared() bool {
-	return !(math.IsInf(m.X(), 0) ||
-		math.IsInf(m.Y(), 0) ||
-		math.IsNaN(m.X()) ||
-		math.IsNaN(m.Y()))
+	return !(math.IsInf(m.TransformedX(), 0) ||
+		math.IsInf(m.TransformedY(), 0) ||
+		math.IsNaN(m.TransformedX()) ||
+		math.IsNaN(m.TransformedY()))
 }
 
 // MarkAsSatisfyingFilter marks this coordinate as satisfying the filter.

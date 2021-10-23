@@ -94,13 +94,13 @@ ubeK6t3gnXdG4wwziiii/UTKMOg6dbzJLFE4dSCP3rEdeOM8805tDsGMvySgSsS6rM6gk9eAcUUVftZt
 
 func (suite *EyedropperTests) TestMapCoordinateToSourceImageCoordinate(checker *C) {
 	coordinates := []*imageoutput.MappedCoordinate{
-		imageoutput.NewMappedCoordinate(0, 0),
-		imageoutput.NewMappedCoordinate(1, 0),
-		imageoutput.NewMappedCoordinate(0, 1),
-		imageoutput.NewMappedCoordinate(1, 1),
-		imageoutput.NewMappedCoordinate(0, math.Inf(1)),
-		imageoutput.NewMappedCoordinate(math.Inf(-1), 0),
-		imageoutput.NewMappedCoordinate(0, 0),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, 0),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(1, 0),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, 1),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(1, 1),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, math.Inf(1)),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(math.Inf(-1), 0),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, 0),
 	}
 	collection := imageoutput.CoordinateCollectionBuilder().WithCoordinates(&coordinates).Build()
 	(*collection.Coordinates())[0].MarkAsSatisfyingFilter()
@@ -167,12 +167,12 @@ func (suite *EyedropperTests) TestEyedropperMapsCoordinatesAndSamplesSourceImage
 	sourceImage := sourceColors.SubImage(image.Rect(0, 0, 2, 2))
 
 	coordinates := []*imageoutput.MappedCoordinate{
-		imageoutput.NewMappedCoordinate(0, 0),
-		imageoutput.NewMappedCoordinate(1, 0),
-		imageoutput.NewMappedCoordinate(0, 1),
-		imageoutput.NewMappedCoordinate(1, 1),
-		imageoutput.NewMappedCoordinate(2, 0),
-		imageoutput.NewMappedCoordinate(0, 2),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, 0),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(1, 0),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, 1),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(1, 1),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(2, 0),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, 2),
 	}
 	collection := imageoutput.CoordinateCollectionBuilder().WithCoordinates(&coordinates).Build()
 	(*collection.Coordinates())[0].MarkAsSatisfyingFilter()
@@ -252,13 +252,13 @@ func (suite *EyedropperTests) TestEyedropperDoesNotMapInvalidCoordinates(checker
 	sourceImage := sourceColors.SubImage(image.Rect(0, 0, 2, 2))
 
 	coordinates := []*imageoutput.MappedCoordinate{
-		imageoutput.NewMappedCoordinate(0, 0),
-		imageoutput.NewMappedCoordinate(1, 0),
-		imageoutput.NewMappedCoordinate(0, 1),
-		imageoutput.NewMappedCoordinate(1, 1),
-		imageoutput.NewMappedCoordinate(0, 0),
-		imageoutput.NewMappedCoordinate(0, math.Inf(1)),
-		imageoutput.NewMappedCoordinate(math.Inf(-1), 0),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, 0),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(1, 0),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, 1),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(1, 1),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, 0),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, math.Inf(1)),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(math.Inf(-1), 0),
 	}
 	collection := imageoutput.CoordinateCollectionBuilder().WithCoordinates(&coordinates).Build()
 	(*collection.Coordinates())[0].MarkAsSatisfyingFilter()

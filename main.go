@@ -11,7 +11,6 @@ import (
 	"github.com/Chadius/creating-symmetry/entities/imageoutput"
 	"github.com/Chadius/creating-symmetry/entities/mathutility"
 	"image"
-	"image/color"
 	"image/png"
 	_ "image/png"
 	"io/ioutil"
@@ -25,27 +24,33 @@ import (
 func main() {
 	filenameArguments := extractFilenameArguments()
 	wallpaperCommand := loadFormulaFile(filenameArguments)
-	destinationBounds, destinationCoordinates := getDestinationBoundary(filenameArguments)
-	scaledCoordinates := scaleDestinationToPatternViewport(wallpaperCommand, destinationBounds, destinationCoordinates)
-	transformedCoordinates := transformCoordinatesAndReport(wallpaperCommand, scaledCoordinates)
-	outputImage := eyedropperFinalColorAndSaveToImage(wallpaperCommand, filenameArguments, destinationCoordinates, transformedCoordinates)
+
+	// TODO Given a filename args and a wallpaper command, return a Coordinate Collection with the output pixel and pattern viewport set
+
+	destinationBounds, destinationCoordinates := getDestinationBoundary(filenameArguments) // TODO Move into TODO function
+	scaledCoordinates := scaleDestinationToPatternViewport(wallpaperCommand, destinationBounds, destinationCoordinates) // TODO Move into TODO function
+	transformedCoordinateCollection := transformCoordinatesAndReport(wallpaperCommand, scaledCoordinates) // TODO This should modify the coordinate collection instead of returning it
+	outputImage := eyedropperFinalColorAndSaveToImage(wallpaperCommand, filenameArguments, transformedCoordinateCollection)
 	outputToFile(filenameArguments.OutputFilename, outputImage)
 }
 
 // eyedropperFinalColorAndSaveToImage uses the CoordinateThreshold to select the colors in the output image.
 //   It returns an image buffer.
-func eyedropperFinalColorAndSaveToImage(wallpaperCommand *command.CreateSymmetryPattern, filenameArguments *FilenameArguments, destinationCoordinates []complex128, transformedCoordinates []complex128) *image.NRGBA {
-	return helperForMapTransformedPointsToOutputImageBuffer(wallpaperCommand, filenameArguments, transformedCoordinates)
+func eyedropperFinalColorAndSaveToImage(wallpaperCommand *command.CreateSymmetryPattern, filenameArguments *FilenameArguments, coordinates *imageoutput.CoordinateCollection) *image.NRGBA {
+	return helperForMapTransformedPointsToOutputImageBuffer(wallpaperCommand, filenameArguments, coordinates)
 }
 
 // transformCoordinatesAndReport applies the formula on the destination
 //   returning a flat array of coordinates.
 //   It also reports on the bounding box.
-func transformCoordinatesAndReport(wallpaperCommand *command.CreateSymmetryPattern, scaledCoordinates []complex128) []complex128 {
-	transformedCoordinates := transformCoordinatesForFormula(wallpaperCommand, scaledCoordinates)
-	zMin, zMax := mathutility.GetBoundingBox(transformedCoordinates)
+func transformCoordinatesAndReport(wallpaperCommand *command.CreateSymmetryPattern, scaledCoordinates []complex128) *imageoutput.CoordinateCollection {
+	transformedRawCoordinates := transformCoordinatesForFormula(wallpaperCommand, scaledCoordinates)
+	zMin, zMax := mathutility.GetBoundingBox(transformedRawCoordinates)
 	println(zMin)
 	println(zMax)
+	transformedCoordinates := imageoutput.CoordinateCollectionBuilder().
+		WithComplexNumbers(&transformedRawCoordinates).
+		Build()
 	return transformedCoordinates
 }
 
@@ -276,7 +281,7 @@ func transformCoordinatesForLatticePattern(latticePattern *wallpaper.Formula, sc
 }
 
 // flattenCoordinates returns an array of coordinates (using complex128 for each pair.)
-//   Each item in the array ranges from (0,0) to (destinationBounds.Min.X,destinationBounds.Min.Y).
+//   Each item in the array ranges from (0,0) to (destinationBounds.Min.TransformedX,destinationBounds.Min.TransformedY).
 func flattenCoordinates(destinationBounds image.Rectangle) []complex128 {
 	flattenedCoordinates := []complex128{}
 	for destinationY := destinationBounds.Min.Y; destinationY < destinationBounds.Max.Y; destinationY++ {
@@ -308,59 +313,6 @@ func scaleDestinationPixels(destinationBounds image.Rectangle, destinationCoordi
 		scaledCoordinates = append(scaledCoordinates, complex(destinationScaledX, destinationScaledY))
 	}
 	return scaledCoordinates
-}
-
-// colorDestinationImage maps each transformed coordinate to a color
-//   inside the Eyedropper Boundary.
-func colorDestinationImage(
-	destinationImage *image.NRGBA,
-	sourceImage image.Image,
-	destinationCoordinates []complex128,
-	transformedCoordinates []complex128,
-	colorValueBoundMin complex128,
-	colorValueBoundMax complex128,
-) {
-	sourceImageBounds := sourceImage.Bounds()
-	for index, transformedCoordinate := range transformedCoordinates {
-		var sourceColorR, sourceColorG, sourceColorB, sourceColorA uint32
-
-		if real(transformedCoordinate) < real(colorValueBoundMin) ||
-			imag(transformedCoordinate) < imag(colorValueBoundMin) ||
-			real(transformedCoordinate) > real(colorValueBoundMax) ||
-			imag(transformedCoordinate) > imag(colorValueBoundMax) {
-			sourceColorR, sourceColorG, sourceColorB, sourceColorA = 0, 0, 0, 0
-		} else {
-			sourceImagePixelX := int(mathutility.ScaleValueBetweenTwoRanges(
-				float64(real(transformedCoordinate)),
-				real(colorValueBoundMin),
-				real(colorValueBoundMax),
-				float64(sourceImageBounds.Min.X),
-				float64(sourceImageBounds.Max.X),
-			))
-			sourceImagePixelY := int(mathutility.ScaleValueBetweenTwoRanges(
-				float64(imag(transformedCoordinate)),
-				imag(colorValueBoundMin),
-				imag(colorValueBoundMax),
-				float64(sourceImageBounds.Min.Y),
-				float64(sourceImageBounds.Max.Y),
-			))
-			sourceColorR, sourceColorG, sourceColorB, sourceColorA = sourceImage.At(sourceImagePixelX, sourceImagePixelY).RGBA()
-		}
-
-		destinationPixelX := int(real(destinationCoordinates[index]))
-		destinationPixelY := int(imag(destinationCoordinates[index]))
-
-		destinationImage.Set(
-			destinationPixelX,
-			destinationPixelY,
-			color.NRGBA{
-				R: uint8(sourceColorR >> 8),
-				G: uint8(sourceColorG >> 8),
-				B: uint8(sourceColorB >> 8),
-				A: uint8(sourceColorA >> 8),
-			},
-		)
-	}
 }
 
 func checkSourceArgument(sourceImageFilename string) {
@@ -422,7 +374,7 @@ func extractFilenameArguments() *FilenameArguments {
 	}
 }
 
-func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSymmetryPattern, arguments *FilenameArguments, transformedCoordinates []complex128) *image.NRGBA {
+func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSymmetryPattern, arguments *FilenameArguments, coordinates *imageoutput.CoordinateCollection) *image.NRGBA {
 	colorSourceImage := openSourceImage(arguments)
 
 	filter := imageoutput.CoordinateFilterBuilder().
@@ -451,11 +403,7 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 			Build()
 	}
 
-	transformedCoordinateCollection := imageoutput.CoordinateCollectionBuilder().
-		WithComplexNumbers(&transformedCoordinates).
-		Build()
-
-	return MapTransformedPointsToOutputImageBuffer(eyedropper, transformedCoordinateCollection, arguments, filter)
+	return MapTransformedPointsToOutputImageBuffer(eyedropper, coordinates, arguments, filter)
 }
 
 // MapTransformedPointsToOutputImageBuffer Uses the transformed points, source image and eyedropper to return an output image buffer.

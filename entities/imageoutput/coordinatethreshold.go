@@ -8,22 +8,22 @@ type CoordinateThreshold struct {
 	maximumY float64
 }
 
-// MinimumX returns the minimum x value for the filter.
+// MinimumX returns the minimum transformedX value for the filter.
 func (c *CoordinateThreshold) MinimumX() float64 {
 	return c.minimumX
 }
 
-// MaximumX returns the maximum x value for the filter.
+// MaximumX returns the maximum transformedX value for the filter.
 func (c *CoordinateThreshold) MaximumX() float64 {
 	return c.maximumX
 }
 
-// MinimumY returns the minimum y value for the filter.
+// MinimumY returns the minimum transformedY value for the filter.
 func (c *CoordinateThreshold) MinimumY() float64 {
 	return c.minimumY
 }
 
-// MaximumY returns the maximum y value for the filter.
+// MaximumY returns the maximum transformedY value for the filter.
 func (c *CoordinateThreshold) MaximumY() float64 {
 	return c.maximumY
 }
@@ -35,19 +35,19 @@ func (c *CoordinateThreshold) FilterAndMarkMappedCoordinate(coordinate *MappedCo
 		return
 	}
 
-	if coordinate.X() < c.MinimumX() {
+	if coordinate.TransformedX() < c.MinimumX() {
 		return
 	}
 
-	if coordinate.X() > c.MaximumX() {
+	if coordinate.TransformedX() > c.MaximumX() {
 		return
 	}
 
-	if coordinate.Y() < c.MinimumY() {
+	if coordinate.TransformedY() < c.MinimumY() {
 		return
 	}
 
-	if coordinate.Y() > c.MaximumY() {
+	if coordinate.TransformedY() > c.MaximumY() {
 		return
 	}
 	coordinate.MarkAsSatisfyingFilter()

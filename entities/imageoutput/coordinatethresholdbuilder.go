@@ -20,25 +20,25 @@ func CoordinateFilterBuilder() *CoordinateThresholdBuilderOptions {
 	}
 }
 
-// WithMinimumX sets the minimum x value for the filter.
+// WithMinimumX sets the minimum transformedX value for the filter.
 func (e *CoordinateThresholdBuilderOptions) WithMinimumX(xMin float64) *CoordinateThresholdBuilderOptions {
 	e.minimumX = xMin
 	return e
 }
 
-// WithMaximumX sets the maximum x value for the filter.
+// WithMaximumX sets the maximum transformedX value for the filter.
 func (e *CoordinateThresholdBuilderOptions) WithMaximumX(xMax float64) *CoordinateThresholdBuilderOptions {
 	e.maximumX = xMax
 	return e
 }
 
-// WithMinimumY sets the minimum y value for the filter.
+// WithMinimumY sets the minimum transformedY value for the filter.
 func (e *CoordinateThresholdBuilderOptions) WithMinimumY(yMin float64) *CoordinateThresholdBuilderOptions {
 	e.minimumY = yMin
 	return e
 }
 
-// WithMaximumY sets the maximum y value for the filter.
+// WithMaximumY sets the maximum transformedY value for the filter.
 func (e *CoordinateThresholdBuilderOptions) WithMaximumY(yMax float64) *CoordinateThresholdBuilderOptions {
 	e.maximumY = yMax
 	return e
