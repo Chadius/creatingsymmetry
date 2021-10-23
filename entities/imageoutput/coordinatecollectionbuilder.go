@@ -21,12 +21,12 @@ func (c *CoordinateCollectionBuilderOptions) WithCoordinates(coordinates *[]*Map
 }
 
 // WithComplexNumbers sets the coordinates stored in the collection using complex numbers.
-//  The real portion is used as the x coordinate.
-//  The imaginary portion is used as the y coordinate.
+//  The real portion is used as the transformedX coordinate.
+//  The imaginary portion is used as the transformedY coordinate.
 func (c *CoordinateCollectionBuilderOptions) WithComplexNumbers(complexNumbers *[]complex128) *CoordinateCollectionBuilderOptions {
 	newCoordinates := []*MappedCoordinate{}
 	for _, complexNumber := range *complexNumbers {
-		newCoordinates = append(newCoordinates, NewMappedCoordinate(
+		newCoordinates = append(newCoordinates, NewMappedCoordinateUsingTransformedCoordinates(
 			real(complexNumber),
 			imag(complexNumber),
 		))

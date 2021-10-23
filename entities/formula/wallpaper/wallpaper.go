@@ -39,11 +39,11 @@ const (
 	Generic LatticeType = "generic"
 	// Hexagonal lattice will have 3 way rotational symmetry
 	Hexagonal LatticeType = "hexagonal"
-	// Rectangular lattice will be aligned along X & Y axis, but they may not be the same size.
+	// Rectangular lattice will be aligned along TransformedX & TransformedY axis, but they may not be the same size.
 	Rectangular LatticeType = "rectangular"
 	// Rhombic lattices all have the same size but may not be aligned along axes (and may not be at right angles)
 	Rhombic LatticeType = "rhombic"
-	// Square lattice will be aligned along X & Y axis and be the same size.
+	// Square lattice will be aligned along TransformedX & TransformedY axis and be the same size.
 	Square LatticeType = "square"
 )
 

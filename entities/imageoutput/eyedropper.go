@@ -6,8 +6,13 @@ import (
 	"image/color"
 )
 
-// Eyedropper will sample transformed coordinates against a subrange of the source image.
-type Eyedropper struct {
+// Eyedropper uses a set of coordinates to choose colors from a source image.
+type Eyedropper interface {
+	ConvertCoordinatesToColors(collection *CoordinateCollection) *[]color.Color
+}
+
+// RectangularEyedropper will sample transformed coordinates against a rectangular portion of the source image.
+type RectangularEyedropper struct {
 	leftBoundary   int
 	rightBoundary  int
 	topBoundary    int
@@ -16,37 +21,37 @@ type Eyedropper struct {
 }
 
 // LeftSide returns the left side of the boundary.
-func (e *Eyedropper) LeftSide() int {
+func (e *RectangularEyedropper) LeftSide() int {
 	return e.leftBoundary
 }
 
 // RightSide returns the right side of the boundary.
-func (e *Eyedropper) RightSide() int {
+func (e *RectangularEyedropper) RightSide() int {
 	return e.rightBoundary
 }
 
 // TopSide returns the top side of the boundary.
-func (e *Eyedropper) TopSide() int {
+func (e *RectangularEyedropper) TopSide() int {
 	return e.topBoundary
 }
 
 // BottomSide returns the bottom side of the boundary.
-func (e *Eyedropper) BottomSide() int {
+func (e *RectangularEyedropper) BottomSide() int {
 	return e.bottomBoundary
 }
 
 //Image returns the source image
-func (e *Eyedropper) Image() *image.Image {
+func (e *RectangularEyedropper) Image() *image.Image {
 	return e.sourceImage
 }
 
 // ConvertCoordinatesToColors uses the collection of coordinates, maps it to the eyedropper range,
 //   and samples the color in the source image at that location.
 //   if the coordinate is mapped outside the source image, it will turn transparent.
-func (e *Eyedropper) ConvertCoordinatesToColors(collection *CoordinateCollection) *[]color.Color {
+func (e *RectangularEyedropper) ConvertCoordinatesToColors(collection *CoordinateCollection) *[]color.Color {
 	var convertedColors []color.Color
 	convertedColors = []color.Color{}
-	e.MapCoordinatesToEyedropperBoundary(collection)
+	e.mapCoordinatesToEyedropperBoundary(collection)
 
 	for _, coordinate := range *collection.Coordinates() {
 		var newColor color.NRGBA
@@ -72,13 +77,13 @@ func (e *Eyedropper) ConvertCoordinatesToColors(collection *CoordinateCollection
 	return &convertedColors
 }
 
-// MapCoordinatesToEyedropperBoundary maps each coordinate from its minimum and maximum to the eyedropper's boundary.
+// mapCoordinatesToEyedropperBoundary maps each coordinate from its minimum and maximum to the eyedropper's boundary.
 //   Only coordinates that satisfied their filter will be updated.
-func (e *Eyedropper) MapCoordinatesToEyedropperBoundary(collection *CoordinateCollection) {
-	collectionMinimumX := collection.MinimumX()
-	collectionMaximumX := collection.MaximumX()
-	collectionMinimumY := collection.MinimumY()
-	collectionMaximumY := collection.MaximumY()
+func (e *RectangularEyedropper) mapCoordinatesToEyedropperBoundary(collection *CoordinateCollection) {
+	collectionMinimumX := collection.MinimumTransformedX()
+	collectionMaximumX := collection.MaximumTransformedX()
+	collectionMinimumY := collection.MinimumTransformedY()
+	collectionMaximumY := collection.MaximumTransformedY()
 
 	for _, coordinate := range *collection.Coordinates() {
 		if !coordinate.SatisfiesFilter() {
@@ -89,7 +94,7 @@ func (e *Eyedropper) MapCoordinatesToEyedropperBoundary(collection *CoordinateCo
 		}
 
 		eyedropperX := mathutility.ScaleValueBetweenTwoRanges(
-			coordinate.X(),
+			coordinate.TransformedX(),
 			collectionMinimumX,
 			collectionMaximumX,
 			float64(e.LeftSide()),
@@ -97,7 +102,7 @@ func (e *Eyedropper) MapCoordinatesToEyedropperBoundary(collection *CoordinateCo
 		)
 
 		eyedropperY := mathutility.ScaleValueBetweenTwoRanges(
-			coordinate.Y(),
+			coordinate.TransformedY(),
 			collectionMinimumY,
 			collectionMaximumY,
 			float64(e.TopSide()),

@@ -40,6 +40,9 @@ Returns an image
 # What can we do now?
 Can shape the eyedropper to be a circle, or to loop when it is outside the image.
 Need to rewrite docs to explain both objects.
+Add Null Objects:
+- A Threshold Filter that accepts all non-Inf or non-NaN numbers
+- An Identity Formula
 
 # Caveats that will trigger future change
 Performance hit is too great
