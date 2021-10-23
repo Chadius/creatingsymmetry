@@ -1,6 +1,5 @@
 package imageoutput_test
 
-
 import (
 	"github.com/Chadius/creating-symmetry/entities/imageoutput"
 	. "gopkg.in/check.v1"
@@ -13,7 +12,7 @@ type CoordinateFilterTests struct {
 var _ = Suite(&CoordinateFilterTests{})
 
 func (suite *CoordinateFilterTests) TestCreateFilterWithBoundaries(checker *C) {
-	filter := imageoutput.CoordinateFilterFactory().WithMinimumX(-1e-5).WithMaximumX(2e1).WithMinimumY(-6e6).WithMaximumY(5e2).Build()
+	filter := imageoutput.CoordinateFilterBuilder().WithMinimumX(-1e-5).WithMaximumX(2e1).WithMinimumY(-6e6).WithMaximumY(5e2).Build()
 	checker.Assert(filter.MinimumX(), Equals, -1e-5)
 	checker.Assert(filter.MaximumX(), Equals, 2e1)
 	checker.Assert(filter.MinimumY(), Equals, -6e6)
@@ -21,8 +20,8 @@ func (suite *CoordinateFilterTests) TestCreateFilterWithBoundaries(checker *C) {
 }
 
 func (suite *CoordinateFilterTests) TestFilterMarksMappedCoordinates(checker *C) {
-	filter := imageoutput.CoordinateFilterFactory().WithMinimumX(-1e-5).WithMaximumX(2e1).WithMinimumY(-6e6).WithMaximumY(5e2).Build()
-	
+	filter := imageoutput.CoordinateFilterBuilder().WithMinimumX(-1e-5).WithMaximumX(2e1).WithMinimumY(-6e6).WithMaximumY(5e2).Build()
+
 	coordinateThatSatisfiesFilter := imageoutput.NewMappedCoordinate(1e1, 2e2)
 	coordinateThatDoesNotSatisfyFilterBecauseItIsOutsideInXDirection := imageoutput.NewMappedCoordinate(-1e1, 2e2)
 	coordinateThatDoesNotSatisfyFilterBecauseItIsOutsideInYDirection := imageoutput.NewMappedCoordinate(1e1, 2e5)
@@ -46,9 +45,9 @@ func (suite *CoordinateFilterTests) TestFilterMarksCoordinateCollection(checker 
 		imageoutput.NewMappedCoordinate(0, -100),
 		imageoutput.NewMappedCoordinate(0, 200),
 	}
-	collection := imageoutput.CoordinateCollectionFactory().WithCoordinates(&coordinates).Build()
+	collection := imageoutput.CoordinateCollectionBuilder().WithCoordinates(&coordinates).Build()
 
-	filter := imageoutput.CoordinateFilterFactory().WithMinimumX(0).WithMaximumX(25).WithMinimumY(-6e6).WithMaximumY(50).Build()
+	filter := imageoutput.CoordinateFilterBuilder().WithMinimumX(0).WithMaximumX(25).WithMinimumY(-6e6).WithMaximumY(50).Build()
 	filter.FilterAndMarkMappedCoordinateCollection(collection)
 
 	checker.Assert((*collection.Coordinates())[0].SatisfiesFilter(), Equals, false)

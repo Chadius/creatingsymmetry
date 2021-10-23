@@ -6,30 +6,30 @@ import (
 	"math"
 )
 
-type CoordinateCollectionFactoryTests struct {
+type CoordinateCollectionBuilderTests struct {
 }
 
-var _ = Suite(&CoordinateCollectionFactoryTests{})
+var _ = Suite(&CoordinateCollectionBuilderTests{})
 
-func (suite *CoordinateCollectionFactoryTests) TestSetupCreateDataRangeWithArray(checker *C) {
+func (suite *CoordinateCollectionBuilderTests) TestSetupCreateDataRangeWithArray(checker *C) {
 	coordinates := []*imageoutput.MappedCoordinate{
 		imageoutput.NewMappedCoordinate(-10, 20),
 		imageoutput.NewMappedCoordinate(20, 0),
 		imageoutput.NewMappedCoordinate(0, -100),
 		imageoutput.NewMappedCoordinate(0, 200),
 	}
-	collection := imageoutput.CoordinateCollectionFactory().WithCoordinates(&coordinates).Build()
+	collection := imageoutput.CoordinateCollectionBuilder().WithCoordinates(&coordinates).Build()
 	checker.Assert(collection.Coordinates(), Equals, &coordinates)
 }
 
-func (suite *CoordinateCollectionFactoryTests) TestSetupCreateDataRangeWithComplexNumbers(checker *C) {
+func (suite *CoordinateCollectionBuilderTests) TestSetupCreateDataRangeWithComplexNumbers(checker *C) {
 	coordinates := []complex128{
 		complex(-10, 20),
 		complex(20, 0),
 		complex(0, -100),
 		complex(0, 200),
 	}
-	collection := imageoutput.CoordinateCollectionFactory().WithComplexNumbers(&coordinates).Build()
+	collection := imageoutput.CoordinateCollectionBuilder().WithComplexNumbers(&coordinates).Build()
 	checker.Assert(*collection.Coordinates(), HasLen, 4)
 	checker.Assert((*collection.Coordinates())[0].X(), Equals, -10.0)
 	checker.Assert((*collection.Coordinates())[0].Y(), Equals, 20.0)
@@ -53,7 +53,7 @@ func (suite *CoordinateCollectionTests) TestReturnsMinimumAndMaximums(checker *C
 		imageoutput.NewMappedCoordinate(0, -100),
 		imageoutput.NewMappedCoordinate(0, 200),
 	}
-	collection := imageoutput.CoordinateCollectionFactory().WithCoordinates(&coordinates).Build()
+	collection := imageoutput.CoordinateCollectionBuilder().WithCoordinates(&coordinates).Build()
 	(*collection.Coordinates())[0].MarkAsSatisfyingFilter()
 	(*collection.Coordinates())[1].MarkAsSatisfyingFilter()
 	(*collection.Coordinates())[2].MarkAsSatisfyingFilter()
@@ -75,7 +75,7 @@ func (suite *CoordinateCollectionTests) TestReturnsMinimumAndMaximumsRespectingS
 		imageoutput.NewMappedCoordinate(0, -100),
 		imageoutput.NewMappedCoordinate(0, 100),
 	}
-	collection := imageoutput.CoordinateCollectionFactory().WithCoordinates(&coordinates).Build()
+	collection := imageoutput.CoordinateCollectionBuilder().WithCoordinates(&coordinates).Build()
 	(*collection.Coordinates())[0].MarkAsSatisfyingFilter()
 	(*collection.Coordinates())[1].MarkAsSatisfyingFilter()
 	(*collection.Coordinates())[2].MarkAsSatisfyingFilter()
@@ -97,7 +97,7 @@ func (suite *CoordinateCollectionTests) TestReturnsMinimumAndMaximumsIgnoringInf
 		imageoutput.NewMappedCoordinate(math.Inf(1), -100),
 		imageoutput.NewMappedCoordinate(math.Inf(-1), 100),
 	}
-	collection := imageoutput.CoordinateCollectionFactory().WithCoordinates(&coordinates).Build()
+	collection := imageoutput.CoordinateCollectionBuilder().WithCoordinates(&coordinates).Build()
 	(*collection.Coordinates())[0].MarkAsSatisfyingFilter()
 	(*collection.Coordinates())[1].MarkAsSatisfyingFilter()
 	(*collection.Coordinates())[2].MarkAsSatisfyingFilter()
@@ -117,7 +117,7 @@ func (suite *CoordinateCollectionTests) TestReturnsNaNMinimumIfAllCoordinatesAre
 		imageoutput.NewMappedCoordinate(math.Inf(-1), -10),
 		imageoutput.NewMappedCoordinate(20, 0),
 	}
-	collection := imageoutput.CoordinateCollectionFactory().WithCoordinates(&coordinates).Build()
+	collection := imageoutput.CoordinateCollectionBuilder().WithCoordinates(&coordinates).Build()
 	(*collection.Coordinates())[0].MarkAsSatisfyingFilter()
 	checker.Assert(math.IsNaN(collection.MinimumX()), Equals, true)
 	checker.Assert(math.IsNaN(collection.MinimumY()), Equals, true)

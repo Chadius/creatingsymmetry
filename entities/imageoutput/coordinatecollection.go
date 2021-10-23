@@ -2,6 +2,7 @@ package imageoutput
 
 import "math"
 
+// CoordinateCollection holds an array of coordinates as they turn into symmetry patterns.
 type CoordinateCollection struct {
 	coordinates *[]*MappedCoordinate
 }

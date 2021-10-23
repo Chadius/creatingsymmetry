@@ -1,6 +1,7 @@
 package imageoutput
 
-type CoordinateFilter struct {
+// CoordinateThreshold defines a range in which coordinates will be kept.
+type CoordinateThreshold struct {
 	minimumX float64
 	maximumX float64
 	minimumY float64
@@ -8,28 +9,28 @@ type CoordinateFilter struct {
 }
 
 // MinimumX returns the minimum x value for the filter.
-func (c *CoordinateFilter) MinimumX() float64 {
+func (c *CoordinateThreshold) MinimumX() float64 {
 	return c.minimumX
 }
 
 // MaximumX returns the maximum x value for the filter.
-func (c *CoordinateFilter) MaximumX() float64 {
+func (c *CoordinateThreshold) MaximumX() float64 {
 	return c.maximumX
 }
 
 // MinimumY returns the minimum y value for the filter.
-func (c *CoordinateFilter) MinimumY() float64 {
+func (c *CoordinateThreshold) MinimumY() float64 {
 	return c.minimumY
 }
 
 // MaximumY returns the maximum y value for the filter.
-func (c *CoordinateFilter) MaximumY() float64 {
+func (c *CoordinateThreshold) MaximumY() float64 {
 	return c.maximumY
 }
 
 // FilterAndMarkMappedCoordinate checks if the coordinate satisfies the filter.
 //   Then it marks the coordinate if it satisfied the filtered out.
-func (c *CoordinateFilter) FilterAndMarkMappedCoordinate(coordinate *MappedCoordinate) {
+func (c *CoordinateThreshold) FilterAndMarkMappedCoordinate(coordinate *MappedCoordinate) {
 	if !coordinate.CanBeCompared() {
 		return
 	}
@@ -54,7 +55,7 @@ func (c *CoordinateFilter) FilterAndMarkMappedCoordinate(coordinate *MappedCoord
 
 // FilterAndMarkMappedCoordinateCollection checks all coordinates against the filter.
 //   Then it marks each coordinate if it satisfied the filter.
-func (c *CoordinateFilter) FilterAndMarkMappedCoordinateCollection(collection *CoordinateCollection) {
+func (c *CoordinateThreshold) FilterAndMarkMappedCoordinateCollection(collection *CoordinateCollection) {
 	for _, coordinateToFiler := range *collection.Coordinates() {
 		c.FilterAndMarkMappedCoordinate(coordinateToFiler)
 	}

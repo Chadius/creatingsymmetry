@@ -24,7 +24,7 @@ import (
 
 func main() {
 	filenameArguments := extractFilenameArguments()
-	wallpaperCommand, err := loadFormulaFile(filenameArguments)
+	wallpaperCommand := loadFormulaFile(filenameArguments)
 	destinationBounds, destinationCoordinates := getDestinationBoundary(filenameArguments)
 	scaledCoordinates := scaleDestinationToPatternViewport(wallpaperCommand, destinationBounds, destinationCoordinates)
 	transformedCoordinates := transformCoordinatesAndReport(wallpaperCommand, scaledCoordinates)
@@ -69,7 +69,7 @@ func getDestinationBoundary(filenameArguments *FilenameArguments) (image.Rectang
 	return destinationBounds, destinationCoordinates
 }
 
-func loadFormulaFile(filenameArguments *FilenameArguments) (*command.CreateSymmetryPattern, error) {
+func loadFormulaFile(filenameArguments *FilenameArguments) *command.CreateSymmetryPattern {
 	createWallpaperYAML, err := ioutil.ReadFile(filenameArguments.FormulaFilename)
 	if err != nil {
 		log.Fatal(err)
@@ -78,7 +78,7 @@ func loadFormulaFile(filenameArguments *FilenameArguments) (*command.CreateSymme
 	if err != nil {
 		log.Fatal(err)
 	}
-	return wallpaperCommand, err
+	return wallpaperCommand
 }
 
 func openSourceImage(filenameArguments *FilenameArguments) image.Image {
@@ -422,11 +422,10 @@ func extractFilenameArguments() *FilenameArguments {
 	}
 }
 
-
 func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSymmetryPattern, arguments *FilenameArguments, transformedCoordinates []complex128) *image.NRGBA {
 	colorSourceImage := openSourceImage(arguments)
 
-	filter := imageoutput.CoordinateFilterFactory().
+	filter := imageoutput.CoordinateFilterBuilder().
 		WithMinimumX(command.CoordinateThreshold.XMin).
 		WithMaximumX(command.CoordinateThreshold.XMax).
 		WithMinimumY(command.CoordinateThreshold.YMin).
@@ -435,7 +434,7 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 
 	var eyedropper *imageoutput.Eyedropper
 	if command.Eyedropper != nil {
-		eyedropper = imageoutput.EyedropperFactory().
+		eyedropper = imageoutput.EyedropperBuilder().
 			WithLeftSide(command.Eyedropper.LeftSide).
 			WithRightSide(command.Eyedropper.RightSide).
 			WithTopSide(command.Eyedropper.TopSide).
@@ -443,7 +442,7 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 			WithImage(&colorSourceImage).
 			Build()
 	} else {
-		eyedropper = imageoutput.EyedropperFactory().
+		eyedropper = imageoutput.EyedropperBuilder().
 			WithLeftSide(colorSourceImage.Bounds().Min.X).
 			WithRightSide(colorSourceImage.Bounds().Max.X).
 			WithTopSide(colorSourceImage.Bounds().Min.Y).
@@ -452,7 +451,7 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 			Build()
 	}
 
-	transformedCoordinateCollection := imageoutput.CoordinateCollectionFactory().
+	transformedCoordinateCollection := imageoutput.CoordinateCollectionBuilder().
 		WithComplexNumbers(&transformedCoordinates).
 		Build()
 
@@ -460,7 +459,7 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 }
 
 // MapTransformedPointsToOutputImageBuffer Uses the transformed points, source image and eyedropper to return an output image buffer.
-func MapTransformedPointsToOutputImageBuffer(eyedropper *imageoutput.Eyedropper, transformedCoordinates *imageoutput.CoordinateCollection, arguments *FilenameArguments, filter *imageoutput.CoordinateFilter) *image.NRGBA{
+func MapTransformedPointsToOutputImageBuffer(eyedropper *imageoutput.Eyedropper, transformedCoordinates *imageoutput.CoordinateCollection, arguments *FilenameArguments, filter *imageoutput.CoordinateThreshold) *image.NRGBA {
 	filter.FilterAndMarkMappedCoordinateCollection(transformedCoordinates)
 
 	colorData := eyedropper.ConvertCoordinatesToColors(transformedCoordinates)

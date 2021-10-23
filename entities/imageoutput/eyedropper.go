@@ -6,12 +6,13 @@ import (
 	"image/color"
 )
 
+// Eyedropper will sample transformed coordinates against a subrange of the source image.
 type Eyedropper struct {
-	leftBoundary int
-	rightBoundary int
-	topBoundary int
+	leftBoundary   int
+	rightBoundary  int
+	topBoundary    int
 	bottomBoundary int
-	sourceImage *image.Image
+	sourceImage    *image.Image
 }
 
 // LeftSide returns the left side of the boundary.

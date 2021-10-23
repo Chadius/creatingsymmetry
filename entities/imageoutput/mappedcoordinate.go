@@ -2,20 +2,21 @@ package imageoutput
 
 import "math"
 
+// MappedCoordinate stores the journey of an individual coordinate.
 type MappedCoordinate struct {
-	x float64
-	y float64
-	satisfiedFilter bool
+	x                    float64
+	y                    float64
+	satisfiedFilter      bool
 	hasMappedCoordinates bool
-	mappedCoordinateX float64
-	mappedCoordinateY float64
+	mappedCoordinateX    float64
+	mappedCoordinateY    float64
 }
 
 // NewMappedCoordinate returns a new mapped coordinate at the given x and y location.
 func NewMappedCoordinate(x, y float64) *MappedCoordinate {
 	return &MappedCoordinate{
-		x: x,
-		y: y,
+		x:               x,
+		y:               y,
 		satisfiedFilter: false,
 	}
 }
@@ -33,11 +34,10 @@ func (m *MappedCoordinate) Y() float64 {
 // CanBeCompared returns true if either x and y coordinate can be compared.
 //   This means neither are Infinity nor NaN.
 func (m *MappedCoordinate) CanBeCompared() bool {
-	return !(
-		math.IsInf(m.X(),0) ||
-			math.IsInf(m.Y(),0) ||
-			math.IsNaN(m.X()) ||
-			math.IsNaN(m.Y()))
+	return !(math.IsInf(m.X(), 0) ||
+		math.IsInf(m.Y(), 0) ||
+		math.IsNaN(m.X()) ||
+		math.IsNaN(m.Y()))
 }
 
 // MarkAsSatisfyingFilter marks this coordinate as satisfying the filter.
