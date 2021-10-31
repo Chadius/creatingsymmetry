@@ -27,14 +27,14 @@ func main() {
 
 	// TODO Given a filename args and a wallpaper command, return a Coordinate Collection with the output pixel and pattern viewport set
 
-	destinationBounds, destinationCoordinates := getDestinationBoundary(filenameArguments) // TODO Move into TODO function
+	destinationBounds, destinationCoordinates := getDestinationBoundary(filenameArguments)                              // TODO Move into TODO function
 	scaledCoordinates := scaleDestinationToPatternViewport(wallpaperCommand, destinationBounds, destinationCoordinates) // TODO Move into TODO function
-	transformedCoordinateCollection := transformCoordinatesAndReport(wallpaperCommand, scaledCoordinates) // TODO This should modify the coordinate collection instead of returning it
+	transformedCoordinateCollection := transformCoordinatesAndReport(wallpaperCommand, scaledCoordinates)               // TODO This should modify the coordinate collection instead of returning it
 	outputImage := eyedropperFinalColorAndSaveToImage(wallpaperCommand, filenameArguments, transformedCoordinateCollection)
 	outputToFile(filenameArguments.OutputFilename, outputImage)
 }
 
-// eyedropperFinalColorAndSaveToImage uses the CoordinateThreshold to select the colors in the output image.
+// eyedropperFinalColorAndSaveToImage uses the RectangularCoordinateThreshold to select the colors in the output image.
 //   It returns an image buffer.
 func eyedropperFinalColorAndSaveToImage(wallpaperCommand *command.CreateSymmetryPattern, filenameArguments *FilenameArguments, coordinates *imageoutput.CoordinateCollection) *image.NRGBA {
 	return helperForMapTransformedPointsToOutputImageBuffer(wallpaperCommand, filenameArguments, coordinates)
@@ -384,7 +384,7 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 		WithMaximumY(command.CoordinateThreshold.YMax).
 		Build()
 
-	var eyedropper *imageoutput.Eyedropper
+	var eyedropper *imageoutput.RectangularEyedropper
 	if command.Eyedropper != nil {
 		eyedropper = imageoutput.EyedropperBuilder().
 			WithLeftSide(command.Eyedropper.LeftSide).
@@ -407,7 +407,7 @@ func helperForMapTransformedPointsToOutputImageBuffer(command *command.CreateSym
 }
 
 // MapTransformedPointsToOutputImageBuffer Uses the transformed points, source image and eyedropper to return an output image buffer.
-func MapTransformedPointsToOutputImageBuffer(eyedropper *imageoutput.Eyedropper, transformedCoordinates *imageoutput.CoordinateCollection, arguments *FilenameArguments, filter *imageoutput.CoordinateThreshold) *image.NRGBA {
+func MapTransformedPointsToOutputImageBuffer(eyedropper *imageoutput.RectangularEyedropper, transformedCoordinates *imageoutput.CoordinateCollection, arguments *FilenameArguments, filter *imageoutput.RectangularCoordinateThreshold) *image.NRGBA {
 	filter.FilterAndMarkMappedCoordinateCollection(transformedCoordinates)
 
 	colorData := eyedropper.ConvertCoordinatesToColors(transformedCoordinates)

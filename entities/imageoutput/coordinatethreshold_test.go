@@ -19,31 +19,14 @@ func (suite *CoordinateFilterTests) TestCreateFilterWithBoundaries(checker *C) {
 	checker.Assert(filter.MaximumY(), Equals, 5e2)
 }
 
-func (suite *CoordinateFilterTests) TestFilterMarksMappedCoordinates(checker *C) {
-	filter := imageoutput.CoordinateFilterBuilder().WithMinimumX(-1e-5).WithMaximumX(2e1).WithMinimumY(-6e6).WithMaximumY(5e2).Build()
-
-	coordinateThatSatisfiesFilter := imageoutput.NewMappedCoordinateUsingTransformedCoordinates(1e1, 2e2)
-	coordinateThatDoesNotSatisfyFilterBecauseItIsOutsideInXDirection := imageoutput.NewMappedCoordinateUsingTransformedCoordinates(-1e1, 2e2)
-	coordinateThatDoesNotSatisfyFilterBecauseItIsOutsideInYDirection := imageoutput.NewMappedCoordinateUsingTransformedCoordinates(1e1, 2e5)
-	coordinateThatDoesNotSatisfyFilterBecauseItIsAtInfinity := imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, math.Inf(1))
-
-	filter.FilterAndMarkMappedCoordinate(coordinateThatSatisfiesFilter)
-	filter.FilterAndMarkMappedCoordinate(coordinateThatDoesNotSatisfyFilterBecauseItIsOutsideInXDirection)
-	filter.FilterAndMarkMappedCoordinate(coordinateThatDoesNotSatisfyFilterBecauseItIsOutsideInYDirection)
-	filter.FilterAndMarkMappedCoordinate(coordinateThatDoesNotSatisfyFilterBecauseItIsAtInfinity)
-
-	checker.Assert(coordinateThatSatisfiesFilter.SatisfiesFilter(), Equals, true)
-	checker.Assert(coordinateThatDoesNotSatisfyFilterBecauseItIsOutsideInXDirection.SatisfiesFilter(), Equals, false)
-	checker.Assert(coordinateThatDoesNotSatisfyFilterBecauseItIsOutsideInYDirection.SatisfiesFilter(), Equals, false)
-	checker.Assert(coordinateThatDoesNotSatisfyFilterBecauseItIsAtInfinity.SatisfiesFilter(), Equals, false)
-}
-
 func (suite *CoordinateFilterTests) TestFilterMarksCoordinateCollection(checker *C) {
 	coordinates := []*imageoutput.MappedCoordinate{
 		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(-10, 20),
 		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(20, 0),
 		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, -100),
 		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, 200),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, math.Inf(1)),
+		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(math.NaN(), 0),
 	}
 	collection := imageoutput.CoordinateCollectionBuilder().WithCoordinates(&coordinates).Build()
 
@@ -54,4 +37,6 @@ func (suite *CoordinateFilterTests) TestFilterMarksCoordinateCollection(checker 
 	checker.Assert((*collection.Coordinates())[1].SatisfiesFilter(), Equals, true)
 	checker.Assert((*collection.Coordinates())[2].SatisfiesFilter(), Equals, true)
 	checker.Assert((*collection.Coordinates())[3].SatisfiesFilter(), Equals, false)
+	checker.Assert((*collection.Coordinates())[4].SatisfiesFilter(), Equals, false)
+	checker.Assert((*collection.Coordinates())[5].SatisfiesFilter(), Equals, false)
 }

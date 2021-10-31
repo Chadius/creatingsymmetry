@@ -11,12 +11,12 @@ import (
 	"strings"
 )
 
-type EyedropperTests struct {
+type RectangularEyedropperTests struct {
 }
 
-var _ = Suite(&EyedropperTests{})
+var _ = Suite(&RectangularEyedropperTests{})
 
-func (suite *EyedropperTests) TestCreateEyedropperWithBoundaries(checker *C) {
+func (suite *RectangularEyedropperTests) TestCreateEyedropperWithBoundaries(checker *C) {
 	eyedropper := imageoutput.EyedropperBuilder().WithLeftSide(-50).WithRightSide(200).WithTopSide(-100).WithBottomSide(400).Build()
 	checker.Assert(eyedropper.LeftSide(), Equals, -50)
 	checker.Assert(eyedropper.RightSide(), Equals, 200)
@@ -24,7 +24,7 @@ func (suite *EyedropperTests) TestCreateEyedropperWithBoundaries(checker *C) {
 	checker.Assert(eyedropper.BottomSide(), Equals, 400)
 }
 
-func (suite *EyedropperTests) TestCreateEyedropperWithSourceImage(checker *C) {
+func (suite *RectangularEyedropperTests) TestCreateEyedropperWithSourceImage(checker *C) {
 	const imageData = `
 /9j/4AAQSkZJRgABAQIAHAAcAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdA
 SFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2Nj
@@ -92,53 +92,7 @@ ubeK6t3gnXdG4wwziiii/UTKMOg6dbzJLFE4dSCP3rEdeOM8805tDsGMvySgSsS6rM6gk9eAcUUVftZt
 	checker.Assert(eyedropper.Image(), Equals, &sourceImage)
 }
 
-func (suite *EyedropperTests) TestMapCoordinateToSourceImageCoordinate(checker *C) {
-	coordinates := []*imageoutput.MappedCoordinate{
-		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, 0),
-		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(1, 0),
-		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, 1),
-		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(1, 1),
-		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, math.Inf(1)),
-		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(math.Inf(-1), 0),
-		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(0, 0),
-	}
-	collection := imageoutput.CoordinateCollectionBuilder().WithCoordinates(&coordinates).Build()
-	(*collection.Coordinates())[0].MarkAsSatisfyingFilter()
-	(*collection.Coordinates())[1].MarkAsSatisfyingFilter()
-	(*collection.Coordinates())[2].MarkAsSatisfyingFilter()
-	(*collection.Coordinates())[3].MarkAsSatisfyingFilter()
-
-	eyedropper := imageoutput.EyedropperBuilder().WithLeftSide(0).WithRightSide(2).WithTopSide(0).WithBottomSide(2).Build()
-	eyedropper.MapCoordinatesToEyedropperBoundary(collection)
-
-	var mappedX, mappedY float64
-
-	checker.Assert((*collection.Coordinates())[0].HasMappedCoordinate(), Equals, true)
-	mappedX, mappedY = (*collection.Coordinates())[0].MappedCoordinate()
-	checker.Assert(mappedX, Equals, 0.0)
-	checker.Assert(mappedY, Equals, 0.0)
-
-	checker.Assert((*collection.Coordinates())[1].HasMappedCoordinate(), Equals, true)
-	mappedX, mappedY = (*collection.Coordinates())[1].MappedCoordinate()
-	checker.Assert(mappedX, Equals, 2.0)
-	checker.Assert(mappedY, Equals, 0.0)
-
-	checker.Assert((*collection.Coordinates())[2].HasMappedCoordinate(), Equals, true)
-	mappedX, mappedY = (*collection.Coordinates())[2].MappedCoordinate()
-	checker.Assert(mappedX, Equals, 0.0)
-	checker.Assert(mappedY, Equals, 2.0)
-
-	checker.Assert((*collection.Coordinates())[3].HasMappedCoordinate(), Equals, true)
-	mappedX, mappedY = (*collection.Coordinates())[3].MappedCoordinate()
-	checker.Assert(mappedX, Equals, 2.0)
-	checker.Assert(mappedY, Equals, 2.0)
-
-	checker.Assert((*collection.Coordinates())[4].HasMappedCoordinate(), Equals, false)
-	checker.Assert((*collection.Coordinates())[5].HasMappedCoordinate(), Equals, false)
-	checker.Assert((*collection.Coordinates())[6].HasMappedCoordinate(), Equals, false)
-}
-
-func (suite *EyedropperTests) TestEyedropperMapsCoordinatesAndSamplesSourceImage(checker *C) {
+func (suite *RectangularEyedropperTests) TestEyedropperMapsCoordinatesAndSamplesSourceImage(checker *C) {
 	sourceColors := image.NewNRGBA(image.Rect(0, 0, 2, 2))
 	sourceColors.Set(0, 0, color.NRGBA{
 		R: uint8(255),
@@ -223,7 +177,7 @@ func (suite *EyedropperTests) TestEyedropperMapsCoordinatesAndSamplesSourceImage
 	checker.Assert(outputA, Equals, uint32(0))
 }
 
-func (suite *EyedropperTests) TestEyedropperDoesNotMapInvalidCoordinates(checker *C) {
+func (suite *RectangularEyedropperTests) TestEyedropperDoesNotMapInvalidCoordinates(checker *C) {
 	sourceColors := image.NewNRGBA(image.Rect(0, 0, 2, 2))
 	sourceColors.Set(0, 0, color.NRGBA{
 		R: uint8(255),

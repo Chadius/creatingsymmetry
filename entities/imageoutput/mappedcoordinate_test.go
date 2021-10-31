@@ -14,7 +14,6 @@ type MappedCoordinateTest struct {
 
 var _ = Suite(&MappedCoordinateTest{})
 
-
 func (suite *MappedCoordinateTest) TestCreateMappedCoordinateUsingOutputImageCoordinates(checker *C) {
 	coordinate := imageoutput.NewMappedCoordinateUsingOutputImageCoordinates(200, 30)
 	checker.Assert(coordinate.OutputImageX(), Equals, 200)

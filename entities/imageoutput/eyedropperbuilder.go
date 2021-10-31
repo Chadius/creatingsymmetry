@@ -55,8 +55,8 @@ func (e *EyedropperBuilderOptions) WithImage(sourceImage *image.Image) *Eyedropp
 }
 
 // Build uses the builder options to create a power.
-func (e *EyedropperBuilderOptions) Build() *Eyedropper {
-	return &Eyedropper{
+func (e *EyedropperBuilderOptions) Build() *RectangularEyedropper {
+	return &RectangularEyedropper{
 		leftBoundary:   e.leftSide,
 		rightBoundary:  e.rightSide,
 		topBoundary:    e.topSide,

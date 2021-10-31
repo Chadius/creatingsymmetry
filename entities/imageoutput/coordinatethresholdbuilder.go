@@ -1,6 +1,6 @@
 package imageoutput
 
-// CoordinateThresholdBuilderOptions contains options used to make a CoordinateThreshold.
+// CoordinateThresholdBuilderOptions contains options used to make a RectangularCoordinateThreshold.
 type CoordinateThresholdBuilderOptions struct {
 	minimumX float64
 	maximumX float64
@@ -45,8 +45,8 @@ func (e *CoordinateThresholdBuilderOptions) WithMaximumY(yMax float64) *Coordina
 }
 
 // Build uses the builder options to create a power.
-func (e *CoordinateThresholdBuilderOptions) Build() *CoordinateThreshold {
-	return &CoordinateThreshold{
+func (e *CoordinateThresholdBuilderOptions) Build() *RectangularCoordinateThreshold {
+	return &RectangularCoordinateThreshold{
 		minimumX: e.minimumX,
 		maximumX: e.maximumX,
 		minimumY: e.minimumY,

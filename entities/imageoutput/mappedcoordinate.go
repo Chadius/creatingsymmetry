@@ -4,8 +4,8 @@ import "math"
 
 // MappedCoordinate stores the journey of an individual coordinate.
 type MappedCoordinate struct {
-	outputImageX    int
-	outputImageY      int
+	outputImageX         int
+	outputImageY         int
 	transformedX         float64
 	transformedY         float64
 	satisfiedFilter      bool
@@ -17,8 +17,8 @@ type MappedCoordinate struct {
 // NewMappedCoordinateUsingOutputImageCoordinates returns a new mapped coordinate at the given outputImageX and outputImageY location.
 func NewMappedCoordinateUsingOutputImageCoordinates(outputImageX, outputImageY int) *MappedCoordinate {
 	return &MappedCoordinate{
-		outputImageX:    outputImageX,
-		outputImageY:    outputImageY,
+		outputImageX: outputImageX,
+		outputImageY: outputImageY,
 	}
 }
 
@@ -52,7 +52,7 @@ func (m *MappedCoordinate) TransformedY() float64 {
 }
 
 // UpdateTransformedCoordinates will update transformedX and transformedY coordinates.
-func (m *MappedCoordinate) UpdateTransformedCoordinates (x, y float64) {
+func (m *MappedCoordinate) UpdateTransformedCoordinates(x, y float64) {
 	m.transformedX = x
 	m.transformedY = y
 }
@@ -68,7 +68,7 @@ func (m *MappedCoordinate) PatternViewportY() float64 {
 }
 
 // UpdatePatternViewportCoordinates will update transformedX and transformedY coordinates.
-func (m *MappedCoordinate) UpdatePatternViewportCoordinates (x, y float64) {
+func (m *MappedCoordinate) UpdatePatternViewportCoordinates(x, y float64) {
 	m.transformedX = x
 	m.transformedY = y
 }
