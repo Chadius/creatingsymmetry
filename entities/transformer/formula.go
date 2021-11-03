@@ -26,14 +26,8 @@ func (f *FormulaTransformer) Transform(settings *Settings) *image.NRGBA {
 
 func (f *FormulaTransformer) createCollectionBasedOnOutputImageSize(settings *Settings) *imageoutput.CoordinateCollection {
 	coordinates := []*imageoutput.MappedCoordinate{}
-	index := 0
 	for inputImageY := 0; inputImageY < settings.OutputHeight; inputImageY++ {
 		for inputImageX := 0; inputImageX < settings.OutputWidth; inputImageX++ {
-
-			if index >= 190 && index < 210 {
-				println(index, inputImageX, inputImageY)
-			}
-			index = index + 1
 			coordinates = append(
 				coordinates,
 				imageoutput.NewMappedCoordinateUsingInputImageCoordinates(inputImageX, inputImageY),
@@ -61,35 +55,6 @@ func (f *FormulaTransformer) scaleCoordinatesToViewport(settings *Settings, coor
 			settings.PatternViewportYMin,
 			settings.PatternViewportYMax,
 		)
-
-
-		// DELETE
-		//if index == 1000 {
-			//200
-			//200
-			//println(settings.OutputWidth)
-			//println(settings.OutputHeight)
-
-			//-8.000000e-001
-			//+8.000000e-001
-			//-8.000000e-001
-			//+8.000000e-001
-			//println(settings.PatternViewportXMin)
-			//println(settings.PatternViewportXMax)
-			//println(settings.PatternViewportYMin)
-			//println(settings.PatternViewportYMax)
-
-			// 10 ? Why is this 10?
-			// 5
-			//println(coordinate.InputImageX())
-			//println(coordinate.InputImageY())
-
-			//-7.200000e-001
-			//-7.600000e-001
-			//println(patternViewportX)
-			//println(patternViewportY)
-		//}
-
 		coordinate.UpdatePatternViewportCoordinates(patternViewportX, patternViewportY)
 	}
 }
@@ -121,16 +86,6 @@ func (f *FormulaTransformer) transformCoordinatesForRosetteFormula(rosetteFormul
 	for _, coordinate := range *coordinateCollection.Coordinates() {
 		complexCoordinate := complex(coordinate.PatternViewportX(), coordinate.PatternViewportY())
 		rosettePatternResults := rosetteFormula.Calculate(complexCoordinate)
-
-		// DELETE
-		//if index == 1000 {
-			//-7.200000e-001
-			//-7.600000e-001
-			//(-6.231386e-001+2.063578e+000i)
-		//	println(coordinate.PatternViewportX())
-		//	println(coordinate.PatternViewportY())
-		//	println(rosettePatternResults.Total)
-		//}
 		coordinate.UpdateTransformedCoordinates(real(rosettePatternResults.Total), imag(rosettePatternResults.Total))
 	}
 }
