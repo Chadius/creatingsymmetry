@@ -8,6 +8,11 @@ coordinate_threshold:
   x_max: 4e1
   y_min: -6e1
   y_max: 2e1
+eyedropper:
+  left: 0
+  right: 170
+  top: 30
+  bottom: 200
 rosette_formula:
   terms:
     - multiplier:

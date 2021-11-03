@@ -26,8 +26,8 @@ func main() {
 	filenameArguments := extractFilenameArguments()
 	wallpaperCommand := loadFormulaFile(filenameArguments)
 
-	//newWay(filenameArguments, wallpaperCommand)
-	oldWay(filenameArguments, wallpaperCommand)
+	newWay(filenameArguments, wallpaperCommand)
+	//oldWay(filenameArguments, wallpaperCommand)
 }
 
 func newWay(filenameArguments *FilenameArguments, wallpaperCommand *command.CreateSymmetryPattern) {

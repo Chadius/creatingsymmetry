@@ -16,7 +16,7 @@ type FormulaTransformer struct {
 
 // Transform converts the input image using the given formula.
 func (f *FormulaTransformer) Transform(settings *Settings) *image.NRGBA {
-	coordinateCollection := f.createCollectionBasedOnInputImageSize(settings)
+	coordinateCollection := f.createCollectionBasedOnOutputImageSize(settings)
 	f.scaleCoordinatesToViewport(settings, coordinateCollection)
 	f.transformCoordinatesUsingFormula(settings, coordinateCollection)
 	settings.CoordinateThreshold.FilterAndMarkMappedCoordinateCollection(coordinateCollection)
@@ -24,11 +24,11 @@ func (f *FormulaTransformer) Transform(settings *Settings) *image.NRGBA {
 	return f.outputToImage(settings, coordinateCollection)
 }
 
-func (f *FormulaTransformer) createCollectionBasedOnInputImageSize(settings *Settings) *imageoutput.CoordinateCollection {
+func (f *FormulaTransformer) createCollectionBasedOnOutputImageSize(settings *Settings) *imageoutput.CoordinateCollection {
 	coordinates := []*imageoutput.MappedCoordinate{}
 	index := 0
-	for inputImageY := settings.InputImage.Bounds().Min.Y; inputImageY < settings.InputImage.Bounds().Max.Y; inputImageY++ {
-		for inputImageX := settings.InputImage.Bounds().Min.X; inputImageX < settings.InputImage.Bounds().Max.X; inputImageX++ {
+	for inputImageY := 0; inputImageY < settings.OutputHeight; inputImageY++ {
+		for inputImageX := 0; inputImageX < settings.OutputWidth; inputImageX++ {
 
 			if index >= 190 && index < 210 {
 				println(index, inputImageX, inputImageY)
