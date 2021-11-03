@@ -10,6 +10,7 @@ import (
 	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
 	"github.com/Chadius/creating-symmetry/entities/imageoutput"
 	"github.com/Chadius/creating-symmetry/entities/mathutility"
+	transformerEntity "github.com/Chadius/creating-symmetry/entities/transformer"
 	"image"
 	"image/png"
 	_ "image/png"
@@ -25,14 +26,63 @@ func main() {
 	filenameArguments := extractFilenameArguments()
 	wallpaperCommand := loadFormulaFile(filenameArguments)
 
-	// TODO Given a filename args and a wallpaper command, return a Coordinate Collection with the output pixel and pattern viewport set
+	//newWay(filenameArguments, wallpaperCommand)
+	oldWay(filenameArguments, wallpaperCommand)
+}
 
+func newWay(filenameArguments *FilenameArguments, wallpaperCommand *command.CreateSymmetryPattern) {
+	sourceImage := openSourceImage(filenameArguments)
+	coordinateThreshold := imageoutput.CoordinateFilterBuilder().
+		WithMinimumX(wallpaperCommand.CoordinateThreshold.XMin).
+		WithMaximumX(wallpaperCommand.CoordinateThreshold.XMax).
+		WithMinimumY(wallpaperCommand.CoordinateThreshold.YMin).
+		WithMaximumY(wallpaperCommand.CoordinateThreshold.YMax).
+		Build()
+
+	var eyedropper *imageoutput.RectangularEyedropper
+	if wallpaperCommand.Eyedropper != nil {
+		eyedropper = imageoutput.EyedropperBuilder().
+			WithLeftSide(wallpaperCommand.Eyedropper.LeftSide).
+			WithRightSide(wallpaperCommand.Eyedropper.RightSide).
+			WithTopSide(wallpaperCommand.Eyedropper.TopSide).
+			WithBottomSide(wallpaperCommand.Eyedropper.BottomSide).
+			WithImage(&sourceImage).
+			Build()
+	} else {
+		eyedropper = imageoutput.EyedropperBuilder().
+			WithLeftSide(sourceImage.Bounds().Min.X).
+			WithRightSide(sourceImage.Bounds().Max.X).
+			WithTopSide(sourceImage.Bounds().Min.Y).
+			WithBottomSide(sourceImage.Bounds().Max.Y).
+			WithImage(&sourceImage).
+			Build()
+	}
+
+	transformer := transformerEntity.FormulaTransformer{}
+
+	outputImage := transformer.Transform(&transformerEntity.Settings{
+		PatternViewportXMin: wallpaperCommand.PatternViewport.XMin,
+		PatternViewportXMax: wallpaperCommand.PatternViewport.XMax,
+		PatternViewportYMin: wallpaperCommand.PatternViewport.YMin,
+		PatternViewportYMax: wallpaperCommand.PatternViewport.YMax,
+		InputImage:          sourceImage,
+		Formula:             wallpaperCommand,
+		CoordinateThreshold: coordinateThreshold,
+		Eyedropper:          eyedropper,
+		OutputWidth:         filenameArguments.OutputWidth,
+		OutputHeight:        filenameArguments.OutputHeight,
+	})
+	outputToFile(filenameArguments.OutputFilename, outputImage)
+}
+
+func oldWay(filenameArguments *FilenameArguments, wallpaperCommand *command.CreateSymmetryPattern) {
 	destinationBounds, destinationCoordinates := getDestinationBoundary(filenameArguments)                              // TODO Move into TODO function
 	scaledCoordinates := scaleDestinationToPatternViewport(wallpaperCommand, destinationBounds, destinationCoordinates) // TODO Move into TODO function
 	transformedCoordinateCollection := transformCoordinatesAndReport(wallpaperCommand, scaledCoordinates)               // TODO This should modify the coordinate collection instead of returning it
 	outputImage := eyedropperFinalColorAndSaveToImage(wallpaperCommand, filenameArguments, transformedCoordinateCollection)
 	outputToFile(filenameArguments.OutputFilename, outputImage)
 }
+
 
 // eyedropperFinalColorAndSaveToImage uses the RectangularCoordinateThreshold to select the colors in the output image.
 //   It returns an image buffer.
@@ -188,6 +238,15 @@ func transformCoordinatesForRosetteFormula(rosetteFormula *rosette.Formula, scal
 			resultsByTerm[index] = append(resultsByTerm[index], formulaResult)
 		}
 
+		//if index == 1000 {
+			//-8.000000e-001
+			//-7.600000e-001
+			//(-4.321901e-001+2.615307e+000i)
+		//	println(real(complexCoordinate))
+		//	println(imag(complexCoordinate))
+		//	println(rosetteResults.Total)
+		//}
+
 		transformedCoordinate := rosetteResults.Total
 		transformedCoordinates = append(transformedCoordinates, transformedCoordinate)
 	}
@@ -295,7 +354,7 @@ func flattenCoordinates(destinationBounds image.Rectangle) []complex128 {
 // scaleDestinationPixels returns a list of pairs of float64. Each pair is mapped from the viewPort to the destinationBoundary.
 func scaleDestinationPixels(destinationBounds image.Rectangle, destinationCoordinates []complex128, viewPortMin complex128, viewPortMax complex128) []complex128 {
 	scaledCoordinates := []complex128{}
-	for _, destinationCoordinate := range destinationCoordinates {
+	for index, destinationCoordinate := range destinationCoordinates {
 		destinationScaledX := mathutility.ScaleValueBetweenTwoRanges(
 			real(destinationCoordinate),
 			float64(destinationBounds.Min.X),
@@ -310,6 +369,24 @@ func scaleDestinationPixels(destinationBounds image.Rectangle, destinationCoordi
 			imag(viewPortMin),
 			imag(viewPortMax),
 		)
+
+		if index >= 190 && index < 210 {
+			//0
+			//200
+			//0
+			//200 vs 198... which one is correct?
+			//println(destinationBounds.Bounds().Min.X)
+			//println(destinationBounds.Bounds().Max.X)
+			//println(destinationBounds.Bounds().Min.Y)
+			//println(destinationBounds.Bounds().Max.Y)
+			//(-8.000000e-001-8.000000e-001i)
+			//(+8.000000e-001+8.000000e-001i)
+			//println(viewPortMin)
+			//println(viewPortMax)
+			//(+0.000000e+000+5.000000e+000i)
+			println(destinationCoordinate)
+		}
+
 		scaledCoordinates = append(scaledCoordinates, complex(destinationScaledX, destinationScaledY))
 	}
 	return scaledCoordinates
