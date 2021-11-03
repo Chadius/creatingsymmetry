@@ -44,6 +44,12 @@ func (suite *MappedCoordinateTest) TestUpdatePatternViewportCoordinates(checker 
 	checker.Assert(coordinate.PatternViewportY(), Equals, -5e3)
 }
 
+func (suite *MappedCoordinateTest) TestUpdateInputImageCoordinates(checker *C) {
+	coordinate := imageoutput.NewMappedCoordinateUsingInputImageCoordinates(30, -20)
+	checker.Assert(coordinate.InputImageX(), Equals, 30)
+	checker.Assert(coordinate.InputImageY(), Equals, -20)
+}
+
 func (suite *MappedCoordinateTest) TestChecksIfOnePartCannotBeCompared(checker *C) {
 	coordinate := imageoutput.NewMappedCoordinateUsingTransformedCoordinates(100e0, -20e-3)
 	checker.Assert(coordinate.CanBeCompared(), Equals, true)

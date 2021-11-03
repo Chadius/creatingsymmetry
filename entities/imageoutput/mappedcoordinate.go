@@ -4,14 +4,31 @@ import "math"
 
 // MappedCoordinate stores the journey of an individual coordinate.
 type MappedCoordinate struct {
-	outputImageX         int
-	outputImageY         int
+	inputImageX          int
+	inputImageY          int
+
+	patternViewportX float64
+	patternViewportY float64
+
 	transformedX         float64
 	transformedY         float64
+
 	satisfiedFilter      bool
 	hasMappedCoordinates bool
+
 	mappedCoordinateX    float64
 	mappedCoordinateY    float64
+
+	outputImageX         int
+	outputImageY         int
+}
+
+// NewMappedCoordinateUsingInputImageCoordinates returns a new mapped coordinate at the given inputImageX and inputImageY location.
+func NewMappedCoordinateUsingInputImageCoordinates(inputImageX, inputImageY int) *MappedCoordinate {
+	return &MappedCoordinate{
+		inputImageX: inputImageX,
+		inputImageY: inputImageY,
+	}
 }
 
 // NewMappedCoordinateUsingOutputImageCoordinates returns a new mapped coordinate at the given outputImageX and outputImageY location.
@@ -41,6 +58,16 @@ func (m *MappedCoordinate) OutputImageY() int {
 	return m.outputImageY
 }
 
+// InputImageX returns the InputImageX coordinate.
+func (m *MappedCoordinate) InputImageX() int {
+	return m.inputImageX
+}
+
+// InputImageY returns the InputImageY coordinate.
+func (m *MappedCoordinate) InputImageY() int {
+	return m.inputImageY
+}
+
 // TransformedX returns the TransformedX coordinate.
 func (m *MappedCoordinate) TransformedX() float64 {
 	return m.transformedX
@@ -59,18 +86,18 @@ func (m *MappedCoordinate) UpdateTransformedCoordinates(x, y float64) {
 
 // PatternViewportX returns the PatternViewportX coordinate.
 func (m *MappedCoordinate) PatternViewportX() float64 {
-	return m.transformedX
+	return m.patternViewportX
 }
 
 // PatternViewportY returns the PatternViewportY coordinate.
 func (m *MappedCoordinate) PatternViewportY() float64 {
-	return m.transformedY
+	return m.patternViewportY
 }
 
-// UpdatePatternViewportCoordinates will update transformedX and transformedY coordinates.
+// UpdatePatternViewportCoordinates will update patternViewportX and patternViewportY coordinates.
 func (m *MappedCoordinate) UpdatePatternViewportCoordinates(x, y float64) {
-	m.transformedX = x
-	m.transformedY = y
+	m.patternViewportX = x
+	m.patternViewportY = y
 }
 
 // CanBeCompared returns true if either transformedX and transformedY coordinate can be compared.
