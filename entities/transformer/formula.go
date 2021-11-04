@@ -11,7 +11,6 @@ import (
 
 // FormulaTransformer turns one image stream into another using a formula
 type FormulaTransformer struct {
-
 }
 
 // Transform converts the input image using the given formula.

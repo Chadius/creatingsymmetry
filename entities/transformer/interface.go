@@ -17,10 +17,10 @@ type Settings struct {
 	PatternViewportXMax float64
 	PatternViewportYMin float64
 	PatternViewportYMax float64
-	InputImage image.Image
-	Formula *command.CreateSymmetryPattern
+	InputImage          image.Image
+	Formula             *command.CreateSymmetryPattern
 	CoordinateThreshold imageoutput.CoordinateThreshold
-	Eyedropper imageoutput.Eyedropper
-	OutputWidth int
-	OutputHeight int
+	Eyedropper          imageoutput.Eyedropper
+	OutputWidth         int
+	OutputHeight        int
 }

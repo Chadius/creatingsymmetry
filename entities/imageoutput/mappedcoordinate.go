@@ -4,23 +4,23 @@ import "math"
 
 // MappedCoordinate stores the journey of an individual coordinate.
 type MappedCoordinate struct {
-	inputImageX          int
-	inputImageY          int
+	inputImageX int
+	inputImageY int
 
 	patternViewportX float64
 	patternViewportY float64
 
-	transformedX         float64
-	transformedY         float64
+	transformedX float64
+	transformedY float64
 
 	satisfiedFilter      bool
 	hasMappedCoordinates bool
 
-	mappedCoordinateX    float64
-	mappedCoordinateY    float64
+	mappedCoordinateX float64
+	mappedCoordinateY float64
 
-	outputImageX         int
-	outputImageY         int
+	outputImageX int
+	outputImageY int
 }
 
 // NewMappedCoordinateUsingInputImageCoordinates returns a new mapped coordinate at the given inputImageX and inputImageY location.

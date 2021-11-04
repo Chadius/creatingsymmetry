@@ -16,9 +16,9 @@ import (
 func Test(t *testing.T) { TestingT(t) }
 
 type FormulaTests struct {
-	sourceImage image.Image
+	sourceImage             image.Image
 	mockCoordinateThreshold MockCoordinateThreshold
-	mockEyedropper MockEyedropper
+	mockEyedropper          MockEyedropper
 	commandShouldBeAFormula *command.CreateSymmetryPattern
 }
 
@@ -92,12 +92,11 @@ func (suite *FormulaTests) SetUpTest(checker *C) {
 		LatticePattern:      nil,
 	}
 
-
 	suite.mockCoordinateThreshold = MockCoordinateThreshold{}
 	suite.mockEyedropper = MockEyedropper{}
 }
 
-func (suite *FormulaTests) TestTransformerCallsThresholdAndEyedropper (checker *C) {
+func (suite *FormulaTests) TestTransformerCallsThresholdAndEyedropper(checker *C) {
 	transformer := transformerEntity.FormulaTransformer{}
 
 	transformer.Transform(&transformerEntity.Settings{
@@ -117,7 +116,7 @@ func (suite *FormulaTests) TestTransformerCallsThresholdAndEyedropper (checker *
 	checker.Assert(suite.mockEyedropper.MockWasCalled, Equals, true)
 }
 
-func (suite *FormulaTests) TestTransformerOutputsToImageOfGivenSize (checker *C) {
+func (suite *FormulaTests) TestTransformerOutputsToImageOfGivenSize(checker *C) {
 	transformer := transformerEntity.FormulaTransformer{}
 
 	outputImage := transformer.Transform(&transformerEntity.Settings{

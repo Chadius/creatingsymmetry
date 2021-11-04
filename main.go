@@ -16,7 +16,6 @@ import (
 	"strings"
 )
 
-
 func main() {
 	filenameArguments := extractFilenameArguments()
 	wallpaperCommand := loadFormulaFile(filenameArguments)
@@ -166,4 +165,3 @@ func checkOutputArgument(outputFilename, outputDimensions string) (int, int) {
 
 	return outputWidth, outputHeight
 }
-
