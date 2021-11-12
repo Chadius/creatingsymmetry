@@ -1,7 +1,7 @@
 package wallpaper
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/oldformula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/latticevector"
 )
 

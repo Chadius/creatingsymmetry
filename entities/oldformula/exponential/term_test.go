@@ -1,7 +1,7 @@
 package exponential_test
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/oldformula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/exponential"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	. "gopkg.in/check.v1"

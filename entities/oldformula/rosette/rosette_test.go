@@ -1,7 +1,7 @@
 package rosette_test
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/oldformula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/exponential"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/rosette"
 	"github.com/Chadius/creating-symmetry/entities/utility"

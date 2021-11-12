@@ -2,7 +2,7 @@ package exponential
 
 import (
 	"encoding/json"
-	"github.com/Chadius/creating-symmetry/entities/oldformula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	"gopkg.in/yaml.v2"
 )
@@ -12,8 +12,8 @@ type TermMarshalable struct {
 	Multiplier               utility.ComplexNumberForMarshal `json:"multiplier" yaml:"multiplier"`
 	PowerN                   int                             `json:"power_n" yaml:"power_n"`
 	PowerM                   int                             `json:"power_m" yaml:"power_m"`
-	IgnoreComplexConjugate   bool                            `json:"ignore_complex_conjugate" yaml:"ignore_complex_conjugate"`
-	CoefficientRelationships []coefficient.Relationship      `json:"coefficient_relationships" yaml:"coefficient_relationships"`
+	IgnoreComplexConjugate   bool                       `json:"ignore_complex_conjugate" yaml:"ignore_complex_conjugate"`
+	CoefficientRelationships []coefficient.Relationship `json:"coefficient_relationships" yaml:"coefficient_relationships"`
 }
 
 // RosetteFriezeTerm is used in Friezes and Rosettes, applying different calculations to them.

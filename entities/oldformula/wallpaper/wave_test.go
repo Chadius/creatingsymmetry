@@ -1,8 +1,8 @@
 package wallpaper_test
 
 import (
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/oldformula"
-	"github.com/Chadius/creating-symmetry/entities/oldformula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/latticevector"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/wallpaper"
 	"github.com/Chadius/creating-symmetry/entities/utility"

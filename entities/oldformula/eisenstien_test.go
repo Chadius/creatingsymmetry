@@ -1,8 +1,8 @@
 package oldformula_test
 
 import (
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/oldformula"
-	"github.com/Chadius/creating-symmetry/entities/oldformula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/latticevector"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	. "gopkg.in/check.v1"

@@ -2,7 +2,7 @@ package rosette
 
 import (
 	"encoding/json"
-	"github.com/Chadius/creating-symmetry/entities/oldformula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/exponential"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/result"
 	"github.com/Chadius/creating-symmetry/entities/utility"
