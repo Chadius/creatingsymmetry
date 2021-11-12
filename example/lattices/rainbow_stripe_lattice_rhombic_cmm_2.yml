@@ -8,19 +8,15 @@ coordinate_threshold:
   y_min: -100e-1
   x_max: 1e0
   y_max: 160e-1
-lattice_pattern:
-  lattice_type: rhombic
-  lattice_size:
-    height: 0.6
-  multiplier:
-    real: 1e0
-    imaginary: 1e-2
+formula:
+  type: rhombic
+  lattice_height: 0.6
   desired_symmetry: cmm
   wave_packets:
     -
       multiplier:
         real: 1e-1
-        imaginary: 1e0
+        imaginary: 1e-2
       terms:
         -
           power_n: 3

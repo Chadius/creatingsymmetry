@@ -8,10 +8,9 @@ coordinate_threshold:
   y_min: -110e-2
   x_max: 1e0
   y_max: 40e-2
-lattice_pattern:
-  lattice_type: rhombic
-  lattice_size:
-    height: 0.6
+formula:
+  type: rhombic
+  lattice_height: 0.6
   multiplier:
     real: 1e0
     imaginary: 1e-2

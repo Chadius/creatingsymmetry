@@ -8,11 +8,9 @@ coordinate_threshold:
   x_max: 30e-1
   y_min: -12e0
   y_max: 8e0
-lattice_pattern:
-  lattice_type: rectangular
-  lattice_size:
-    width: 0
-    height: 1.5
+formula:
+  type: rectangular
+  lattice_height: 1.5
   multiplier:
     real: 1.0
     imaginary: 0

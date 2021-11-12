@@ -8,8 +8,8 @@ coordinate_threshold:
   y_min: -5e-2
   x_max: 1e0
   y_max: 8e-2
-lattice_pattern:
-  lattice_type: square
+formula:
+  type: square
   multiplier:
     real: 1e0
     imaginary: 1e-2

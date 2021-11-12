@@ -5,81 +5,60 @@ import (
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	"gopkg.in/yaml.v2"
-	"math"
-	"math/cmplx"
 )
 
-// EisensteinFormulaTermMarshal can be marshaled and converted to a EisensteinFormulaTerm
-type EisensteinFormulaTermMarshal struct {
-	PowerN int `json:"power_n" yaml:"power_n"`
-	PowerM int `json:"power_m" yaml:"power_m"`
+// WavePacket for Waves mathematically creates repeating, cyclical mathematical patterns
+//   in 2D space, similar to waves on the ocean.
+type WavePacket struct {
+	terms      []Term
+	multiplier complex128
 }
 
-// EisensteinFormulaTerm defines the shape of a lattice, a 2D structure that remains consistent
-//    in wallpaper symmetry.
-type EisensteinFormulaTerm struct {
-	PowerN int
-	PowerM int
+// Multiplier is a getter.
+func (wavePacket WavePacket) Multiplier() complex128 {
+	return wavePacket.multiplier
 }
 
-// PowerSumIsEven returns true if the sum of the term powers is divisible by 2.
-func (term EisensteinFormulaTerm) PowerSumIsEven() bool {
-	return (term.PowerM+term.PowerN)%2 == 0
+// Terms is a getter.
+func (wavePacket WavePacket) Terms() []Term {
+	return wavePacket.terms
 }
 
-// Calculate uses the Eisenstein formula on the complex number z.
-// Calculate(z) = e ^ (2 PI i * (nX + mY))
-//  where n amd m are PowerN and PowerM,
-//  and TransformedX and TransformedY are the real and imag parts of (zInLatticeCoordinates)
-func (term EisensteinFormulaTerm) Calculate(zInLatticeCoordinates complex128) complex128 {
-	powerMultiplier := (float64(term.PowerN) * real(zInLatticeCoordinates)) +
-		(float64(term.PowerM) * imag(zInLatticeCoordinates))
-	expo := cmplx.Exp(complex(0, 2.0*math.Pi*powerMultiplier))
-	return expo
-}
+// Calculate takes the complex number zInLatticeCoordinates and processes it using the mathematical terms.
+func (wavePacket WavePacket) Calculate(zInLatticeCoordinates complex128) complex128 {
+	sum := complex(0, 0)
 
-// NewEisensteinFormulaTermFromJSON reads the data and returns a formula term from it.
-func NewEisensteinFormulaTermFromJSON(data []byte) (*EisensteinFormulaTerm, error) {
-	return newEisensteinFormulaTermFromDatastream(data, json.Unmarshal)
-}
-
-// NewEisensteinFormulaTermFromYAML reads the data and returns a formula term from it.
-func NewEisensteinFormulaTermFromYAML(data []byte) (*EisensteinFormulaTerm, error) {
-	return newEisensteinFormulaTermFromDatastream(data, yaml.Unmarshal)
-}
-
-//newEisensteinFormulaTermFromDatastream consumes a given bytestream and tries to create a new object from it.
-func newEisensteinFormulaTermFromDatastream(data []byte, unmarshal utility.UnmarshalFunc) (*EisensteinFormulaTerm, error) {
-	var unmarshalError error
-	var formulaTermMarshal EisensteinFormulaTermMarshal
-	unmarshalError = unmarshal(data, &formulaTermMarshal)
-
-	if unmarshalError != nil {
-		return nil, unmarshalError
+	for _, term := range wavePacket.Terms() {
+		termContribution := term.CalculateInLatticeCoordinates(zInLatticeCoordinates)
+		sum += termContribution
 	}
-
-	formulaTerm := NewEisensteinFormulaTermFromMarshalObject(formulaTermMarshal)
-	return formulaTerm, nil
+	return sum * wavePacket.Multiplier()
 }
 
-// NewEisensteinFormulaTermFromMarshalObject converts the marshaled intermediary object into a usable object.
-func NewEisensteinFormulaTermFromMarshalObject(marshalObject EisensteinFormulaTermMarshal) *EisensteinFormulaTerm {
-	return &EisensteinFormulaTerm{
-		PowerN: marshalObject.PowerN,
-		PowerM: marshalObject.PowerM,
+// GetWavePacketRelationship returns a list of relationships that all of the wave packets conform to.
+func GetWavePacketRelationship(wavePacket1, wavePacket2 WavePacket) []coefficient.Relationship {
+	termForWavePacket1 := wavePacket1.Terms()[0]
+	termForWavePacket2 := wavePacket2.Terms()[0]
+
+	return GetAllPossibleTermRelationships3(termForWavePacket1, termForWavePacket2, wavePacket1.Multiplier(), wavePacket2.Multiplier())
+}
+
+// ContainsRelationship returns true if the target relationship is in the list of relationships.
+func ContainsRelationship(relationships []coefficient.Relationship, target coefficient.Relationship) bool {
+	for _, thisRelationship := range relationships {
+		if target == thisRelationship {
+			return true
+		}
 	}
+	return false
 }
 
-// GetAllPossibleTermRelationships returns a list of relationships that all of the terms conform to.
-func GetAllPossibleTermRelationships(
-	term1, term2 *EisensteinFormulaTerm,
+// GetAllPossibleTermRelationships3 returns a list of relationships that all terms conform to.
+func GetAllPossibleTermRelationships3(
+	term1, term2 Term,
 	term1Multiplier complex128,
 	term2Multiplier complex128,
 ) []coefficient.Relationship {
-	if term1 == nil || term2 == nil {
-		return []coefficient.Relationship{}
-	}
-
 	foundRelationships := []coefficient.Relationship{}
 
 	relationshipsToTest := []coefficient.Relationship{
@@ -110,13 +89,13 @@ func GetAllPossibleTermRelationships(
 	return foundRelationships
 }
 
-// SatisfiesRelationship sees if the all of terms match the coefficient relationship.
-func SatisfiesRelationship(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128, relationship coefficient.Relationship) bool {
+// SatisfiesRelationship sees if the all terms match the coefficient relationship.
+func SatisfiesRelationship(term1, term2 Term, term1Multiplier, term2Multiplier complex128, relationship coefficient.Relationship) bool {
 	if !termMultipliersAreTheSame(term1Multiplier, term2Multiplier) && !termMultipliersAreNegated(term1Multiplier, term2Multiplier) {
 		return false
 	}
 
-	type TwoTermChecker func(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool
+	type TwoTermChecker func(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool
 	relationshipCheckerByRelationship := map[coefficient.Relationship]TwoTermChecker{
 		coefficient.PlusMPlusN:                                satisfiesRelationshipPlusMPlusN,
 		coefficient.MinusNMinusM:                              satisfiesRelationshipMinusNMinusM,
@@ -147,27 +126,27 @@ func termMultipliersAreNegated(term1Multiplier, term2Multiplier complex128) bool
 	return real(term1Multiplier) == -1*real(term2Multiplier) && imag(term1Multiplier) == -1*imag(term2Multiplier)
 }
 
-func satisfiesRelationshipPlusMPlusN(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipPlusMPlusN(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	return termMultipliersAreTheSame(term1Multiplier, term2Multiplier) && term1.PowerN == term2.PowerM && term1.PowerM == term2.PowerN
 }
 
-func satisfiesRelationshipMinusNMinusM(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipMinusNMinusM(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	return termMultipliersAreTheSame(term1Multiplier, term2Multiplier) && term1.PowerN == -1*term2.PowerN && term1.PowerM == -1*term2.PowerM
 }
 
-func satisfiesRelationshipPlusNPlusM(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipPlusNPlusM(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	return termMultipliersAreTheSame(term1Multiplier, term2Multiplier) && term1.PowerN == term2.PowerN && term1.PowerM == term2.PowerM
 }
 
-func satisfiesRelationshipMinusNPlusM(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipMinusNPlusM(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	return termMultipliersAreTheSame(term1Multiplier, term2Multiplier) && term2.PowerN == -1*term1.PowerN && term2.PowerM == term1.PowerM
 }
 
-func satisfiesRelationshipMinusMMinusN(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipMinusMMinusN(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	return termMultipliersAreTheSame(term1Multiplier, term2Multiplier) && term1.PowerN == -1*term2.PowerM && term1.PowerM == -1*term2.PowerN
 }
 
-func satisfiesRelationshipPlusMPlusNMaybeFlipScale(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipPlusMPlusNMaybeFlipScale(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	if term1.PowerSumIsEven() && !termMultipliersAreTheSame(term1Multiplier, term2Multiplier) {
 		return false
 	}
@@ -179,7 +158,7 @@ func satisfiesRelationshipPlusMPlusNMaybeFlipScale(term1, term2 *EisensteinFormu
 	return term1.PowerN == term2.PowerM && term1.PowerM == term2.PowerN
 }
 
-func satisfiesRelationshipMinusMMinusNMaybeFlipScale(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipMinusMMinusNMaybeFlipScale(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	if term1.PowerSumIsEven() && !termMultipliersAreTheSame(term1Multiplier, term2Multiplier) {
 		return false
 	}
@@ -190,22 +169,22 @@ func satisfiesRelationshipMinusMMinusNMaybeFlipScale(term1, term2 *EisensteinFor
 
 	return term1.PowerN == -1*term2.PowerM && term1.PowerM == -1*term2.PowerN
 }
-func satisfiesRelationshipPlusMMinusSumNAndM(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipPlusMMinusSumNAndM(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	return termMultipliersAreTheSame(term1Multiplier, term2Multiplier) && term2.PowerN == term1.PowerM && term2.PowerM == -1*(term1.PowerN+term1.PowerM)
 }
-func satisfiesRelationshipMinusSumNAndMPlusN(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipMinusSumNAndMPlusN(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	return termMultipliersAreTheSame(term1Multiplier, term2Multiplier) && term2.PowerN == -1*(term1.PowerN+term1.PowerM) && term2.PowerM == term1.PowerN
 }
-func satisfiesRelationshipPlusMMinusN(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipPlusMMinusN(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	return termMultipliersAreTheSame(term1Multiplier, term2Multiplier) && term2.PowerN == term1.PowerM && term2.PowerM == -1*term1.PowerN
 }
-func satisfiesRelationshipMinusMPlusN(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipMinusMPlusN(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	return termMultipliersAreTheSame(term1Multiplier, term2Multiplier) && term2.PowerN == -1*term1.PowerM && term2.PowerM == term1.PowerN
 }
-func satisfiesRelationshipPlusNMinusM(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipPlusNMinusM(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	return termMultipliersAreTheSame(term1Multiplier, term2Multiplier) && term2.PowerN == term1.PowerN && term2.PowerM == -1*term1.PowerM
 }
-func satisfiesRelationshipPlusNMinusMNegateMultiplierIfOddPowerN(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipPlusNMinusMNegateMultiplierIfOddPowerN(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	if term1.PowerN%2 == 0 && !termMultipliersAreTheSame(term1Multiplier, term2Multiplier) {
 		return false
 	}
@@ -216,7 +195,7 @@ func satisfiesRelationshipPlusNMinusMNegateMultiplierIfOddPowerN(term1, term2 *E
 
 	return term2.PowerN == term1.PowerN && term2.PowerM == -1*term1.PowerM
 }
-func satisfiesRelationshipPlusNMinusMNegateMultiplierIfOddPowerSum(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipPlusNMinusMNegateMultiplierIfOddPowerSum(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	if term1.PowerSumIsEven() && !termMultipliersAreTheSame(term1Multiplier, term2Multiplier) {
 		return false
 	}
@@ -228,7 +207,7 @@ func satisfiesRelationshipPlusNMinusMNegateMultiplierIfOddPowerSum(term1, term2 
 	return term2.PowerN == term1.PowerN && term2.PowerM == -1*term1.PowerM
 }
 
-func satisfiesRelationshipMinusNPlusMNegateMultiplierIfOddPowerN(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipMinusNPlusMNegateMultiplierIfOddPowerN(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	if term1.PowerN%2 == 0 && !termMultipliersAreTheSame(term1Multiplier, term2Multiplier) {
 		return false
 	}
@@ -239,7 +218,7 @@ func satisfiesRelationshipMinusNPlusMNegateMultiplierIfOddPowerN(term1, term2 *E
 
 	return term2.PowerN == -1*term1.PowerN && term2.PowerM == term1.PowerM
 }
-func satisfiesRelationshipMinusNPlusMNegateMultiplierIfOddPowerSum(term1, term2 *EisensteinFormulaTerm, term1Multiplier, term2Multiplier complex128) bool {
+func satisfiesRelationshipMinusNPlusMNegateMultiplierIfOddPowerSum(term1, term2 Term, term1Multiplier, term2Multiplier complex128) bool {
 	if term1.PowerSumIsEven() && !termMultipliersAreTheSame(term1Multiplier, term2Multiplier) {
 		return false
 	}
@@ -249,4 +228,81 @@ func satisfiesRelationshipMinusNPlusMNegateMultiplierIfOddPowerSum(term1, term2 
 	}
 
 	return term2.PowerN == -1*term1.PowerN && term2.PowerM == term1.PowerM
+}
+
+// WavePacketBuilder is used to create new WavePackets.
+type WavePacketBuilder struct {
+	multiplier complex128
+	terms      []Term
+}
+
+// NewWavePacketBuilder returns a blank WavePacketBuilder.
+func NewWavePacketBuilder() *WavePacketBuilder {
+	return &WavePacketBuilder{
+		multiplier: complex(0, 0),
+		terms:      []Term{},
+	}
+}
+
+// Multiplier sets the wave packet's multiplier.
+func (w *WavePacketBuilder) Multiplier(multiplier complex128) *WavePacketBuilder {
+	w.multiplier = multiplier
+	return w
+}
+
+// AddTerm adds a term to the formula.
+func (w *WavePacketBuilder) AddTerm(term *Term) *WavePacketBuilder {
+	w.terms = append(w.terms, *term)
+	return w
+}
+
+// Build returns a new WavePacket.
+func (w *WavePacketBuilder) Build() *WavePacket {
+	return &WavePacket{
+		terms:      w.terms,
+		multiplier: w.multiplier,
+	}
+}
+
+// UsingYAMLData updates the term, given data
+func (w *WavePacketBuilder) UsingYAMLData(data []byte) *WavePacketBuilder {
+	return w.usingByteStream(data, yaml.Unmarshal)
+}
+
+// UsingJSONData updates the term, given data
+func (w *WavePacketBuilder) UsingJSONData(data []byte) *WavePacketBuilder {
+	return w.usingByteStream(data, json.Unmarshal)
+}
+
+// WavePacketMarshal is a representation of a term object
+type WavePacketMarshal struct {
+	Multiplier *utility.ComplexNumberForMarshal `json:"multiplier" yaml:"multiplier"`
+	Terms      []TermMarshal                    `json:"terms" yaml:"terms"`
+}
+
+func (w *WavePacketBuilder) usingByteStream(data []byte, unmarshal utility.UnmarshalFunc) *WavePacketBuilder {
+	var unmarshalError error
+	var marshaledOptions WavePacketMarshal
+
+	unmarshalError = unmarshal(data, &marshaledOptions)
+
+	if unmarshalError != nil {
+		return w
+	}
+	return w.WithMarshalOptions(marshaledOptions)
+}
+
+// WithMarshalOptions updates the builder with options read from the options object.
+func (w *WavePacketBuilder) WithMarshalOptions(marshaledOptions WavePacketMarshal) *WavePacketBuilder {
+	if marshaledOptions.Multiplier != nil {
+		w.Multiplier(complex(marshaledOptions.Multiplier.Real, marshaledOptions.Multiplier.Imaginary))
+	} else {
+		w.Multiplier(complex(1, 0))
+	}
+
+	for _, termMarshal := range marshaledOptions.Terms {
+		newTerm := NewTermBuilder().WithMarshalOptions(termMarshal).Build()
+		w.AddTerm(newTerm)
+	}
+	return w
 }

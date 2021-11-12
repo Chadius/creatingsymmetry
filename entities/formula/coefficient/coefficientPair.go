@@ -1,6 +1,6 @@
 package coefficient
 
-// Pairing notes the multiplier and the powers applied to a formula term.
+// Pairing notes the multiplier and the powers applied to a oldformula term.
 type Pairing struct {
 	PowerN           int
 	PowerM           int

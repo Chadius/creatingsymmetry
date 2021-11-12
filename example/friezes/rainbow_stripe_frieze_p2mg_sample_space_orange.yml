@@ -8,7 +8,8 @@ coordinate_threshold:
   x_max: 1.1e1
   y_min: -2.8e1
   y_max: 0.8e1
-frieze_formula:
+formula:
+  type: frieze
   terms:
     -
       multiplier:

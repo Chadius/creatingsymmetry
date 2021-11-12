@@ -8,8 +8,8 @@ coordinate_threshold:
   x_max: 20e-1
   y_min: -12e-1
   y_max: 60e-1
-lattice_pattern:
-  lattice_type: hexagonal
+formula:
+  type: hexagonal
   multiplier:
     real: 1.0
     imaginary: 0

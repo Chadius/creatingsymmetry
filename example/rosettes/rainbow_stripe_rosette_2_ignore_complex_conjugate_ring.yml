@@ -1,14 +1,15 @@
 pattern_viewport:
-  x_min: -8e-1
-  y_min: -8e-1
-  x_max: 8e-1
-  y_max: 8e-1
+  x_min: -8e-2
+  y_min: -8e-2
+  x_max: 8e-2
+  y_max: 8e-2
 coordinate_threshold:
   x_min: -4e1
   x_max: 4e1
   y_min: -2.5e1
   y_max: 4.5e1
-rosette_formula:
+formula:
+  type: rosette
   terms:
     - multiplier:
         real: -1.0
