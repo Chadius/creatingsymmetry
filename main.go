@@ -34,9 +34,9 @@ type FilenameArguments struct {
 
 func extractFilenameArguments() *FilenameArguments {
 	var sourceImageFilename, outputFilename, outputDimensions string
-	formulaFilename := "data/formula.yml"
-	flag.StringVar(&formulaFilename, "f", "data/formula.yml", "See -formula")
-	flag.StringVar(&formulaFilename, "formula", "data/formula.yml", "The filename of the formula file. Defaults to data/formula.yml")
+	formulaFilename := "data/oldformula.yml"
+	flag.StringVar(&formulaFilename, "f", "data/oldformula.yml", "See -oldformula")
+	flag.StringVar(&formulaFilename, "oldformula", "data/oldformula.yml", "The filename of the oldformula file. Defaults to data/oldformula.yml")
 
 	flag.StringVar(&sourceImageFilename, "in", "", "See -source. Required.")
 	flag.StringVar(&sourceImageFilename, "source", "", "Source filename. Required.")

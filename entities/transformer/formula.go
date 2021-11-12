@@ -1,19 +1,19 @@
 package transformer
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/formula/frieze"
-	"github.com/Chadius/creating-symmetry/entities/formula/rosette"
-	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
 	"github.com/Chadius/creating-symmetry/entities/imageoutput"
 	"github.com/Chadius/creating-symmetry/entities/mathutility"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/frieze"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/rosette"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/wallpaper"
 	"image"
 )
 
-// FormulaTransformer turns one image stream into another using a formula
+// FormulaTransformer turns one image stream into another using a oldformula
 type FormulaTransformer struct {
 }
 
-// Transform converts the input image using the given formula.
+// Transform converts the input image using the given oldformula.
 func (f *FormulaTransformer) Transform(settings *Settings) *image.NRGBA {
 	coordinateCollection := f.createCollectionBasedOnOutputImageSize(settings)
 	f.scaleCoordinatesToViewport(settings, coordinateCollection)

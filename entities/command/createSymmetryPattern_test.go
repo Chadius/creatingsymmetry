@@ -2,7 +2,7 @@ package command_test
 
 import (
 	"github.com/Chadius/creating-symmetry/entities/command"
-	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/wallpaper"
 	. "gopkg.in/check.v1"
 	"testing"
 )

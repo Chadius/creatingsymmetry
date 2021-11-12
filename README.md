@@ -39,7 +39,7 @@ Run `go install` and it will download the other required libraries:
 Copy the example formula, and run the program.
 
 ```shell script
-cp data/formula.yml.example data/formula.yml
+cp data/oldformula.yml.example data/oldformula.yml
 make run
 ```
 

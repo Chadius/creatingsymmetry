@@ -2,10 +2,10 @@ package transformer_test
 
 import (
 	"github.com/Chadius/creating-symmetry/entities/command"
-	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
-	"github.com/Chadius/creating-symmetry/entities/formula/exponential"
-	"github.com/Chadius/creating-symmetry/entities/formula/rosette"
 	"github.com/Chadius/creating-symmetry/entities/imageoutput"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/exponential"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/rosette"
 	transformerEntity "github.com/Chadius/creating-symmetry/entities/transformer"
 	. "gopkg.in/check.v1"
 	"image"

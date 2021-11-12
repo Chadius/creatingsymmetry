@@ -2,9 +2,9 @@ package command
 
 import (
 	"encoding/json"
-	"github.com/Chadius/creating-symmetry/entities/formula/frieze"
-	"github.com/Chadius/creating-symmetry/entities/formula/rosette"
-	"github.com/Chadius/creating-symmetry/entities/formula/wallpaper"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/frieze"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/rosette"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/wallpaper"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	"gopkg.in/yaml.v2"
 )
