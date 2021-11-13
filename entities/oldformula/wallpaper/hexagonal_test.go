@@ -1,7 +1,7 @@
 package wallpaper_test
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/oldformula"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/eisenstien"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/wallpaper"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	. "gopkg.in/check.v1"
@@ -26,7 +26,7 @@ func (suite *HexagonalWallpaper) SetUpTest(checker *C) {
 		Multiplier: complex(1, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 1,
 						PowerM: -2,
@@ -77,7 +77,7 @@ var _ = Suite(&HexagonalWallpaperHasSymmetryTest{})
 
 func (suite *HexagonalWallpaperHasSymmetryTest) SetUpTest(checker *C) {
 	suite.baseWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 8,
 				PowerM: -3,
@@ -119,7 +119,7 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacket.Terms[0].PowerM,
 						PowerM: suite.baseWavePacket.Terms[0].PowerN,
@@ -148,7 +148,7 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacket.Terms[0].PowerM * -1,
 						PowerM: suite.baseWavePacket.Terms[0].PowerN * -1,
@@ -177,7 +177,7 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacket.Terms[0].PowerN * -1,
 						PowerM: suite.baseWavePacket.Terms[0].PowerM * -1,
@@ -206,7 +206,7 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacket.Terms[0].PowerN * -1,
 						PowerM: suite.baseWavePacket.Terms[0].PowerM * -1,
@@ -215,7 +215,7 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 				Multiplier: suite.baseWavePacket.Multiplier,
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacket.Terms[0].PowerM,
 						PowerM: suite.baseWavePacket.Terms[0].PowerN,
@@ -224,7 +224,7 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 				Multiplier: suite.baseWavePacket.Multiplier,
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacket.Terms[0].PowerM * -1,
 						PowerM: suite.baseWavePacket.Terms[0].PowerN * -1,
@@ -253,7 +253,7 @@ var _ = Suite(&HexagonalCreatedWithDesiredSymmetry{})
 
 func (suite *HexagonalCreatedWithDesiredSymmetry) SetUpTest(checker *C) {
 	suite.baseWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 1,
 				PowerM: -2,

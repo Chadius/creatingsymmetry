@@ -1,7 +1,7 @@
 package wallpaper_test
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/oldformula"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/eisenstien"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/wallpaper"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	. "gopkg.in/check.v1"
@@ -26,7 +26,7 @@ func (suite *GenericWallpaper) SetUpTest(checker *C) {
 		Multiplier: complex(1, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 3,
 						PowerM: -4,
@@ -64,7 +64,7 @@ func (suite *GenericWallpaper) TestCalculationOfPoints(checker *C) {
 }
 
 type GenericWallpaperDesiredSymmetryTest struct {
-	eisensteinTerm      []*oldformula.EisensteinFormulaTerm
+	eisensteinTerm      []*eisenstien.EisensteinFormulaTerm
 	wallpaperMultiplier complex128
 	latticeSize         complex128
 }
@@ -72,7 +72,7 @@ type GenericWallpaperDesiredSymmetryTest struct {
 var _ = Suite(&GenericWallpaperDesiredSymmetryTest{})
 
 func (suite *GenericWallpaperDesiredSymmetryTest) SetUpTest(checker *C) {
-	suite.eisensteinTerm = []*oldformula.EisensteinFormulaTerm{
+	suite.eisensteinTerm = []*eisenstien.EisensteinFormulaTerm{
 		{
 			PowerN: 8,
 			PowerM: -3,
@@ -95,7 +95,7 @@ func (suite *GenericWallpaperDesiredSymmetryTest) TestCreateGenericWithP1(checke
 		WavePackets: []*wallpaper.WavePacket{
 			{
 				Multiplier: complex(1, 0),
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					suite.eisensteinTerm[0],
 				},
 			},
@@ -126,7 +126,7 @@ func (suite *GenericWallpaperDesiredSymmetryTest) TestCreateGenericWithP2(checke
 		WavePackets: []*wallpaper.WavePacket{
 			{
 				Multiplier: complex(1, 0),
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					suite.eisensteinTerm[0],
 				},
 			},
@@ -153,7 +153,7 @@ var _ = Suite(&GenericWaveSymmetry{})
 
 func (suite *GenericWaveSymmetry) SetUpTest(checker *C) {
 	suite.baseWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 8,
 				PowerM: -3,
@@ -194,7 +194,7 @@ func (suite *GenericWaveSymmetry) TestP2(checker *C) {
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacket.Terms[0].PowerN * -1,
 						PowerM: suite.baseWavePacket.Terms[0].PowerM * -1,

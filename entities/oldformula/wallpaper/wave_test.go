@@ -2,7 +2,7 @@ package wallpaper_test
 
 import (
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
-	"github.com/Chadius/creating-symmetry/entities/oldformula"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/eisenstien"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/latticevector"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/wallpaper"
 	"github.com/Chadius/creating-symmetry/entities/utility"
@@ -25,7 +25,7 @@ func (suite *WaveFormulaTests) SetUpTest(checker *C) {
 	}
 	suite.hexagonalWavePacket = &wallpaper.WavePacket{
 
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 1,
 				PowerM: -2,
@@ -159,7 +159,7 @@ var _ = Suite(&WavePacketRelationshipTest{})
 
 func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 	suite.aPlusNPlusMOddWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: -1,
 				PowerM: 4,
@@ -168,7 +168,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(2, 1),
 	}
 	suite.aPlusMPlusNOddWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 4,
 				PowerM: -1,
@@ -177,7 +177,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(2, 1),
 	}
 	suite.aMinusNMinusMOddWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 1,
 				PowerM: -4,
@@ -186,7 +186,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(2, 1),
 	}
 	suite.aMinusMMinusNOddWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: -4,
 				PowerM: 1,
@@ -195,7 +195,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(2, 1),
 	}
 	suite.aPlusMMinusNOddWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 4,
 				PowerM: 1,
@@ -204,7 +204,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(2, 1),
 	}
 	suite.aMinusMPlusNOddWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: -4,
 				PowerM: -1,
@@ -213,7 +213,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(2, 1),
 	}
 	suite.aPlusMPlusNOddNegatedWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 4,
 				PowerM: -1,
@@ -222,7 +222,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(-2, -1),
 	}
 	suite.aMinusMMinusNOddNegatedWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: -4,
 				PowerM: 1,
@@ -231,7 +231,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(-2, -1),
 	}
 	suite.aPlusMMinusSumNAndMOddWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 4,
 				PowerM: -3,
@@ -240,7 +240,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(2, 1),
 	}
 	suite.aMinusSumNAndMPlusNWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: -3,
 				PowerM: -1,
@@ -249,7 +249,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(2, 1),
 	}
 	suite.aMinusSumNAndMPlusNOddWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: -3,
 				PowerM: -1,
@@ -259,7 +259,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 	}
 
 	suite.aPlusNPlusMEvenWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: -6,
 				PowerM: 2,
@@ -268,7 +268,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(2, 1),
 	}
 	suite.aPlusMPlusNEvenWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 2,
 				PowerM: -6,
@@ -277,7 +277,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(2, 1),
 	}
 	suite.aPlusMPlusNEvenNegatedWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 2,
 				PowerM: -6,
@@ -286,7 +286,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(-2, -1),
 	}
 	suite.aMinusMMinusNEvenWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: -2,
 				PowerM: 6,
@@ -295,7 +295,7 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 		Multiplier: complex(2, 1),
 	}
 	suite.aMinusMMinusNEvenNegatedWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: -2,
 				PowerM: 6,

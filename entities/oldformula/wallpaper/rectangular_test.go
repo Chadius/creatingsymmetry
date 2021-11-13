@@ -1,7 +1,7 @@
 package wallpaper_test
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/oldformula"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/eisenstien"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/wallpaper"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	. "gopkg.in/check.v1"
@@ -26,7 +26,7 @@ func (suite *RectangularWallpaper) SetUpTest(checker *C) {
 		Multiplier: complex(1, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 1,
 						PowerM: -2,
@@ -68,7 +68,7 @@ var _ = Suite(&RectangularWallpaperHasSymmetryTest{})
 
 func (suite *RectangularWallpaperHasSymmetryTest) SetUpTest(checker *C) {
 	suite.baseWavePacketWithEvenPowerNAndOddPowerSum = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 8,
 				PowerM: -3,
@@ -77,7 +77,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) SetUpTest(checker *C) {
 		Multiplier: complex(1, 0),
 	}
 	suite.baseWavePacketWithOddPowerNAndEvenPowerSum = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 7,
 				PowerM: -3,
@@ -123,7 +123,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestRectangularMayHaveSymmetry
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithEvenPowerNAndOddPowerSum,
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
 						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
@@ -155,7 +155,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestRectangularMayHaveSymmetry
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithEvenPowerNAndOddPowerSum,
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
 						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
@@ -185,7 +185,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestRectangularMayHaveSymmetry
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
 						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
@@ -217,7 +217,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPmmAndPmgWithEvenPowerN(ch
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithEvenPowerNAndOddPowerSum,
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
 						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
@@ -226,7 +226,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPmmAndPmgWithEvenPowerN(ch
 				Multiplier: complex(1, 0),
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
 						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
@@ -235,7 +235,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPmmAndPmgWithEvenPowerN(ch
 				Multiplier: complex(1, 0),
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
 						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM,
@@ -267,7 +267,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPmgWithOddPowerN(checker *
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
 						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
@@ -276,7 +276,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPmgWithOddPowerN(checker *
 				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
 						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
@@ -285,7 +285,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPmgWithOddPowerN(checker *
 				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1,
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
 						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM,
@@ -317,7 +317,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPgg(checker *C) {
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithEvenPowerNAndOddPowerSum,
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
 						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
@@ -326,7 +326,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPgg(checker *C) {
 				Multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
 						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
@@ -335,7 +335,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPgg(checker *C) {
 				Multiplier: -1 * suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
 						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM,
@@ -365,7 +365,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPgg(checker *C) {
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
 						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
@@ -374,7 +374,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPgg(checker *C) {
 				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
 						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
@@ -383,7 +383,7 @@ func (suite *RectangularWallpaperHasSymmetryTest) TestPgg(checker *C) {
 				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
 						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM,
@@ -411,7 +411,7 @@ var _ = Suite(&RectangularCreatedWithDesiredSymmetry{})
 
 func (suite *RectangularCreatedWithDesiredSymmetry) SetUpTest(checker *C) {
 	suite.baseWavePacketWithOddPowerNAndEvenPowerSum = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 7,
 				PowerM: -3,

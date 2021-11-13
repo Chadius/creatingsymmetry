@@ -1,7 +1,7 @@
 package wallpaper_test
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/oldformula"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/eisenstien"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/wallpaper"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	. "gopkg.in/check.v1"
@@ -23,7 +23,7 @@ func (suite *SquareWallpaper) SetUpTest(checker *C) {
 		Multiplier:  complex(1, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 1,
 						PowerM: -2,
@@ -90,7 +90,7 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4mSymmetryDetectedAcrossSingle
 		Multiplier:  complex(2, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: -2,
 						PowerM: 1,
@@ -99,7 +99,7 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4mSymmetryDetectedAcrossSingle
 				Multiplier: complex(1, 0),
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 1,
 						PowerM: -2,
@@ -124,7 +124,7 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4mSymmetryDetectedAcrossMultip
 		Multiplier:  complex(2, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: -5,
 						PowerM: 8,
@@ -133,7 +133,7 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4mSymmetryDetectedAcrossMultip
 				Multiplier: complex(1, 0),
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 2,
 						PowerM: -1,
@@ -142,7 +142,7 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4mSymmetryDetectedAcrossMultip
 				Multiplier: complex(1, 0),
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 8,
 						PowerM: -5,
@@ -151,7 +151,7 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4mSymmetryDetectedAcrossMultip
 				Multiplier: complex(1, 0),
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: -1,
 						PowerM: 2,
@@ -176,7 +176,7 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4SymmetryIsAlwaysTrueForSquare
 		Multiplier:  complex(2, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: -2,
 						PowerM: 1,
@@ -202,7 +202,7 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4g(checker *C) {
 		Multiplier:  complex(2, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: -2,
 						PowerM: 1,
@@ -211,7 +211,7 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4g(checker *C) {
 				Multiplier: complex(1, 0),
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 1,
 						PowerM: -2,
@@ -232,7 +232,7 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4g(checker *C) {
 		Multiplier:  complex(2, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: -3,
 						PowerM: 1,
@@ -241,7 +241,7 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4g(checker *C) {
 				Multiplier: complex(1, 0),
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 1,
 						PowerM: -3,
@@ -266,7 +266,7 @@ var _ = Suite(&SquareCreatedWithDesiredSymmetry{})
 
 func (suite *SquareCreatedWithDesiredSymmetry) SetUpTest(checker *C) {
 	suite.baseWavePacketWithOddSumFormula = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 1,
 				PowerM: -2,
@@ -275,7 +275,7 @@ func (suite *SquareCreatedWithDesiredSymmetry) SetUpTest(checker *C) {
 		Multiplier: complex(1, 0),
 	}
 	suite.baseWavePacketWithEvenSumFormula = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerM: 3,
 				PowerN: -1,

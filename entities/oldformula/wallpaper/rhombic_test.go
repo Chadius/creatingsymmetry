@@ -1,7 +1,7 @@
 package wallpaper_test
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/oldformula"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/eisenstien"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/wallpaper"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	. "gopkg.in/check.v1"
@@ -26,7 +26,7 @@ func (suite *RhombicWallpaper) SetUpTest(checker *C) {
 		Multiplier: complex(1, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 1,
 						PowerM: -2,
@@ -74,7 +74,7 @@ var _ = Suite(&RhombicWallpaperHasSymmetryTest{})
 
 func (suite *RhombicWallpaperHasSymmetryTest) SetUpTest(checker *C) {
 	suite.baseWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 8,
 				PowerM: -3,
@@ -119,7 +119,7 @@ func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicMayHaveSymmetryForCm(ch
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacket.Terms[0].PowerM,
 						PowerM: suite.baseWavePacket.Terms[0].PowerN,
@@ -148,7 +148,7 @@ func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicMayHaveSymmetryForCmm(c
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacket,
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacket.Terms[0].PowerM,
 						PowerM: suite.baseWavePacket.Terms[0].PowerN,
@@ -157,7 +157,7 @@ func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicMayHaveSymmetryForCmm(c
 				Multiplier: suite.baseWavePacket.Multiplier,
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacket.Terms[0].PowerM * -1,
 						PowerM: suite.baseWavePacket.Terms[0].PowerN * -1,
@@ -166,7 +166,7 @@ func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicMayHaveSymmetryForCmm(c
 				Multiplier: suite.baseWavePacket.Multiplier,
 			},
 			{
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: suite.baseWavePacket.Terms[0].PowerN * -1,
 						PowerM: suite.baseWavePacket.Terms[0].PowerM * -1,
@@ -192,7 +192,7 @@ var _ = Suite(&RhombicCreatedWithDesiredSymmetry{})
 
 func (suite *RhombicCreatedWithDesiredSymmetry) SetUpTest(checker *C) {
 	suite.baseWavePacket = &wallpaper.WavePacket{
-		Terms: []*oldformula.EisensteinFormulaTerm{
+		Terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 1,
 				PowerM: -2,

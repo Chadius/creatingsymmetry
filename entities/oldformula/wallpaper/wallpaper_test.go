@@ -1,7 +1,7 @@
 package wallpaper_test
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/oldformula"
+	"github.com/Chadius/creating-symmetry/entities/oldformula/eisenstien"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/wallpaper"
 	. "gopkg.in/check.v1"
 	"math"
@@ -115,7 +115,7 @@ func (suite *MakeNewFormulaBasedOnLatticeShape) TestMakeGenericFormula(checker *
 		WavePackets: []*wallpaper.WavePacket{
 			{
 				Multiplier: complex(1, 0),
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 1,
 						PowerM: -4,
@@ -148,7 +148,7 @@ func (suite *MakeNewFormulaBasedOnLatticeShape) TestMakeHexagonalFormula(checker
 		WavePackets: []*wallpaper.WavePacket{
 			{
 				Multiplier: complex(1, 0),
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 1,
 						PowerM: -4,
@@ -187,7 +187,7 @@ func (suite *MakeNewFormulaBasedOnLatticeShape) TestSetupThrowsAnErrorIfVectorsA
 		WavePackets: []*wallpaper.WavePacket{
 			{
 				Multiplier: complex(1, 0),
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 1,
 						PowerM: -4,
@@ -214,7 +214,7 @@ func (suite *MakeNewFormulaBasedOnLatticeShape) TestSetupThrowsAnErrorIfVectorsA
 		WavePackets: []*wallpaper.WavePacket{
 			{
 				Multiplier: complex(1, 0),
-				Terms: []*oldformula.EisensteinFormulaTerm{
+				Terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 1,
 						PowerM: -4,

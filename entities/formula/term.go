@@ -2,6 +2,8 @@ package formula
 
 import (
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"math"
+	"math/cmplx"
 )
 
 // Term objects help shape the calculation of every formula.
@@ -12,6 +14,22 @@ type Term struct {
 	IgnoreComplexConjugate bool
 	CoefficientRelationships []coefficient.Relationship
 }
+
+// CalculateInLatticeCoordinates (z) = e ^ (2 PI i * (nX + mY))
+//  where n amd m are PowerN and PowerM,
+//  and TransformedX and TransformedY are the real and imag parts of (zInLatticeCoordinates)
+func (term Term) CalculateInLatticeCoordinates(zInLatticeCoordinates complex128) complex128 {
+	powerMultiplier := (float64(term.PowerN) * real(zInLatticeCoordinates)) +
+		(float64(term.PowerM) * imag(zInLatticeCoordinates))
+	expo := cmplx.Exp(complex(0, 2.0*math.Pi*powerMultiplier))
+	return expo
+}
+
+// PowerSumIsEven returns true if the sum of the term powers is divisible by 2.
+func (term Term) PowerSumIsEven() bool {
+	return (term.PowerM+term.PowerN)%2 == 0
+}
+
 
 // TermBuilder is used to create formula objects.
 type TermBuilder struct {

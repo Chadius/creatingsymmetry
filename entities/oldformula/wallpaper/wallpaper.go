@@ -3,7 +3,7 @@ package wallpaper
 import (
 	"encoding/json"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
-	eisensteinFormula "github.com/Chadius/creating-symmetry/entities/oldformula"
+	eisensteinFormula "github.com/Chadius/creating-symmetry/entities/oldformula/eisenstien"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/latticevector"
 	"github.com/Chadius/creating-symmetry/entities/oldformula/result"
 	"github.com/Chadius/creating-symmetry/entities/utility"
