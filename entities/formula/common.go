@@ -1,6 +1,7 @@
 package formula
 
 import (
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"errors"
 	"fmt"
 	"math"
@@ -61,4 +62,39 @@ func ValidateLatticeVectors(latticeVectors []complex128) error {
 		)
 	}
 	return nil
+}
+
+// TODO test this function
+
+// lockTermsBasedOnRelationship adds terms based on the first term of each WavePacket.
+func lockTermsBasedOnRelationship(
+	lockedRelationships []coefficient.Relationship,
+	originalWavePackets []WavePacket) []WavePacket {
+	newWavePackets := []WavePacket{}
+
+	for _, wavePacket := range originalWavePackets {
+		baseCoefficientPairing := coefficient.Pairing{
+			PowerN: wavePacket.GetTerms()[0].PowerN,
+			PowerM: wavePacket.GetTerms()[0].PowerM,
+		}
+
+		newWavePacket := NewWavePacketBuilder().
+			Multiplier(wavePacket.GetMultiplier()).
+			AddTerm(&wavePacket.GetTerms()[0])
+
+		newPairings := baseCoefficientPairing.GenerateCoefficientSets(lockedRelationships)
+		for _, newCoefficientPair := range newPairings {
+			newTerm := NewTermBuilder().
+				PowerN(newCoefficientPair.PowerN).
+				PowerM(newCoefficientPair.PowerM).
+				Multiplier(complex(1,0)).
+				Build()
+
+			newWavePacket.AddTerm(newTerm)
+		}
+		
+		newWavePackets = append(newWavePackets, *newWavePacket.Build())
+	}
+	
+	return newWavePackets
 }

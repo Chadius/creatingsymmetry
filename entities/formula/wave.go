@@ -4,6 +4,10 @@ import (
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 )
 
+// TODO create NewTerm() function
+// TODO rename Terms to terms
+// TODO rename GetTerms() to Terms()
+
 // WavePacket for Waves mathematically creates repeating, cyclical mathematical patterns
 //   in 2D space, similar to waves on the ocean.
 type WavePacket struct {

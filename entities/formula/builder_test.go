@@ -65,6 +65,23 @@ func (b *BuilderTest) TestWhenNoLatticeHeight_ThenRectangularFormulaReturnsError
 	checker.Assert(reflect.TypeOf(rectangularFormula).String(), Equals, "*formula.Identity")
 }
 
+func (b *BuilderTest) TestSquareFormula(checker *C) {
+	squareFormula, _ := formula.NewBuilder().
+		Square().
+		AddWavePacket(
+			formula.NewWavePacketBuilder().
+				Multiplier(complex(1,0)).
+				AddTerm(
+					formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
+				).
+				Build(),
+		).
+		Build()
+
+	checker.Assert(reflect.TypeOf(squareFormula).String(), Equals, "*formula.Square")
+	checker.Assert(squareFormula.WavePackets(), HasLen, 1)
+}
+
 type TermBuilderTest struct {}
 
 var _ = Suite(&TermBuilderTest{})

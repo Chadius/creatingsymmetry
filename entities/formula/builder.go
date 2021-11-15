@@ -42,6 +42,12 @@ func (b *Builder) Rectangular() *Builder {
 	return b
 }
 
+// Square sets the formula as a square formula.
+func (b *Builder) Square() *Builder {
+	b.formulaType = "square"
+	return b
+}
+
 // AddTerm adds a term to the formula.
 func (b *Builder) AddTerm(term *Term) *Builder {
 	b.formulaLevelTerms = append(b.formulaLevelTerms, *term)
@@ -68,6 +74,9 @@ func (b *Builder) Build() (Arbitrary, error) {
 			return &Identity{}, err
 		}
 		return formula, err
+	}
+	if b.formulaType == "square" {
+		return NewSquareFormula(b.wavePackets)
 	}
 	return &Identity{}, nil
 }
