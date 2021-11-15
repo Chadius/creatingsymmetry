@@ -4,6 +4,8 @@ import (
 	"github.com/Chadius/creating-symmetry/entities/formula"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	. "gopkg.in/check.v1"
+	"math"
+	"math/cmplx"
 )
 
 type RectangularWallpaper struct {
@@ -35,18 +37,13 @@ func (suite *RectangularWallpaper) TestSetupCreatesLatticeVectors(checker *C) {
 	checker.Assert(imag(suite.newFormula.LatticeVectors()[1]), utility.NumericallyCloseEnough{}, 0.5, 1e-6)
 }
 
-// TODO throw error if height is 0
+func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
+	calculation := suite.newFormula.Calculate(complex(0.75, -0.25))
 
-//func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
-//	calculation := suite.newFormula.Calculate(complex(0.75, -0.25))
-//	total := calculation.Total
-//
-//	expectedAnswer := cmplx.Exp(complex(0, math.Pi*7/2))
-//
-//	checker.Assert(real(total), utility.NumericallyCloseEnough{}, real(expectedAnswer), 1e-6)
-//	checker.Assert(imag(total), utility.NumericallyCloseEnough{}, imag(expectedAnswer), 1e-6)
-//}
-//
+	expectedAnswer := cmplx.Exp(complex(0, math.Pi*7/2))
+	checker.Assert(real(calculation), utility.NumericallyCloseEnough{}, real(expectedAnswer), 1e-6)
+	checker.Assert(imag(calculation), utility.NumericallyCloseEnough{}, imag(expectedAnswer), 1e-6)
+}
 
 //type RectangularWallpaperHasSymmetryTest struct {
 //	baseWavePacketWithEvenPowerNAndOddPowerSum *wallpaper.WavePacket
