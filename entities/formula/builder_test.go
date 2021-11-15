@@ -12,12 +12,12 @@ type BuilderTest struct {}
 var _ = Suite(&BuilderTest{})
 
 func (b *BuilderTest) TestIdentityFormula(checker *C) {
-	identityFormula := formula.NewBuilder().Build()
+	identityFormula, _ := formula.NewBuilder().Build()
 	checker.Assert(reflect.TypeOf(identityFormula).String(), Equals, "*formula.Identity")
 }
 
 func (b *BuilderTest) TestRosetteFormula(checker *C) {
-	rosetteFormula := formula.NewBuilder().
+	rosetteFormula, _ := formula.NewBuilder().
 		Rosette().
 		AddTerm(
 			formula.NewTermBuilder().Build(),
@@ -28,7 +28,7 @@ func (b *BuilderTest) TestRosetteFormula(checker *C) {
 }
 
 func (b *BuilderTest) TestFriezeFormula(checker *C) {
-	rosetteFormula := formula.NewBuilder().
+	rosetteFormula, _ := formula.NewBuilder().
 		Frieze().
 		AddTerm(
 			formula.NewTermBuilder().Build(),
@@ -36,6 +36,33 @@ func (b *BuilderTest) TestFriezeFormula(checker *C) {
 		Build()
 	checker.Assert(reflect.TypeOf(rosetteFormula).String(), Equals, "*formula.Frieze")
 	checker.Assert(rosetteFormula.FormulaLevelTerms(), HasLen, 1)
+}
+
+func (b *BuilderTest) TestRectangularFormula(checker *C) {
+	rectangularFormula, _ := formula.NewBuilder().
+		Rectangular().
+		LatticeHeight(0.5).
+		AddWavePacket(
+			formula.NewWavePacketBuilder().
+				Multiplier(complex(1,0)).
+				AddTerm(
+					formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
+				).
+				Build(),
+		).
+		Build()
+
+	checker.Assert(reflect.TypeOf(rectangularFormula).String(), Equals, "*formula.Rectangular")
+	checker.Assert(rectangularFormula.WavePackets(), HasLen, 1)
+}
+
+func (b *BuilderTest) TestWhenNoLatticeHeight_ThenRectangularFormulaReturnsError(checker *C) {
+	rectangularFormula, err := formula.NewBuilder().
+		Rectangular().
+		Build()
+
+	checker.Assert(err, ErrorMatches, "rectangular lattice must specify height")
+	checker.Assert(reflect.TypeOf(rectangularFormula).String(), Equals, "*formula.Identity")
 }
 
 type TermBuilderTest struct {}

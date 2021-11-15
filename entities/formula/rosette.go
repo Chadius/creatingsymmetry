@@ -11,10 +11,16 @@ type Rosette struct {
 }
 
 // NewRosetteFormula returns a new formula
-func NewRosetteFormula(formulaLevelTerms []Term) *Rosette {
+func NewRosetteFormula(formulaLevelTerms []Term) (*Rosette, error) {
 	return &Rosette{
 		formulaLevelTerms: formulaLevelTerms,
-	}
+	},
+	nil
+}
+
+// WavePackets returns an empty array, this type of formula does not use WavePackets.
+func (r *Rosette) WavePackets() []WavePacket {
+	return nil
 }
 
 // Calculate applies the Rosette formula to the complex number z.
@@ -65,4 +71,9 @@ func CalculateExponentTerm(coordinate complex128, power1, power2 int, scale comp
 // FormulaLevelTerms returns the Terms this formula will use.
 func (r *Rosette) FormulaLevelTerms() []Term {
 	return r.formulaLevelTerms
+}
+
+// LatticeVectors returns an empty list, this formula does not use them
+func (r *Rosette) LatticeVectors() []complex128 {
+	return nil
 }

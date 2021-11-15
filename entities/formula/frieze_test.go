@@ -13,7 +13,7 @@ type FriezeTest struct {}
 var _ = Suite(&FriezeTest{})
 
 func (suite *FriezeTest) TestFriezeFormulaTransforms(checker *C) {
-	FriezeFormula := formula.NewBuilder().Frieze().AddTerm(
+	FriezeFormula, _ := formula.NewBuilder().Frieze().AddTerm(
 		formula.NewTermBuilder().
 			Multiplier(complex(2,0)).
 			PowerN(1).

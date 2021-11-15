@@ -12,7 +12,7 @@ type RosetteTest struct {}
 var _ = Suite(&RosetteTest{})
 
 func (suite *RosetteTest) TestRosetteFormulaTransforms(checker *C) {
-	rosetteFormula := formula.NewBuilder().Rosette().AddTerm(
+	rosetteFormula, _ := formula.NewBuilder().Rosette().AddTerm(
 		formula.NewTermBuilder().
 			Multiplier(complex(3,0)).
 			PowerN(1).
