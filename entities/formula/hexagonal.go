@@ -2,43 +2,43 @@ package formula
 
 import (
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"math"
 )
 
-// Square formulas will transform points by returning the same coordinates.
-type Square struct {
+// Hexagonal formulas will transform points by returning the same coordinates.
+type Hexagonal struct {
 	latticeVectors []complex128
 	wavePackets []WavePacket
 }
 
-// NewSquareFormula returns a new formula object.
-func NewSquareFormula(packets []WavePacket) (*Square, error) {
+// NewHexagonalFormula returns a new formula object.
+func NewHexagonalFormula(packets []WavePacket) (*Hexagonal, error) {
 	packetsWithLockedCoefficients := lockTermsBasedOnRelationship(
 		[]coefficient.Relationship{
-			coefficient.PlusMMinusN,
-			coefficient.MinusNMinusM,
-			coefficient.MinusMPlusN,
-		}, 
+			coefficient.PlusMMinusSumNAndM,
+			coefficient.MinusSumNAndMPlusN,
+		},
 		packets)
-	
-	squareWallpaperFormula := &Square{
+
+	return &Hexagonal{
 		wavePackets: packetsWithLockedCoefficients,
 		latticeVectors: []complex128{
 			complex(1, 0),
-			complex(0, 1),
+			complex(-0.5, math.Sqrt(3.0)/2.0),
 		},
-	}
-	
-	return squareWallpaperFormula, nil
+	},
+	nil
 }
 
 // WavePackets returns the wave packets used.
-func (r *Square) WavePackets() []WavePacket {
+func (r *Hexagonal) WavePackets() []WavePacket {
 	return r.wavePackets
 }
 
-// Calculate transforms the coordinate using the Square lattice's wave packets.
-func (r *Square) Calculate(coordinate complex128) complex128 {
+// Calculate transforms the coordinate using the Hexagonal lattice's wave packets.
+func (r *Hexagonal) Calculate(coordinate complex128) complex128 {
 	result := complex(0,0)
+
 	zInLatticeCoordinates := ConvertToLatticeCoordinates(coordinate, r.LatticeVectors())
 
 	for _, wavePacket := range r.WavePackets() {
@@ -49,12 +49,12 @@ func (r *Square) Calculate(coordinate complex128) complex128 {
 	return result
 }
 
-// FormulaLevelTerms returns an empty list, Square formulas do not have base-level terms.
-func (r *Square) FormulaLevelTerms() []Term {
+// FormulaLevelTerms returns an empty list, Hexagonal formulas do not have base-level terms.
+func (r *Hexagonal) FormulaLevelTerms() []Term {
 	return nil
 }
 
 // LatticeVectors returns the lattice vectors used to create the rectangle.
-func (r *Square) LatticeVectors() []complex128 {
+func (r *Hexagonal) LatticeVectors() []complex128 {
 	return r.latticeVectors
 }

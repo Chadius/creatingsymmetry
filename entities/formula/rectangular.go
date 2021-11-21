@@ -39,7 +39,7 @@ func (r *Rectangular) Calculate(coordinate complex128) complex128 {
 
 	for _, wavePacket := range r.WavePackets() {
 		termContribution := wavePacket.Calculate(zInLatticeCoordinates)
-		result += termContribution / complex(float64(len(wavePacket.Terms)), 0)
+		result += termContribution / complex(float64(len(wavePacket.Terms())), 0)
 	}
 
 	return result

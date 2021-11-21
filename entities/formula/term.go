@@ -15,6 +15,26 @@ type Term struct {
 	CoefficientRelationships []coefficient.Relationship
 }
 
+// NewTerm returns a new Term object.
+func NewTerm(multiplier complex128, powerN, powerM int, ignoreComplexConjugate bool, coefficientRelationships []coefficient.Relationship) *Term {
+	return &Term{
+		Multiplier: multiplier,
+		PowerN:     powerN,
+		PowerM:     powerM,
+		IgnoreComplexConjugate: ignoreComplexConjugate,
+		CoefficientRelationships: coefficientRelationships,
+	}
+}
+
+// NewTermWithMultiplierAndPowers returns a new Term object using just the multiplier, PowerN and PowerM.
+func NewTermWithMultiplierAndPowers(multiplier complex128, powerN, powerM int) *Term {
+	return &Term{
+		Multiplier: multiplier,
+		PowerN:     powerN,
+		PowerM:     powerM,
+	}
+}
+
 // CalculateInLatticeCoordinates (z) = e ^ (2 PI i * (nX + mY))
 //  where n amd m are PowerN and PowerM,
 //  and TransformedX and TransformedY are the real and imag parts of (zInLatticeCoordinates)
@@ -83,12 +103,6 @@ func (t *TermBuilder) IgnoreComplexConjugate() *TermBuilder {
 
 // Build creates a new Term object.
 func (t *TermBuilder) Build() *Term {
-	return &Term{
-		Multiplier: t.multiplier,
-		PowerN: t.powerN,
-		PowerM: t.powerM,
-		IgnoreComplexConjugate: t.ignoreComplexConjugate,
-		CoefficientRelationships: t.coefficientRelationships,
-	}
+	return NewTerm(t.multiplier, t.powerN, t.powerM, t.ignoreComplexConjugate, t.coefficientRelationships)
 }
 

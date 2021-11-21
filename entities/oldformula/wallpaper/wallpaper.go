@@ -144,7 +144,7 @@ func (formula *Formula) createVectors() error {
 	return formula.Lattice.Validate()
 }
 
-// lockEisensteinTerms creates eisenstein Terms based on the LatticeType
+// lockEisensteinTerms creates eisenstein terms based on the LatticeType
 func (formula *Formula) lockEisensteinTerms() {
 	if formula.LatticeType == Generic || formula.LatticeType == Rectangular {
 		return

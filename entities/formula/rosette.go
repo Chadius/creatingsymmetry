@@ -68,7 +68,7 @@ func CalculateExponentTerm(coordinate complex128, power1, power2 int, scale comp
 	return zRaisedToN * complexConjugateRaisedToM * scale
 }
 
-// FormulaLevelTerms returns the Terms this formula will use.
+// FormulaLevelTerms returns the terms this formula will use.
 func (r *Rosette) FormulaLevelTerms() []Term {
 	return r.formulaLevelTerms
 }

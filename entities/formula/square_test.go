@@ -4,7 +4,10 @@ import (
 	"github.com/Chadius/creating-symmetry/entities/formula"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	. "gopkg.in/check.v1"
-/*	"math"
+	"math"
+	"math/cmplx"
+
+	/*	"math"
 	"math/cmplx"
 */)
 
@@ -37,18 +40,17 @@ func (suite *SquareWallpaper) TestSetupCreatesLatticeVectors(checker *C) {
 }
 
 func (suite *SquareWallpaper) TestSetupAddsLockedPairs(checker *C) {
-	checker.Assert(suite.newFormula.WavePackets()[0].GetTerms(), HasLen, 4)
-	checker.Assert(suite.newFormula.WavePackets()[0].GetTerms()[1].PowerN, Equals, suite.newFormula.WavePackets()[0].GetTerms()[0].PowerM)
-	checker.Assert(suite.newFormula.WavePackets()[0].GetTerms()[1].PowerM, Equals, suite.newFormula.WavePackets()[0].GetTerms()[0].PowerN*-1)
-	checker.Assert(suite.newFormula.WavePackets()[0].GetTerms()[2].PowerN, Equals, suite.newFormula.WavePackets()[0].GetTerms()[0].PowerN*-1)
-	checker.Assert(suite.newFormula.WavePackets()[0].GetTerms()[2].PowerM, Equals, suite.newFormula.WavePackets()[0].GetTerms()[0].PowerM*-1)
-	checker.Assert(suite.newFormula.WavePackets()[0].GetTerms()[3].PowerN, Equals, suite.newFormula.WavePackets()[0].GetTerms()[0].PowerM*-1)
-	checker.Assert(suite.newFormula.WavePackets()[0].GetTerms()[3].PowerM, Equals, suite.newFormula.WavePackets()[0].GetTerms()[0].PowerN)
+	checker.Assert(suite.newFormula.WavePackets()[0].Terms(), HasLen, 4)
+	checker.Assert(suite.newFormula.WavePackets()[0].Terms()[1].PowerN, Equals, suite.newFormula.WavePackets()[0].Terms()[0].PowerM)
+	checker.Assert(suite.newFormula.WavePackets()[0].Terms()[1].PowerM, Equals, suite.newFormula.WavePackets()[0].Terms()[0].PowerN*-1)
+	checker.Assert(suite.newFormula.WavePackets()[0].Terms()[2].PowerN, Equals, suite.newFormula.WavePackets()[0].Terms()[0].PowerN*-1)
+	checker.Assert(suite.newFormula.WavePackets()[0].Terms()[2].PowerM, Equals, suite.newFormula.WavePackets()[0].Terms()[0].PowerM*-1)
+	checker.Assert(suite.newFormula.WavePackets()[0].Terms()[3].PowerN, Equals, suite.newFormula.WavePackets()[0].Terms()[0].PowerM*-1)
+	checker.Assert(suite.newFormula.WavePackets()[0].Terms()[3].PowerM, Equals, suite.newFormula.WavePackets()[0].Terms()[0].PowerN)
 }
-/*
+
 func (suite *SquareWallpaper) TestCalculationOfPoints(checker *C) {
 	calculation := suite.newFormula.Calculate(complex(2, 0.5))
-	total := calculation.Total
 
 	expectedAnswer :=
 		(cmplx.Exp(complex(0, 2*math.Pi)) +
@@ -56,11 +58,10 @@ func (suite *SquareWallpaper) TestCalculationOfPoints(checker *C) {
 			cmplx.Exp(complex(0, 2*math.Pi*-1)) +
 			cmplx.Exp(complex(0, 2*math.Pi*4.5))) / 4
 
-	checker.Assert(real(total), utility.NumericallyCloseEnough{}, real(expectedAnswer), 1e-6)
-	checker.Assert(imag(total), utility.NumericallyCloseEnough{}, imag(expectedAnswer), 1e-6)
-
+	checker.Assert(real(calculation), utility.NumericallyCloseEnough{}, real(expectedAnswer), 1e-6)
+	checker.Assert(imag(calculation), utility.NumericallyCloseEnough{}, imag(expectedAnswer), 1e-6)
 }
-
+/*
 type SquareWallpaperHasSymmetryTest struct {
 	wallpaperMultiplier complex128
 }
@@ -76,25 +77,25 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4mSymmetryDetectedAcrossSingle
 		LatticeType: wallpaper.Square,
 		LatticeSize: nil,
 		Lattice:     nil,
-		Multiplier:  complex(2, 0),
+		multiplier:  complex(2, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*eisenstien.EisensteinFormulaTerm{
+				terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: -2,
 						PowerM: 1,
 					},
 				},
-				Multiplier: complex(1, 0),
+				multiplier: complex(1, 0),
 			},
 			{
-				Terms: []*eisenstien.EisensteinFormulaTerm{
+				terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 1,
 						PowerM: -2,
 					},
 				},
-				Multiplier: complex(1, 0),
+				multiplier: complex(1, 0),
 			},
 		},
 	}
@@ -110,43 +111,43 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4mSymmetryDetectedAcrossMultip
 		LatticeType: wallpaper.Square,
 		LatticeSize: nil,
 		Lattice:     nil,
-		Multiplier:  complex(2, 0),
+		multiplier:  complex(2, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*eisenstien.EisensteinFormulaTerm{
+				terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: -5,
 						PowerM: 8,
 					},
 				},
-				Multiplier: complex(1, 0),
+				multiplier: complex(1, 0),
 			},
 			{
-				Terms: []*eisenstien.EisensteinFormulaTerm{
+				terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 2,
 						PowerM: -1,
 					},
 				},
-				Multiplier: complex(1, 0),
+				multiplier: complex(1, 0),
 			},
 			{
-				Terms: []*eisenstien.EisensteinFormulaTerm{
+				terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 8,
 						PowerM: -5,
 					},
 				},
-				Multiplier: complex(1, 0),
+				multiplier: complex(1, 0),
 			},
 			{
-				Terms: []*eisenstien.EisensteinFormulaTerm{
+				terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: -1,
 						PowerM: 2,
 					},
 				},
-				Multiplier: complex(1, 0),
+				multiplier: complex(1, 0),
 			},
 		},
 	}
@@ -162,16 +163,16 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4SymmetryIsAlwaysTrueForSquare
 		LatticeType: wallpaper.Square,
 		LatticeSize: nil,
 		Lattice:     nil,
-		Multiplier:  complex(2, 0),
+		multiplier:  complex(2, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*eisenstien.EisensteinFormulaTerm{
+				terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: -2,
 						PowerM: 1,
 					},
 				},
-				Multiplier: complex(1, 0),
+				multiplier: complex(1, 0),
 			},
 		},
 	}
@@ -188,25 +189,25 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4g(checker *C) {
 		LatticeType: wallpaper.Square,
 		LatticeSize: nil,
 		Lattice:     nil,
-		Multiplier:  complex(2, 0),
+		multiplier:  complex(2, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*eisenstien.EisensteinFormulaTerm{
+				terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: -2,
 						PowerM: 1,
 					},
 				},
-				Multiplier: complex(1, 0),
+				multiplier: complex(1, 0),
 			},
 			{
-				Terms: []*eisenstien.EisensteinFormulaTerm{
+				terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 1,
 						PowerM: -2,
 					},
 				},
-				Multiplier: complex(-1, 0),
+				multiplier: complex(-1, 0),
 			},
 		},
 	}
@@ -218,25 +219,25 @@ func (suite *SquareWallpaperHasSymmetryTest) TestP4g(checker *C) {
 		LatticeType: wallpaper.Square,
 		LatticeSize: nil,
 		Lattice:     nil,
-		Multiplier:  complex(2, 0),
+		multiplier:  complex(2, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			{
-				Terms: []*eisenstien.EisensteinFormulaTerm{
+				terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: -3,
 						PowerM: 1,
 					},
 				},
-				Multiplier: complex(1, 0),
+				multiplier: complex(1, 0),
 			},
 			{
-				Terms: []*eisenstien.EisensteinFormulaTerm{
+				terms: []*eisenstien.EisensteinFormulaTerm{
 					{
 						PowerN: 1,
 						PowerM: -3,
 					},
 				},
-				Multiplier: complex(1, 0),
+				multiplier: complex(1, 0),
 			},
 		},
 	}
@@ -255,22 +256,22 @@ var _ = Suite(&SquareCreatedWithDesiredSymmetry{})
 
 func (suite *SquareCreatedWithDesiredSymmetry) SetUpTest(checker *C) {
 	suite.baseWavePacketWithOddSumFormula = &wallpaper.WavePacket{
-		Terms: []*eisenstien.EisensteinFormulaTerm{
+		terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerN: 1,
 				PowerM: -2,
 			},
 		},
-		Multiplier: complex(1, 0),
+		multiplier: complex(1, 0),
 	}
 	suite.baseWavePacketWithEvenSumFormula = &wallpaper.WavePacket{
-		Terms: []*eisenstien.EisensteinFormulaTerm{
+		terms: []*eisenstien.EisensteinFormulaTerm{
 			{
 				PowerM: 3,
 				PowerN: -1,
 			},
 		},
-		Multiplier: complex(1, 0),
+		multiplier: complex(1, 0),
 	}
 	suite.wallpaperMultiplier = complex(1, 0)
 }
@@ -282,7 +283,7 @@ func (suite *SquareCreatedWithDesiredSymmetry) TestCreateWallpaperWithP4m(checke
 			Width:  0.5,
 			Height: 1,
 		},
-		Multiplier: complex(2, 0),
+		multiplier: complex(2, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithOddSumFormula,
 		},
@@ -291,10 +292,10 @@ func (suite *SquareCreatedWithDesiredSymmetry) TestCreateWallpaperWithP4m(checke
 	err := newFormula.Setup()
 	checker.Assert(err, IsNil)
 	checker.Assert(newFormula.WavePackets, HasLen, 2)
-	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 4)
+	checker.Assert(newFormula.WavePackets[0].terms, HasLen, 4)
 
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, -2)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, 1)
+	checker.Assert(newFormula.WavePackets[1].terms[0].PowerN, Equals, -2)
+	checker.Assert(newFormula.WavePackets[1].terms[0].PowerM, Equals, 1)
 
 	checker.Assert(newFormula.HasSymmetry(wallpaper.P4), Equals, true)
 	checker.Assert(newFormula.HasSymmetry(wallpaper.P4m), Equals, true)
@@ -307,7 +308,7 @@ func (suite *SquareCreatedWithDesiredSymmetry) TestCreateWallpaperWithP4gAndOddS
 			Width:  0.5,
 			Height: 1,
 		},
-		Multiplier: complex(2, 0),
+		multiplier: complex(2, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithOddSumFormula,
 		},
@@ -316,12 +317,12 @@ func (suite *SquareCreatedWithDesiredSymmetry) TestCreateWallpaperWithP4gAndOddS
 	err := newFormula.Setup()
 	checker.Assert(err, IsNil)
 	checker.Assert(newFormula.WavePackets, HasLen, 2)
-	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 4)
+	checker.Assert(newFormula.WavePackets[0].terms, HasLen, 4)
 
-	checker.Assert(real(newFormula.WavePackets[1].Multiplier), utility.NumericallyCloseEnough{}, real(suite.wallpaperMultiplier)*-1, 1e-6)
-	checker.Assert(imag(newFormula.WavePackets[1].Multiplier), utility.NumericallyCloseEnough{}, imag(suite.wallpaperMultiplier)*-1, 1e-6)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, 1)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, -2)
+	checker.Assert(real(newFormula.WavePackets[1].multiplier), utility.NumericallyCloseEnough{}, real(suite.wallpaperMultiplier)*-1, 1e-6)
+	checker.Assert(imag(newFormula.WavePackets[1].multiplier), utility.NumericallyCloseEnough{}, imag(suite.wallpaperMultiplier)*-1, 1e-6)
+	checker.Assert(newFormula.WavePackets[1].terms[0].PowerM, Equals, 1)
+	checker.Assert(newFormula.WavePackets[1].terms[0].PowerN, Equals, -2)
 
 	checker.Assert(newFormula.HasSymmetry(wallpaper.P4), Equals, true)
 	checker.Assert(newFormula.HasSymmetry(wallpaper.P4g), Equals, true)
@@ -334,7 +335,7 @@ func (suite *SquareCreatedWithDesiredSymmetry) TestCreateWallpaperWithP4gAndEven
 			Width:  0.5,
 			Height: 1,
 		},
-		Multiplier: complex(2, 0),
+		multiplier: complex(2, 0),
 		WavePackets: []*wallpaper.WavePacket{
 			suite.baseWavePacketWithEvenSumFormula,
 		},
@@ -344,12 +345,12 @@ func (suite *SquareCreatedWithDesiredSymmetry) TestCreateWallpaperWithP4gAndEven
 	checker.Assert(err, IsNil)
 
 	checker.Assert(newFormula.WavePackets, HasLen, 2)
-	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 4)
+	checker.Assert(newFormula.WavePackets[0].terms, HasLen, 4)
 
-	checker.Assert(real(newFormula.WavePackets[1].Multiplier), utility.NumericallyCloseEnough{}, real(suite.wallpaperMultiplier), 1e-6)
-	checker.Assert(imag(newFormula.WavePackets[1].Multiplier), utility.NumericallyCloseEnough{}, imag(suite.wallpaperMultiplier), 1e-6)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, -1)
-	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, 3)
+	checker.Assert(real(newFormula.WavePackets[1].multiplier), utility.NumericallyCloseEnough{}, real(suite.wallpaperMultiplier), 1e-6)
+	checker.Assert(imag(newFormula.WavePackets[1].multiplier), utility.NumericallyCloseEnough{}, imag(suite.wallpaperMultiplier), 1e-6)
+	checker.Assert(newFormula.WavePackets[1].terms[0].PowerM, Equals, -1)
+	checker.Assert(newFormula.WavePackets[1].terms[0].PowerN, Equals, 3)
 
 	checker.Assert(newFormula.HasSymmetry(wallpaper.P4), Equals, true)
 	checker.Assert(newFormula.HasSymmetry(wallpaper.P4m), Equals, true)

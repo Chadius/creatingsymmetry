@@ -4,8 +4,6 @@ import (
 	"github.com/Chadius/creating-symmetry/entities/formula"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	. "gopkg.in/check.v1"
-	"math"
-	"math/cmplx"
 )
 
 type RectangularWallpaper struct {
@@ -37,13 +35,13 @@ func (suite *RectangularWallpaper) TestSetupCreatesLatticeVectors(checker *C) {
 	checker.Assert(imag(suite.newFormula.LatticeVectors()[1]), utility.NumericallyCloseEnough{}, 0.5, 1e-6)
 }
 
-func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
-	calculation := suite.newFormula.Calculate(complex(0.75, -0.25))
-
-	expectedAnswer := cmplx.Exp(complex(0, math.Pi*7/2))
-	checker.Assert(real(calculation), utility.NumericallyCloseEnough{}, real(expectedAnswer), 1e-6)
-	checker.Assert(imag(calculation), utility.NumericallyCloseEnough{}, imag(expectedAnswer), 1e-6)
-}
+//func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
+//	calculation := suite.newFormula.Calculate(complex(0.75, -0.25))
+//
+//	expectedAnswer := cmplx.Exp(complex(0, math.Pi*7/2))
+//	checker.Assert(real(calculation), utility.NumericallyCloseEnough{}, real(expectedAnswer), 1e-6)
+//	checker.Assert(imag(calculation), utility.NumericallyCloseEnough{}, imag(expectedAnswer), 1e-6)
+//}
 
 //type RectangularWallpaperHasSymmetryTest struct {
 //	baseWavePacketWithEvenPowerNAndOddPowerSum *wallpaper.WavePacket
@@ -55,22 +53,22 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //
 //func (suite *RectangularWallpaperHasSymmetryTest) SetUpTest(checker *C) {
 //	suite.baseWavePacketWithEvenPowerNAndOddPowerSum = &wallpaper.WavePacket{
-//		Terms: []*eisenstien.EisensteinFormulaTerm{
+//		terms: []*eisenstien.EisensteinFormulaTerm{
 //			{
 //				PowerN: 8,
 //				PowerM: -3,
 //			},
 //		},
-//		Multiplier: complex(1, 0),
+//		multiplier: complex(1, 0),
 //	}
 //	suite.baseWavePacketWithOddPowerNAndEvenPowerSum = &wallpaper.WavePacket{
-//		Terms: []*eisenstien.EisensteinFormulaTerm{
+//		terms: []*eisenstien.EisensteinFormulaTerm{
 //			{
 //				PowerN: 7,
 //				PowerM: -3,
 //			},
 //		},
-//		Multiplier: complex(1, 0),
+//		multiplier: complex(1, 0),
 //	}
 //	suite.wallpaperMultiplier = complex(1, 0)
 //}
@@ -83,7 +81,7 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //			Height: 1.5,
 //		},
 //		Lattice:    nil,
-//		Multiplier: complex(2, 0),
+//		multiplier: complex(2, 0),
 //		WavePackets: []*wallpaper.WavePacket{
 //			suite.baseWavePacketWithEvenPowerNAndOddPowerSum,
 //		},
@@ -106,17 +104,17 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //			Height: 1.5,
 //		},
 //		Lattice:    nil,
-//		Multiplier: complex(2, 0),
+//		multiplier: complex(2, 0),
 //		WavePackets: []*wallpaper.WavePacket{
 //			suite.baseWavePacketWithEvenPowerNAndOddPowerSum,
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
-//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
+//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerN,
+//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerM * -1,
 //					},
 //				},
-//				Multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
+//				multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.multiplier,
 //			},
 //		},
 //	}
@@ -138,17 +136,17 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //			Height: 1.5,
 //		},
 //		Lattice:    nil,
-//		Multiplier: complex(2, 0),
+//		multiplier: complex(2, 0),
 //		WavePackets: []*wallpaper.WavePacket{
 //			suite.baseWavePacketWithEvenPowerNAndOddPowerSum,
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
-//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
+//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerN,
+//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerM * -1,
 //					},
 //				},
-//				Multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
+//				multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.multiplier,
 //			},
 //		},
 //	}
@@ -168,17 +166,17 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //			Height: 1.5,
 //		},
 //		Lattice:    nil,
-//		Multiplier: complex(2, 0),
+//		multiplier: complex(2, 0),
 //		WavePackets: []*wallpaper.WavePacket{
 //			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
-//						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
+//						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN,
+//						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM * -1,
 //					},
 //				},
-//				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1,
+//				multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier * -1,
 //			},
 //		},
 //	}
@@ -200,35 +198,35 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //			Height: 1.5,
 //		},
 //		Lattice:    nil,
-//		Multiplier: complex(2, 0),
+//		multiplier: complex(2, 0),
 //		WavePackets: []*wallpaper.WavePacket{
 //			suite.baseWavePacketWithEvenPowerNAndOddPowerSum,
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
-//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
+//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerN * -1,
+//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerM * -1,
 //					},
 //				},
-//				Multiplier: complex(1, 0),
+//				multiplier: complex(1, 0),
 //			},
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
-//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
+//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerN,
+//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerM * -1,
 //					},
 //				},
-//				Multiplier: complex(1, 0),
+//				multiplier: complex(1, 0),
 //			},
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
-//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM,
+//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerN * -1,
+//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerM,
 //					},
 //				},
-//				Multiplier: complex(1, 0),
+//				multiplier: complex(1, 0),
 //			},
 //		},
 //	}
@@ -250,35 +248,35 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //			Height: 1.5,
 //		},
 //		Lattice:    nil,
-//		Multiplier: complex(2, 0),
+//		multiplier: complex(2, 0),
 //		WavePackets: []*wallpaper.WavePacket{
 //			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
-//						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
+//						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN * -1,
+//						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM * -1,
 //					},
 //				},
-//				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
+//				multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier,
 //			},
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
-//						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
+//						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN,
+//						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM * -1,
 //					},
 //				},
-//				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1,
+//				multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier * -1,
 //			},
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
-//						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM,
+//						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN * -1,
+//						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM,
 //					},
 //				},
-//				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier * -1,
+//				multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier * -1,
 //			},
 //		},
 //	}
@@ -300,35 +298,35 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //			Height: 1.5,
 //		},
 //		Lattice:    nil,
-//		Multiplier: complex(2, 0),
+//		multiplier: complex(2, 0),
 //		WavePackets: []*wallpaper.WavePacket{
 //			suite.baseWavePacketWithEvenPowerNAndOddPowerSum,
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
-//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
+//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerN * -1,
+//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerM * -1,
 //					},
 //				},
-//				Multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
+//				multiplier: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.multiplier,
 //			},
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN,
-//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM * -1,
+//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerN,
+//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerM * -1,
 //					},
 //				},
-//				Multiplier: -1 * suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
+//				multiplier: -1 * suite.baseWavePacketWithEvenPowerNAndOddPowerSum.multiplier,
 //			},
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerN * -1,
-//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Terms[0].PowerM,
+//						PowerN: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerN * -1,
+//						PowerM: suite.baseWavePacketWithEvenPowerNAndOddPowerSum.terms[0].PowerM,
 //					},
 //				},
-//				Multiplier: -1 * suite.baseWavePacketWithEvenPowerNAndOddPowerSum.Multiplier,
+//				multiplier: -1 * suite.baseWavePacketWithEvenPowerNAndOddPowerSum.multiplier,
 //			},
 //		},
 //	}
@@ -348,35 +346,35 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //			Height: 1.5,
 //		},
 //		Lattice:    nil,
-//		Multiplier: complex(2, 0),
+//		multiplier: complex(2, 0),
 //		WavePackets: []*wallpaper.WavePacket{
 //			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
-//						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
+//						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN * -1,
+//						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM * -1,
 //					},
 //				},
-//				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
+//				multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier,
 //			},
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN,
-//						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM * -1,
+//						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN,
+//						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM * -1,
 //					},
 //				},
-//				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
+//				multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier,
 //			},
 //			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
+//				terms: []*eisenstien.EisensteinFormulaTerm{
 //					{
-//						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN * -1,
-//						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM,
+//						PowerN: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN * -1,
+//						PowerM: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM,
 //					},
 //				},
-//				Multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier,
+//				multiplier: suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier,
 //			},
 //		},
 //	}
@@ -398,13 +396,13 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //
 //func (suite *RectangularCreatedWithDesiredSymmetry) SetUpTest(checker *C) {
 //	suite.baseWavePacketWithOddPowerNAndEvenPowerSum = &wallpaper.WavePacket{
-//		Terms: []*eisenstien.EisensteinFormulaTerm{
+//		terms: []*eisenstien.EisensteinFormulaTerm{
 //			{
 //				PowerN: 7,
 //				PowerM: -3,
 //			},
 //		},
-//		Multiplier: complex(1, 0),
+//		multiplier: complex(1, 0),
 //	}
 //}
 //
@@ -415,7 +413,7 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //			Width:  0,
 //			Height: 2.0,
 //		},
-//		Multiplier: complex(2, 0),
+//		multiplier: complex(2, 0),
 //		WavePackets: []*wallpaper.WavePacket{
 //			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 //		},
@@ -425,11 +423,11 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //	checker.Assert(err, IsNil)
 //
 //	checker.Assert(newFormula.WavePackets, HasLen, 2)
-//	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 1)
+//	checker.Assert(newFormula.WavePackets[0].terms, HasLen, 1)
 //
-//	checker.Assert(newFormula.WavePackets[1].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN)
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
+//	checker.Assert(newFormula.WavePackets[1].multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier)
+//	checker.Assert(newFormula.WavePackets[1].terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN)
+//	checker.Assert(newFormula.WavePackets[1].terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM*-1)
 //
 //	checker.Assert(newFormula.HasSymmetry(wallpaper.Pm), Equals, true)
 //	checker.Assert(newFormula.HasSymmetry(wallpaper.Pg), Equals, false)
@@ -445,7 +443,7 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //			Width:  0,
 //			Height: 2.0,
 //		},
-//		Multiplier: complex(2, 0),
+//		multiplier: complex(2, 0),
 //		WavePackets: []*wallpaper.WavePacket{
 //			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 //		},
@@ -455,11 +453,11 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //	checker.Assert(err, IsNil)
 //
 //	checker.Assert(newFormula.WavePackets, HasLen, 2)
-//	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 1)
+//	checker.Assert(newFormula.WavePackets[0].terms, HasLen, 1)
 //
-//	checker.Assert(newFormula.WavePackets[1].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier*-1)
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN)
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
+//	checker.Assert(newFormula.WavePackets[1].multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier*-1)
+//	checker.Assert(newFormula.WavePackets[1].terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN)
+//	checker.Assert(newFormula.WavePackets[1].terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM*-1)
 //
 //	checker.Assert(newFormula.HasSymmetry(wallpaper.Pm), Equals, false)
 //	checker.Assert(newFormula.HasSymmetry(wallpaper.Pg), Equals, true)
@@ -475,7 +473,7 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //			Width:  0,
 //			Height: 2.0,
 //		},
-//		Multiplier: complex(2, 0),
+//		multiplier: complex(2, 0),
 //		WavePackets: []*wallpaper.WavePacket{
 //			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 //		},
@@ -485,23 +483,23 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //	checker.Assert(err, IsNil)
 //
 //	checker.Assert(newFormula.WavePackets, HasLen, 4)
-//	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 1)
+//	checker.Assert(newFormula.WavePackets[0].terms, HasLen, 1)
 //
-//	checker.Assert(newFormula.WavePackets[1].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN*-1)
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
+//	checker.Assert(newFormula.WavePackets[1].multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier)
+//	checker.Assert(newFormula.WavePackets[1].terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN*-1)
+//	checker.Assert(newFormula.WavePackets[1].terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM*-1)
 //
-//	checker.Assert(newFormula.WavePackets[1].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN*-1)
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
+//	checker.Assert(newFormula.WavePackets[1].multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier)
+//	checker.Assert(newFormula.WavePackets[1].terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN*-1)
+//	checker.Assert(newFormula.WavePackets[1].terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM*-1)
 //
-//	checker.Assert(newFormula.WavePackets[2].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-//	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN*-1)
-//	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM)
+//	checker.Assert(newFormula.WavePackets[2].multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier)
+//	checker.Assert(newFormula.WavePackets[2].terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN*-1)
+//	checker.Assert(newFormula.WavePackets[2].terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM)
 //
-//	checker.Assert(newFormula.WavePackets[3].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-//	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN)
-//	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
+//	checker.Assert(newFormula.WavePackets[3].multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier)
+//	checker.Assert(newFormula.WavePackets[3].terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN)
+//	checker.Assert(newFormula.WavePackets[3].terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM*-1)
 //
 //	checker.Assert(newFormula.HasSymmetry(wallpaper.Pm), Equals, true)
 //	checker.Assert(newFormula.HasSymmetry(wallpaper.Pg), Equals, false)
@@ -517,7 +515,7 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //			Width:  0,
 //			Height: 2.0,
 //		},
-//		Multiplier: complex(2, 0),
+//		multiplier: complex(2, 0),
 //		WavePackets: []*wallpaper.WavePacket{
 //			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 //		},
@@ -527,19 +525,19 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //	checker.Assert(err, IsNil)
 //
 //	checker.Assert(newFormula.WavePackets, HasLen, 4)
-//	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 1)
+//	checker.Assert(newFormula.WavePackets[0].terms, HasLen, 1)
 //
-//	checker.Assert(newFormula.WavePackets[1].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN*-1)
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
+//	checker.Assert(newFormula.WavePackets[1].multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier)
+//	checker.Assert(newFormula.WavePackets[1].terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN*-1)
+//	checker.Assert(newFormula.WavePackets[1].terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM*-1)
 //
-//	checker.Assert(newFormula.WavePackets[2].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier*-1)
-//	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN*-1)
-//	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM)
+//	checker.Assert(newFormula.WavePackets[2].multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier*-1)
+//	checker.Assert(newFormula.WavePackets[2].terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN*-1)
+//	checker.Assert(newFormula.WavePackets[2].terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM)
 //
-//	checker.Assert(newFormula.WavePackets[3].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier*-1)
-//	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN)
-//	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
+//	checker.Assert(newFormula.WavePackets[3].multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier*-1)
+//	checker.Assert(newFormula.WavePackets[3].terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN)
+//	checker.Assert(newFormula.WavePackets[3].terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM*-1)
 //
 //	checker.Assert(newFormula.HasSymmetry(wallpaper.Pm), Equals, false)
 //	checker.Assert(newFormula.HasSymmetry(wallpaper.Pg), Equals, true)
@@ -555,7 +553,7 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //			Width:  0,
 //			Height: 2.0,
 //		},
-//		Multiplier: complex(2, 0),
+//		multiplier: complex(2, 0),
 //		WavePackets: []*wallpaper.WavePacket{
 //			suite.baseWavePacketWithOddPowerNAndEvenPowerSum,
 //		},
@@ -565,19 +563,19 @@ func (suite *RectangularWallpaper) TestCalculationOfPoints(checker *C) {
 //	checker.Assert(err, IsNil)
 //
 //	checker.Assert(newFormula.WavePackets, HasLen, 4)
-//	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 1)
+//	checker.Assert(newFormula.WavePackets[0].terms, HasLen, 1)
 //
-//	checker.Assert(newFormula.WavePackets[1].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN*-1)
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
+//	checker.Assert(newFormula.WavePackets[1].multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier)
+//	checker.Assert(newFormula.WavePackets[1].terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN*-1)
+//	checker.Assert(newFormula.WavePackets[1].terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM*-1)
 //
-//	checker.Assert(newFormula.WavePackets[2].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-//	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN*-1)
-//	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM)
+//	checker.Assert(newFormula.WavePackets[2].multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier)
+//	checker.Assert(newFormula.WavePackets[2].terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN*-1)
+//	checker.Assert(newFormula.WavePackets[2].terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM)
 //
-//	checker.Assert(newFormula.WavePackets[3].Multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Multiplier)
-//	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerN)
-//	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.Terms[0].PowerM*-1)
+//	checker.Assert(newFormula.WavePackets[3].multiplier, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.multiplier)
+//	checker.Assert(newFormula.WavePackets[3].terms[0].PowerN, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerN)
+//	checker.Assert(newFormula.WavePackets[3].terms[0].PowerM, Equals, suite.baseWavePacketWithOddPowerNAndEvenPowerSum.terms[0].PowerM*-1)
 //
 //	checker.Assert(newFormula.HasSymmetry(wallpaper.Pm), Equals, true)
 //	checker.Assert(newFormula.HasSymmetry(wallpaper.Pg), Equals, false)

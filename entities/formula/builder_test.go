@@ -82,6 +82,23 @@ func (b *BuilderTest) TestSquareFormula(checker *C) {
 	checker.Assert(squareFormula.WavePackets(), HasLen, 1)
 }
 
+func (b *BuilderTest) TestHexagonalFormula(checker *C) {
+	hexagonFormula, _ := formula.NewBuilder().
+		Hexagonal().
+		AddWavePacket(
+			formula.NewWavePacketBuilder().
+				Multiplier(complex(1,0)).
+				AddTerm(
+					formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
+				).
+				Build(),
+		).
+		Build()
+
+	checker.Assert(reflect.TypeOf(hexagonFormula).String(), Equals, "*formula.Hexagonal")
+	checker.Assert(hexagonFormula.WavePackets(), HasLen, 1)
+}
+
 type TermBuilderTest struct {}
 
 var _ = Suite(&TermBuilderTest{})

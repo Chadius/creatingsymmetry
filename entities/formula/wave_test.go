@@ -28,15 +28,15 @@ func (suite *WavePacketBuilderTest) TestCreateWavePackets(checker *C) {
 		).
 		Build()
 
-	checker.Assert(real(newWavePacket.GetMultiplier()), utility.NumericallyCloseEnough{}, 2e-3, 1e-6)
-	checker.Assert(imag(newWavePacket.GetMultiplier()), utility.NumericallyCloseEnough{}, -5e7, 1e-6)
-	checker.Assert(newWavePacket.GetTerms(), HasLen, 3)
-	checker.Assert(newWavePacket.GetTerms()[0].PowerN, Equals, 1)
-	checker.Assert(newWavePacket.GetTerms()[0].PowerM, Equals, -2)
-	checker.Assert(newWavePacket.GetTerms()[1].PowerN, Equals, -2)
-	checker.Assert(newWavePacket.GetTerms()[1].PowerM, Equals, 1)
-	checker.Assert(newWavePacket.GetTerms()[2].PowerN, Equals, 1)
-	checker.Assert(newWavePacket.GetTerms()[2].PowerM, Equals, 1)
+	checker.Assert(real(newWavePacket.Multiplier()), utility.NumericallyCloseEnough{}, 2e-3, 1e-6)
+	checker.Assert(imag(newWavePacket.Multiplier()), utility.NumericallyCloseEnough{}, -5e7, 1e-6)
+	checker.Assert(newWavePacket.Terms(), HasLen, 3)
+	checker.Assert(newWavePacket.Terms()[0].PowerN, Equals, 1)
+	checker.Assert(newWavePacket.Terms()[0].PowerM, Equals, -2)
+	checker.Assert(newWavePacket.Terms()[1].PowerN, Equals, -2)
+	checker.Assert(newWavePacket.Terms()[1].PowerM, Equals, 1)
+	checker.Assert(newWavePacket.Terms()[2].PowerN, Equals, 1)
+	checker.Assert(newWavePacket.Terms()[2].PowerM, Equals, 1)
 }
 
 type WaveFormulaTests struct {
@@ -78,9 +78,15 @@ func (suite *WaveFormulaTests) TestWaveFormulaCombinesEisensteinTerms(checker *C
 }
 
 func (suite *WaveFormulaTests) TestWaveFormulaUsesMultiplier(checker *C) {
-	suite.hexagonalWavePacket.Multiplier = complex(1/3.0, 0)
+	hexagonalWavePacketWithNewMultiplier :=  formula.NewWavePacketBuilder().
+		Multiplier(complex(1/3.0,0)).
+		AddTerm(&suite.hexagonalWavePacket.Terms()[0]).
+		AddTerm(&suite.hexagonalWavePacket.Terms()[1]).
+		AddTerm(&suite.hexagonalWavePacket.Terms()[2]).
+		Build()
+
 	zInLatticeCoordinates := suite.hexLatticeVectors.ConvertToLatticeCoordinates(complex(math.Sqrt(3), -1*math.Sqrt(3)))
-	calculation := suite.hexagonalWavePacket.Calculate(zInLatticeCoordinates)
+	calculation := hexagonalWavePacketWithNewMultiplier.Calculate(zInLatticeCoordinates)
 
 	expectedAnswer := (cmplx.Exp(complex(0, 2*math.Pi*(3+math.Sqrt(3)))) +
 		cmplx.Exp(complex(0, 2*math.Pi*(-2*math.Sqrt(3)))) +

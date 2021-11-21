@@ -67,7 +67,7 @@ func CalculateEulerTerm(z complex128, power1, power2 int, scale complex128, igno
 }
 
 
-// FormulaLevelTerms returns the Terms this formula will use.
+// FormulaLevelTerms returns the terms this formula will use.
 func (f *Frieze) FormulaLevelTerms() []Term {
 	return f.formulaLevelTerms
 }

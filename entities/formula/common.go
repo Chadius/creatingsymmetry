@@ -74,13 +74,13 @@ func lockTermsBasedOnRelationship(
 
 	for _, wavePacket := range originalWavePackets {
 		baseCoefficientPairing := coefficient.Pairing{
-			PowerN: wavePacket.GetTerms()[0].PowerN,
-			PowerM: wavePacket.GetTerms()[0].PowerM,
+			PowerN: wavePacket.Terms()[0].PowerN,
+			PowerM: wavePacket.Terms()[0].PowerM,
 		}
 
 		newWavePacket := NewWavePacketBuilder().
-			Multiplier(wavePacket.GetMultiplier()).
-			AddTerm(&wavePacket.GetTerms()[0])
+			Multiplier(wavePacket.Multiplier()).
+			AddTerm(&wavePacket.Terms()[0])
 
 		newPairings := baseCoefficientPairing.GenerateCoefficientSets(lockedRelationships)
 		for _, newCoefficientPair := range newPairings {

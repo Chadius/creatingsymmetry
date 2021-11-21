@@ -19,197 +19,197 @@ package formula
 //
 //	if desiredSymmetry == P31m || desiredSymmetry == P4m || desiredSymmetry == Cm {
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerM,
 //					PowerM: powerN,
 //				},
 //			},
-//			Multiplier: multiplier,
+//			multiplier: multiplier,
 //		})
 //	}
 //	if desiredSymmetry == Pm {
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerN,
 //					PowerM: powerM * -1,
 //				},
 //			},
-//			Multiplier: multiplier,
+//			multiplier: multiplier,
 //		})
 //	}
 //	if desiredSymmetry == Pg {
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerN,
 //					PowerM: powerM * -1,
 //				},
 //			},
-//			Multiplier: multiplierMaybeNegatedBasedOnPowerN,
+//			multiplier: multiplierMaybeNegatedBasedOnPowerN,
 //		})
 //	}
 //	if desiredSymmetry == Pmm {
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerN * -1,
 //					PowerM: powerM * -1,
 //				},
 //			},
-//			Multiplier: multiplier,
+//			multiplier: multiplier,
 //		})
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerN * -1,
 //					PowerM: powerM,
 //				},
 //			},
-//			Multiplier: multiplier,
+//			multiplier: multiplier,
 //		})
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerN,
 //					PowerM: powerM * -1,
 //				},
 //			},
-//			Multiplier: multiplier,
+//			multiplier: multiplier,
 //		})
 //	}
 //	if desiredSymmetry == Pmg {
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerN * -1,
 //					PowerM: powerM * -1,
 //				},
 //			},
-//			Multiplier: multiplier,
+//			multiplier: multiplier,
 //		})
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerN * -1,
 //					PowerM: powerM,
 //				},
 //			},
-//			Multiplier: multiplierMaybeNegatedBasedOnPowerN,
+//			multiplier: multiplierMaybeNegatedBasedOnPowerN,
 //		})
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerN,
 //					PowerM: powerM * -1,
 //				},
 //			},
-//			Multiplier: multiplierMaybeNegatedBasedOnPowerN,
+//			multiplier: multiplierMaybeNegatedBasedOnPowerN,
 //		})
 //	}
 //	if desiredSymmetry == Pgg {
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerN * -1,
 //					PowerM: powerM * -1,
 //				},
 //			},
-//			Multiplier: multiplier,
+//			multiplier: multiplier,
 //		})
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerN * -1,
 //					PowerM: powerM,
 //				},
 //			},
-//			Multiplier: multiplierMaybeNegatedBasedOnSum,
+//			multiplier: multiplierMaybeNegatedBasedOnSum,
 //		})
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerN,
 //					PowerM: powerM * -1,
 //				},
 //			},
-//			Multiplier: multiplierMaybeNegatedBasedOnSum,
+//			multiplier: multiplierMaybeNegatedBasedOnSum,
 //		})
 //	}
 //
 //	if desiredSymmetry == P3m1 {
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerM: powerN * -1,
 //					PowerN: powerM * -1,
 //				},
 //			},
-//			Multiplier: multiplier,
+//			multiplier: multiplier,
 //		})
 //	}
 //	if desiredSymmetry == P6 {
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerM: powerM * -1,
 //					PowerN: powerN * -1,
 //				},
 //			},
-//			Multiplier: multiplier,
+//			multiplier: multiplier,
 //		})
 //	}
 //	if desiredSymmetry == P6m || desiredSymmetry == Cmm {
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerN * -1,
 //					PowerM: powerM * -1,
 //				},
 //			},
-//			Multiplier: multiplier,
+//			multiplier: multiplier,
 //		})
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerM,
 //					PowerM: powerN,
 //				},
 //			},
-//			Multiplier: multiplier,
+//			multiplier: multiplier,
 //		})
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerM * -1,
 //					PowerM: powerN * -1,
 //				},
 //			},
-//			Multiplier: multiplier,
+//			multiplier: multiplier,
 //		})
 //	}
 //
 //	if desiredSymmetry == P4g {
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerM: powerN,
 //					PowerN: powerM,
 //				},
 //			},
-//			Multiplier: multiplierMaybeNegatedBasedOnSum,
+//			multiplier: multiplierMaybeNegatedBasedOnSum,
 //		})
 //	}
 //	if desiredSymmetry == P2 {
 //		newWavePackets = append(newWavePackets, &WavePacket{
-//			Terms: []*eisenstien.EisensteinFormulaTerm{
+//			terms: []*eisenstien.EisensteinFormulaTerm{
 //				{
 //					PowerN: powerN * -1,
 //					PowerM: powerM * -1,
 //				},
 //			},
-//			Multiplier: multiplier,
+//			multiplier: multiplier,
 //		})
 //	}
 //

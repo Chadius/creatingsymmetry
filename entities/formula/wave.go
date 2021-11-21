@@ -4,36 +4,32 @@ import (
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 )
 
-// TODO create NewTerm() function
-// TODO rename Terms to terms
-// TODO rename GetTerms() to Terms()
-
 // WavePacket for Waves mathematically creates repeating, cyclical mathematical patterns
 //   in 2D space, similar to waves on the ocean.
 type WavePacket struct {
-	Terms      []Term
-	Multiplier complex128
+	terms      []Term
+	multiplier complex128
 }
 
-// GetMultiplier is a getter.
-func (wavePacket WavePacket) GetMultiplier() complex128 {
-	return wavePacket.Multiplier
+// Multiplier is a getter.
+func (wavePacket WavePacket) Multiplier() complex128 {
+	return wavePacket.multiplier
 }
 
-// GetTerms is a getter.
-func (wavePacket WavePacket) GetTerms() []Term {
-	return wavePacket.Terms
+// Terms is a getter.
+func (wavePacket WavePacket) Terms() []Term {
+	return wavePacket.terms
 }
 
 // Calculate takes the complex number zInLatticeCoordinates and processes it using the mathematical terms.
 func (wavePacket WavePacket) Calculate(zInLatticeCoordinates complex128) complex128 {
 	sum := complex(0,0)
 
-	for _, term := range wavePacket.Terms {
+	for _, term := range wavePacket.Terms() {
 		termContribution := term.CalculateInLatticeCoordinates(zInLatticeCoordinates)
 		sum += termContribution
 	}
-	return sum * wavePacket.Multiplier
+	return sum * wavePacket.Multiplier()
 }
 
 // GetWavePacketRelationship returns a list of relationships that all of the wave packets conform to.
@@ -42,10 +38,10 @@ func GetWavePacketRelationship(wavePacket1, wavePacket2 *WavePacket) []coefficie
 		return []coefficient.Relationship{}
 	}
 
-	termForWavePacket1 := wavePacket1.GetTerms()[0]
-	termForWavePacket2 := wavePacket2.GetTerms()[0]
+	termForWavePacket1 := wavePacket1.Terms()[0]
+	termForWavePacket2 := wavePacket2.Terms()[0]
 
-	return GetAllPossibleTermRelationships3(termForWavePacket1, termForWavePacket2, wavePacket1.Multiplier, wavePacket2.Multiplier)
+	return GetAllPossibleTermRelationships3(termForWavePacket1, termForWavePacket2, wavePacket1.Multiplier(), wavePacket2.Multiplier())
 }
 
 // ContainsRelationship returns true if the target relationship is in the list of relationships.
@@ -264,7 +260,7 @@ func (w *WavePacketBuilder) AddTerm(term *Term) *WavePacketBuilder {
 // Build returns a new WavePacket.
 func (w *WavePacketBuilder) Build() *WavePacket {
 	return &WavePacket{
-		Terms:      w.terms,
-		Multiplier: w.multiplier,
+		terms:      w.terms,
+		multiplier: w.multiplier,
 	}
 }

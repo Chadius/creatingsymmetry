@@ -48,6 +48,12 @@ func (b *Builder) Square() *Builder {
 	return b
 }
 
+// Hexagonal sets the formula as a square formula.
+func (b *Builder) Hexagonal() *Builder {
+	b.formulaType = "hexagonal"
+	return b
+}
+
 // AddTerm adds a term to the formula.
 func (b *Builder) AddTerm(term *Term) *Builder {
 	b.formulaLevelTerms = append(b.formulaLevelTerms, *term)
@@ -77,6 +83,9 @@ func (b *Builder) Build() (Arbitrary, error) {
 	}
 	if b.formulaType == "square" {
 		return NewSquareFormula(b.wavePackets)
+	}
+	if b.formulaType == "hexagonal" {
+		return NewHexagonalFormula(b.wavePackets)
 	}
 	return &Identity{}, nil
 }
