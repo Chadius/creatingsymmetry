@@ -6,9 +6,6 @@ import (
 	. "gopkg.in/check.v1"
 	"math"
 	"math/cmplx"
-
-	//"math"
-	//"math/cmplx"
 )
 
 type RhombicWallpaper struct {

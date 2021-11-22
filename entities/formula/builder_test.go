@@ -126,6 +126,26 @@ func (b *BuilderTest) TestWhenNoLatticeHeight_RhombicFormulaReturnsError(checker
 	checker.Assert(reflect.TypeOf(rhombicFormula).String(), Equals, "*formula.Identity")
 }
 
+func (b *BuilderTest) TestGenericFormula(checker *C) {
+	genericFormula, _ := formula.NewBuilder().
+		Generic().
+		LatticeWidth(2).
+		LatticeHeight(-0.5).
+		AddWavePacket(
+			formula.NewWavePacketBuilder().
+				Multiplier(complex(1,0)).
+				AddTerm(
+					formula.NewTermBuilder().PowerN(3).PowerM(-4).Build(),
+				).
+				Build(),
+		).
+		Build()
+
+	checker.Assert(reflect.TypeOf(genericFormula).String(), Equals, "*formula.Generic")
+	checker.Assert(genericFormula.WavePackets(), HasLen, 1)
+}
+
+
 type TermBuilderTest struct {}
 
 var _ = Suite(&TermBuilderTest{})

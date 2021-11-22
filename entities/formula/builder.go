@@ -4,6 +4,7 @@ package formula
 type Builder struct {
 	formulaType string
 	formulaLevelTerms []Term
+	latticeWidth float64
 	latticeHeight float64
 	wavePackets []WavePacket
 }
@@ -13,6 +14,7 @@ func NewBuilder() *Builder {
 	return &Builder{
 		formulaType: "identity",
 		formulaLevelTerms: []Term{},
+		latticeWidth: 0.0,
 		latticeHeight: 0.0,
 		wavePackets: []WavePacket{},
 	}
@@ -36,7 +38,13 @@ func (b *Builder) LatticeHeight(latticeHeight float64) *Builder {
 	return b
 }
 
-// Rectangular sets the formula as a frieze formula.
+// LatticeWidth sets the lattice width for wallpaper based patterns.
+func (b *Builder) LatticeWidth(latticeWidth float64) *Builder {
+	b.latticeWidth = latticeWidth
+	return b
+}
+
+// Rectangular sets the formula as a rectangular formula.
 func (b *Builder) Rectangular() *Builder {
 	b.formulaType = "rectangular"
 	return b
@@ -48,15 +56,21 @@ func (b *Builder) Square() *Builder {
 	return b
 }
 
-// Hexagonal sets the formula as a square formula.
+// Hexagonal sets the formula as a hexagonal formula.
 func (b *Builder) Hexagonal() *Builder {
 	b.formulaType = "hexagonal"
 	return b
 }
 
-// Rhombic sets the formula as a square formula.
+// Rhombic sets the formula as a rhombic formula.
 func (b *Builder) Rhombic() *Builder {
 	b.formulaType = "rhombic"
+	return b
+}
+
+// Generic sets the formula as a generic formula.
+func (b *Builder) Generic() *Builder {
+	b.formulaType = "generic"
 	return b
 }
 
@@ -95,6 +109,13 @@ func (b *Builder) Build() (Arbitrary, error) {
 	}
 	if b.formulaType == "rhombic" {
 		formula, err := NewRhombicFormula(b.wavePackets, b.latticeHeight)
+		if formula == nil {
+			return &Identity{}, err
+		}
+		return formula, err
+	}
+	if b.formulaType == "generic" {
+		formula, err := NewGenericFormula(b.wavePackets, b.latticeWidth, b.latticeHeight)
 		if formula == nil {
 			return &Identity{}, err
 		}
