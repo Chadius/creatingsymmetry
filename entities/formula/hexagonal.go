@@ -37,16 +37,7 @@ func (r *Hexagonal) WavePackets() []WavePacket {
 
 // Calculate transforms the coordinate using the Hexagonal lattice's wave packets.
 func (r *Hexagonal) Calculate(coordinate complex128) complex128 {
-	result := complex(0,0)
-
-	zInLatticeCoordinates := ConvertToLatticeCoordinates(coordinate, r.LatticeVectors())
-
-	for _, wavePacket := range r.WavePackets() {
-		termContribution := wavePacket.Calculate(zInLatticeCoordinates)
-		result += termContribution / complex(float64(len(wavePacket.Terms())), 0)
-	}
-
-	return result
+	return CalculateCoordinateUsingWavePackets(coordinate, r.LatticeVectors(), r.WavePackets())
 }
 
 // FormulaLevelTerms returns an empty list, Hexagonal formulas do not have base-level terms.

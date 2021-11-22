@@ -38,15 +38,7 @@ func (r *Square) WavePackets() []WavePacket {
 
 // Calculate transforms the coordinate using the Square lattice's wave packets.
 func (r *Square) Calculate(coordinate complex128) complex128 {
-	result := complex(0,0)
-	zInLatticeCoordinates := ConvertToLatticeCoordinates(coordinate, r.LatticeVectors())
-
-	for _, wavePacket := range r.WavePackets() {
-		termContribution := wavePacket.Calculate(zInLatticeCoordinates)
-		result += termContribution / complex(float64(len(wavePacket.Terms())), 0)
-	}
-
-	return result
+	return CalculateCoordinateUsingWavePackets(coordinate, r.LatticeVectors(), r.WavePackets())
 }
 
 // FormulaLevelTerms returns an empty list, Square formulas do not have base-level terms.

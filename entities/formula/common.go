@@ -1,9 +1,9 @@
 package formula
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"errors"
 	"fmt"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"math"
 )
 
@@ -64,8 +64,6 @@ func ValidateLatticeVectors(latticeVectors []complex128) error {
 	return nil
 }
 
-// TODO test this function
-
 // lockTermsBasedOnRelationship adds terms based on the first term of each WavePacket.
 func lockTermsBasedOnRelationship(
 	lockedRelationships []coefficient.Relationship,
@@ -97,4 +95,18 @@ func lockTermsBasedOnRelationship(
 	}
 	
 	return newWavePackets
+}
+
+// CalculateCoordinateUsingWavePackets transforms the coordinate using the lattice and its wave packets.
+func CalculateCoordinateUsingWavePackets(coordinate complex128, latticeVectors []complex128, wavePackets []WavePacket) complex128 {
+	result := complex(0,0)
+
+	zInLatticeCoordinates := ConvertToLatticeCoordinates(coordinate, latticeVectors)
+
+	for _, wavePacket := range wavePackets {
+		termContribution := wavePacket.Calculate(zInLatticeCoordinates)
+		result += termContribution / complex(float64(len(wavePacket.Terms())), 0)
+	}
+
+	return result
 }

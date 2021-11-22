@@ -99,6 +99,33 @@ func (b *BuilderTest) TestHexagonalFormula(checker *C) {
 	checker.Assert(hexagonFormula.WavePackets(), HasLen, 1)
 }
 
+func (b *BuilderTest) TestRhombicFormula(checker *C) {
+	rhombicFormula, _ := formula.NewBuilder().
+		Rhombic().
+		LatticeHeight(0.5).
+		AddWavePacket(
+			formula.NewWavePacketBuilder().
+				Multiplier(complex(1,0)).
+				AddTerm(
+					formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
+				).
+				Build(),
+		).
+		Build()
+
+	checker.Assert(reflect.TypeOf(rhombicFormula).String(), Equals, "*formula.Rhombic")
+	checker.Assert(rhombicFormula.WavePackets(), HasLen, 1)
+}
+
+func (b *BuilderTest) TestWhenNoLatticeHeight_RhombicFormulaReturnsError(checker *C) {
+	rhombicFormula, err := formula.NewBuilder().
+		Rhombic().
+		Build()
+
+	checker.Assert(err, ErrorMatches, "rhombic lattice must specify height")
+	checker.Assert(reflect.TypeOf(rhombicFormula).String(), Equals, "*formula.Identity")
+}
+
 type TermBuilderTest struct {}
 
 var _ = Suite(&TermBuilderTest{})

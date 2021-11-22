@@ -54,6 +54,12 @@ func (b *Builder) Hexagonal() *Builder {
 	return b
 }
 
+// Rhombic sets the formula as a square formula.
+func (b *Builder) Rhombic() *Builder {
+	b.formulaType = "rhombic"
+	return b
+}
+
 // AddTerm adds a term to the formula.
 func (b *Builder) AddTerm(term *Term) *Builder {
 	b.formulaLevelTerms = append(b.formulaLevelTerms, *term)
@@ -86,6 +92,13 @@ func (b *Builder) Build() (Arbitrary, error) {
 	}
 	if b.formulaType == "hexagonal" {
 		return NewHexagonalFormula(b.wavePackets)
+	}
+	if b.formulaType == "rhombic" {
+		formula, err := NewRhombicFormula(b.wavePackets, b.latticeHeight)
+		if formula == nil {
+			return &Identity{}, err
+		}
+		return formula, err
 	}
 	return &Identity{}, nil
 }
