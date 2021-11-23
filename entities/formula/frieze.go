@@ -76,3 +76,8 @@ func (f *Frieze) FormulaLevelTerms() []Term {
 func (f *Frieze) LatticeVectors() []complex128 {
 	return nil
 }
+
+// SymmetriesFound returns all symmetries found in this pattern.
+func (f *Frieze) SymmetriesFound() []Symmetry {
+	return nil
+}

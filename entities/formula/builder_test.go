@@ -99,6 +99,24 @@ func (b *BuilderTest) TestHexagonalFormula(checker *C) {
 	checker.Assert(hexagonFormula.WavePackets(), HasLen, 1)
 }
 
+func (b *BuilderTest) TestHexagonalFormulaWithDesiredSymmetry(checker *C) {
+	hexagonFormula, _ := formula.NewBuilder().
+		Hexagonal().
+		AddWavePacket(
+			formula.NewWavePacketBuilder().
+				Multiplier(complex(1,0)).
+				AddTerm(
+					formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
+				).
+				Build(),
+		).
+		DesiredSymmetry(formula.P31m).
+		Build()
+
+	checker.Assert(hexagonFormula.SymmetriesFound(), HasLen, 1)
+	checker.Assert(hexagonFormula.SymmetriesFound()[0], Equals, formula.P31m)
+}
+
 func (b *BuilderTest) TestRhombicFormula(checker *C) {
 	rhombicFormula, _ := formula.NewBuilder().
 		Rhombic().
@@ -145,6 +163,14 @@ func (b *BuilderTest) TestGenericFormula(checker *C) {
 	checker.Assert(genericFormula.WavePackets(), HasLen, 1)
 }
 
+func (b *BuilderTest) TestWhenNoLatticeHeight_GenericFormulaReturnsError(checker *C) {
+	genericFormula, err := formula.NewBuilder().
+		Generic().
+		Build()
+
+	checker.Assert(err, ErrorMatches, "generic lattice must specify dimensions")
+	checker.Assert(reflect.TypeOf(genericFormula).String(), Equals, "*formula.Identity")
+}
 
 type TermBuilderTest struct {}
 

@@ -50,3 +50,8 @@ func (r *Square) FormulaLevelTerms() []Term {
 func (r *Square) LatticeVectors() []complex128 {
 	return r.latticeVectors
 }
+
+// SymmetriesFound returns all symmetries found in this pattern.
+func (r *Square) SymmetriesFound() []Symmetry {
+	return nil
+}

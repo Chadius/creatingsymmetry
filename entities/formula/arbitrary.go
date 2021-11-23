@@ -6,4 +6,5 @@ type Arbitrary interface {
 	FormulaLevelTerms() []Term
 	WavePackets() []WavePacket
 	LatticeVectors() []complex128
+	SymmetriesFound() []Symmetry
 }

@@ -45,3 +45,8 @@ func (r *Rectangular) FormulaLevelTerms() []Term {
 func (r *Rectangular) LatticeVectors() []complex128 {
 	return r.latticeVectors
 }
+
+// SymmetriesFound returns all symmetries found in this pattern.
+func (r *Rectangular) SymmetriesFound() []Symmetry {
+	return nil
+}

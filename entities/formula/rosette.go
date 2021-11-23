@@ -77,3 +77,8 @@ func (r *Rosette) FormulaLevelTerms() []Term {
 func (r *Rosette) LatticeVectors() []complex128 {
 	return nil
 }
+
+// SymmetriesFound returns all symmetries found in this pattern.
+func (r *Rosette) SymmetriesFound() []Symmetry {
+	return nil
+}

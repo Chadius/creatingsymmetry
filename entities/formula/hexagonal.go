@@ -9,10 +9,11 @@ import (
 type Hexagonal struct {
 	latticeVectors []complex128
 	wavePackets []WavePacket
+	desiredSymmetry Symmetry // TODO No need to store it here
 }
 
 // NewHexagonalFormula returns a new formula object.
-func NewHexagonalFormula(packets []WavePacket) (*Hexagonal, error) {
+func NewHexagonalFormula(packets []WavePacket, desiredSymmetry Symmetry) (*Hexagonal, error) {
 	packetsWithLockedCoefficients := lockTermsBasedOnRelationship(
 		[]coefficient.Relationship{
 			coefficient.PlusMMinusSumNAndM,
@@ -21,6 +22,7 @@ func NewHexagonalFormula(packets []WavePacket) (*Hexagonal, error) {
 		packets)
 
 	return &Hexagonal{
+		desiredSymmetry: desiredSymmetry, // TODO actually apply desiredSymmetry here, then get rid of this
 		wavePackets: packetsWithLockedCoefficients,
 		latticeVectors: []complex128{
 			complex(1, 0),
@@ -48,4 +50,9 @@ func (r *Hexagonal) FormulaLevelTerms() []Term {
 // LatticeVectors returns the lattice vectors used to create the rectangle.
 func (r *Hexagonal) LatticeVectors() []complex128 {
 	return r.latticeVectors
+}
+
+// SymmetriesFound returns all symmetries found in this pattern.
+func (r *Hexagonal) SymmetriesFound() []Symmetry {
+	return []Symmetry{r.desiredSymmetry} // TODO Actually analyze pattern to figure out symmetries
 }

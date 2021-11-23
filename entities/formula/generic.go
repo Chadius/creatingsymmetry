@@ -12,8 +12,8 @@ type Generic struct {
 
 // NewGenericFormula returns a new formula object.
 func NewGenericFormula(packets []WavePacket, latticeWidth, latticeHeight float64) (*Generic, error) {
-	if latticeHeight == 0.0 {
-		return nil, errors.New("generic lattice must specify height")
+	if latticeHeight == 0.0 || latticeWidth == 0.0 {
+		return nil, errors.New("generic lattice must specify dimensions")
 	}
 
 	return &Generic{
@@ -44,4 +44,9 @@ func (r *Generic) FormulaLevelTerms() []Term {
 // LatticeVectors returns the lattice vectors used to create the rectangle.
 func (r *Generic) LatticeVectors() []complex128 {
 	return r.latticeVectors
+}
+
+// SymmetriesFound returns all symmetries found in this pattern.
+func (r *Generic) SymmetriesFound() []Symmetry {
+	return nil
 }

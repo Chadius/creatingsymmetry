@@ -7,6 +7,7 @@ type Builder struct {
 	latticeWidth float64
 	latticeHeight float64
 	wavePackets []WavePacket
+	desiredSymmetry Symmetry
 }
 
 // NewBuilder returns a new object used to Build Formula objects.
@@ -17,6 +18,7 @@ func NewBuilder() *Builder {
 		latticeWidth: 0.0,
 		latticeHeight: 0.0,
 		wavePackets: []WavePacket{},
+		desiredSymmetry: P1,
 	}
 }
 
@@ -86,6 +88,12 @@ func (b *Builder) AddWavePacket(packet *WavePacket) *Builder {
 	return b
 }
 
+// DesiredSymmetry sets the desired symmetry
+func (b *Builder)DesiredSymmetry(symmetry Symmetry) *Builder {
+	b.desiredSymmetry = symmetry
+	return b
+}
+
 // Build creates a new Formula object.
 func (b *Builder) Build() (Arbitrary, error) {
 	if b.formulaType == "rosette" {
@@ -105,7 +113,7 @@ func (b *Builder) Build() (Arbitrary, error) {
 		return NewSquareFormula(b.wavePackets)
 	}
 	if b.formulaType == "hexagonal" {
-		return NewHexagonalFormula(b.wavePackets)
+		return NewHexagonalFormula(b.wavePackets, b.desiredSymmetry)
 	}
 	if b.formulaType == "rhombic" {
 		formula, err := NewRhombicFormula(b.wavePackets, b.latticeHeight)

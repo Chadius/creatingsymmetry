@@ -52,3 +52,8 @@ func (r *Rhombic) FormulaLevelTerms() []Term {
 func (r *Rhombic) LatticeVectors() []complex128 {
 	return r.latticeVectors
 }
+
+// SymmetriesFound returns all symmetries found in this pattern.
+func (r *Rhombic) SymmetriesFound() []Symmetry {
+	return nil
+}

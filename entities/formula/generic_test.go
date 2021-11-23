@@ -50,57 +50,70 @@ func (suite *GenericWallpaper) TestCalculationOfPoints(checker *C) {
 	checker.Assert(imag(calculation), utility.NumericallyCloseEnough{}, imag(expectedAnswer), 1e-6)
 }
 
-//type GenericWallpaperDesiredSymmetryTest struct {
-//	eisensteinTerm      []*eisenstien.EisensteinFormulaTerm
-//	wallpaperMultiplier complex128
-//	latticeSize         complex128
-//}
-//
-//var _ = Suite(&GenericWallpaperDesiredSymmetryTest{})
-//
-//func (suite *GenericWallpaperDesiredSymmetryTest) SetUpTest(checker *C) {
-//	suite.eisensteinTerm = []*eisenstien.EisensteinFormulaTerm{
-//		{
-//			PowerN: 8,
-//			PowerM: -3,
-//		},
-//	}
-//
-//	suite.wallpaperMultiplier = complex(1, 0)
-//	suite.latticeSize = complex(2.0, 1.5)
-//}
-//
-//func (suite *GenericWallpaperDesiredSymmetryTest) TestCreateGenericWithP1(checker *C) {
-//	newFormula := wallpaper.Formula{
-//		LatticeType: wallpaper.Generic,
-//		LatticeSize: &wallpaper.Dimensions{
-//			Width:  real(suite.latticeSize),
-//			Height: imag(suite.latticeSize),
-//		},
-//		Lattice:    nil,
-//		Multiplier: complex(2, 0),
-//		WavePackets: []*wallpaper.WavePacket{
-//			{
-//				Multiplier: complex(1, 0),
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
-//					suite.eisensteinTerm[0],
-//				},
-//			},
-//		},
-//		DesiredSymmetry: wallpaper.P1,
-//	}
-//	err := newFormula.Setup()
+type GenericWallpaperDesiredSymmetryTest struct {
+	eisensteinTerm      []formula.Term
+	wallpaperMultiplier complex128
+	latticeSize         complex128
+}
+
+var _ = Suite(&GenericWallpaperDesiredSymmetryTest{})
+
+func (suite *GenericWallpaperDesiredSymmetryTest) SetUpTest(checker *C) {
+	suite.eisensteinTerm = []formula.Term{
+		*formula.NewTermBuilder().PowerN(8).PowerM(-3).Multiplier(complex(1, 0)).Build(),
+	}
+	suite.wallpaperMultiplier = complex(1, 0)
+	suite.latticeSize = complex(2.0, 1.5)
+}
+
+func (suite *GenericWallpaperDesiredSymmetryTest) TestCreateGenericWithP1(checker *C) {
+	newFormula, err := formula.NewBuilder().
+		Generic().
+		LatticeWidth(real(suite.latticeSize)).
+		LatticeHeight(imag(suite.latticeSize)).
+		AddWavePacket(
+			formula.NewWavePacketBuilder().
+				Multiplier(complex(1,0)).
+				AddTerm(&suite.eisensteinTerm[0]).
+				Build(),
+		).
+		Build()
+	checker.Assert(err, IsNil)
+
+	checker.Assert(newFormula.LatticeVectors()[1], Equals, suite.latticeSize)
+
+	checker.Assert(newFormula.WavePackets(), HasLen, 1)
+	checker.Assert(newFormula.WavePackets()[0].Terms(), HasLen, 1)
+	checker.Assert(newFormula.WavePackets()[0].Terms()[0].PowerN, Equals, suite.eisensteinTerm[0].PowerN)
+	checker.Assert(newFormula.WavePackets()[0].Terms()[0].PowerM, Equals, suite.eisensteinTerm[0].PowerM)
+}
+
+//func (suite *GenericWallpaperDesiredSymmetryTest) TestCreateGenericWithP2(checker *C) {
+//	newFormula, err := formula.NewBuilder().
+//		Generic().
+//		LatticeWidth(real(suite.latticeSize)).
+//		LatticeHeight(imag(suite.latticeSize)).
+//		AddWavePacket(
+//			formula.NewWavePacketBuilder().
+//				Multiplier(complex(1,0)).
+//				AddTerm(&suite.eisensteinTerm[0]).
+//				Build(),
+//		).
+//		DesiredSymmetry(formula.P2).
+//		Build()
 //	checker.Assert(err, IsNil)
 //
-//	checker.Assert(newFormula.Lattice.YLatticeVector, Equals, suite.latticeSize)
+//	checker.Assert(newFormula.LatticeVectors()[1], Equals, suite.latticeSize)
 //
-//	checker.Assert(newFormula.WavePackets, HasLen, 1)
-//
-//	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 1)
-//	checker.Assert(newFormula.WavePackets[0].Terms[0].PowerN, Equals, suite.eisensteinTerm[0].PowerN)
-//	checker.Assert(newFormula.WavePackets[0].Terms[0].PowerM, Equals, suite.eisensteinTerm[0].PowerM)
+//	checker.Assert(newFormula.WavePackets(), HasLen, 2)
+//	checker.Assert(newFormula.WavePackets()[0].Terms(), HasLen, 1)
+//	checker.Assert(newFormula.WavePackets()[0].Terms()[0].PowerN, Equals, suite.eisensteinTerm[0].PowerN)
+//	checker.Assert(newFormula.WavePackets()[0].Terms()[0].PowerM, Equals, suite.eisensteinTerm[0].PowerM)
+//	checker.Assert(newFormula.WavePackets()[1].Terms(), HasLen, 1)
+//	checker.Assert(newFormula.WavePackets()[1].Terms()[0].PowerN, Equals, suite.eisensteinTerm[0].PowerN * -1)
+//	checker.Assert(newFormula.WavePackets()[1].Terms()[0].PowerM, Equals, suite.eisensteinTerm[0].PowerM * -1)
 //}
-//
+
 //func (suite *GenericWallpaperDesiredSymmetryTest) TestCreateGenericWithP2(checker *C) {
 //	newFormula := wallpaper.Formula{
 //		LatticeType: wallpaper.Generic,

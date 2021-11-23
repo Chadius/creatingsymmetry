@@ -22,3 +22,8 @@ func (i *Identity) FormulaLevelTerms() []Term {
 func (i *Identity) LatticeVectors() []complex128 {
 	return nil
 }
+
+// SymmetriesFound returns all symmetries found in this pattern.
+func (i *Identity) SymmetriesFound() []Symmetry {
+	return nil
+}
