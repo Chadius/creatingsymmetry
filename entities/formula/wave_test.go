@@ -185,23 +185,10 @@ func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
 			Build()
 }
 
-func (suite *WavePacketRelationshipTest) TestLessThanTwoWavePacketsHasNoRelationship(checker *C) {
-	checker.Assert(
-		formula.GetWavePacketRelationship(nil, nil),
-		HasLen, 0)
-
-	checker.Assert(
-		formula.GetWavePacketRelationship(
-			suite.aPlusNPlusMOddWavePacket,
-			nil,
-		),
-		HasLen, 0)
-}
-
 func (suite *WavePacketRelationshipTest) TestPlusNPlusM(checker *C) {
 	relationshipsFound := formula.GetWavePacketRelationship(
-		suite.aPlusNPlusMOddWavePacket,
-		suite.aPlusNPlusMOddWavePacket,
+		*suite.aPlusNPlusMOddWavePacket,
+		*suite.aPlusNPlusMOddWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 1)
@@ -210,8 +197,8 @@ func (suite *WavePacketRelationshipTest) TestPlusNPlusM(checker *C) {
 
 func (suite *WavePacketRelationshipTest) TestMinusNMinusM(checker *C) {
 	relationshipsFound := formula.GetWavePacketRelationship(
-		suite.aPlusNPlusMOddWavePacket,
-		suite.aMinusNMinusMOddWavePacket,
+		*suite.aPlusNPlusMOddWavePacket,
+		*suite.aMinusNMinusMOddWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 1)
@@ -220,8 +207,8 @@ func (suite *WavePacketRelationshipTest) TestMinusNMinusM(checker *C) {
 
 func (suite *WavePacketRelationshipTest) TestMinusMMinusN(checker *C) {
 	relationshipsFound := formula.GetWavePacketRelationship(
-		suite.aPlusNPlusMOddWavePacket,
-		suite.aMinusMMinusNOddWavePacket,
+		*suite.aPlusNPlusMOddWavePacket,
+		*suite.aMinusMMinusNOddWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 1)
@@ -230,23 +217,23 @@ func (suite *WavePacketRelationshipTest) TestMinusMMinusN(checker *C) {
 
 func (suite *WavePacketRelationshipTest) TestPlusMPlusNMaybeFlipScale(checker *C) {
 	relationshipsFound := formula.GetWavePacketRelationship(
-		suite.aPlusNPlusMOddWavePacket,
-		suite.aPlusMPlusNOddNegatedWavePacket,
+		*suite.aPlusNPlusMOddWavePacket,
+		*suite.aPlusMPlusNOddNegatedWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 1)
 	checker.Assert(formula.ContainsRelationship(relationshipsFound, coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum), Equals, true)
 
 	relationshipsFound = formula.GetWavePacketRelationship(
-		suite.aPlusNPlusMEvenWavePacket,
-		suite.aPlusMPlusNEvenNegatedWavePacket,
+		*suite.aPlusNPlusMEvenWavePacket,
+		*suite.aPlusMPlusNEvenNegatedWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 0)
 
 	relationshipsFound = formula.GetWavePacketRelationship(
-		suite.aPlusNPlusMEvenWavePacket,
-		suite.aPlusMPlusNEvenWavePacket,
+		*suite.aPlusNPlusMEvenWavePacket,
+		*suite.aPlusMPlusNEvenWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 2)
@@ -256,16 +243,16 @@ func (suite *WavePacketRelationshipTest) TestPlusMPlusNMaybeFlipScale(checker *C
 
 func (suite *WavePacketRelationshipTest) TestMinusMMinusNMaybeFlipScale(checker *C) {
 	relationshipsFound := formula.GetWavePacketRelationship(
-		suite.aPlusNPlusMOddWavePacket,
-		suite.aMinusMMinusNOddNegatedWavePacket,
+		*suite.aPlusNPlusMOddWavePacket,
+		*suite.aMinusMMinusNOddNegatedWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 1)
 	checker.Assert(relationshipsFound[0], Equals, coefficient.MinusMMinusNNegateMultiplierIfOddPowerSum)
 
 	relationshipsFound = formula.GetWavePacketRelationship(
-		suite.aPlusNPlusMEvenWavePacket,
-		suite.aMinusMMinusNEvenWavePacket,
+		*suite.aPlusNPlusMEvenWavePacket,
+		*suite.aMinusMMinusNEvenWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 2)
@@ -273,8 +260,8 @@ func (suite *WavePacketRelationshipTest) TestMinusMMinusNMaybeFlipScale(checker 
 	checker.Assert(formula.ContainsRelationship(relationshipsFound, coefficient.MinusMMinusN), Equals, true)
 
 	relationshipsFound = formula.GetWavePacketRelationship(
-		suite.aPlusNPlusMEvenWavePacket,
-		suite.aMinusMMinusNEvenNegatedWavePacket,
+		*suite.aPlusNPlusMEvenWavePacket,
+		*suite.aMinusMMinusNEvenNegatedWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 0)
@@ -282,8 +269,8 @@ func (suite *WavePacketRelationshipTest) TestMinusMMinusNMaybeFlipScale(checker 
 
 func (suite *WavePacketRelationshipTest) TestPlusMMinusSumNAndM(checker *C) {
 	relationshipsFound := formula.GetWavePacketRelationship(
-		suite.aPlusNPlusMOddWavePacket,
-		suite.aPlusMMinusSumNAndMOddWavePacket,
+		*suite.aPlusNPlusMOddWavePacket,
+		*suite.aPlusMMinusSumNAndMOddWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 1)
@@ -292,8 +279,8 @@ func (suite *WavePacketRelationshipTest) TestPlusMMinusSumNAndM(checker *C) {
 
 func (suite *WavePacketRelationshipTest) TestMinusSumNAndMPlusN(checker *C) {
 	relationshipsFound := formula.GetWavePacketRelationship(
-		suite.aPlusNPlusMOddWavePacket,
-		suite.aMinusSumNAndMPlusNOddWavePacket,
+		*suite.aPlusNPlusMOddWavePacket,
+		*suite.aMinusSumNAndMPlusNOddWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 1)
@@ -302,8 +289,8 @@ func (suite *WavePacketRelationshipTest) TestMinusSumNAndMPlusN(checker *C) {
 
 func (suite *WavePacketRelationshipTest) TestPlusMMinusN(checker *C) {
 	relationshipsFound := formula.GetWavePacketRelationship(
-		suite.aPlusNPlusMOddWavePacket,
-		suite.aPlusMMinusNOddWavePacket,
+		*suite.aPlusNPlusMOddWavePacket,
+		*suite.aPlusMMinusNOddWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 1)
@@ -312,8 +299,8 @@ func (suite *WavePacketRelationshipTest) TestPlusMMinusN(checker *C) {
 
 func (suite *WavePacketRelationshipTest) TestMinusMPlusN(checker *C) {
 	relationshipsFound := formula.GetWavePacketRelationship(
-		suite.aPlusNPlusMOddWavePacket,
-		suite.aMinusMPlusNOddWavePacket,
+		*suite.aPlusNPlusMOddWavePacket,
+		*suite.aMinusMPlusNOddWavePacket,
 	)
 
 	checker.Assert(relationshipsFound, HasLen, 1)

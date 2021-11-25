@@ -110,3 +110,182 @@ func CalculateCoordinateUsingWavePackets(coordinate complex128, latticeVectors [
 
 	return result
 }
+
+// addNewWavePacketsBasedOnSymmetry creates new WavePackets based on the given term, multiplier and desired symmetry
+func addNewWavePacketsBasedOnSymmetry(term Term, multiplier complex128, desiredSymmetry Symmetry, newWavePackets []WavePacket) []WavePacket {
+	powerN := term.PowerN
+	powerM := term.PowerM
+	powerNIsEven := powerN%2 == 0
+	powerSumIsEven := (powerN+powerM)%2 == 0
+
+	multiplierMaybeNegatedBasedOnSum := multiplier
+	if !powerSumIsEven {
+		multiplierMaybeNegatedBasedOnSum *= -1
+	}
+
+	multiplierMaybeNegatedBasedOnPowerN := multiplier
+	if !powerNIsEven {
+		multiplierMaybeNegatedBasedOnPowerN *= -1
+	}
+
+	//if desiredSymmetry == P31m || desiredSymmetry == P4m || desiredSymmetry == Cm {
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplier).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM, powerN)).
+	//		Build())
+	//}
+	//if desiredSymmetry == Pm {
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplier).
+	//		AddTerm(NewTermWithMultiplierAndPowers(multiplier, powerN, powerM * -1)).
+	//		Build())
+	//}
+	//if desiredSymmetry == Pg {
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplier).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN, powerM * -1)).
+	//		Build())
+	//}
+	//if desiredSymmetry == Pmm {
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplier).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)).
+	//		Build())
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplier).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM)).
+	//		Build())
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplier).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN, powerM * -1)).
+	//		Build())
+	//}
+	//if desiredSymmetry == Pmg {
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplier).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)). // TODO double check that multiplier, may be multiplierMaybeNegatedBasedOnPowerN
+	//		Build())
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplierMaybeNegatedBasedOnPowerN).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM)).
+	//		Build())
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplierMaybeNegatedBasedOnPowerN).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN, powerM * -1)).
+	//		Build())
+	//}
+	//if desiredSymmetry == Pgg {
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplier).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)). // TODO double check that multiplier, may be multiplierMaybeNegatedBasedOnSum
+	//		Build())
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplierMaybeNegatedBasedOnSum).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM)).
+	//		Build())
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplierMaybeNegatedBasedOnSum).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN, powerM * -1)).
+	//		Build())
+	//}
+	//if desiredSymmetry == P3m1 {
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplier).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM * -1, powerN * -1)).
+	//		Build())
+	//}
+	//if desiredSymmetry == P6 {
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplier).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)).
+	//		Build())
+	//}
+	//if desiredSymmetry == P6m || desiredSymmetry == Cmm {
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplier).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)).
+	//		Build())
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplier).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM, powerN)).
+	//		Build())
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplier).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM * -1, powerN * -1)).
+	//		Build())
+	//}
+	//
+	//if desiredSymmetry == P4g {
+	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+	//Multiplier(multiplierMaybeNegatedBasedOnSum).
+	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM, powerN)).
+	//		Build())
+	//}
+	if desiredSymmetry == P2 {
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplier).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)).
+			Build())
+	}
+
+	return newWavePackets
+}
+
+// HasSymmetry returns true if the WavePackets involved form the desired symmetry.
+func HasSymmetry(wavePackets []WavePacket, desiredSymmetry Symmetry, desiredSymmetryToCoefficients map[Symmetry][]coefficient.Relationship) bool {
+	numberOfWavePackets := len(wavePackets)
+	if numberOfWavePackets < 2 || numberOfWavePackets%2 == 1 {
+		return false
+	}
+
+	coefficientsToFind := desiredSymmetryToCoefficients[desiredSymmetry]
+
+	if coefficientsToFind == nil {
+		return false
+	}
+
+	return CanWavePacketsBeGroupedAmongCoefficientRelationships(wavePackets, coefficientsToFind)
+}
+
+// CanWavePacketsBeGroupedAmongCoefficientRelationships returns true if the WavePackets involved satisfy the relationships.
+func CanWavePacketsBeGroupedAmongCoefficientRelationships(wavePackets []WavePacket, desiredRelationships []coefficient.Relationship) bool {
+	wavePacketsMatched := []bool{}
+	for range wavePackets {
+		wavePacketsMatched = append(wavePacketsMatched, false)
+	}
+
+	for indexA, wavePacketA := range wavePackets {
+		relationshipWasFound := map[coefficient.Relationship]bool{}
+		for _, r := range desiredRelationships {
+			relationshipWasFound[r] = false
+		}
+
+		if wavePacketsMatched[indexA] == true {
+			continue
+		}
+
+		for offsetB, wavePacketB := range wavePackets[indexA+1:] {
+			relationshipsFound := GetWavePacketRelationship(
+				wavePacketA,
+				wavePacketB,
+			)
+
+			for _, relationshipToLookFor := range desiredRelationships {
+				if ContainsRelationship(relationshipsFound, relationshipToLookFor) {
+					wavePacketsMatched[indexA+offsetB+1] = true
+					relationshipWasFound[relationshipToLookFor] = true
+					break
+				}
+			}
+		}
+
+		for _, relationshipFound := range relationshipWasFound {
+			if relationshipFound != true {
+				return false
+			}
+		}
+		wavePacketsMatched[indexA] = true
+	}
+
+	return true
+}

@@ -123,7 +123,7 @@ func (b *Builder) Build() (Arbitrary, error) {
 		return formula, err
 	}
 	if b.formulaType == "generic" {
-		formula, err := NewGenericFormula(b.wavePackets, b.latticeWidth, b.latticeHeight)
+		formula, err := NewGenericFormula(b.wavePackets, b.latticeWidth, b.latticeHeight, b.desiredSymmetry)
 		if formula == nil {
 			return &Identity{}, err
 		}

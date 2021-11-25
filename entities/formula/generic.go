@@ -2,6 +2,7 @@ package formula
 
 import (
 	"errors"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 )
 
 // Generic formulas will transform points by returning the same coordinates.
@@ -11,19 +12,34 @@ type Generic struct {
 }
 
 // NewGenericFormula returns a new formula object.
-func NewGenericFormula(packets []WavePacket, latticeWidth, latticeHeight float64) (*Generic, error) {
+func NewGenericFormula(packets []WavePacket, latticeWidth, latticeHeight float64, desiredSymmetry Symmetry) (*Generic, error) {
 	if latticeHeight == 0.0 || latticeWidth == 0.0 {
 		return nil, errors.New("generic lattice must specify dimensions")
 	}
 
+	if desiredSymmetry != P1 && desiredSymmetry != P2 && desiredSymmetry != "" {
+		return nil, errors.New("generic lattice can apply these desired symmetries: P1, P2")
+	}
+
+	newWavePackets := createNewWavePacketsBasedOnDesiredSymmetry(packets, desiredSymmetry)
+
 	return &Generic{
-		wavePackets: packets,
-		latticeVectors: []complex128{
-			complex(1, 0),
-			complex(latticeWidth, latticeHeight),
+			wavePackets:     newWavePackets,
+			latticeVectors: []complex128{
+				complex(1, 0),
+				complex(latticeWidth, latticeHeight),
+			},
 		},
-	},
-	nil
+		nil
+}
+
+func createNewWavePacketsBasedOnDesiredSymmetry(packets []WavePacket, desiredSymmetry Symmetry) []WavePacket {
+	newWavePackets := []WavePacket{}
+	newWavePackets = append(newWavePackets, packets...)
+	for _, existingWavePacket := range packets {
+		newWavePackets = addNewWavePacketsBasedOnSymmetry(existingWavePacket.Terms()[0], existingWavePacket.Multiplier(), desiredSymmetry, newWavePackets)
+	}
+	return newWavePackets
 }
 
 // WavePackets returns the wave packets used.
@@ -48,5 +64,13 @@ func (r *Generic) LatticeVectors() []complex128 {
 
 // SymmetriesFound returns all symmetries found in this pattern.
 func (r *Generic) SymmetriesFound() []Symmetry {
-	return nil
+	symmetriesFound := []Symmetry{P1}
+
+	if HasSymmetry(r.WavePackets(), P2, map[Symmetry][]coefficient.Relationship{
+		P2: {coefficient.MinusNMinusM},
+	}) {
+		symmetriesFound = append(symmetriesFound, P2)
+	}
+
+	return symmetriesFound
 }

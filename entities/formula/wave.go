@@ -33,11 +33,7 @@ func (wavePacket WavePacket) Calculate(zInLatticeCoordinates complex128) complex
 }
 
 // GetWavePacketRelationship returns a list of relationships that all of the wave packets conform to.
-func GetWavePacketRelationship(wavePacket1, wavePacket2 *WavePacket) []coefficient.Relationship {
-	if wavePacket1 == nil || wavePacket2 == nil {
-		return []coefficient.Relationship{}
-	}
-
+func GetWavePacketRelationship(wavePacket1, wavePacket2 WavePacket) []coefficient.Relationship {
 	termForWavePacket1 := wavePacket1.Terms()[0]
 	termForWavePacket2 := wavePacket2.Terms()[0]
 
