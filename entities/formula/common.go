@@ -128,12 +128,12 @@ func addNewWavePacketsBasedOnSymmetry(term Term, multiplier complex128, desiredS
 		multiplierMaybeNegatedBasedOnPowerN *= -1
 	}
 
-	//if desiredSymmetry == P31m || desiredSymmetry == P4m || desiredSymmetry == Cm {
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplier).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM, powerN)).
-	//		Build())
-	//}
+	if desiredSymmetry == P31m { //|| desiredSymmetry == P4m || desiredSymmetry == Cm {
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplier).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM, powerN)).
+			Build())
+	}
 	//if desiredSymmetry == Pm {
 	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
 	//Multiplier(multiplier).
@@ -188,33 +188,33 @@ func addNewWavePacketsBasedOnSymmetry(term Term, multiplier complex128, desiredS
 	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN, powerM * -1)).
 	//		Build())
 	//}
-	//if desiredSymmetry == P3m1 {
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplier).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM * -1, powerN * -1)).
-	//		Build())
-	//}
-	//if desiredSymmetry == P6 {
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplier).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)).
-	//		Build())
-	//}
-	//if desiredSymmetry == P6m || desiredSymmetry == Cmm {
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplier).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)).
-	//		Build())
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplier).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM, powerN)).
-	//		Build())
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplier).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM * -1, powerN * -1)).
-	//		Build())
-	//}
-	//
+	if desiredSymmetry == P3m1 {
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplier).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM * -1, powerN * -1)).
+			Build())
+	}
+	if desiredSymmetry == P6 {
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplier).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)).
+			Build())
+	}
+	if desiredSymmetry == P6m { //|| desiredSymmetry == Cmm {
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplier).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)).
+			Build())
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplier).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM, powerN)).
+			Build())
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplier).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM * -1, powerN * -1)).
+			Build())
+	}
+
 	//if desiredSymmetry == P4g {
 	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
 	//Multiplier(multiplierMaybeNegatedBasedOnSum).
@@ -288,4 +288,13 @@ func CanWavePacketsBeGroupedAmongCoefficientRelationships(wavePackets []WavePack
 	}
 
 	return true
+}
+
+func createNewWavePacketsBasedOnDesiredSymmetry(packets []WavePacket, desiredSymmetry Symmetry) []WavePacket {
+	newWavePackets := []WavePacket{}
+	newWavePackets = append(newWavePackets, packets...)
+	for _, existingWavePacket := range packets {
+		newWavePackets = addNewWavePacketsBasedOnSymmetry(existingWavePacket.Terms()[0], existingWavePacket.Multiplier(), desiredSymmetry, newWavePackets)
+	}
+	return newWavePackets
 }

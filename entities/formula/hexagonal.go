@@ -1,6 +1,7 @@
 package formula
 
 import (
+	"errors"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"math"
 )
@@ -9,20 +10,30 @@ import (
 type Hexagonal struct {
 	latticeVectors []complex128
 	wavePackets []WavePacket
-	desiredSymmetry Symmetry // TODO No need to store it here
 }
 
 // NewHexagonalFormula returns a new formula object.
 func NewHexagonalFormula(packets []WavePacket, desiredSymmetry Symmetry) (*Hexagonal, error) {
+	if desiredSymmetry != "" &&
+		desiredSymmetry != P1 &&
+		desiredSymmetry != P3 &&
+		desiredSymmetry != P31m &&
+		desiredSymmetry != P3m1 &&
+		desiredSymmetry != P6 &&
+		desiredSymmetry != P6m {
+		return nil, errors.New("hexagonal lattice can apply these desired symmetries: P1, P3, P31m, P3m1, P6, P6m")
+	}
+
+	wavePacketsWithDesiredSymmetry := createNewWavePacketsBasedOnDesiredSymmetry(packets, desiredSymmetry)
+
 	packetsWithLockedCoefficients := lockTermsBasedOnRelationship(
 		[]coefficient.Relationship{
 			coefficient.PlusMMinusSumNAndM,
 			coefficient.MinusSumNAndMPlusN,
 		},
-		packets)
+		wavePacketsWithDesiredSymmetry)
 
 	return &Hexagonal{
-		desiredSymmetry: desiredSymmetry, // TODO actually apply desiredSymmetry here, then get rid of this
 		wavePackets: packetsWithLockedCoefficients,
 		latticeVectors: []complex128{
 			complex(1, 0),
@@ -54,5 +65,28 @@ func (r *Hexagonal) LatticeVectors() []complex128 {
 
 // SymmetriesFound returns all symmetries found in this pattern.
 func (r *Hexagonal) SymmetriesFound() []Symmetry {
-	return []Symmetry{r.desiredSymmetry} // TODO Actually analyze pattern to figure out symmetries
+	symmetriesFound := []Symmetry{P1, P3}
+
+	expectedCoefficientsBySymmetry := map[Symmetry][]coefficient.Relationship{
+		P31m: {coefficient.PlusMPlusN},
+		P3m1: {coefficient.MinusMMinusN},
+		P6:   {coefficient.MinusNMinusM},
+		P6m: {
+			coefficient.MinusNMinusM,
+			coefficient.MinusMMinusN,
+			coefficient.PlusMPlusN,
+		},
+	}
+
+	order := []Symmetry{P31m, P3m1, P6, P6m}
+	for _, symmetryType := range order {
+		coefficients := expectedCoefficientsBySymmetry[symmetryType]
+		if HasSymmetry(r.WavePackets(), symmetryType, map[Symmetry][]coefficient.Relationship{
+			symmetryType: coefficients,
+		}) {
+			symmetriesFound = append(symmetriesFound, symmetryType)
+		}
+	}
+
+	return symmetriesFound
 }

@@ -33,15 +33,6 @@ func NewGenericFormula(packets []WavePacket, latticeWidth, latticeHeight float64
 		nil
 }
 
-func createNewWavePacketsBasedOnDesiredSymmetry(packets []WavePacket, desiredSymmetry Symmetry) []WavePacket {
-	newWavePackets := []WavePacket{}
-	newWavePackets = append(newWavePackets, packets...)
-	for _, existingWavePacket := range packets {
-		newWavePackets = addNewWavePacketsBasedOnSymmetry(existingWavePacket.Terms()[0], existingWavePacket.Multiplier(), desiredSymmetry, newWavePackets)
-	}
-	return newWavePackets
-}
-
 // WavePackets returns the wave packets used.
 func (r *Generic) WavePackets() []WavePacket {
 	return r.wavePackets

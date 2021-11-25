@@ -113,8 +113,10 @@ func (b *BuilderTest) TestHexagonalFormulaWithDesiredSymmetry(checker *C) {
 		DesiredSymmetry(formula.P31m).
 		Build()
 
-	checker.Assert(hexagonFormula.SymmetriesFound(), HasLen, 1)
-	checker.Assert(hexagonFormula.SymmetriesFound()[0], Equals, formula.P31m)
+	checker.Assert(hexagonFormula.SymmetriesFound(), HasLen, 3)
+	checker.Assert(hexagonFormula.SymmetriesFound()[0], Equals, formula.P1)
+	checker.Assert(hexagonFormula.SymmetriesFound()[1], Equals, formula.P3)
+	checker.Assert(hexagonFormula.SymmetriesFound()[2], Equals, formula.P31m)
 }
 
 func (b *BuilderTest) TestRhombicFormula(checker *C) {

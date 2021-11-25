@@ -113,7 +113,11 @@ func (b *Builder) Build() (Arbitrary, error) {
 		return NewSquareFormula(b.wavePackets)
 	}
 	if b.formulaType == "hexagonal" {
-		return NewHexagonalFormula(b.wavePackets, b.desiredSymmetry)
+		formula, err := NewHexagonalFormula(b.wavePackets, b.desiredSymmetry)
+		if formula == nil {
+			return &Identity{}, err
+		}
+		return formula, err
 	}
 	if b.formulaType == "rhombic" {
 		formula, err := NewRhombicFormula(b.wavePackets, b.latticeHeight)
