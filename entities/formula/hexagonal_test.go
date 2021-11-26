@@ -224,8 +224,6 @@ func (suite *HexagonalCreatedWithDesiredSymmetry) SetUpTest(checker *C) {
 	suite.wallpaperMultiplier = complex(1, 0)
 }
 
-// TODO Test invalid desired symmetry
-
 func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithP31m(checker *C) {
 	newFormula, err := formula.NewBuilder().
 		Hexagonal().

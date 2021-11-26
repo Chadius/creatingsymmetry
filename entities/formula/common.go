@@ -134,60 +134,60 @@ func addNewWavePacketsBasedOnSymmetry(term Term, multiplier complex128, desiredS
 			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM, powerN)).
 			Build())
 	}
-	//if desiredSymmetry == Pm {
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplier).
-	//		AddTerm(NewTermWithMultiplierAndPowers(multiplier, powerN, powerM * -1)).
-	//		Build())
-	//}
-	//if desiredSymmetry == Pg {
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplier).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN, powerM * -1)).
-	//		Build())
-	//}
-	//if desiredSymmetry == Pmm {
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplier).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)).
-	//		Build())
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplier).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM)).
-	//		Build())
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplier).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN, powerM * -1)).
-	//		Build())
-	//}
-	//if desiredSymmetry == Pmg {
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplier).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)). // TODO double check that multiplier, may be multiplierMaybeNegatedBasedOnPowerN
-	//		Build())
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplierMaybeNegatedBasedOnPowerN).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM)).
-	//		Build())
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplierMaybeNegatedBasedOnPowerN).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN, powerM * -1)).
-	//		Build())
-	//}
-	//if desiredSymmetry == Pgg {
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplier).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)). // TODO double check that multiplier, may be multiplierMaybeNegatedBasedOnSum
-	//		Build())
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplierMaybeNegatedBasedOnSum).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM)).
-	//		Build())
-	//	newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
-	//Multiplier(multiplierMaybeNegatedBasedOnSum).
-	//		AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN, powerM * -1)).
-	//		Build())
-	//}
+	if desiredSymmetry == Pm {
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplier).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN, powerM * -1)).
+			Build())
+	}
+	if desiredSymmetry == Pg {
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplierMaybeNegatedBasedOnPowerN).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN, powerM * -1)).
+			Build())
+	}
+	if desiredSymmetry == Pmm {
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplier).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)).
+			Build())
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplier).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM)).
+			Build())
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplier).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN, powerM * -1)).
+			Build())
+	}
+	if desiredSymmetry == Pmg {
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplier).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)). // TODO double check that multiplier, may be multiplierMaybeNegatedBasedOnPowerN
+			Build())
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplierMaybeNegatedBasedOnPowerN).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM)).
+			Build())
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplierMaybeNegatedBasedOnPowerN).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN, powerM * -1)).
+			Build())
+	}
+	if desiredSymmetry == Pgg {
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplier).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM * -1)). // TODO double check that multiplier, may be multiplierMaybeNegatedBasedOnSum
+			Build())
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplierMaybeNegatedBasedOnSum).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN * -1, powerM)).
+			Build())
+		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
+			Multiplier(multiplierMaybeNegatedBasedOnSum).
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN, powerM * -1)).
+			Build())
+	}
 	if desiredSymmetry == P3m1 {
 		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
 			Multiplier(multiplier).

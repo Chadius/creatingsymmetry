@@ -65,6 +65,30 @@ func (b *BuilderTest) TestWhenNoLatticeHeight_ThenRectangularFormulaReturnsError
 	checker.Assert(reflect.TypeOf(rectangularFormula).String(), Equals, "*formula.Identity")
 }
 
+func (b *BuilderTest) TestRectangularFormulaWithDesiredSymmetry(checker *C) {
+	rectangularFormula, _ := formula.NewBuilder().
+		Rectangular().
+		LatticeHeight(0.5).
+		AddWavePacket(
+			formula.NewWavePacketBuilder().
+				Multiplier(complex(1,0)).
+				AddTerm(
+					formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
+				).
+				Build(),
+		).
+		DesiredSymmetry(formula.Pg).
+		Build()
+
+	foundPgSymmetry := false
+	for _, symmetry := range rectangularFormula.SymmetriesFound() {
+		if symmetry == formula.Pg {
+			foundPgSymmetry = true
+		}
+	}
+	checker.Assert(foundPgSymmetry, Equals, true)
+}
+
 func (b *BuilderTest) TestSquareFormula(checker *C) {
 	squareFormula, _ := formula.NewBuilder().
 		Square().
@@ -113,10 +137,13 @@ func (b *BuilderTest) TestHexagonalFormulaWithDesiredSymmetry(checker *C) {
 		DesiredSymmetry(formula.P31m).
 		Build()
 
-	checker.Assert(hexagonFormula.SymmetriesFound(), HasLen, 3)
-	checker.Assert(hexagonFormula.SymmetriesFound()[0], Equals, formula.P1)
-	checker.Assert(hexagonFormula.SymmetriesFound()[1], Equals, formula.P3)
-	checker.Assert(hexagonFormula.SymmetriesFound()[2], Equals, formula.P31m)
+	foundP31mSymmetry := false
+	for _, symmetry := range hexagonFormula.SymmetriesFound() {
+		if symmetry == formula.P31m {
+			foundP31mSymmetry = true
+		}
+	}
+	checker.Assert(foundP31mSymmetry, Equals, true)
 }
 
 func (b *BuilderTest) TestRhombicFormula(checker *C) {

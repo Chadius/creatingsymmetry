@@ -103,7 +103,7 @@ func (b *Builder) Build() (Arbitrary, error) {
 		return NewFriezeFormula(b.formulaLevelTerms)
 	}
 	if b.formulaType == "rectangular" {
-		formula, err := NewRectangularFormula(b.wavePackets, b.latticeHeight)
+		formula, err := NewRectangularFormula(b.wavePackets, b.latticeHeight, b.desiredSymmetry)
 		if formula == nil {
 			return &Identity{}, err
 		}
