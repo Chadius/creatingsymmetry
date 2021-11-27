@@ -267,7 +267,6 @@ func satisfiesRelationshipMinusNPlusMNegateMultiplierIfOddPowerSum(term1, term2 
 	return term2.PowerN == -1*term1.PowerN && term2.PowerM == term1.PowerM
 }
 
-
 // ContainsRelationship returns true if the target relationship is in the list of relationships.
 func ContainsRelationship(relationships []coefficient.Relationship, target coefficient.Relationship) bool {
 	for _, thisRelationship := range relationships {

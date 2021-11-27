@@ -7,7 +7,7 @@ import (
 	"reflect"
 )
 
-type BuilderTest struct {}
+type BuilderTest struct{}
 
 var _ = Suite(&BuilderTest{})
 
@@ -44,7 +44,7 @@ func (b *BuilderTest) TestRectangularFormula(checker *C) {
 		LatticeHeight(0.5).
 		AddWavePacket(
 			formula.NewWavePacketBuilder().
-				Multiplier(complex(1,0)).
+				Multiplier(complex(1, 0)).
 				AddTerm(
 					formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
 				).
@@ -71,7 +71,7 @@ func (b *BuilderTest) TestRectangularFormulaWithDesiredSymmetry(checker *C) {
 		LatticeHeight(0.5).
 		AddWavePacket(
 			formula.NewWavePacketBuilder().
-				Multiplier(complex(1,0)).
+				Multiplier(complex(1, 0)).
 				AddTerm(
 					formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
 				).
@@ -94,7 +94,7 @@ func (b *BuilderTest) TestSquareFormula(checker *C) {
 		Square().
 		AddWavePacket(
 			formula.NewWavePacketBuilder().
-				Multiplier(complex(1,0)).
+				Multiplier(complex(1, 0)).
 				AddTerm(
 					formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
 				).
@@ -106,12 +106,35 @@ func (b *BuilderTest) TestSquareFormula(checker *C) {
 	checker.Assert(squareFormula.WavePackets(), HasLen, 1)
 }
 
+func (b *BuilderTest) TestSquareFormulaWithDesiredSymmetry(checker *C) {
+	squareFormula, _ := formula.NewBuilder().
+		Square().
+		AddWavePacket(
+			formula.NewWavePacketBuilder().
+				Multiplier(complex(1, 0)).
+				AddTerm(
+					formula.NewTermBuilder().PowerN(-2).PowerM(1).Build(),
+				).
+				Build(),
+		).
+		DesiredSymmetry(formula.P4m).
+		Build()
+
+	foundP4mSymmetry := false
+	for _, symmetry := range squareFormula.SymmetriesFound() {
+		if symmetry == formula.P4m {
+			foundP4mSymmetry = true
+		}
+	}
+	checker.Assert(foundP4mSymmetry, Equals, true)
+}
+
 func (b *BuilderTest) TestHexagonalFormula(checker *C) {
 	hexagonFormula, _ := formula.NewBuilder().
 		Hexagonal().
 		AddWavePacket(
 			formula.NewWavePacketBuilder().
-				Multiplier(complex(1,0)).
+				Multiplier(complex(1, 0)).
 				AddTerm(
 					formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
 				).
@@ -128,7 +151,7 @@ func (b *BuilderTest) TestHexagonalFormulaWithDesiredSymmetry(checker *C) {
 		Hexagonal().
 		AddWavePacket(
 			formula.NewWavePacketBuilder().
-				Multiplier(complex(1,0)).
+				Multiplier(complex(1, 0)).
 				AddTerm(
 					formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
 				).
@@ -152,7 +175,7 @@ func (b *BuilderTest) TestRhombicFormula(checker *C) {
 		LatticeHeight(0.5).
 		AddWavePacket(
 			formula.NewWavePacketBuilder().
-				Multiplier(complex(1,0)).
+				Multiplier(complex(1, 0)).
 				AddTerm(
 					formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
 				).
@@ -180,7 +203,7 @@ func (b *BuilderTest) TestGenericFormula(checker *C) {
 		LatticeHeight(-0.5).
 		AddWavePacket(
 			formula.NewWavePacketBuilder().
-				Multiplier(complex(1,0)).
+				Multiplier(complex(1, 0)).
 				AddTerm(
 					formula.NewTermBuilder().PowerN(3).PowerM(-4).Build(),
 				).
@@ -201,7 +224,7 @@ func (b *BuilderTest) TestWhenNoLatticeHeight_GenericFormulaReturnsError(checker
 	checker.Assert(reflect.TypeOf(genericFormula).String(), Equals, "*formula.Identity")
 }
 
-type TermBuilderTest struct {}
+type TermBuilderTest struct{}
 
 var _ = Suite(&TermBuilderTest{})
 

@@ -9,7 +9,7 @@ import (
 func Test(t *testing.T) { TestingT(t) }
 
 type IdentityTest struct {
-	identityFormula  formula.Arbitrary
+	identityFormula formula.Arbitrary
 }
 
 var _ = Suite(&IdentityTest{})

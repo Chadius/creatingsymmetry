@@ -22,7 +22,7 @@ func (suite *GenericWallpaper) SetUpTest(checker *C) {
 		LatticeHeight(-0.5).
 		AddWavePacket(
 			formula.NewWavePacketBuilder().
-				Multiplier(complex(1,0)).
+				Multiplier(complex(1, 0)).
 				AddTerm(
 					formula.NewTermBuilder().PowerN(3).PowerM(-4).Build(),
 				).
@@ -74,7 +74,7 @@ func (suite *GenericWallpaperDesiredSymmetryTest) TestCreateGenericWithP1(checke
 		LatticeHeight(imag(suite.latticeSize)).
 		AddWavePacket(
 			formula.NewWavePacketBuilder().
-				Multiplier(complex(1,0)).
+				Multiplier(complex(1, 0)).
 				AddTerm(&suite.eisensteinTerm[0]).
 				Build(),
 		).
@@ -96,7 +96,7 @@ func (suite *GenericWallpaperDesiredSymmetryTest) TestCreateGenericWithP2(checke
 		LatticeHeight(imag(suite.latticeSize)).
 		AddWavePacket(
 			formula.NewWavePacketBuilder().
-				Multiplier(complex(1,0)).
+				Multiplier(complex(1, 0)).
 				AddTerm(&suite.eisensteinTerm[0]).
 				Build(),
 		).
@@ -112,18 +112,18 @@ func (suite *GenericWallpaperDesiredSymmetryTest) TestCreateGenericWithP2(checke
 	checker.Assert(newFormula.WavePackets()[0].Terms()[0].PowerN, Equals, suite.eisensteinTerm[0].PowerN)
 	checker.Assert(newFormula.WavePackets()[0].Terms()[0].PowerM, Equals, suite.eisensteinTerm[0].PowerM)
 	checker.Assert(newFormula.WavePackets()[1].Terms(), HasLen, 1)
-	checker.Assert(newFormula.WavePackets()[1].Terms()[0].PowerN, Equals, suite.eisensteinTerm[0].PowerN * -1)
-	checker.Assert(newFormula.WavePackets()[1].Terms()[0].PowerM, Equals, suite.eisensteinTerm[0].PowerM * -1)
+	checker.Assert(newFormula.WavePackets()[1].Terms()[0].PowerN, Equals, suite.eisensteinTerm[0].PowerN*-1)
+	checker.Assert(newFormula.WavePackets()[1].Terms()[0].PowerM, Equals, suite.eisensteinTerm[0].PowerM*-1)
 }
 
-func (suite *GenericWallpaperDesiredSymmetryTest)TestWhenOtherDesiredSymmetry_BuilderReturnsError(checker *C) {
+func (suite *GenericWallpaperDesiredSymmetryTest) TestWhenOtherDesiredSymmetry_BuilderReturnsError(checker *C) {
 	newFormula, err := formula.NewBuilder().
 		Generic().
 		LatticeWidth(real(suite.latticeSize)).
 		LatticeHeight(imag(suite.latticeSize)).
 		AddWavePacket(
 			formula.NewWavePacketBuilder().
-				Multiplier(complex(1,0)).
+				Multiplier(complex(1, 0)).
 				AddTerm(&suite.eisensteinTerm[0]).
 				Build(),
 		).
@@ -168,7 +168,7 @@ func (suite *GenericWaveSymmetry) TestP2(checker *C) {
 		AddWavePacket(
 			formula.NewWavePacketBuilder().
 				Multiplier(suite.baseWavePacket.Multiplier()).
-				AddTerm(formula.NewTermWithMultiplierAndPowers(complex(1,0), suite.baseWavePacket.Terms()[0].PowerN * -1, suite.baseWavePacket.Terms()[0].PowerM * -1)).
+				AddTerm(formula.NewTermWithMultiplierAndPowers(complex(1, 0), suite.baseWavePacket.Terms()[0].PowerN*-1, suite.baseWavePacket.Terms()[0].PowerM*-1)).
 				Build(),
 		).
 		DesiredSymmetry(formula.P1).

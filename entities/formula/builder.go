@@ -2,23 +2,23 @@ package formula
 
 // Builder is used to create formula objects.
 type Builder struct {
-	formulaType string
+	formulaType       string
 	formulaLevelTerms []Term
-	latticeWidth float64
-	latticeHeight float64
-	wavePackets []WavePacket
-	desiredSymmetry Symmetry
+	latticeWidth      float64
+	latticeHeight     float64
+	wavePackets       []WavePacket
+	desiredSymmetry   Symmetry
 }
 
 // NewBuilder returns a new object used to Build Formula objects.
 func NewBuilder() *Builder {
 	return &Builder{
-		formulaType: "identity",
+		formulaType:       "identity",
 		formulaLevelTerms: []Term{},
-		latticeWidth: 0.0,
-		latticeHeight: 0.0,
-		wavePackets: []WavePacket{},
-		desiredSymmetry: P1,
+		latticeWidth:      0.0,
+		latticeHeight:     0.0,
+		wavePackets:       []WavePacket{},
+		desiredSymmetry:   P1,
 	}
 }
 
@@ -89,7 +89,7 @@ func (b *Builder) AddWavePacket(packet *WavePacket) *Builder {
 }
 
 // DesiredSymmetry sets the desired symmetry
-func (b *Builder)DesiredSymmetry(symmetry Symmetry) *Builder {
+func (b *Builder) DesiredSymmetry(symmetry Symmetry) *Builder {
 	b.desiredSymmetry = symmetry
 	return b
 }
@@ -102,6 +102,7 @@ func (b *Builder) Build() (Arbitrary, error) {
 	if b.formulaType == "frieze" {
 		return NewFriezeFormula(b.formulaLevelTerms)
 	}
+
 	if b.formulaType == "rectangular" {
 		formula, err := NewRectangularFormula(b.wavePackets, b.latticeHeight, b.desiredSymmetry)
 		if formula == nil {
@@ -110,7 +111,11 @@ func (b *Builder) Build() (Arbitrary, error) {
 		return formula, err
 	}
 	if b.formulaType == "square" {
-		return NewSquareFormula(b.wavePackets)
+		formula, err := NewSquareFormula(b.wavePackets, b.desiredSymmetry)
+		if formula == nil {
+			return &Identity{}, err
+		}
+		return formula, err
 	}
 	if b.formulaType == "hexagonal" {
 		formula, err := NewHexagonalFormula(b.wavePackets, b.desiredSymmetry)

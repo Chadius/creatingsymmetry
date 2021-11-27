@@ -8,7 +8,7 @@ import (
 // Generic formulas will transform points by returning the same coordinates.
 type Generic struct {
 	latticeVectors []complex128
-	wavePackets []WavePacket
+	wavePackets    []WavePacket
 }
 
 // NewGenericFormula returns a new formula object.
@@ -24,7 +24,7 @@ func NewGenericFormula(packets []WavePacket, latticeWidth, latticeHeight float64
 	newWavePackets := createNewWavePacketsBasedOnDesiredSymmetry(packets, desiredSymmetry)
 
 	return &Generic{
-			wavePackets:     newWavePackets,
+			wavePackets: newWavePackets,
 			latticeVectors: []complex128{
 				complex(1, 0),
 				complex(latticeWidth, latticeHeight),

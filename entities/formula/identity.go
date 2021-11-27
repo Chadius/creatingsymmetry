@@ -1,7 +1,7 @@
 package formula
 
 // Identity formulas will transform points by returning the same coordinates.
-type Identity struct {}
+type Identity struct{}
 
 // Calculate returns the coordinate, the Identity formula returns the given input.
 func (i *Identity) Calculate(coordinate complex128) complex128 {

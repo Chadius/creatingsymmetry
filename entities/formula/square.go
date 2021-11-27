@@ -1,25 +1,36 @@
 package formula
 
 import (
+	"errors"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 )
 
 // Square formulas will transform points by returning the same coordinates.
 type Square struct {
 	latticeVectors []complex128
-	wavePackets []WavePacket
+	wavePackets    []WavePacket
 }
 
 // NewSquareFormula returns a new formula object.
-func NewSquareFormula(packets []WavePacket) (*Square, error) {
+func NewSquareFormula(packets []WavePacket, desiredSymmetry Symmetry) (*Square, error) {
+	if desiredSymmetry != "" &&
+		desiredSymmetry != P1 &&
+		desiredSymmetry != P4 &&
+		desiredSymmetry != P4m &&
+		desiredSymmetry != P4g {
+		return nil, errors.New("square lattice can apply these desired symmetries: P1, P4, P4m, P4g")
+	}
+
+	wavePacketsWithDesiredSymmetry := createNewWavePacketsBasedOnDesiredSymmetry(packets, desiredSymmetry)
+
 	packetsWithLockedCoefficients := lockTermsBasedOnRelationship(
 		[]coefficient.Relationship{
 			coefficient.PlusMMinusN,
 			coefficient.MinusNMinusM,
 			coefficient.MinusMPlusN,
-		}, 
-		packets)
-	
+		},
+		wavePacketsWithDesiredSymmetry)
+
 	squareWallpaperFormula := &Square{
 		wavePackets: packetsWithLockedCoefficients,
 		latticeVectors: []complex128{
@@ -27,7 +38,7 @@ func NewSquareFormula(packets []WavePacket) (*Square, error) {
 			complex(0, 1),
 		},
 	}
-	
+
 	return squareWallpaperFormula, nil
 }
 
@@ -53,5 +64,22 @@ func (r *Square) LatticeVectors() []complex128 {
 
 // SymmetriesFound returns all symmetries found in this pattern.
 func (r *Square) SymmetriesFound() []Symmetry {
-	return nil
+	symmetriesFound := []Symmetry{P1, P4}
+
+	expectedCoefficientsBySymmetry := map[Symmetry][]coefficient.Relationship{
+		P4m: {coefficient.PlusMPlusN},
+		P4g: {coefficient.PlusMPlusNNegateMultiplierIfOddPowerSum},
+	}
+
+	order := []Symmetry{P4m, P4g}
+	for _, symmetryType := range order {
+		coefficients := expectedCoefficientsBySymmetry[symmetryType]
+		if HasSymmetry(r.WavePackets(), symmetryType, map[Symmetry][]coefficient.Relationship{
+			symmetryType: coefficients,
+		}) {
+			symmetriesFound = append(symmetriesFound, symmetryType)
+		}
+	}
+
+	return symmetriesFound
 }

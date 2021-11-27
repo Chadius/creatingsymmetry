@@ -7,14 +7,14 @@ import (
 	. "gopkg.in/check.v1"
 )
 
-type RosetteTest struct {}
+type RosetteTest struct{}
 
 var _ = Suite(&RosetteTest{})
 
 func (suite *RosetteTest) TestRosetteFormulaTransforms(checker *C) {
 	rosetteFormula, _ := formula.NewBuilder().Rosette().AddTerm(
 		formula.NewTermBuilder().
-			Multiplier(complex(3,0)).
+			Multiplier(complex(3, 0)).
 			PowerN(1).
 			PowerM(0).
 			AddCoefficientRelationship(coefficient.PlusMPlusN).

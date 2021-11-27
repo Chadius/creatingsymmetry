@@ -10,7 +10,7 @@ import (
 	"math/cmplx"
 )
 
-type WavePacketBuilderTest struct {}
+type WavePacketBuilderTest struct{}
 
 var _ = Suite(&WavePacketBuilderTest{})
 
@@ -51,8 +51,8 @@ func (suite *WaveFormulaTests) SetUpTest(checker *C) {
 		XLatticeVector: complex(1, 0),
 		YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
 	}
-	suite.hexagonalWavePacket =  formula.NewWavePacketBuilder().
-		Multiplier(complex(1,0)).
+	suite.hexagonalWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(1, 0)).
 		AddTerm(
 			formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
 		).
@@ -78,8 +78,8 @@ func (suite *WaveFormulaTests) TestWaveFormulaCombinesEisensteinTerms(checker *C
 }
 
 func (suite *WaveFormulaTests) TestWaveFormulaUsesMultiplier(checker *C) {
-	hexagonalWavePacketWithNewMultiplier :=  formula.NewWavePacketBuilder().
-		Multiplier(complex(1/3.0,0)).
+	hexagonalWavePacketWithNewMultiplier := formula.NewWavePacketBuilder().
+		Multiplier(complex(1/3.0, 0)).
 		AddTerm(&suite.hexagonalWavePacket.Terms()[0]).
 		AddTerm(&suite.hexagonalWavePacket.Terms()[1]).
 		AddTerm(&suite.hexagonalWavePacket.Terms()[2]).
@@ -119,70 +119,70 @@ type WavePacketRelationshipTest struct {
 var _ = Suite(&WavePacketRelationshipTest{})
 
 func (suite *WavePacketRelationshipTest) SetUpTest(checker *C) {
-		suite.aPlusNPlusMOddWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(2, 1)).
-			AddTerm(formula.NewTermBuilder().PowerN(-1).PowerM(4).Build()).
-			Build()
-		suite.aPlusMPlusNOddWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(2, 1)).
-			AddTerm(formula.NewTermBuilder().PowerN(4).PowerM(-1).Build()).
-			Build()
-		suite.aMinusNMinusMOddWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(2, 1)).
-			AddTerm(formula.NewTermBuilder().PowerN(1).PowerM(-4).Build()).
-			Build()
-		suite.aMinusMMinusNOddWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(2, 1)).
-			AddTerm(formula.NewTermBuilder().PowerN(-4).PowerM(1).Build()).
-			Build()
-		suite.aPlusMMinusNOddWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(2, 1)).
-			AddTerm(formula.NewTermBuilder().PowerN(4).PowerM(1).Build()).
-			Build()
-		suite.aMinusMPlusNOddWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(2, 1)).
-			AddTerm(formula.NewTermBuilder().PowerN(-4).PowerM(-1).Build()).
-			Build()
-		suite.aPlusMPlusNOddNegatedWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(-2, -1)).
-			AddTerm(formula.NewTermBuilder().PowerN(4).PowerM(-1).Build()).
-			Build()
-		suite.aMinusMMinusNOddNegatedWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(-2, -1)).
-			AddTerm(formula.NewTermBuilder().PowerN(-4).PowerM(1).Build()).
-			Build()
-		suite.aPlusMMinusSumNAndMOddWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(2, 1)).
-			AddTerm(formula.NewTermBuilder().PowerN(4).PowerM(-3).Build()).
-			Build()
-		suite.aMinusSumNAndMPlusNWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(2, 1)).
-			AddTerm(formula.NewTermBuilder().PowerN(-3).PowerM(-1).Build()).
-			Build()
-		suite.aMinusSumNAndMPlusNOddWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(2, 1)).
-			AddTerm(formula.NewTermBuilder().PowerN(-3).PowerM(-1).Build()).
-			Build()
-		suite.aPlusNPlusMEvenWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(2, 1)).
-			AddTerm(formula.NewTermBuilder().PowerN(-6).PowerM(2).Build()).
-			Build()
-		suite.aPlusMPlusNEvenWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(2, 1)).
-			AddTerm(formula.NewTermBuilder().PowerN(2).PowerM(-6).Build()).
-			Build()
-		suite.aPlusMPlusNEvenNegatedWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(-2, -1)).
-			AddTerm(formula.NewTermBuilder().PowerN(2).PowerM(-6).Build()).
-			Build()
-		suite.aMinusMMinusNEvenWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(2, 1)).
-			AddTerm(formula.NewTermBuilder().PowerN(-2).PowerM(6).Build()).
-			Build()
-		suite.aMinusMMinusNEvenNegatedWavePacket = formula.NewWavePacketBuilder().
-			Multiplier(complex(-2, -1)).
-			AddTerm(formula.NewTermBuilder().PowerN(-2).PowerM(6).Build()).
-			Build()
+	suite.aPlusNPlusMOddWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(2, 1)).
+		AddTerm(formula.NewTermBuilder().PowerN(-1).PowerM(4).Build()).
+		Build()
+	suite.aPlusMPlusNOddWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(2, 1)).
+		AddTerm(formula.NewTermBuilder().PowerN(4).PowerM(-1).Build()).
+		Build()
+	suite.aMinusNMinusMOddWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(2, 1)).
+		AddTerm(formula.NewTermBuilder().PowerN(1).PowerM(-4).Build()).
+		Build()
+	suite.aMinusMMinusNOddWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(2, 1)).
+		AddTerm(formula.NewTermBuilder().PowerN(-4).PowerM(1).Build()).
+		Build()
+	suite.aPlusMMinusNOddWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(2, 1)).
+		AddTerm(formula.NewTermBuilder().PowerN(4).PowerM(1).Build()).
+		Build()
+	suite.aMinusMPlusNOddWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(2, 1)).
+		AddTerm(formula.NewTermBuilder().PowerN(-4).PowerM(-1).Build()).
+		Build()
+	suite.aPlusMPlusNOddNegatedWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(-2, -1)).
+		AddTerm(formula.NewTermBuilder().PowerN(4).PowerM(-1).Build()).
+		Build()
+	suite.aMinusMMinusNOddNegatedWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(-2, -1)).
+		AddTerm(formula.NewTermBuilder().PowerN(-4).PowerM(1).Build()).
+		Build()
+	suite.aPlusMMinusSumNAndMOddWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(2, 1)).
+		AddTerm(formula.NewTermBuilder().PowerN(4).PowerM(-3).Build()).
+		Build()
+	suite.aMinusSumNAndMPlusNWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(2, 1)).
+		AddTerm(formula.NewTermBuilder().PowerN(-3).PowerM(-1).Build()).
+		Build()
+	suite.aMinusSumNAndMPlusNOddWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(2, 1)).
+		AddTerm(formula.NewTermBuilder().PowerN(-3).PowerM(-1).Build()).
+		Build()
+	suite.aPlusNPlusMEvenWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(2, 1)).
+		AddTerm(formula.NewTermBuilder().PowerN(-6).PowerM(2).Build()).
+		Build()
+	suite.aPlusMPlusNEvenWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(2, 1)).
+		AddTerm(formula.NewTermBuilder().PowerN(2).PowerM(-6).Build()).
+		Build()
+	suite.aPlusMPlusNEvenNegatedWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(-2, -1)).
+		AddTerm(formula.NewTermBuilder().PowerN(2).PowerM(-6).Build()).
+		Build()
+	suite.aMinusMMinusNEvenWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(2, 1)).
+		AddTerm(formula.NewTermBuilder().PowerN(-2).PowerM(6).Build()).
+		Build()
+	suite.aMinusMMinusNEvenNegatedWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(-2, -1)).
+		AddTerm(formula.NewTermBuilder().PowerN(-2).PowerM(6).Build()).
+		Build()
 }
 
 func (suite *WavePacketRelationshipTest) TestPlusNPlusM(checker *C) {

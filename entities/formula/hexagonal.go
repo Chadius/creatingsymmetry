@@ -9,7 +9,7 @@ import (
 // Hexagonal formulas will transform points by returning the same coordinates.
 type Hexagonal struct {
 	latticeVectors []complex128
-	wavePackets []WavePacket
+	wavePackets    []WavePacket
 }
 
 // NewHexagonalFormula returns a new formula object.
@@ -34,13 +34,13 @@ func NewHexagonalFormula(packets []WavePacket, desiredSymmetry Symmetry) (*Hexag
 		wavePacketsWithDesiredSymmetry)
 
 	return &Hexagonal{
-		wavePackets: packetsWithLockedCoefficients,
-		latticeVectors: []complex128{
-			complex(1, 0),
-			complex(-0.5, math.Sqrt(3.0)/2.0),
+			wavePackets: packetsWithLockedCoefficients,
+			latticeVectors: []complex128{
+				complex(1, 0),
+				complex(-0.5, math.Sqrt(3.0)/2.0),
+			},
 		},
-	},
-	nil
+		nil
 }
 
 // WavePackets returns the wave packets used.

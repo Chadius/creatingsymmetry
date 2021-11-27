@@ -8,7 +8,7 @@ import (
 // Rectangular formulas will transform points by returning the same coordinates.
 type Rectangular struct {
 	latticeVectors []complex128
-	wavePackets []WavePacket
+	wavePackets    []WavePacket
 }
 
 // NewRectangularFormula returns a new formula object.
@@ -30,13 +30,13 @@ func NewRectangularFormula(packets []WavePacket, latticeHeight float64, desiredS
 	wavePacketsWithDesiredSymmetry := createNewWavePacketsBasedOnDesiredSymmetry(packets, desiredSymmetry)
 
 	return &Rectangular{
-		wavePackets: wavePacketsWithDesiredSymmetry,
-		latticeVectors: []complex128{
-			complex(1, 0),
-			complex(0, latticeHeight),
+			wavePackets: wavePacketsWithDesiredSymmetry,
+			latticeVectors: []complex128{
+				complex(1, 0),
+				complex(0, latticeHeight),
+			},
 		},
-	},
-	nil
+		nil
 }
 
 // WavePackets returns the wave packets used.

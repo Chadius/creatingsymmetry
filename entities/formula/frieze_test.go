@@ -8,14 +8,14 @@ import (
 	"math"
 )
 
-type FriezeTest struct {}
+type FriezeTest struct{}
 
 var _ = Suite(&FriezeTest{})
 
 func (suite *FriezeTest) TestFriezeFormulaTransforms(checker *C) {
 	FriezeFormula, _ := formula.NewBuilder().Frieze().AddTerm(
 		formula.NewTermBuilder().
-			Multiplier(complex(2,0)).
+			Multiplier(complex(2, 0)).
 			PowerN(1).
 			PowerM(0).
 			AddCoefficientRelationship(coefficient.PlusMPlusN).

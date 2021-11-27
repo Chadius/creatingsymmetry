@@ -13,9 +13,9 @@ type Frieze struct {
 // NewFriezeFormula returns a new formula
 func NewFriezeFormula(formulaLevelTerms []Term) (*Frieze, error) {
 	return &Frieze{
-		formulaLevelTerms: formulaLevelTerms,
-	},
-	nil
+			formulaLevelTerms: formulaLevelTerms,
+		},
+		nil
 }
 
 // WavePackets returns an empty array, this type of formula does not use WavePackets.
@@ -25,7 +25,7 @@ func (f *Frieze) WavePackets() []WavePacket {
 
 // Calculate applies the Frieze formula to the complex number z.
 func (f *Frieze) Calculate(coordinate complex128) complex128 {
-	sumOfTermCalculations := complex(0,0)
+	sumOfTermCalculations := complex(0, 0)
 	for _, term := range f.formulaLevelTerms {
 		termCalculation := f.calculateTerm(term, coordinate)
 		sumOfTermCalculations += termCalculation
@@ -65,7 +65,6 @@ func CalculateEulerTerm(z complex128, power1, power2 int, scale complex128, igno
 	eRaisedToTheNegativeMZConji := cmplx.Exp(complexConjugate * complex(0, -1*float64(power2)))
 	return eRaisedToTheNZi * eRaisedToTheNegativeMZConji * scale
 }
-
 
 // FormulaLevelTerms returns the terms this formula will use.
 func (f *Frieze) FormulaLevelTerms() []Term {

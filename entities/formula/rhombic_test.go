@@ -20,7 +20,7 @@ func (suite *RhombicWallpaper) SetUpTest(checker *C) {
 		LatticeHeight(1).
 		AddWavePacket(
 			formula.NewWavePacketBuilder().
-				Multiplier(complex(1,0)).
+				Multiplier(complex(1, 0)).
 				AddTerm(
 					formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
 				).

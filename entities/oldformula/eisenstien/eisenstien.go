@@ -68,4 +68,3 @@ func NewEisensteinFormulaTermFromMarshalObject(marshalObject EisensteinFormulaTe
 		PowerM: marshalObject.PowerM,
 	}
 }
-

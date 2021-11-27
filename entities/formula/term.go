@@ -8,20 +8,20 @@ import (
 
 // Term objects help shape the calculation of every formula.
 type Term struct {
-	Multiplier complex128
-	PowerN     int
-	PowerM     int
-	IgnoreComplexConjugate bool
+	Multiplier               complex128
+	PowerN                   int
+	PowerM                   int
+	IgnoreComplexConjugate   bool
 	CoefficientRelationships []coefficient.Relationship
 }
 
 // NewTerm returns a new Term object.
 func NewTerm(multiplier complex128, powerN, powerM int, ignoreComplexConjugate bool, coefficientRelationships []coefficient.Relationship) *Term {
 	return &Term{
-		Multiplier: multiplier,
-		PowerN:     powerN,
-		PowerM:     powerM,
-		IgnoreComplexConjugate: ignoreComplexConjugate,
+		Multiplier:               multiplier,
+		PowerN:                   powerN,
+		PowerM:                   powerM,
+		IgnoreComplexConjugate:   ignoreComplexConjugate,
 		CoefficientRelationships: coefficientRelationships,
 	}
 }
@@ -50,24 +50,23 @@ func (term Term) PowerSumIsEven() bool {
 	return (term.PowerM+term.PowerN)%2 == 0
 }
 
-
 // TermBuilder is used to create formula objects.
 type TermBuilder struct {
-	multiplier complex128
-	powerN int
-	powerM int
+	multiplier               complex128
+	powerN                   int
+	powerM                   int
 	coefficientRelationships []coefficient.Relationship
-	ignoreComplexConjugate bool
+	ignoreComplexConjugate   bool
 }
 
 // NewTermBuilder returns a new object used to build Term objects.
 func NewTermBuilder() *TermBuilder {
 	return &TermBuilder{
-		multiplier: complex(0,0),
-		powerN:  0,
-		powerM:  0,
+		multiplier:               complex(0, 0),
+		powerN:                   0,
+		powerM:                   0,
 		coefficientRelationships: []coefficient.Relationship{},
-		ignoreComplexConjugate: false,
+		ignoreComplexConjugate:   false,
 	}
 }
 
@@ -105,4 +104,3 @@ func (t *TermBuilder) IgnoreComplexConjugate() *TermBuilder {
 func (t *TermBuilder) Build() *Term {
 	return NewTerm(t.multiplier, t.powerN, t.powerM, t.ignoreComplexConjugate, t.coefficientRelationships)
 }
-

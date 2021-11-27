@@ -20,7 +20,7 @@ func (suite *HexagonalWallpaper) SetUpTest(checker *C) {
 		Hexagonal().
 		AddWavePacket(
 			formula.NewWavePacketBuilder().
-				Multiplier(complex(1,0)).
+				Multiplier(complex(1, 0)).
 				AddTerm(
 					formula.NewTermBuilder().Multiplier(complex(1, 0)).PowerN(1).PowerM(-2).Build(),
 				).
@@ -92,10 +92,10 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 			formula.NewWavePacketBuilder().
 				Multiplier(suite.baseWavePacket.Multiplier()).
 				AddTerm(formula.NewTermWithMultiplierAndPowers(
-					complex(1,0),
+					complex(1, 0),
 					suite.baseWavePacket.Terms()[0].PowerM,
 					suite.baseWavePacket.Terms()[0].PowerN,
-					),
+				),
 				).
 				Build(),
 		).
@@ -115,9 +115,9 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 			formula.NewWavePacketBuilder().
 				Multiplier(suite.baseWavePacket.Multiplier()).
 				AddTerm(formula.NewTermWithMultiplierAndPowers(
-					complex(1,0),
-					suite.baseWavePacket.Terms()[0].PowerM * -1,
-					suite.baseWavePacket.Terms()[0].PowerN * -1,
+					complex(1, 0),
+					suite.baseWavePacket.Terms()[0].PowerM*-1,
+					suite.baseWavePacket.Terms()[0].PowerN*-1,
 				),
 				).
 				Build(),
@@ -138,9 +138,9 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 			formula.NewWavePacketBuilder().
 				Multiplier(suite.baseWavePacket.Multiplier()).
 				AddTerm(formula.NewTermWithMultiplierAndPowers(
-					complex(1,0),
-					suite.baseWavePacket.Terms()[0].PowerN * -1,
-					suite.baseWavePacket.Terms()[0].PowerM * -1,
+					complex(1, 0),
+					suite.baseWavePacket.Terms()[0].PowerN*-1,
+					suite.baseWavePacket.Terms()[0].PowerM*-1,
 				),
 				).
 				Build(),
@@ -162,9 +162,9 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 				Multiplier(suite.baseWavePacket.Multiplier()).
 				AddTerm(
 					formula.NewTermWithMultiplierAndPowers(
-						complex(1,0),
-						suite.baseWavePacket.Terms()[0].PowerN * -1,
-						suite.baseWavePacket.Terms()[0].PowerM * -1,
+						complex(1, 0),
+						suite.baseWavePacket.Terms()[0].PowerN*-1,
+						suite.baseWavePacket.Terms()[0].PowerM*-1,
 					),
 				).
 				Build(),
@@ -173,7 +173,7 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 			formula.NewWavePacketBuilder().
 				AddTerm(
 					formula.NewTermWithMultiplierAndPowers(
-						complex(1,0),
+						complex(1, 0),
 						suite.baseWavePacket.Terms()[0].PowerM,
 						suite.baseWavePacket.Terms()[0].PowerN,
 					),
@@ -184,9 +184,9 @@ func (suite *HexagonalWallpaperHasSymmetryTest) TestHexagonalMayHaveSymmetryForP
 			formula.NewWavePacketBuilder().
 				AddTerm(
 					formula.NewTermWithMultiplierAndPowers(
-						complex(1,0),
-						suite.baseWavePacket.Terms()[0].PowerM * -1,
-						suite.baseWavePacket.Terms()[0].PowerN * -1,
+						complex(1, 0),
+						suite.baseWavePacket.Terms()[0].PowerM*-1,
+						suite.baseWavePacket.Terms()[0].PowerN*-1,
 					),
 				).
 				Build(),
@@ -212,10 +212,10 @@ var _ = Suite(&HexagonalCreatedWithDesiredSymmetry{})
 func (suite *HexagonalCreatedWithDesiredSymmetry) SetUpTest(checker *C) {
 	suite.baseWavePacket =
 		formula.NewWavePacketBuilder().
-			Multiplier(complex(1,0)).
+			Multiplier(complex(1, 0)).
 			AddTerm(
 				formula.NewTermWithMultiplierAndPowers(
-					complex(1,0),
+					complex(1, 0),
 					1,
 					-2,
 				),
@@ -315,7 +315,7 @@ func (suite *HexagonalCreatedWithDesiredSymmetry) TestCreateWallpaperWithP6m(che
 	checker.Assert(newFormula.SymmetriesFound()[5], Equals, formula.P6m)
 }
 
-func (suite *HexagonalCreatedWithDesiredSymmetry)TestWhenOtherDesiredSymmetry_BuilderReturnsError(checker *C) {
+func (suite *HexagonalCreatedWithDesiredSymmetry) TestWhenOtherDesiredSymmetry_BuilderReturnsError(checker *C) {
 	newFormula, err := formula.NewBuilder().
 		Hexagonal().
 		AddWavePacket(suite.baseWavePacket).

@@ -13,9 +13,9 @@ type Rosette struct {
 // NewRosetteFormula returns a new formula
 func NewRosetteFormula(formulaLevelTerms []Term) (*Rosette, error) {
 	return &Rosette{
-		formulaLevelTerms: formulaLevelTerms,
-	},
-	nil
+			formulaLevelTerms: formulaLevelTerms,
+		},
+		nil
 }
 
 // WavePackets returns an empty array, this type of formula does not use WavePackets.
@@ -25,7 +25,7 @@ func (r *Rosette) WavePackets() []WavePacket {
 
 // Calculate applies the Rosette formula to the complex number z.
 func (r *Rosette) Calculate(coordinate complex128) complex128 {
-	sumOfTermCalculations := complex(0,0)
+	sumOfTermCalculations := complex(0, 0)
 	for _, term := range r.formulaLevelTerms {
 		termCalculation := r.calculateTerm(term, coordinate)
 		sumOfTermCalculations += termCalculation

@@ -23,7 +23,7 @@ func (wavePacket WavePacket) Terms() []Term {
 
 // Calculate takes the complex number zInLatticeCoordinates and processes it using the mathematical terms.
 func (wavePacket WavePacket) Calculate(zInLatticeCoordinates complex128) complex128 {
-	sum := complex(0,0)
+	sum := complex(0, 0)
 
 	for _, term := range wavePacket.Terms() {
 		termContribution := term.CalculateInLatticeCoordinates(zInLatticeCoordinates)
@@ -230,14 +230,14 @@ func satisfiesRelationshipMinusNPlusMNegateMultiplierIfOddPowerSum(term1, term2 
 // WavePacketBuilder is used to create new WavePackets.
 type WavePacketBuilder struct {
 	multiplier complex128
-	terms []Term
+	terms      []Term
 }
 
 // NewWavePacketBuilder returns a blank WavePacketBuilder.
 func NewWavePacketBuilder() *WavePacketBuilder {
 	return &WavePacketBuilder{
-		multiplier: complex(0,0),
-		terms: []Term{},
+		multiplier: complex(0, 0),
+		terms:      []Term{},
 	}
 }
 
