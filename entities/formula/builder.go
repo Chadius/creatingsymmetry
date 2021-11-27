@@ -125,7 +125,7 @@ func (b *Builder) Build() (Arbitrary, error) {
 		return formula, err
 	}
 	if b.formulaType == "rhombic" {
-		formula, err := NewRhombicFormula(b.wavePackets, b.latticeHeight)
+		formula, err := NewRhombicFormula(b.wavePackets, b.latticeHeight, b.desiredSymmetry)
 		if formula == nil {
 			return &Identity{}, err
 		}

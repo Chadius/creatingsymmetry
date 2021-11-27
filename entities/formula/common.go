@@ -128,7 +128,7 @@ func addNewWavePacketsBasedOnSymmetry(term Term, multiplier complex128, desiredS
 		multiplierMaybeNegatedBasedOnPowerN *= -1
 	}
 
-	if desiredSymmetry == P31m || desiredSymmetry == P4m { // || desiredSymmetry == Cm {
+	if desiredSymmetry == P31m || desiredSymmetry == P4m || desiredSymmetry == Cm {
 		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
 			Multiplier(multiplier).
 			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerM, powerN)).
@@ -200,7 +200,7 @@ func addNewWavePacketsBasedOnSymmetry(term Term, multiplier complex128, desiredS
 			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN*-1, powerM*-1)).
 			Build())
 	}
-	if desiredSymmetry == P6m { //|| desiredSymmetry == Cmm {
+	if desiredSymmetry == P6m || desiredSymmetry == Cmm {
 		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
 			Multiplier(multiplier).
 			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN*-1, powerM*-1)).

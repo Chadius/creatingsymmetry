@@ -187,6 +187,30 @@ func (b *BuilderTest) TestRhombicFormula(checker *C) {
 	checker.Assert(rhombicFormula.WavePackets(), HasLen, 1)
 }
 
+func (b *BuilderTest) TestRhombicFormulaWithDesiredSymmetry(checker *C) {
+	squareFormula, _ := formula.NewBuilder().
+		Rhombic().
+		LatticeHeight(0.5).
+		AddWavePacket(
+			formula.NewWavePacketBuilder().
+				Multiplier(complex(1, 0)).
+				AddTerm(
+					formula.NewTermBuilder().PowerN(1).PowerM(-2).Build(),
+				).
+				Build(),
+		).
+		DesiredSymmetry(formula.Cm).
+		Build()
+
+	foundCmSymmetry := false
+	for _, symmetry := range squareFormula.SymmetriesFound() {
+		if symmetry == formula.Cm {
+			foundCmSymmetry = true
+		}
+	}
+	checker.Assert(foundCmSymmetry, Equals, true)
+}
+
 func (b *BuilderTest) TestWhenNoLatticeHeight_RhombicFormulaReturnsError(checker *C) {
 	rhombicFormula, err := formula.NewBuilder().
 		Rhombic().

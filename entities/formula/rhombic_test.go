@@ -6,6 +6,7 @@ import (
 	. "gopkg.in/check.v1"
 	"math"
 	"math/cmplx"
+	"reflect"
 )
 
 type RhombicWallpaper struct {
@@ -53,197 +54,186 @@ func (suite *RhombicWallpaper) TestCalculationOfPoints(checker *C) {
 	checker.Assert(imag(calculation), utility.NumericallyCloseEnough{}, imag(expectedAnswer), 1e-6)
 }
 
-//type RhombicWallpaperHasSymmetryTest struct {
-//	baseWavePacket      *wallpaper.WavePacket
-//	wallpaperMultiplier complex128
-//}
-//
-//var _ = Suite(&RhombicWallpaperHasSymmetryTest{})
-//
-//func (suite *RhombicWallpaperHasSymmetryTest) SetUpTest(checker *C) {
-//	suite.baseWavePacket = &wallpaper.WavePacket{
-//		Terms: []*eisenstien.EisensteinFormulaTerm{
-//			{
-//				PowerN: 8,
-//				PowerM: -3,
-//			},
-//		},
-//		Multiplier: complex(1, 0),
-//	}
-//
-//	suite.wallpaperMultiplier = complex(1, 0)
-//}
-//
-//func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicHasNoSymmetry(checker *C) {
-//	newFormula := wallpaper.Formula{
-//		LatticeType: wallpaper.Rhombic,
-//		LatticeSize: &wallpaper.Dimensions{
-//			Width:  0.5,
-//			Height: 1,
-//		},
-//		Lattice:    nil,
-//		Multiplier: complex(2, 0),
-//		WavePackets: []*wallpaper.WavePacket{
-//			suite.baseWavePacket,
-//		},
-//	}
-//	err := newFormula.Setup()
-//	checker.Assert(err, IsNil)
-//
-//	checker.Assert(newFormula.WavePackets, HasLen, 1)
-//	checker.Assert(newFormula.HasSymmetry(wallpaper.Cm), Equals, false)
-//	checker.Assert(newFormula.HasSymmetry(wallpaper.Cmm), Equals, false)
-//}
-//
-//func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicMayHaveSymmetryForCm(checker *C) {
-//	newFormula := wallpaper.Formula{
-//		LatticeType: wallpaper.Rhombic,
-//		LatticeSize: &wallpaper.Dimensions{
-//			Width:  0.5,
-//			Height: 1,
-//		},
-//		Lattice:    nil,
-//		Multiplier: complex(2, 0),
-//		WavePackets: []*wallpaper.WavePacket{
-//			suite.baseWavePacket,
-//			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
-//					{
-//						PowerN: suite.baseWavePacket.Terms[0].PowerM,
-//						PowerM: suite.baseWavePacket.Terms[0].PowerN,
-//					},
-//				},
-//				Multiplier: suite.baseWavePacket.Multiplier,
-//			},
-//		},
-//	}
-//	err := newFormula.Setup()
-//	checker.Assert(err, IsNil)
-//
-//	checker.Assert(newFormula.HasSymmetry(wallpaper.Cm), Equals, true)
-//	checker.Assert(newFormula.HasSymmetry(wallpaper.Cmm), Equals, false)
-//}
-//
-//func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicMayHaveSymmetryForCmm(checker *C) {
-//	newFormula := wallpaper.Formula{
-//		LatticeType: wallpaper.Rhombic,
-//		LatticeSize: &wallpaper.Dimensions{
-//			Width:  0.5,
-//			Height: 1,
-//		},
-//		Lattice:    nil,
-//		Multiplier: complex(2, 0),
-//		WavePackets: []*wallpaper.WavePacket{
-//			suite.baseWavePacket,
-//			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
-//					{
-//						PowerN: suite.baseWavePacket.Terms[0].PowerM,
-//						PowerM: suite.baseWavePacket.Terms[0].PowerN,
-//					},
-//				},
-//				Multiplier: suite.baseWavePacket.Multiplier,
-//			},
-//			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
-//					{
-//						PowerN: suite.baseWavePacket.Terms[0].PowerM * -1,
-//						PowerM: suite.baseWavePacket.Terms[0].PowerN * -1,
-//					},
-//				},
-//				Multiplier: suite.baseWavePacket.Multiplier,
-//			},
-//			{
-//				Terms: []*eisenstien.EisensteinFormulaTerm{
-//					{
-//						PowerN: suite.baseWavePacket.Terms[0].PowerN * -1,
-//						PowerM: suite.baseWavePacket.Terms[0].PowerM * -1,
-//					},
-//				},
-//				Multiplier: suite.baseWavePacket.Multiplier,
-//			},
-//		},
-//	}
-//	err := newFormula.Setup()
-//	checker.Assert(err, IsNil)
-//
-//	checker.Assert(newFormula.HasSymmetry(wallpaper.Cm), Equals, true)
-//	checker.Assert(newFormula.HasSymmetry(wallpaper.Cmm), Equals, true)
-//}
-//
-//type RhombicCreatedWithDesiredSymmetry struct {
-//	baseWavePacket      *wallpaper.WavePacket
-//	wallpaperMultiplier complex128
-//}
-//
-//var _ = Suite(&RhombicCreatedWithDesiredSymmetry{})
-//
-//func (suite *RhombicCreatedWithDesiredSymmetry) SetUpTest(checker *C) {
-//	suite.baseWavePacket = &wallpaper.WavePacket{
-//		Terms: []*eisenstien.EisensteinFormulaTerm{
-//			{
-//				PowerN: 1,
-//				PowerM: -2,
-//			},
-//		},
-//		Multiplier: complex(1, 0),
-//	}
-//	suite.wallpaperMultiplier = complex(1, 0)
-//}
-//
-//func (suite *RhombicCreatedWithDesiredSymmetry) TestCreateWallpaperWithCm(checker *C) {
-//	newFormula := wallpaper.Formula{
-//		LatticeType: wallpaper.Rhombic,
-//		LatticeSize: &wallpaper.Dimensions{
-//			Width:  0.5,
-//			Height: 1,
-//		},
-//		Multiplier: complex(2, 0),
-//		WavePackets: []*wallpaper.WavePacket{
-//			suite.baseWavePacket,
-//		},
-//		DesiredSymmetry: wallpaper.Cm,
-//	}
-//	err := newFormula.Setup()
-//	checker.Assert(err, IsNil)
-//
-//	checker.Assert(newFormula.WavePackets, HasLen, 2)
-//	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 2)
-//
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacket.Terms[0].PowerM)
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacket.Terms[0].PowerN)
-//
-//	checker.Assert(newFormula.HasSymmetry(wallpaper.Cm), Equals, true)
-//	checker.Assert(newFormula.HasSymmetry(wallpaper.Cmm), Equals, false)
-//}
-//
-//func (suite *RhombicCreatedWithDesiredSymmetry) TestCreateWallpaperWithCmm(checker *C) {
-//	newFormula := wallpaper.Formula{
-//		LatticeType: wallpaper.Rhombic,
-//		LatticeSize: &wallpaper.Dimensions{
-//			Width:  0.5,
-//			Height: 1,
-//		},
-//		Multiplier: complex(2, 0),
-//		WavePackets: []*wallpaper.WavePacket{
-//			suite.baseWavePacket,
-//		},
-//		DesiredSymmetry: wallpaper.Cmm,
-//	}
-//	err := newFormula.Setup()
-//	checker.Assert(err, IsNil)
-//
-//	checker.Assert(newFormula.WavePackets, HasLen, 4)
-//	checker.Assert(newFormula.WavePackets[0].Terms, HasLen, 2)
-//
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerN, Equals, suite.baseWavePacket.Terms[0].PowerN*-1)
-//	checker.Assert(newFormula.WavePackets[1].Terms[0].PowerM, Equals, suite.baseWavePacket.Terms[0].PowerM*-1)
-//	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerN, Equals, suite.baseWavePacket.Terms[0].PowerM)
-//	checker.Assert(newFormula.WavePackets[2].Terms[0].PowerM, Equals, suite.baseWavePacket.Terms[0].PowerN)
-//	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerN, Equals, suite.baseWavePacket.Terms[0].PowerM*-1)
-//	checker.Assert(newFormula.WavePackets[3].Terms[0].PowerM, Equals, suite.baseWavePacket.Terms[0].PowerN*-1)
-//
-//	checker.Assert(newFormula.HasSymmetry(wallpaper.Cm), Equals, true)
-//	checker.Assert(newFormula.HasSymmetry(wallpaper.Cmm), Equals, true)
-//}
-//
+type RhombicWallpaperHasSymmetryTest struct {
+	baseWavePacket      *formula.WavePacket
+	wallpaperMultiplier complex128
+}
+
+var _ = Suite(&RhombicWallpaperHasSymmetryTest{})
+
+func (suite *RhombicWallpaperHasSymmetryTest) SetUpTest(checker *C) {
+	suite.baseWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(1, 0)).
+		AddTerm(
+			formula.NewTermWithMultiplierAndPowers(
+				complex(1, 0),
+				8,
+				-3,
+			),
+		).
+		Build()
+
+	suite.wallpaperMultiplier = complex(1, 0)
+}
+
+func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicHasNoSymmetry(checker *C) {
+	newFormula, err := formula.NewBuilder().
+		Rhombic().
+		LatticeHeight(1.0).
+		AddWavePacket(suite.baseWavePacket).
+		Build()
+
+	checker.Assert(err, IsNil)
+
+	checker.Assert(newFormula.SymmetriesFound(), HasLen, 1)
+	checker.Assert(newFormula.SymmetriesFound(), Not(Equals), formula.Cm)
+	checker.Assert(newFormula.SymmetriesFound(), Not(Equals), formula.Cmm)
+}
+
+func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicMayHaveSymmetryForCm(checker *C) {
+	newFormula, err := formula.NewBuilder().
+		Rhombic().
+		LatticeHeight(1.0).
+		AddWavePacket(suite.baseWavePacket).
+		AddWavePacket(
+			formula.NewWavePacketBuilder().
+				Multiplier(suite.baseWavePacket.Multiplier()).
+				AddTerm(
+					formula.NewTermWithMultiplierAndPowers(
+						complex(1, 0),
+						suite.baseWavePacket.Terms()[0].PowerM,
+						suite.baseWavePacket.Terms()[0].PowerN,
+					),
+				).
+				Build(),
+		).
+		Build()
+
+	checker.Assert(err, IsNil)
+
+	checker.Assert(newFormula.SymmetriesFound(), HasLen, 2)
+	checker.Assert(newFormula.SymmetriesFound()[0], Equals, formula.P1)
+	checker.Assert(newFormula.SymmetriesFound()[1], Equals, formula.Cm)
+}
+
+func (suite *RhombicWallpaperHasSymmetryTest) TestRhombicMayHaveSymmetryForCmm(checker *C) {
+	newFormula, err := formula.NewBuilder().
+		Rhombic().
+		LatticeHeight(1.0).
+		AddWavePacket(suite.baseWavePacket).
+		AddWavePacket(
+			formula.NewWavePacketBuilder().
+				Multiplier(suite.baseWavePacket.Multiplier()).
+				AddTerm(
+					formula.NewTermWithMultiplierAndPowers(
+						complex(1, 0),
+						suite.baseWavePacket.Terms()[0].PowerM,
+						suite.baseWavePacket.Terms()[0].PowerN,
+					),
+				).
+				Build(),
+		).
+		AddWavePacket(
+			formula.NewWavePacketBuilder().
+				Multiplier(suite.baseWavePacket.Multiplier()).
+				AddTerm(
+					formula.NewTermWithMultiplierAndPowers(
+						complex(1, 0),
+						suite.baseWavePacket.Terms()[0].PowerM*-1,
+						suite.baseWavePacket.Terms()[0].PowerN*-1,
+					),
+				).
+				Build(),
+		).
+		AddWavePacket(
+			formula.NewWavePacketBuilder().
+				Multiplier(suite.baseWavePacket.Multiplier()).
+				AddTerm(
+					formula.NewTermWithMultiplierAndPowers(
+						complex(1, 0),
+						suite.baseWavePacket.Terms()[0].PowerN*-1,
+						suite.baseWavePacket.Terms()[0].PowerM*-1,
+					),
+				).
+				Build(),
+		).
+		Build()
+
+	checker.Assert(err, IsNil)
+
+	checker.Assert(newFormula.SymmetriesFound(), HasLen, 3)
+	checker.Assert(newFormula.SymmetriesFound()[0], Equals, formula.P1)
+	checker.Assert(newFormula.SymmetriesFound()[1], Equals, formula.Cm)
+	checker.Assert(newFormula.SymmetriesFound()[2], Equals, formula.Cmm)
+}
+
+type RhombicCreatedWithDesiredSymmetry struct {
+	baseWavePacket      *formula.WavePacket
+	wallpaperMultiplier complex128
+}
+
+var _ = Suite(&RhombicCreatedWithDesiredSymmetry{})
+
+func (suite *RhombicCreatedWithDesiredSymmetry) SetUpTest(checker *C) {
+	suite.baseWavePacket = formula.NewWavePacketBuilder().
+		Multiplier(complex(1, 0)).
+		AddTerm(
+			formula.NewTermWithMultiplierAndPowers(
+				complex(1, 0),
+				1,
+				-2,
+			),
+		).
+		Build()
+	suite.wallpaperMultiplier = complex(1, 0)
+}
+
+func (suite *RhombicCreatedWithDesiredSymmetry) TestCreateWallpaperWithCm(checker *C) {
+	newFormula, err := formula.NewBuilder().
+		Rhombic().
+		LatticeHeight(1.0).
+		AddWavePacket(suite.baseWavePacket).
+		DesiredSymmetry(formula.Cm).
+		Build()
+
+	checker.Assert(err, IsNil)
+
+	checker.Assert(newFormula.WavePackets(), HasLen, 2)
+	checker.Assert(newFormula.WavePackets()[0].Terms(), HasLen, 2)
+
+	checker.Assert(newFormula.WavePackets()[1].Terms()[0].PowerN, Equals, suite.baseWavePacket.Terms()[0].PowerM)
+	checker.Assert(newFormula.WavePackets()[1].Terms()[0].PowerM, Equals, suite.baseWavePacket.Terms()[0].PowerN)
+}
+
+func (suite *RhombicCreatedWithDesiredSymmetry) TestCreateWallpaperWithCmm(checker *C) {
+	newFormula, err := formula.NewBuilder().
+		Rhombic().
+		LatticeHeight(1.0).
+		AddWavePacket(suite.baseWavePacket).
+		DesiredSymmetry(formula.Cmm).
+		Build()
+
+	checker.Assert(err, IsNil)
+
+	checker.Assert(newFormula.WavePackets(), HasLen, 4)
+	checker.Assert(newFormula.WavePackets()[0].Terms(), HasLen, 2)
+
+	checker.Assert(newFormula.WavePackets()[1].Terms()[0].PowerN, Equals, suite.baseWavePacket.Terms()[0].PowerN*-1)
+	checker.Assert(newFormula.WavePackets()[1].Terms()[0].PowerM, Equals, suite.baseWavePacket.Terms()[0].PowerM*-1)
+	checker.Assert(newFormula.WavePackets()[2].Terms()[0].PowerN, Equals, suite.baseWavePacket.Terms()[0].PowerM)
+	checker.Assert(newFormula.WavePackets()[2].Terms()[0].PowerM, Equals, suite.baseWavePacket.Terms()[0].PowerN)
+	checker.Assert(newFormula.WavePackets()[3].Terms()[0].PowerN, Equals, suite.baseWavePacket.Terms()[0].PowerM*-1)
+	checker.Assert(newFormula.WavePackets()[3].Terms()[0].PowerM, Equals, suite.baseWavePacket.Terms()[0].PowerN*-1)
+}
+
+func (suite *RhombicCreatedWithDesiredSymmetry) TestWhenOtherDesiredSymmetry_BuilderReturnsError(checker *C) {
+	newFormula, err := formula.NewBuilder().
+		Rhombic().
+		LatticeHeight(1.0).
+		AddWavePacket(suite.baseWavePacket).
+		DesiredSymmetry(formula.P2).
+		Build()
+
+	checker.Assert(err, ErrorMatches, "rhombic lattice can apply these desired symmetries: P1, Cm, Cmm")
+	checker.Assert(reflect.TypeOf(newFormula).String(), Equals, "*formula.Identity")
+}
