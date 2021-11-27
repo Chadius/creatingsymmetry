@@ -163,7 +163,7 @@ func addNewWavePacketsBasedOnSymmetry(term Term, multiplier complex128, desiredS
 	if desiredSymmetry == Pmg {
 		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
 			Multiplier(multiplier).
-			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN*-1, powerM*-1)). // TODO double check that multiplier, may be multiplierMaybeNegatedBasedOnPowerN
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN*-1, powerM*-1)).
 			Build())
 		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
 			Multiplier(multiplierMaybeNegatedBasedOnPowerN).
@@ -177,7 +177,7 @@ func addNewWavePacketsBasedOnSymmetry(term Term, multiplier complex128, desiredS
 	if desiredSymmetry == Pgg {
 		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
 			Multiplier(multiplier).
-			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN*-1, powerM*-1)). // TODO double check that multiplier, may be multiplierMaybeNegatedBasedOnSum
+			AddTerm(NewTermWithMultiplierAndPowers(term.Multiplier, powerN*-1, powerM*-1)).
 			Build())
 		newWavePackets = append(newWavePackets, *NewWavePacketBuilder().
 			Multiplier(multiplierMaybeNegatedBasedOnSum).
