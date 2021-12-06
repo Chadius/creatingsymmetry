@@ -43,12 +43,44 @@ func (suite *BuilderMakeTermUsingDataStream) TestMakeTermWithPowers(checker *C) 
 	checker.Assert(newTerm.PowerM, Equals, 1)
 
 	//term := formula.FormulaLevelTerms()[0]
-	// Make sure multipliers are 1, 0 by default
-	//PowerN                   int
-	//PowerM                   int
-	//IgnoreComplexConjugate   bool
 	//CoefficientRelationships []coefficient.Relationship
 }
 
 // TODO Add tests for making Terms from YAML
 // TODO Make a new Term builder test file
+
+func (suite *BuilderMakeTermUsingDataStream) TestMakeTermWithDefaultMultiplier(checker *C) {
+	yamlByteStream := []byte(`
+`)
+	newTerm := formula.NewTermBuilder().UsingYAMLData(yamlByteStream).Build()
+	checker.Assert(newTerm.Multiplier, Equals, complex(1,0))
+}
+
+func (suite *BuilderMakeTermUsingDataStream) TestMakeTermWithSpecificMultiplier(checker *C) {
+	yamlByteStream := []byte(`
+multiplier:
+  real: 2
+  imaginary: 3e-1
+`)
+	newTerm := formula.NewTermBuilder().UsingYAMLData(yamlByteStream).Build()
+	checker.Assert(newTerm.Multiplier, Equals, complex(2, 3e-1))
+}
+
+func (suite *BuilderMakeTermUsingDataStream) TestMakeTermIgnoreComplexConjugate(checker *C) {
+	yamlByteStream := []byte(`
+ignore_complex_conjugate: true
+`)
+	newTerm := formula.NewTermBuilder().UsingYAMLData(yamlByteStream).Build()
+	checker.Assert(newTerm.IgnoreComplexConjugate, Equals, true)
+}
+
+func (suite *BuilderMakeTermUsingDataStream) TestMakeTermWithCoefficientRelationships(checker *C) {
+	yamlByteStream := []byte(`
+coefficient_relationships: ["-N-M", "-N+MF(N+M)", "-(N+M)+N"]
+`)
+	newTerm := formula.NewTermBuilder().UsingYAMLData(yamlByteStream).Build()
+	checker.Assert(newTerm.CoefficientRelationships, HasLen, 3)
+	checker.Assert(newTerm.CoefficientRelationships[0], Equals, coefficient.MinusNMinusM)
+	checker.Assert(newTerm.CoefficientRelationships[1], Equals, coefficient.MinusNPlusMNegateMultiplierIfOddPowerSum)
+	checker.Assert(newTerm.CoefficientRelationships[2], Equals, coefficient.MinusSumNAndMPlusN)
+}

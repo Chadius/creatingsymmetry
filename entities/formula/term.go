@@ -64,7 +64,7 @@ type TermBuilder struct {
 // NewTermBuilder returns a new object used to build Term objects.
 func NewTermBuilder() *TermBuilder {
 	return &TermBuilder{
-		multiplier:               complex(0, 0),
+		multiplier:               complex(1, 0),
 		powerN:                   0,
 		powerM:                   0,
 		coefficientRelationships: []coefficient.Relationship{},
@@ -90,7 +90,7 @@ func (t *TermBuilder) PowerM(coefficient int) *TermBuilder {
 	return t
 }
 
-// AddCoefficientRelationship sets the field.
+// AddCoefficientRelationship adds the coefficient.
 func (t *TermBuilder) AddCoefficientRelationship(coefficient coefficient.Relationship) *TermBuilder {
 	t.coefficientRelationships = append(t.coefficientRelationships, coefficient)
 	return t
@@ -114,7 +114,7 @@ func (t *TermBuilder) UsingYAMLData(data []byte) *TermBuilder {
 
 // TermMarshal is a representation of a term object
 type TermMarshal struct {
-	Multiplier               complex128                 `json:"multiplier" yaml:"multiplier"`
+	Multiplier               *utility.ComplexNumberForMarshal `json:"multiplier" yaml:"multiplier"`
 	PowerN                   int                        `json:"power_n" yaml:"power_n"`
 	PowerM                   int                        `json:"power_m" yaml:"power_m"`
 	CoefficientRelationships []coefficient.Relationship `json:"coefficient_relationships" yaml:"coefficient_relationships"`
@@ -130,7 +130,23 @@ func (t *TermBuilder) usingByteStream(data []byte, unmarshal utility.UnmarshalFu
 	if unmarshalError != nil {
 		return t
 	}
-	
+
 	t.PowerN(marshaledOptions.PowerN)
+	t.PowerM(marshaledOptions.PowerM)
+
+	if marshaledOptions.Multiplier != nil {
+		t.Multiplier(complex(marshaledOptions.Multiplier.Real, marshaledOptions.Multiplier.Imaginary))
+	} else {
+		t.Multiplier(complex(1, 0))
+	}
+
+	if marshaledOptions.IgnoreComplexConjugate {
+		t.IgnoreComplexConjugate()
+	}
+	
+	for _, coefficient := range marshaledOptions.CoefficientRelationships {
+		t.AddCoefficientRelationship(coefficient)
+	}
+	
 	return t
 }

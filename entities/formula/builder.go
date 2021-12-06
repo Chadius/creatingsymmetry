@@ -176,7 +176,7 @@ func (b *Builder) usingByteStream(data []byte, unmarshal utility.UnmarshalFunc) 
 		newTerm := NewTermBuilder().
 			PowerN(termMarshal.PowerN).
 			PowerM(termMarshal.PowerM).
-			Multiplier(termMarshal.Multiplier).
+			Multiplier(complex(1, 0)).
 			Build()
 		// TODO other fields... put that in the test suite
 		b.AddTerm(newTerm)
