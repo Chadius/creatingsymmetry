@@ -1,6 +1,8 @@
 package formula
 
 import (
+	"github.com/Chadius/creating-symmetry/entities/utility"
+	"gopkg.in/yaml.v2"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"math"
 	"math/cmplx"
@@ -103,4 +105,32 @@ func (t *TermBuilder) IgnoreComplexConjugate() *TermBuilder {
 // Build creates a new Term object.
 func (t *TermBuilder) Build() *Term {
 	return NewTerm(t.multiplier, t.powerN, t.powerM, t.ignoreComplexConjugate, t.coefficientRelationships)
+}
+
+// UsingYAMLData updates the term, given data
+func (t *TermBuilder) UsingYAMLData(data []byte) *TermBuilder {
+	return t.usingByteStream(data, yaml.Unmarshal)
+}
+
+// TermMarshal is a representation of a term object
+type TermMarshal struct {
+	Multiplier               complex128                 `json:"multiplier" yaml:"multiplier"`
+	PowerN                   int                        `json:"power_n" yaml:"power_n"`
+	PowerM                   int                        `json:"power_m" yaml:"power_m"`
+	CoefficientRelationships []coefficient.Relationship `json:"coefficient_relationships" yaml:"coefficient_relationships"`
+	IgnoreComplexConjugate   bool                       `json:"ignore_complex_conjugate" yaml:"ignore_complex_conjugate"`
+}
+
+func (t *TermBuilder) usingByteStream(data []byte, unmarshal utility.UnmarshalFunc) *TermBuilder {
+	var unmarshalError error
+	var marshaledOptions TermMarshal
+
+	unmarshalError = unmarshal(data, &marshaledOptions)
+
+	if unmarshalError != nil {
+		return t
+	}
+	
+	t.PowerN(marshaledOptions.PowerN)
+	return t
 }
