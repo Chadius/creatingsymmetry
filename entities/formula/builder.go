@@ -1,5 +1,11 @@
 package formula
 
+import (
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/utility"
+	"gopkg.in/yaml.v2"
+)
+
 // Builder is used to create formula objects.
 type Builder struct {
 	formulaType       string
@@ -139,4 +145,54 @@ func (b *Builder) Build() (Arbitrary, error) {
 		return formula, err
 	}
 	return &Identity{}, nil
+}
+
+// UsingYAMLData updates the builder, given data
+func (b *Builder) UsingYAMLData(data []byte) *Builder {
+	return b.usingByteStream(data, yaml.Unmarshal)
+}
+
+// BuilderOptionMarshal is a flattened representation of all Builder options.
+type BuilderOptionMarshal struct {
+	Type  string        `json:"type" yaml:"type"`
+	Terms []TermMarshal `json:"terms" yaml:"terms"`
+}
+
+// TODO Move this to the Term builder
+
+// TermMarshal is a representation of a term object
+type TermMarshal struct {
+	multiplier               complex128                 `json:"multiplier" yaml:"multiplier"`
+	powerN                   int                        `json:"power_n" yaml:"power_n"`
+	powerM                   int                        `json:"power_m" yaml:"power_m"`
+	coefficientRelationships []coefficient.Relationship `json:"coefficient_relationships" yaml:"coefficient_relationships"`
+	ignoreComplexConjugate   bool                       `json:"ignore_complex_conjugate" yaml:"ignore_complex_conjugate"`
+}
+
+func (b *Builder) usingByteStream(data []byte, unmarshal utility.UnmarshalFunc) *Builder {
+	var unmarshalError error
+	var marshaledOptions BuilderOptionMarshal
+
+	unmarshalError = unmarshal(data, &marshaledOptions)
+
+	if unmarshalError != nil {
+		return b
+	}
+
+	if marshaledOptions.Type == "rosette" {
+		b.Rosette()
+	}
+
+	for _, termMarshal := range marshaledOptions.Terms {
+		// TODO Move this into term builder tests
+		newTerm := NewTermBuilder().
+			PowerN(termMarshal.powerN).
+			PowerM(termMarshal.powerM).
+			Multiplier(termMarshal.multiplier).
+			Build()
+		// TODO other fields... put that in the test suite
+		b.AddTerm(newTerm)
+	}
+
+	return b
 }

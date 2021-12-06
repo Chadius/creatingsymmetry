@@ -269,3 +269,31 @@ func (t *TermBuilderTest) TestCreateTerm(checker *C) {
 	checker.Assert(term.CoefficientRelationships[0], Equals, coefficient.PlusMPlusN)
 	checker.Assert(term.CoefficientRelationships[1], Equals, coefficient.MinusMMinusN)
 }
+
+type BuilderMakeFormulaUsingDataStream struct{}
+
+var _ = Suite(&BuilderMakeFormulaUsingDataStream{})
+
+func (suite *BuilderMakeFormulaUsingDataStream) TestMakeRosetteFormulaWithYAML(checker *C) {
+	yamlByteStream := []byte(`
+type: rosette
+terms:
+  -
+    power_n: 3
+    power_m: 1
+`)
+	newFormula, _ := formula.NewBuilder().UsingYAMLData(yamlByteStream).Build()
+	checker.Assert(newFormula, NotNil)
+	checker.Assert(reflect.TypeOf(newFormula).String(), Equals, "*formula.Rosette")
+	checker.Assert(newFormula.FormulaLevelTerms(), HasLen, 1)
+
+	//term := formula.FormulaLevelTerms()[0]
+	// Make sure multipliers are 1, 0 by default
+	//PowerN                   int
+	//PowerM                   int
+	//IgnoreComplexConjugate   bool
+	//CoefficientRelationships []coefficient.Relationship
+}
+
+// TODO Add tests for making Terms from YAML
+// TODO Make a new Term builder test file
