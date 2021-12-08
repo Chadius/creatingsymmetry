@@ -1,9 +1,10 @@
 package formula
 
 import (
+	"encoding/json"
+	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	"gopkg.in/yaml.v2"
-	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 	"math"
 	"math/cmplx"
 )
@@ -112,13 +113,18 @@ func (t *TermBuilder) UsingYAMLData(data []byte) *TermBuilder {
 	return t.usingByteStream(data, yaml.Unmarshal)
 }
 
+// UsingJSONData updates the term, given data
+func (t *TermBuilder) UsingJSONData(data []byte) *TermBuilder {
+	return t.usingByteStream(data, json.Unmarshal)
+}
+
 // TermMarshal is a representation of a term object
 type TermMarshal struct {
 	Multiplier               *utility.ComplexNumberForMarshal `json:"multiplier" yaml:"multiplier"`
-	PowerN                   int                        `json:"power_n" yaml:"power_n"`
-	PowerM                   int                        `json:"power_m" yaml:"power_m"`
-	CoefficientRelationships []coefficient.Relationship `json:"coefficient_relationships" yaml:"coefficient_relationships"`
-	IgnoreComplexConjugate   bool                       `json:"ignore_complex_conjugate" yaml:"ignore_complex_conjugate"`
+	PowerN                   int                              `json:"power_n" yaml:"power_n"`
+	PowerM                   int                              `json:"power_m" yaml:"power_m"`
+	CoefficientRelationships []coefficient.Relationship       `json:"coefficient_relationships" yaml:"coefficient_relationships"`
+	IgnoreComplexConjugate   bool                             `json:"ignore_complex_conjugate" yaml:"ignore_complex_conjugate"`
 }
 
 func (t *TermBuilder) usingByteStream(data []byte, unmarshal utility.UnmarshalFunc) *TermBuilder {
@@ -143,10 +149,10 @@ func (t *TermBuilder) usingByteStream(data []byte, unmarshal utility.UnmarshalFu
 	if marshaledOptions.IgnoreComplexConjugate {
 		t.IgnoreComplexConjugate()
 	}
-	
+
 	for _, coefficient := range marshaledOptions.CoefficientRelationships {
 		t.AddCoefficientRelationship(coefficient)
 	}
-	
+
 	return t
 }

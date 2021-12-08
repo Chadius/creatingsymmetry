@@ -7,8 +7,8 @@ import (
 
 // Rhombic formulas will transform points by returning the same coordinates.
 type Rhombic struct {
-	latticeVectors          []complex128
-	wavePackets             []WavePacket
+	latticeVectors []complex128
+	wavePackets    []WavePacket
 }
 
 // NewRhombicFormula returns a new formula object.
@@ -32,7 +32,7 @@ func NewRhombicFormula(packets []WavePacket, latticeHeight float64, desiredSymme
 		wavePacketsWithDesiredSymmetry)
 
 	return &Rhombic{
-			wavePackets:             packetsWithLockedCoefficients,
+			wavePackets: packetsWithLockedCoefficients,
 			latticeVectors: []complex128{
 				complex(0.5, latticeHeight),
 				complex(0.5, latticeHeight*-1),

@@ -41,19 +41,13 @@ func (suite *BuilderMakeTermUsingDataStream) TestMakeTermWithPowers(checker *C) 
 	checker.Assert(newTerm, NotNil)
 	checker.Assert(newTerm.PowerN, Equals, 3)
 	checker.Assert(newTerm.PowerM, Equals, 1)
-
-	//term := formula.FormulaLevelTerms()[0]
-	//CoefficientRelationships []coefficient.Relationship
 }
-
-// TODO Add tests for making Terms from YAML
-// TODO Make a new Term builder test file
 
 func (suite *BuilderMakeTermUsingDataStream) TestMakeTermWithDefaultMultiplier(checker *C) {
 	yamlByteStream := []byte(`
 `)
 	newTerm := formula.NewTermBuilder().UsingYAMLData(yamlByteStream).Build()
-	checker.Assert(newTerm.Multiplier, Equals, complex(1,0))
+	checker.Assert(newTerm.Multiplier, Equals, complex(1, 0))
 }
 
 func (suite *BuilderMakeTermUsingDataStream) TestMakeTermWithSpecificMultiplier(checker *C) {
@@ -83,4 +77,26 @@ coefficient_relationships: ["-N-M", "-N+MF(N+M)", "-(N+M)+N"]
 	checker.Assert(newTerm.CoefficientRelationships[0], Equals, coefficient.MinusNMinusM)
 	checker.Assert(newTerm.CoefficientRelationships[1], Equals, coefficient.MinusNPlusMNegateMultiplierIfOddPowerSum)
 	checker.Assert(newTerm.CoefficientRelationships[2], Equals, coefficient.MinusSumNAndMPlusN)
+}
+
+func (suite *BuilderMakeTermUsingDataStream) TestMakeTermWithJSON(checker *C) {
+	jsonByteStream := []byte(`{
+	"multiplier": {
+		"real": 1.2e2,
+		"imaginary": 4.3e-5
+	},
+	"power_n": 5,
+	"power_m": 7,
+	"ignore_complex_conjugate": true,
+	"coefficient_relationships": ["+N+M", "-N+M"]
+}`)
+	newTerm := formula.NewTermBuilder().UsingJSONData(jsonByteStream).Build()
+	checker.Assert(newTerm, NotNil)
+	checker.Assert(newTerm.Multiplier, Equals, complex(1.2e2, 4.3e-5))
+	checker.Assert(newTerm.PowerN, Equals, 5)
+	checker.Assert(newTerm.PowerM, Equals, 7)
+	checker.Assert(newTerm.IgnoreComplexConjugate, Equals, true)
+	checker.Assert(newTerm.CoefficientRelationships, HasLen, 2)
+	checker.Assert(newTerm.CoefficientRelationships[0], Equals, coefficient.PlusNPlusM)
+	checker.Assert(newTerm.CoefficientRelationships[1], Equals, coefficient.MinusNPlusM)
 }
