@@ -1,6 +1,7 @@
 package formula
 
 import (
+	"encoding/json"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	"gopkg.in/yaml.v2"
 )
@@ -151,6 +152,11 @@ func (b *Builder) UsingYAMLData(data []byte) *Builder {
 	return b.usingByteStream(data, yaml.Unmarshal)
 }
 
+// UsingJSONData updates the builder, given data
+func (b *Builder) UsingJSONData(data []byte) *Builder {
+	return b.usingByteStream(data, json.Unmarshal)
+}
+
 // BuilderOptionMarshal is a flattened representation of all Builder options.
 type BuilderOptionMarshal struct {
 	Type  string        `json:"type" yaml:"type"`
@@ -171,14 +177,18 @@ func (b *Builder) usingByteStream(data []byte, unmarshal utility.UnmarshalFunc) 
 		b.Rosette()
 	}
 
+	if marshaledOptions.Type == "frieze" {
+		b.Frieze()
+	}
+
+	// TODO generic
+	// TODO hexagonal
+	// TODO square
+	// TODO rectangular
+	// TODO rhombic
+
 	for _, termMarshal := range marshaledOptions.Terms {
-		// TODO Move this into term builder tests
-		newTerm := NewTermBuilder().
-			PowerN(termMarshal.PowerN).
-			PowerM(termMarshal.PowerM).
-			Multiplier(complex(1, 0)).
-			Build()
-		// TODO other fields... put that in the test suite
+		newTerm := NewTermBuilder().WithMarshalOptions(termMarshal).Build()
 		b.AddTerm(newTerm)
 	}
 

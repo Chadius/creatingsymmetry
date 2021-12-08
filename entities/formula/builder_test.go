@@ -258,19 +258,36 @@ terms:
   -
     power_n: 3
     power_m: 1
+  -
+    power_n: 3
+    power_m: 7
 `)
 	newFormula, _ := formula.NewBuilder().UsingYAMLData(yamlByteStream).Build()
 	checker.Assert(newFormula, NotNil)
 	checker.Assert(reflect.TypeOf(newFormula).String(), Equals, "*formula.Rosette")
-	checker.Assert(newFormula.FormulaLevelTerms(), HasLen, 1)
+	checker.Assert(newFormula.FormulaLevelTerms(), HasLen, 2)
 
-	//term := formula.FormulaLevelTerms()[0]
-	// Make sure multipliers are 1, 0 by default
-	//PowerN                   int
-	//PowerM                   int
-	//IgnoreComplexConjugate   bool
-	//CoefficientRelationships []coefficient.Relationship
+	term := newFormula.FormulaLevelTerms()[0]
+	checker.Assert(term.PowerN, Equals, 3)
+	checker.Assert(term.Multiplier, Equals, complex(1, 0))
 }
 
-// TODO Add tests for making Terms from YAML
-// TODO Make a new Term builder test file
+func (suite *BuilderMakeFormulaUsingDataStream) TestMakeFriezeFormulaWithJSON(checker *C) {
+	jsonByteStream := []byte(`{
+	"type": "frieze",
+	"terms": [
+		{
+			"power_n": 5,
+    		"power_m": 2
+		}
+	]
+}`)
+	newFormula, _ := formula.NewBuilder().UsingJSONData(jsonByteStream).Build()
+	checker.Assert(newFormula, NotNil)
+	checker.Assert(reflect.TypeOf(newFormula).String(), Equals, "*formula.Frieze")
+	checker.Assert(newFormula.FormulaLevelTerms(), HasLen, 1)
+
+	term := newFormula.FormulaLevelTerms()[0]
+	checker.Assert(term.PowerN, Equals, 5)
+	checker.Assert(term.Multiplier, Equals, complex(1, 0))
+}

@@ -136,7 +136,10 @@ func (t *TermBuilder) usingByteStream(data []byte, unmarshal utility.UnmarshalFu
 	if unmarshalError != nil {
 		return t
 	}
+	return t.WithMarshalOptions(marshaledOptions)
+}
 
+func (t *TermBuilder) WithMarshalOptions(marshaledOptions TermMarshal) *TermBuilder {
 	t.PowerN(marshaledOptions.PowerN)
 	t.PowerM(marshaledOptions.PowerM)
 
