@@ -318,22 +318,145 @@ wave_packets:
 	checker.Assert(real(newFormula.LatticeVectors()[1]), utility.NumericallyCloseEnough{}, 7.11, 1e-6)
 	checker.Assert(imag(newFormula.LatticeVectors()[1]), utility.NumericallyCloseEnough{}, 5e3, 1e-6)
 
-	// TODO Return here once WavePackets are ready
-	//checker.Assert(newFormula.WavePackets(), HasLen, 1)
-	//packet := newFormula.WavePackets()[0]
-	//checker.Assert(real(packet.Multiplier()), utility.NumericallyCloseEnough{}, 2e9, 1e-6)
-	//checker.Assert(imag(packet.Multiplier()), utility.NumericallyCloseEnough{}, 1e-3, 1e-6)
-	//
-	//term := packet.Terms()[0]
-	//checker.Assert(term.PowerN, Equals, 3)
-	//checker.Assert(term.PowerM, Equals, 19)
-	//
-	//symmetriesFound := newFormula.SymmetriesFound()
-	//foundP2Symmetry := false
-	//for _, symmetry := range symmetriesFound {
-	//	if symmetry == formula.P2 {
-	//		foundP2Symmetry = true
-	//	}
-	//}
-	//checker.Assert(foundP2Symmetry, Equals, true)
+	checker.Assert(newFormula.WavePackets(), HasLen, 2)
+	packet := newFormula.WavePackets()[0]
+	checker.Assert(real(packet.Multiplier()), utility.NumericallyCloseEnough{}, 2e9, 1e-6)
+	checker.Assert(imag(packet.Multiplier()), utility.NumericallyCloseEnough{}, 1e-3, 1e-6)
+
+	term := packet.Terms()[0]
+	checker.Assert(term.PowerN, Equals, 3)
+	checker.Assert(term.PowerM, Equals, 19)
+
+	symmetriesFound := newFormula.SymmetriesFound()
+	foundP2Symmetry := false
+	for _, symmetry := range symmetriesFound {
+		if symmetry == formula.P2 {
+			foundP2Symmetry = true
+		}
+	}
+	checker.Assert(foundP2Symmetry, Equals, true)
+}
+
+func (suite *BuilderMakeFormulaUsingDataStream) TestMakeWallpaperRectangularFormulaWithJSON(checker *C) {
+	jsonByteStream := []byte(`{
+"type": "rectangular",
+"lattice_height": 1e2,
+"wave_packets": [
+	{
+		"multiplier": {
+			"real": 3e5,
+			"imaginary": 7e-11
+		},
+		"terms": [ 
+			{
+				"power_n": 13,
+				"power_m": -17
+			} 
+		]
+	}
+]
+}`)
+	newFormula, err := formula.NewBuilder().UsingJSONData(jsonByteStream).Build()
+	checker.Assert(newFormula, NotNil)
+	checker.Assert(err, IsNil)
+	checker.Assert(reflect.TypeOf(newFormula).String(), Equals, "*formula.Rectangular")
+
+	checker.Assert(newFormula.LatticeVectors(), HasLen, 2)
+	checker.Assert(real(newFormula.LatticeVectors()[1]), utility.NumericallyCloseEnough{}, 0, 1e-6)
+	checker.Assert(imag(newFormula.LatticeVectors()[1]), utility.NumericallyCloseEnough{}, 1e2, 1e-6)
+
+	checker.Assert(newFormula.WavePackets(), HasLen, 1)
+	packet := newFormula.WavePackets()[0]
+	checker.Assert(real(packet.Multiplier()), utility.NumericallyCloseEnough{}, 3e5, 1e-6)
+	checker.Assert(imag(packet.Multiplier()), utility.NumericallyCloseEnough{}, 7e-11, 1e-6)
+
+	term := packet.Terms()[0]
+	checker.Assert(term.PowerN, Equals, 13)
+	checker.Assert(term.PowerM, Equals, -17)
+}
+
+func (suite *BuilderMakeFormulaUsingDataStream) TestMakeWallpaperRhombicFormulaWithYAML(checker *C) {
+	yamlByteStream := []byte(`
+type: rhombic
+lattice_height: 19e-3
+wave_packets:
+  -
+    multiplier:
+      real: 2e9
+      imaginary: 1e-3
+    terms:
+      -
+        power_n: 3
+        power_m: 19
+  -
+    multiplier:
+      real: 11e9
+      imaginary: 17e-3
+    terms:
+      -
+        power_n: -2
+        power_m: -5
+`)
+	newFormula, err := formula.NewBuilder().UsingYAMLData(yamlByteStream).Build()
+	checker.Assert(newFormula, NotNil)
+	checker.Assert(err, IsNil)
+	checker.Assert(reflect.TypeOf(newFormula).String(), Equals, "*formula.Rhombic")
+
+	checker.Assert(newFormula.LatticeVectors(), HasLen, 2)
+	checker.Assert(imag(newFormula.LatticeVectors()[0]), utility.NumericallyCloseEnough{}, 19e-3, 1e-6)
+
+	checker.Assert(newFormula.WavePackets(), HasLen, 2)
+}
+
+func (suite *BuilderMakeFormulaUsingDataStream) TestMakeWallpaperHexagonalFormulaWithYAML(checker *C) {
+	yamlByteStream := []byte(`
+type: hexagonal
+wave_packets:
+  -
+    multiplier:
+      real: 2e9
+      imaginary: 1e-3
+    terms:
+      -
+        power_n: 3
+        power_m: 19
+`)
+	newFormula, err := formula.NewBuilder().UsingYAMLData(yamlByteStream).Build()
+	checker.Assert(newFormula, NotNil)
+	checker.Assert(err, IsNil)
+	checker.Assert(reflect.TypeOf(newFormula).String(), Equals, "*formula.Hexagonal")
+	checker.Assert(newFormula.WavePackets(), HasLen, 1)
+}
+
+func (suite *BuilderMakeFormulaUsingDataStream) TestMakeWallpaperSquareFormulaWithJSON(checker *C) {
+	jsonByteStream := []byte(`{
+"type": "square",
+"wave_packets": [
+	{
+		"multiplier": {
+			"real": 3e5,
+			"imaginary": 7e-11
+		},
+		"terms": [ 
+			{
+				"power_n": 13,
+				"power_m": -17
+			} 
+		]
+	}
+]
+}`)
+	newFormula, err := formula.NewBuilder().UsingJSONData(jsonByteStream).Build()
+	checker.Assert(newFormula, NotNil)
+	checker.Assert(err, IsNil)
+	checker.Assert(reflect.TypeOf(newFormula).String(), Equals, "*formula.Square")
+
+	checker.Assert(newFormula.WavePackets(), HasLen, 1)
+	packet := newFormula.WavePackets()[0]
+	checker.Assert(real(packet.Multiplier()), utility.NumericallyCloseEnough{}, 3e5, 1e-6)
+	checker.Assert(imag(packet.Multiplier()), utility.NumericallyCloseEnough{}, 7e-11, 1e-6)
+
+	term := packet.Terms()[0]
+	checker.Assert(term.PowerN, Equals, 13)
+	checker.Assert(term.PowerM, Equals, -17)
 }

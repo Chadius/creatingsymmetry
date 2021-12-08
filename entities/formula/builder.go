@@ -159,10 +159,12 @@ func (b *Builder) UsingJSONData(data []byte) *Builder {
 
 // BuilderOptionMarshal is a flattened representation of all Builder options.
 type BuilderOptionMarshal struct {
-	Type          string        `json:"type" yaml:"type"`
-	Terms         []TermMarshal `json:"terms" yaml:"terms"`
-	LatticeWidth  float64       `json:"lattice_width" yaml:"lattice_width"`
-	LatticeHeight float64       `json:"lattice_height" yaml:"lattice_height"`
+	Type            string              `json:"type" yaml:"type"`
+	Terms           []TermMarshal       `json:"terms" yaml:"terms"`
+	LatticeWidth    float64             `json:"lattice_width" yaml:"lattice_width"`
+	LatticeHeight   float64             `json:"lattice_height" yaml:"lattice_height"`
+	WavePackets     []WavePacketMarshal `json:"wave_packets" yaml:"wave_packets"`
+	DesiredSymmetry Symmetry            `json:"desired_symmetry" yaml:"desired_symmetry"`
 }
 
 func (b *Builder) usingByteStream(data []byte, unmarshal utility.UnmarshalFunc) *Builder {
@@ -184,20 +186,37 @@ func (b *Builder) usingByteStream(data []byte, unmarshal utility.UnmarshalFunc) 
 	}
 
 	if marshaledOptions.Type == "generic" {
-		b.Generic().
-			LatticeWidth(marshaledOptions.LatticeWidth).
-			LatticeHeight(marshaledOptions.LatticeHeight)
-
-		//for _, packet := range marshaledOptions.WavePackets {
-		//	b.AddWavePacket(packet)
-		//}
+		b.Generic()
 	}
 
-	// TODO generic
-	// TODO hexagonal
-	// TODO square
-	// TODO rectangular
-	// TODO rhombic
+	if marshaledOptions.Type == "rectangular" {
+		b.Rectangular()
+	}
+
+	if marshaledOptions.Type == "rhombic" {
+		b.Rhombic()
+	}
+
+	if marshaledOptions.Type == "hexagonal" {
+		b.Hexagonal()
+	}
+
+	if marshaledOptions.Type == "square" {
+		b.Square()
+	}
+
+	b.LatticeWidth(marshaledOptions.LatticeWidth).
+		LatticeHeight(marshaledOptions.LatticeHeight)
+
+	for _, wavePacketMarshal := range marshaledOptions.WavePackets {
+		b.AddWavePacket(
+			NewWavePacketBuilder().WithMarshalOptions(wavePacketMarshal).Build(),
+		)
+	}
+
+	if marshaledOptions.DesiredSymmetry != "" {
+		b.DesiredSymmetry(marshaledOptions.DesiredSymmetry)
+	}
 
 	for _, termMarshal := range marshaledOptions.Terms {
 		newTerm := NewTermBuilder().WithMarshalOptions(termMarshal).Build()
