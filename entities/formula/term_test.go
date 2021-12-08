@@ -32,7 +32,7 @@ type BuilderMakeTermUsingDataStream struct{}
 
 var _ = Suite(&BuilderMakeTermUsingDataStream{})
 
-func (suite *BuilderMakeTermUsingDataStream) TestMakeTermWithPowers(checker *C) {
+func (suite *BuilderMakeTermUsingDataStream) TestMakeTermWithPowersAndYAML(checker *C) {
 	yamlByteStream := []byte(`
   power_n: 3
   power_m: 1

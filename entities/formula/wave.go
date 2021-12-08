@@ -1,7 +1,10 @@
 package formula
 
 import (
+	"encoding/json"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/utility"
+	"gopkg.in/yaml.v2"
 )
 
 // WavePacket for Waves mathematically creates repeating, cyclical mathematical patterns
@@ -259,4 +262,47 @@ func (w *WavePacketBuilder) Build() *WavePacket {
 		terms:      w.terms,
 		multiplier: w.multiplier,
 	}
+}
+
+// UsingYAMLData updates the term, given data
+func (w *WavePacketBuilder) UsingYAMLData(data []byte) *WavePacketBuilder {
+	return w.usingByteStream(data, yaml.Unmarshal)
+}
+
+// UsingJSONData updates the term, given data
+func (w *WavePacketBuilder) UsingJSONData(data []byte) *WavePacketBuilder {
+	return w.usingByteStream(data, json.Unmarshal)
+}
+
+// WavePacketMarshal is a representation of a term object
+type WavePacketMarshal struct {
+	Multiplier *utility.ComplexNumberForMarshal `json:"multiplier" yaml:"multiplier"`
+	Terms      []TermMarshal                    `json:"terms" yaml:"terms"`
+}
+
+func (w *WavePacketBuilder) usingByteStream(data []byte, unmarshal utility.UnmarshalFunc) *WavePacketBuilder {
+	var unmarshalError error
+	var marshaledOptions WavePacketMarshal
+
+	unmarshalError = unmarshal(data, &marshaledOptions)
+
+	if unmarshalError != nil {
+		return w
+	}
+	return w.WithMarshalOptions(marshaledOptions)
+}
+
+// WithMarshalOptions updates the builder with options read from the options object.
+func (w *WavePacketBuilder) WithMarshalOptions(marshaledOptions WavePacketMarshal) *WavePacketBuilder {
+	if marshaledOptions.Multiplier != nil {
+		w.Multiplier(complex(marshaledOptions.Multiplier.Real, marshaledOptions.Multiplier.Imaginary))
+	} else {
+		w.Multiplier(complex(1, 0))
+	}
+
+	for _, termMarshal := range marshaledOptions.Terms {
+		newTerm := NewTermBuilder().WithMarshalOptions(termMarshal).Build()
+		w.AddTerm(newTerm)
+	}
+	return w
 }

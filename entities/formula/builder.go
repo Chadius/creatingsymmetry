@@ -159,8 +159,10 @@ func (b *Builder) UsingJSONData(data []byte) *Builder {
 
 // BuilderOptionMarshal is a flattened representation of all Builder options.
 type BuilderOptionMarshal struct {
-	Type  string        `json:"type" yaml:"type"`
-	Terms []TermMarshal `json:"terms" yaml:"terms"`
+	Type          string        `json:"type" yaml:"type"`
+	Terms         []TermMarshal `json:"terms" yaml:"terms"`
+	LatticeWidth  float64       `json:"lattice_width" yaml:"lattice_width"`
+	LatticeHeight float64       `json:"lattice_height" yaml:"lattice_height"`
 }
 
 func (b *Builder) usingByteStream(data []byte, unmarshal utility.UnmarshalFunc) *Builder {
@@ -179,6 +181,16 @@ func (b *Builder) usingByteStream(data []byte, unmarshal utility.UnmarshalFunc) 
 
 	if marshaledOptions.Type == "frieze" {
 		b.Frieze()
+	}
+
+	if marshaledOptions.Type == "generic" {
+		b.Generic().
+			LatticeWidth(marshaledOptions.LatticeWidth).
+			LatticeHeight(marshaledOptions.LatticeHeight)
+
+		//for _, packet := range marshaledOptions.WavePackets {
+		//	b.AddWavePacket(packet)
+		//}
 	}
 
 	// TODO generic

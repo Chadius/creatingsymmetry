@@ -2,6 +2,7 @@ package formula_test
 
 import (
 	"github.com/Chadius/creating-symmetry/entities/formula"
+	"github.com/Chadius/creating-symmetry/entities/utility"
 	. "gopkg.in/check.v1"
 	"reflect"
 )
@@ -290,4 +291,49 @@ func (suite *BuilderMakeFormulaUsingDataStream) TestMakeFriezeFormulaWithJSON(ch
 	term := newFormula.FormulaLevelTerms()[0]
 	checker.Assert(term.PowerN, Equals, 5)
 	checker.Assert(term.Multiplier, Equals, complex(1, 0))
+}
+
+func (suite *BuilderMakeFormulaUsingDataStream) TestMakeWallpaperGenericFormulaWithYAML(checker *C) {
+	yamlByteStream := []byte(`
+type: generic
+lattice_width: 7.11
+lattice_height: 5e3
+desired_symmetry: p2
+wave_packets:
+  -
+    multiplier:
+      real: 2e9
+      imaginary: 1e-3
+    terms:
+      -
+        power_n: 3
+        power_m: 19
+`)
+	newFormula, err := formula.NewBuilder().UsingYAMLData(yamlByteStream).Build()
+	checker.Assert(newFormula, NotNil)
+	checker.Assert(err, IsNil)
+	checker.Assert(reflect.TypeOf(newFormula).String(), Equals, "*formula.Generic")
+
+	checker.Assert(newFormula.LatticeVectors(), HasLen, 2)
+	checker.Assert(real(newFormula.LatticeVectors()[1]), utility.NumericallyCloseEnough{}, 7.11, 1e-6)
+	checker.Assert(imag(newFormula.LatticeVectors()[1]), utility.NumericallyCloseEnough{}, 5e3, 1e-6)
+
+	// TODO Return here once WavePackets are ready
+	//checker.Assert(newFormula.WavePackets(), HasLen, 1)
+	//packet := newFormula.WavePackets()[0]
+	//checker.Assert(real(packet.Multiplier()), utility.NumericallyCloseEnough{}, 2e9, 1e-6)
+	//checker.Assert(imag(packet.Multiplier()), utility.NumericallyCloseEnough{}, 1e-3, 1e-6)
+	//
+	//term := packet.Terms()[0]
+	//checker.Assert(term.PowerN, Equals, 3)
+	//checker.Assert(term.PowerM, Equals, 19)
+	//
+	//symmetriesFound := newFormula.SymmetriesFound()
+	//foundP2Symmetry := false
+	//for _, symmetry := range symmetriesFound {
+	//	if symmetry == formula.P2 {
+	//		foundP2Symmetry = true
+	//	}
+	//}
+	//checker.Assert(foundP2Symmetry, Equals, true)
 }

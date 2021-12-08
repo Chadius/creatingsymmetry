@@ -306,3 +306,63 @@ func (suite *WavePacketRelationshipTest) TestMinusMPlusN(checker *C) {
 	checker.Assert(relationshipsFound, HasLen, 1)
 	checker.Assert(relationshipsFound[0], Equals, coefficient.MinusMPlusN)
 }
+
+type WavePacketDataStreamBuilder struct{}
+
+var _ = Suite(&WavePacketDataStreamBuilder{})
+
+func (suite *WavePacketDataStreamBuilder) TestCreateWavePacketUsingYAML(checker *C) {
+	yamlByteStream := []byte(`
+multiplier:
+  real: 2e9
+  imaginary: 1e-3
+terms:
+  -
+    power_n: 3
+    power_m: 19
+`)
+	packet := formula.NewWavePacketBuilder().UsingYAMLData(yamlByteStream).Build()
+	checker.Assert(real(packet.Multiplier()), utility.NumericallyCloseEnough{}, 2e9, 1e-6)
+	checker.Assert(imag(packet.Multiplier()), utility.NumericallyCloseEnough{}, 1e-3, 1e-6)
+
+	checker.Assert(packet.Terms(), HasLen, 1)
+	term := packet.Terms()[0]
+	checker.Assert(term.PowerN, Equals, 3)
+	checker.Assert(term.PowerM, Equals, 19)
+}
+
+func (suite *WavePacketDataStreamBuilder) TestCreateWavePacketUseDefaultMultiplier(checker *C) {
+	yamlByteStream := []byte(``)
+	packet := formula.NewWavePacketBuilder().UsingYAMLData(yamlByteStream).Build()
+	checker.Assert(packet.Multiplier(), Equals, complex(1, 0))
+}
+
+func (suite *WavePacketDataStreamBuilder) TestCreateWavePacketUsingJSON(checker *C) {
+	jsonByteStream := []byte(`{
+"multiplier": {
+	"real": 5e2,
+	"imaginary": 3e-1
+},
+"terms": [
+	{
+		"power_n": 3,
+		"power_m": 19
+	},
+	{
+		"power_n": -11,
+		"power_m": -7
+	}
+]
+}`)
+	packet := formula.NewWavePacketBuilder().UsingJSONData(jsonByteStream).Build()
+	checker.Assert(real(packet.Multiplier()), utility.NumericallyCloseEnough{}, 5e2, 1e-6)
+	checker.Assert(imag(packet.Multiplier()), utility.NumericallyCloseEnough{}, 3e-1, 1e-6)
+
+	checker.Assert(packet.Terms(), HasLen, 2)
+	term0 := packet.Terms()[0]
+	checker.Assert(term0.PowerN, Equals, 3)
+	checker.Assert(term0.PowerM, Equals, 19)
+	term1 := packet.Terms()[1]
+	checker.Assert(term1.PowerN, Equals, -11)
+	checker.Assert(term1.PowerM, Equals, -7)
+}
