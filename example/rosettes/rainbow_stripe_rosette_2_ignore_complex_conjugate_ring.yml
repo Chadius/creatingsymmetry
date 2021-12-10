@@ -1,8 +1,8 @@
 pattern_viewport:
-  x_min: -8e-1
-  y_min: -8e-1
-  x_max: 8e-1
-  y_max: 8e-1
+  x_min: -8e-2
+  y_min: -8e-2
+  x_max: 8e-2
+  y_max: 8e-2
 coordinate_threshold:
   x_min: -4e1
   x_max: 4e1
