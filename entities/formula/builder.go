@@ -177,6 +177,11 @@ func (b *Builder) usingByteStream(data []byte, unmarshal utility.UnmarshalFunc) 
 		return b
 	}
 
+	return b.WithMarshalOptions(marshaledOptions)
+}
+
+// WithMarshalOptions uses the options to populate the builder.
+func (b *Builder) WithMarshalOptions(marshaledOptions BuilderOptionMarshal) *Builder {
 	if marshaledOptions.Type == "rosette" {
 		b.Rosette()
 	}

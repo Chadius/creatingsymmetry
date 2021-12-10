@@ -2,9 +2,7 @@ package command
 
 import (
 	"encoding/json"
-	"github.com/Chadius/creating-symmetry/entities/oldformula/frieze"
-	"github.com/Chadius/creating-symmetry/entities/oldformula/rosette"
-	"github.com/Chadius/creating-symmetry/entities/oldformula/wallpaper"
+	"github.com/Chadius/creating-symmetry/entities/formula"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	"gopkg.in/yaml.v2"
 )
@@ -31,9 +29,7 @@ type CreateSymmetryPattern struct {
 	CoordinateThreshold ComplexNumberCorners `json:"coordinate_threshold" yaml:"coordinate_threshold"`
 	Eyedropper          *PixelCorners        `json:"eyedropper" yaml:"eyedropper"`
 
-	RosetteFormula *rosette.Formula   `json:"rosette_formula" yaml:"rosette_formula"`
-	FriezeFormula  *frieze.Formula    `json:"frieze_formula" yaml:"frieze_formula"`
-	LatticePattern *wallpaper.Formula `json:"lattice_pattern" yaml:"lattice_pattern"`
+	Formula formula.Arbitrary `json:"formula" yaml:"formula"`
 }
 
 // CreateWallpaperCommandMarshal can be marshaled and converted to a CreateSymmetryPattern
@@ -42,9 +38,7 @@ type CreateWallpaperCommandMarshal struct {
 	CoordinateThreshold ComplexNumberCorners `json:"coordinate_threshold" yaml:"coordinate_threshold"`
 	Eyedropper          *PixelCorners        `json:"eyedropper" yaml:"eyedropper"`
 
-	RosetteFormula *rosette.MarshaledFormula `json:"rosette_formula" yaml:"rosette_formula"`
-	FriezeFormula  *frieze.MarshaledFormula  `json:"frieze_formula" yaml:"frieze_formula"`
-	LatticePattern *wallpaper.FormulaMarshal `json:"lattice_pattern" yaml:"lattice_pattern"`
+	Formula *formula.BuilderOptionMarshal `json:"formula" yaml:"formula"`
 }
 
 // NewCreateWallpaperCommandFromYAML reads the data and returns a CreateSymmetryPattern from it.
@@ -73,16 +67,8 @@ func newCreateWallpaperCommandFromDatastream(data []byte, unmarshal utility.Unma
 		Eyedropper:          commandToCreateMarshal.Eyedropper,
 	}
 
-	if commandToCreateMarshal.RosetteFormula != nil {
-		commandToCreate.RosetteFormula = rosette.NewRosetteFormulaFromMarshalObject(*commandToCreateMarshal.RosetteFormula)
-	}
-
-	if commandToCreateMarshal.FriezeFormula != nil {
-		commandToCreate.FriezeFormula = frieze.NewFriezeFormulaFromMarshalObject(*commandToCreateMarshal.FriezeFormula)
-	}
-
-	if commandToCreateMarshal.LatticePattern != nil {
-		commandToCreate.LatticePattern = wallpaper.NewFormulaFromMarshalObject(*commandToCreateMarshal.LatticePattern)
+	if commandToCreateMarshal.Formula != nil {
+		commandToCreate.Formula, _ = formula.NewBuilder().WithMarshalOptions(*commandToCreateMarshal.Formula).Build()
 	}
 
 	return commandToCreate, nil

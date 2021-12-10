@@ -139,6 +139,7 @@ func (t *TermBuilder) usingByteStream(data []byte, unmarshal utility.UnmarshalFu
 	return t.WithMarshalOptions(marshaledOptions)
 }
 
+// WithMarshalOptions updates the term builder using the options.
 func (t *TermBuilder) WithMarshalOptions(marshaledOptions TermMarshal) *TermBuilder {
 	t.PowerN(marshaledOptions.PowerN)
 	t.PowerM(marshaledOptions.PowerM)

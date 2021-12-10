@@ -2,10 +2,8 @@ package transformer_test
 
 import (
 	"github.com/Chadius/creating-symmetry/entities/command"
-	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/Chadius/creating-symmetry/entities/formula"
 	"github.com/Chadius/creating-symmetry/entities/imageoutput"
-	"github.com/Chadius/creating-symmetry/entities/oldformula/exponential"
-	"github.com/Chadius/creating-symmetry/entities/oldformula/rosette"
 	transformerEntity "github.com/Chadius/creating-symmetry/entities/transformer"
 	. "gopkg.in/check.v1"
 	"image"
@@ -69,27 +67,21 @@ func (suite *FormulaTests) SetUpTest(checker *C) {
 	})
 	suite.sourceImage = sourceColors.SubImage(image.Rect(0, 0, 2, 2))
 
-	rosetteFormula := rosette.Formula{
-		Terms: []*exponential.RosetteFriezeTerm{
-			{
-				Multiplier:             complex(3, 0),
-				PowerN:                 1,
-				PowerM:                 0,
-				IgnoreComplexConjugate: false,
-				CoefficientRelationships: []coefficient.Relationship{
-					coefficient.PlusMPlusN,
-				},
-			},
-		},
-	}
+	rosetteFormula, _ := formula.NewBuilder().
+		Rosette().
+		AddTerm(
+			formula.NewTermBuilder().
+				PowerN(2).
+				PowerM(1).
+				Build(),
+		).
+		Build()
 
 	suite.commandShouldBeAFormula = &command.CreateSymmetryPattern{
 		PatternViewport:     command.ComplexNumberCorners{},
 		CoordinateThreshold: command.ComplexNumberCorners{},
 		Eyedropper:          nil,
-		RosetteFormula:      &rosetteFormula,
-		FriezeFormula:       nil,
-		LatticePattern:      nil,
+		Formula:             rosetteFormula,
 	}
 
 	suite.mockCoordinateThreshold = MockCoordinateThreshold{}

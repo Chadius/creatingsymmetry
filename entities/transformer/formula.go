@@ -1,11 +1,9 @@
 package transformer
 
 import (
+	"github.com/Chadius/creating-symmetry/entities/formula"
 	"github.com/Chadius/creating-symmetry/entities/imageoutput"
 	"github.com/Chadius/creating-symmetry/entities/mathutility"
-	"github.com/Chadius/creating-symmetry/entities/oldformula/frieze"
-	"github.com/Chadius/creating-symmetry/entities/oldformula/rosette"
-	"github.com/Chadius/creating-symmetry/entities/oldformula/wallpaper"
 	"image"
 )
 
@@ -59,43 +57,16 @@ func (f *FormulaTransformer) scaleCoordinatesToViewport(settings *Settings, coor
 }
 
 func (f *FormulaTransformer) transformCoordinatesUsingFormula(settings *Settings, coordinateCollection *imageoutput.CoordinateCollection) {
-	if settings.Formula.FriezeFormula != nil {
-		f.transformCoordinatesForFriezeFormula(settings.Formula.FriezeFormula, coordinateCollection)
-		return
-	}
-	if settings.Formula.RosetteFormula != nil {
-		f.transformCoordinatesForRosetteFormula(settings.Formula.RosetteFormula, coordinateCollection)
-		return
-	}
-	if settings.Formula.LatticePattern != nil {
-		f.transformCoordinatesForLatticePattern(settings.Formula.LatticePattern, coordinateCollection)
-		return
+	if settings.Formula.Formula != nil {
+		f.transformCoordinatesForArbitraryFormula(settings.Formula.Formula, coordinateCollection)
 	}
 }
 
-func (f *FormulaTransformer) transformCoordinatesForFriezeFormula(friezeFormula *frieze.Formula, coordinateCollection *imageoutput.CoordinateCollection) {
+func (f *FormulaTransformer) transformCoordinatesForArbitraryFormula(arbitraryFormula formula.Arbitrary, coordinateCollection *imageoutput.CoordinateCollection) {
 	for _, coordinate := range *coordinateCollection.Coordinates() {
 		complexCoordinate := complex(coordinate.PatternViewportX(), coordinate.PatternViewportY())
-		friezePatternResults := friezeFormula.Calculate(complexCoordinate)
-		coordinate.UpdateTransformedCoordinates(real(friezePatternResults.Total), imag(friezePatternResults.Total))
-	}
-}
-
-func (f *FormulaTransformer) transformCoordinatesForRosetteFormula(rosetteFormula *rosette.Formula, coordinateCollection *imageoutput.CoordinateCollection) {
-	for _, coordinate := range *coordinateCollection.Coordinates() {
-		complexCoordinate := complex(coordinate.PatternViewportX(), coordinate.PatternViewportY())
-		rosettePatternResults := rosetteFormula.Calculate(complexCoordinate)
-		coordinate.UpdateTransformedCoordinates(real(rosettePatternResults.Total), imag(rosettePatternResults.Total))
-	}
-}
-
-func (f *FormulaTransformer) transformCoordinatesForLatticePattern(latticePattern *wallpaper.Formula, coordinateCollection *imageoutput.CoordinateCollection) {
-	latticePattern.Setup()
-
-	for _, coordinate := range *coordinateCollection.Coordinates() {
-		complexCoordinate := complex(coordinate.PatternViewportX(), coordinate.PatternViewportY())
-		latticePatternResults := latticePattern.Calculate(complexCoordinate)
-		coordinate.UpdateTransformedCoordinates(real(latticePatternResults.Total), imag(latticePatternResults.Total))
+		transformedPoint := arbitraryFormula.Calculate(complexCoordinate)
+		coordinate.UpdateTransformedCoordinates(real(transformedPoint), imag(transformedPoint))
 	}
 }
 
