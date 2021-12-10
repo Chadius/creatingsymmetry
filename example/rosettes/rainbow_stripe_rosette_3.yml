@@ -8,7 +8,8 @@ coordinate_threshold:
   x_max: 4e1
   y_min: -3e1
   y_max: 3e1
-rosette_formula:
+formula:
+  type: rosette
   terms:
     - multiplier:
         real: -1.0e-1

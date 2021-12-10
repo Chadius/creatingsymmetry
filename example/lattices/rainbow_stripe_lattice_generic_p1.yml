@@ -8,11 +8,10 @@ coordinate_threshold:
   y_min: -3e-1
   x_max: 1e0
   y_max: 3e-1
-lattice_pattern:
-  lattice_type: generic
-  lattice_size:
-    width: 0.4
-    height: 0.6
+formula:
+  type: generic
+  lattice_width: 0.4
+  lattice_height: 0.6
   multiplier:
     real: 1e0
     imaginary: 1e-2

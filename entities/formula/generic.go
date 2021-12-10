@@ -5,6 +5,8 @@ import (
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
 )
 
+// TODO Do I need a formula wide multiplier?
+
 // Generic formulas will transform points by returning the same coordinates.
 type Generic struct {
 	latticeVectors []complex128

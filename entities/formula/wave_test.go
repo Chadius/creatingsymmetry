@@ -3,7 +3,6 @@ package formula_test
 import (
 	"github.com/Chadius/creating-symmetry/entities/formula"
 	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
-	"github.com/Chadius/creating-symmetry/entities/oldformula/latticevector"
 	"github.com/Chadius/creating-symmetry/entities/utility"
 	. "gopkg.in/check.v1"
 	"math"
@@ -40,17 +39,18 @@ func (suite *WavePacketBuilderTest) TestCreateWavePackets(checker *C) {
 }
 
 type WaveFormulaTests struct {
-	hexLatticeVectors   *latticevector.Pair
+	hexLatticeVectors   []complex128
 	hexagonalWavePacket *formula.WavePacket
 }
 
 var _ = Suite(&WaveFormulaTests{})
 
 func (suite *WaveFormulaTests) SetUpTest(checker *C) {
-	suite.hexLatticeVectors = &latticevector.Pair{
-		XLatticeVector: complex(1, 0),
-		YLatticeVector: complex(-0.5, math.Sqrt(3.0)/2.0),
+	suite.hexLatticeVectors = []complex128{
+		complex(1, 0),
+		complex(-0.5, math.Sqrt(3.0)/2.0),
 	}
+
 	suite.hexagonalWavePacket = formula.NewWavePacketBuilder().
 		Multiplier(complex(1, 0)).
 		AddTerm(
@@ -66,7 +66,11 @@ func (suite *WaveFormulaTests) SetUpTest(checker *C) {
 }
 
 func (suite *WaveFormulaTests) TestWaveFormulaCombinesEisensteinTerms(checker *C) {
-	zInLatticeCoordinates := suite.hexLatticeVectors.ConvertToLatticeCoordinates(complex(math.Sqrt(3), -1*math.Sqrt(3)))
+	zInLatticeCoordinates := formula.ConvertToLatticeCoordinates(
+		complex(math.Sqrt(3), -1*math.Sqrt(3)),
+		suite.hexLatticeVectors,
+	)
+
 	calculation := suite.hexagonalWavePacket.Calculate(zInLatticeCoordinates)
 
 	expectedAnswer := cmplx.Exp(complex(0, 2*math.Pi*(3+math.Sqrt(3)))) +
@@ -85,7 +89,11 @@ func (suite *WaveFormulaTests) TestWaveFormulaUsesMultiplier(checker *C) {
 		AddTerm(&suite.hexagonalWavePacket.Terms()[2]).
 		Build()
 
-	zInLatticeCoordinates := suite.hexLatticeVectors.ConvertToLatticeCoordinates(complex(math.Sqrt(3), -1*math.Sqrt(3)))
+	zInLatticeCoordinates := formula.ConvertToLatticeCoordinates(
+		complex(math.Sqrt(3), -1*math.Sqrt(3)),
+		suite.hexLatticeVectors,
+	)
+
 	calculation := hexagonalWavePacketWithNewMultiplier.Calculate(zInLatticeCoordinates)
 
 	expectedAnswer := (cmplx.Exp(complex(0, 2*math.Pi*(3+math.Sqrt(3)))) +
