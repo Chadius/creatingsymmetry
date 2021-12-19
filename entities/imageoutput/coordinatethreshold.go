@@ -1,5 +1,7 @@
 package imageoutput
 
+import "math"
+
 // CoordinateThreshold looks at a CoordinateCollection and determines which coordinates will be kept.
 type CoordinateThreshold interface {
 	FilterAndMarkMappedCoordinateCollection(collection *CoordinateCollection)
@@ -40,6 +42,11 @@ func (c *RectangularCoordinateThreshold) filterAndMarkMappedCoordinate(coordinat
 		return
 	}
 
+	if !c.isRangeSet() {
+		coordinate.MarkAsSatisfyingFilter()
+		return
+	}
+
 	if coordinate.TransformedX() < c.MinimumX() {
 		return
 	}
@@ -64,4 +71,14 @@ func (c *RectangularCoordinateThreshold) FilterAndMarkMappedCoordinateCollection
 	for _, coordinateToFiler := range *collection.Coordinates() {
 		c.filterAndMarkMappedCoordinate(coordinateToFiler)
 	}
+}
+
+// isRangeSet returns a boolean value if no range was set for this threshold.
+func (c *RectangularCoordinateThreshold) isRangeSet() bool {
+	for _, boundary := range []float64{c.MinimumX(), c.MaximumX(), c.MinimumY(), c.MaximumY()} {
+		if math.Abs(boundary) >= 1e-6 {
+			return true
+		}
+	}
+	return false
 }

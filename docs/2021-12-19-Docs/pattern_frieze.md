@@ -17,20 +17,20 @@ You can skip ahead to the symmetry types you want, or you can read ahead to see 
 These types of patterns repeat by just moving to the left or right.
 All Frieze patterns have translational symmetry.
 
-![Transformed rainbow stripe image into frieze with p111 symmetry, like a row of melting pudding pops](../example/friezes/rainbow_stripe_frieze_p111_only.png)
+![Transformed rainbow stripe image into frieze with p111 symmetry, like a row of melting pudding pops](../../example/friezes/rainbow_stripe_frieze_p111_only.png)
 
 If you look at one of the red-black peaks and move to the side, you'll see another one.  
 
 ## Reflective
 These types look the same if you flip them over a line. Usually you'll see them reflect over the x-axis (so the tops match the bottoms.) 
 
-![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../example/friezes/rainbow_stripe_frieze_p11m_and_p11g.png)
+![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../../example/friezes/rainbow_stripe_frieze_p11m_and_p11g.png)
 
 ## Glide
 Glides combine translation and reflective features. These translate the top usually by half a unit and reflect over the x-axis.
 Often you can get a checkerboard pattern, like the Orange/Red boxes in this example.
 
-![Transformed rainbow stripe image into frieze with p2mg symmetry (glide,) with multicolored spikes emerging from a checker board orange and red background](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.png)
+![Transformed rainbow stripe image into frieze with p2mg symmetry (glide,) with multicolored spikes emerging from a checker board orange and red background](../../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.png)
 
 # Create your Frieze Formula
 * Your formula should have a `frieze_formula` key, followed by a list of `terms`.
@@ -59,9 +59,9 @@ If the `Multiplier`s of 2 terms are the same, you may accidentally cause reflect
 - Change the `power_n` and `power_m` of some of the terms. See the "Manual formula" section of the symmetry your pattern triggered.
 
 #### Example
-![Transformed rainbow stripe image into frieze with p111 symmetry, like a row of melting pudding pops](../example/friezes/rainbow_stripe_frieze_p111_only.png)
+![Transformed rainbow stripe image into frieze with p111 symmetry, like a row of melting pudding pops](../../example/friezes/rainbow_stripe_frieze_p111_only.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_frieze_p111_only.yml)
+[(link to formula)](../../example/friezes/rainbow_stripe_frieze_p111_only.yml)
 
 This pattern only has translational symmetry. You can line up the purple peaks to see how it repeats.
 
@@ -81,9 +81,9 @@ Note how the purple-white peaks line up correctly.
 
 This pattern has no reflection symmetry. It lacks glide symmetry, as well. If you try to move the top half a unit before reflecting over the x-axis, the white peaks are pointing the wrong way.
 
-![Transformed rainbow stripe image into frieze with p211 symmetry, like an orange branch with black notches separated by blue and white droplets](../example/friezes/rainbow_stripe_frieze_p211.png)
+![Transformed rainbow stripe image into frieze with p211 symmetry, like an orange branch with black notches separated by blue and white droplets](../../example/friezes/rainbow_stripe_frieze_p211.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_frieze_p211.yml)
+[(link to formula)](../../example/friezes/rainbow_stripe_frieze_p211.yml)
 
 #### Manual formula
 `coefficient_relationships` will take each term and create a new term.
@@ -111,9 +111,9 @@ This is an example of an image with p1m1 symmetry.
 If you draw a horizontal line halfway through the central green valley, you can reflect the pattern.
 Notice that the blue bottom extends down infinitely.
 
-![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../example/friezes/rainbow_stripe_frieze_p1m1.png)
+![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../../example/friezes/rainbow_stripe_frieze_p1m1.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_frieze_p1m1.yml)
+[(link to formula)](../../example/friezes/rainbow_stripe_frieze_p1m1.yml)
 
 #### Manual formula
 To create this pattern manually, you need to add a new corresponding term for each that you have.
@@ -137,9 +137,9 @@ To create p11m symmetry, add this `coefficient_relationships` field below each t
 ##### p11m only
 This is an example of an image with p11m symmetry. You can draw a horizontal line across the center and fold it in half.
 
-![Transformed rainbow stripe image into frieze with p11m symmetry (reflective,) with blue and yellow hourglasses in a green background](../example/friezes/rainbow_stripe_frieze_p11m_only.png)
+![Transformed rainbow stripe image into frieze with p11m symmetry (reflective,) with blue and yellow hourglasses in a green background](../../example/friezes/rainbow_stripe_frieze_p11m_only.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_frieze_p11m_only.yml)
+[(link to formula)](../../example/friezes/rainbow_stripe_frieze_p11m_only.yml)
 
 Compare with a [p11g](#p11g-only) pattern, where you cannot reflect it across the x-axis.
 
@@ -147,9 +147,9 @@ Compare with a [p11g](#p11g-only) pattern, where you cannot reflect it across th
 This is an example of an image with p11m and p11g symmetry.
 The length of "one unit" is two pairs of blue and yellow pits, so moving it "half a unit" across looks just the same as reflecting it across the x-axis.
 
-![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../example/friezes/rainbow_stripe_frieze_p11m_and_p11g.png)
+![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../../example/friezes/rainbow_stripe_frieze_p11m_and_p11g.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_frieze_p11m_and_p11g.yml)
+[(link to formula)](../../example/friezes/rainbow_stripe_frieze_p11m_and_p11g.yml)
 #### Manual formula
 If you want to create this pattern manually, add another term. Swap and negate both `power_n` and `power_m`.
 Multiplier stays the same as the original term.
@@ -172,9 +172,9 @@ To create p11g symmetry, add this `coefficient_relationships` field below each t
 ##### p11g only
 This is an example of an image with only p11g symmetry.
 
-![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../example/friezes/rainbow_stripe_frieze_p11g_only.png)
+![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../../example/friezes/rainbow_stripe_frieze_p11g_only.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_frieze_p11g_only.yml)
+[(link to formula)](../../example/friezes/rainbow_stripe_frieze_p11g_only.yml)
 
 Compare with a [p11m](#p11m-only) pattern, where you can reflect it across the horizontal line in the center.
 
@@ -205,9 +205,9 @@ To create p2mm symmetry, add this `coefficient_relationships` field below each t
 #### Example
 This is an example of an image with only p2mm symmetry. The white centers can be rotated 180 degrees without visually changing the pattern. Or you can reflect it over the y-axis, lined up with those white centers.
 
-![Transformed rainbow stripe image into frieze with only p2mm symmetry. Thin mango slices joined by a white and purple x. with multicolored spikes emerging from a checker board orange and red background](../example/friezes/rainbow_stripe_frieze_p2mm_only.png)
+![Transformed rainbow stripe image into frieze with only p2mm symmetry. Thin mango slices joined by a white and purple x. with multicolored spikes emerging from a checker board orange and red background](../../example/friezes/rainbow_stripe_frieze_p2mm_only.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_frieze_p2mm_only.yml)
+[(link to formula)](../../example/friezes/rainbow_stripe_frieze_p2mm_only.yml)
 
 Compare to [p2mg only symmetry](#p2mg), which you cannot reflect.
 
@@ -217,9 +217,9 @@ Here is an example of p2mm and p2mg symmetry.
 - You can rotate it at the intersection of the squares.
 - You can draw a vertical line at the center of the valley and reflect across it.
 
-![Transformed rainbow stripe image into frieze with p2mm and p2mg symmetry (glide,) with multicolored spikes emerging from a checker board orange and red background](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.png)
+![Transformed rainbow stripe image into frieze with p2mm and p2mg symmetry (glide,) with multicolored spikes emerging from a checker board orange and red background](../../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.png)
 
-[(Link to formula)](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.yml)
+[(Link to formula)](../../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.yml)
 
 #### Manual formula
 Notice if the sum of `power_n` and `power_m` is even, you'll also get p2mg symmetry.
@@ -258,9 +258,9 @@ To create p2mg symmetry, add this `coefficient_relationships` list below each te
 #### Example
 Here's an example of a pattern with only p2mg symmetry:
 
-![Transformed rainbow stripe image into frieze with p2mg symmetry, with multicolored spikes emerging from a green background](../example/friezes/rainbow_stripe_frieze_p2mg.png)
+![Transformed rainbow stripe image into frieze with p2mg symmetry, with multicolored spikes emerging from a green background](../../example/friezes/rainbow_stripe_frieze_p2mg.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_frieze_p2mg.yml)
+[(link to formula)](../../example/friezes/rainbow_stripe_frieze_p2mg.yml)
 
 You can glide across the x-axis. Move the yellow valley half a unit across, then flip it over. It will look just like the bottom of this pattern.
 
@@ -308,34 +308,34 @@ This breaks reflective and glide symmetry, but it does look kind of cool.
 ##### Example
 For an example, let's look back at the p11m/p11g pattern:
 
-![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../example/friezes/rainbow_stripe_frieze_p11m_and_p11g.png)
+![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../../example/friezes/rainbow_stripe_frieze_p11m_and_p11g.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_frieze_p11m_and_p11g.yml)
+[(link to formula)](../../example/friezes/rainbow_stripe_frieze_p11m_and_p11g.yml)
 
 Let's add `ignore_complex_conjugate: true` to the term.
 
-![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../example/friezes/rainbow_stripe_frieze_p11m_and_p11g_ignore_complex_conjugate.png)
+![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../../example/friezes/rainbow_stripe_frieze_p11m_and_p11g_ignore_complex_conjugate.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_frieze_p11m_and_p11g_ignore_complex_conjugate.yml)
+[(link to formula)](../../example/friezes/rainbow_stripe_frieze_p11m_and_p11g_ignore_complex_conjugate.yml)
 
 Let's zoom out a bit to get all the detail:
 
-![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../example/friezes/rainbow_stripe_frieze_p11m_and_p11g_ignore_complex_conjugate_zoomed.png)
+![Transformed rainbow stripe image into frieze with p11g symmetry (reflective,) with blue and yellow hourglasses in a green background](../../example/friezes/rainbow_stripe_frieze_p11m_and_p11g_ignore_complex_conjugate_zoomed.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_frieze_p11m_and_p11g_ignore_complex_conjugate_zoomed.yml)
+[(link to formula)](../../example/friezes/rainbow_stripe_frieze_p11m_and_p11g_ignore_complex_conjugate_zoomed.yml)
 
 ## Relation to Rosettes
-[Rosette patterns](./pattern_rosette.md) are circular and surround a central ring. Imagine picking a side of the ring,
+[Rosette patterns](pattern_rosette.md) are circular and surround a central ring. Imagine picking a side of the ring,
 cutting all the way to the outer edge, and then stretching it out until it laid perfectly horizontal. You'd have a frieze pattern.
 
 You may have some fun making a frieze, and then changing the formula to a rosette.
 
-![Transformed rainbow stripe image into frieze with p11m symmetry (reflective,) with blue and yellow hourglasses in a green background](../example/friezes/rainbow_stripe_frieze_p11m_only.png)
+![Transformed rainbow stripe image into frieze with p11m symmetry (reflective,) with blue and yellow hourglasses in a green background](../../example/friezes/rainbow_stripe_frieze_p11m_only.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_frieze_p11m_only.yml)
+[(link to formula)](../../example/friezes/rainbow_stripe_frieze_p11m_only.yml)
 
 And here's the same formula, but now in a rosette pattern.
 
-![Transformed rainbow stripe image into rosette based on frieze with with p11m symmetry. with a blue blob on top and yellow blob on the bottom of a green background](../example/friezes/rainbow_stripe_rosette_based_on_frieze_p11m_only.png)
+![Transformed rainbow stripe image into rosette based on frieze with with p11m symmetry. with a blue blob on top and yellow blob on the bottom of a green background](../../example/friezes/rainbow_stripe_rosette_based_on_frieze_p11m_only.png)
 
-[(link to formula)](../example/friezes/rainbow_stripe_rosette_based_on_frieze_p11m_only.yml)
+[(link to formula)](../../example/friezes/rainbow_stripe_rosette_based_on_frieze_p11m_only.yml)

@@ -84,9 +84,9 @@ pattern_viewport:
   y_max: 8e-1
 ```
 
-![Transformed rainbow stripe image into rosette with 4 rotational symmetry, creating purple and green petals on a blue background](../example/rosettes/rainbow_stripe_rosette_2.png)
+![Transformed rainbow stripe image into rosette with 4 rotational symmetry, creating purple and green petals on a blue background](../../example/rosettes/rainbow_stripe_rosette_2.png)
 
-[(Formula)](../example/rosettes/rainbow_stripe_rosette_2.yml)
+[(Formula)](../../example/rosettes/rainbow_stripe_rosette_2.yml)
 
 I want to stretch the horizontal pattern viewport and see more detail.
 I will reduce the distance between x_min and x_max by half. In exchange for more detail, I don't get to see as much of the overall image.
@@ -99,9 +99,9 @@ pattern_viewport:
   y_max: 8e-1
 ```
 
-![Transformed rainbow stripe image into rosette with 4 rotational symmetry, creating purple and green petals on a blue background](../example/rosettes/rainbow_stripe_rosette_2_sample_space_1.png)
+![Transformed rainbow stripe image into rosette with 4 rotational symmetry, creating purple and green petals on a blue background](../../example/rosettes/rainbow_stripe_rosette_2_sample_space_1.png)
 
-[(Link to formula)](../example/rosettes/rainbow_stripe_rosette_2_sample_space_1.yml)
+[(Link to formula)](../../example/rosettes/rainbow_stripe_rosette_2_sample_space_1.yml)
 
 Let's zoom out and see the extremes. Make a large distance between x_min and x_max. Same thing for y_min and y_max.
 It's hard to see anything about the central ring, but now I get to see more of the pattern.
@@ -114,9 +114,9 @@ pattern_viewport:
   y_max: 64e-1
 ```
 
-![Transformed rainbow stripe image into rosette with 4 rotational symmetry, creating purple and green petals on a blue background](../example/rosettes/rainbow_stripe_rosette_2_sample_space_2.png)
+![Transformed rainbow stripe image into rosette with 4 rotational symmetry, creating purple and green petals on a blue background](../../example/rosettes/rainbow_stripe_rosette_2_sample_space_2.png)
 
-[(Link to formula)](../example/rosettes/rainbow_stripe_rosette_2_sample_space_2.yml)
+[(Link to formula)](../../example/rosettes/rainbow_stripe_rosette_2_sample_space_2.yml)
 
 ### Coordinate Threshold
 The transformed [pattern viewport](#sample-space) has many results, covering a wide numerical range. Sometimes you want to focus on a single mathematical range and ignore the rest. Coordinate Threshold to the rescue.
@@ -159,9 +159,9 @@ coordinate_threshold:
   y_max: 1.8e1
 ```
 
-![Transformed rainbow stripe image into frieze with p2mg symmetry, with multicolored spikes emerging from a green background](../example/friezes/rainbow_stripe_frieze_p2mg_alpha.png)
+![Transformed rainbow stripe image into frieze with p2mg symmetry, with multicolored spikes emerging from a green background](../../example/friezes/rainbow_stripe_frieze_p2mg_alpha.png)
 
-[(Link to formula)](../example/friezes/rainbow_stripe_frieze_p2mg_alpha.yml)
+[(Link to formula)](../../example/friezes/rainbow_stripe_frieze_p2mg_alpha.yml)
 
 Let's push the center towards the orange/red part of the source image. That lies near the bottom, so `y_min` and `y_max`'s midpoint should be negative.
 
@@ -172,9 +172,9 @@ coordinate_threshold:
   y_min: -2.8e1
   y_max: 0.8e1
 ```
-![Transformed rainbow stripe image into frieze with p2mg symmetry, with multicolored spikes emerging from a checker board orange and red background](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.png)
+![Transformed rainbow stripe image into frieze with p2mg symmetry, with multicolored spikes emerging from a checker board orange and red background](../../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.png)
 
-[(Link to formula)](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.yml)
+[(Link to formula)](../../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_orange.yml)
 
 Values that fall out of this range become transparent. So if we increase the size of `y_min` and `y_max` then more pixels will be drawn.
 Note how the valleys and peaks are more extreme.
@@ -187,9 +187,9 @@ coordinate_threshold:
   y_min: -5.8e1
   y_max: 1.8e1
   ```
-![Transformed rainbow stripe image into frieze with p2mg symmetry, with multicolored spikes emerging from an orange background with red valleys](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_extra_thick.png)
+![Transformed rainbow stripe image into frieze with p2mg symmetry, with multicolored spikes emerging from an orange background with red valleys](../../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_extra_thick.png)
 
-[(Link to formula)](../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_extra_thick.yml)
+[(Link to formula)](../../example/friezes/rainbow_stripe_frieze_p2mg_sample_space_extra_thick.yml)
 
 ### Eyedropper Boundary
 Which part of the source image do you want to use? Pick the part of the source image to sample by adjusting the Eyedropper.

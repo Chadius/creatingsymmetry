@@ -2,18 +2,18 @@
 A Rhombic lattice is a 4 sided shape with equal sides.
 A square is a special type of rhombic lattice, where all 4 sides meet at 90 degree angles. A general rhombus has two pairs of equal angles.
 
-![Transformed rainbow stripe image into rhombic lattice with cmm symmetry. Red and orange blobs sit interlocked against a transparent background](../example/lattices/rainbow_stripe_lattice_rhombic_cmm.png)
+![Transformed rainbow stripe image into rhombic lattice with cmm symmetry. Red and orange blobs sit interlocked against a transparent background](../../example/lattices/rainbow_stripe_lattice_rhombic_cmm.png)
 
-Rhombic lattice with cmm symmetry [(link to formula)](../example/lattices/rainbow_stripe_lattice_rhombic_cmm.yml)
+Rhombic lattice with cmm symmetry [(link to formula)](../../example/lattices/rainbow_stripe_lattice_rhombic_cmm.yml)
 
-![Above image highlighting one of the Rhombic lattices](../docs/lattice_symmetry/rainbow_stripe_lattice_rhombic_lattice.png)
+![Above image highlighting one of the Rhombic lattices](lattice_symmetry/rainbow_stripe_lattice_rhombic_lattice.png)
 
 Here's a lattice and the underlying Rhombic shape.
 
 # Formula file
 To create a formula file, you can either use one of the example formula and modify them, or follow these steps to write it from scratch.
 
-0. Set up your [common options](./common_options.md) before adding the formula.
+0. Set up your [common options](common_options.md) before adding the formula.
 1. Add the lattice pattern header so the program knows you want to make a Rhombic pattern with a desired symmetry.
 2. Add one or more wave packets that will shape your pattern (and optionally set up symmetry.)
 
@@ -44,13 +44,13 @@ Every lattice based pattern has one or more wave packets.
 
 # Symmetry
 ## cm
-![Transformed rainbow stripe image into a Rhombic lattice with cm symmetry. Orange and red saw teeth emerge from an orange block of wood](../example/lattices/rainbow_stripe_lattice_rhombic_cm.png)
+![Transformed rainbow stripe image into a Rhombic lattice with cm symmetry. Orange and red saw teeth emerge from an orange block of wood](../../example/lattices/rainbow_stripe_lattice_rhombic_cm.png)
 
-Rhombic lattice with cm symmetry [(link to formula)](../example/lattices/rainbow_stripe_lattice_rhombic_cm.yml).
+Rhombic lattice with cm symmetry [(link to formula)](../../example/lattices/rainbow_stripe_lattice_rhombic_cm.yml).
 
 cm patterns have glide symmetry along the x-axis. You can shift the image half a "unit" to the left or right, then reflect over the horizontal line.
 
-![Previous picture with a black line from one corner to the other, demonstrating the symmetrical mirror effect](../docs/lattice_symmetry/rainbow_stripe_lattice_rhombic_cm_symmetry_glide.png)
+![Previous picture with a black line from one corner to the other, demonstrating the symmetrical mirror effect](lattice_symmetry/rainbow_stripe_lattice_rhombic_cm_symmetry_glide.png)
 
 To create cm symmetry, add `desired_symmetry: cm` to your `lattice_formula` section.
 
@@ -65,9 +65,9 @@ In other words:
 
 ## cmm
 
-![Transformed rainbow stripe image into a Rhombic lattice with cmm symmetry. Blue snakes with green and purple highlights swim across](../example/lattices/rainbow_stripe_lattice_rhombic_cmm_2.png)
+![Transformed rainbow stripe image into a Rhombic lattice with cmm symmetry. Blue snakes with green and purple highlights swim across](../../example/lattices/rainbow_stripe_lattice_rhombic_cmm_2.png)
 
-Rhombic lattice with cmm symmetry [(link to formula)](../example/lattices/rainbow_stripe_lattice_rhombic_cmm_2.yml).
+Rhombic lattice with cmm symmetry [(link to formula)](../../example/lattices/rainbow_stripe_lattice_rhombic_cmm_2.yml).
 
 cmm symmetry have 2 rotation symmetry. They can be rotated 180 degrees without visually changing the image. 
 Like cm patterns, cmm patterns also have glide symmetry along the x-axis. So all cmm patterns also have cm symmetry.
