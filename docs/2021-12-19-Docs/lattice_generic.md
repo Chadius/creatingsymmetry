@@ -1,14 +1,14 @@
 # Generic Lattice
 A Generic lattice is a 4 sided polygon with arbitrary non-zero lengths.
 
-![Transformed rainbow stripe image into generic lattice with p1 symmetry. rainbow seahorses and fish swim in diagonal rows](../example/lattices/rainbow_stripe_lattice_generic_p1.png)
+![Transformed rainbow stripe image into generic lattice with p1 symmetry. rainbow seahorses and fish swim in diagonal rows](../../example/lattices/rainbow_stripe_lattice_generic_p1.png)
 
-[(link to formula)](../example/lattices/rainbow_stripe_lattice_generic_p1.yml)
+[(link to formula)](../../example/lattices/rainbow_stripe_lattice_generic_p1.yml)
 
 # Formula file
 To create a formula file, you can either use one of the example formula and modify them, or follow these steps to write it from scratch.
 
-0. Set up your [common options](./common_options.md) before adding the formula.
+0. Set up your [common options](common_options.md) before adding the formula.
 1. Add the lattice pattern header so the program knows you want to make a hexagonal pattern with a desired symmetry.
 2. Add one or more wave packets that will shape your pattern (and optionally set up symmetry.)
 
@@ -49,9 +49,9 @@ If you don't want any other type of symmetry:
 - Change the `power_m` and `power_n` for each term. Make sure another term didn't negate the powers.
 
 ## P2
-![Transformed rainbow stripe image into generic lattice with p2 symmetry. Orange pattern with tilted holes are like a grilled cheese sandwich](../example/lattices/rainbow_stripe_lattice_generic_p2.png)
+![Transformed rainbow stripe image into generic lattice with p2 symmetry. Orange pattern with tilted holes are like a grilled cheese sandwich](../../example/lattices/rainbow_stripe_lattice_generic_p2.png)
 
-[(link to formula)](../example/lattices/rainbow_stripe_lattice_generic_p2.yml)
+[(link to formula)](../../example/lattices/rainbow_stripe_lattice_generic_p2.yml)
 
 There is only 1 type of optional symmetry: 180-degree rotation.
 
