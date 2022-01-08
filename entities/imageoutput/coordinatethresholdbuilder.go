@@ -1,5 +1,7 @@
 package imageoutput
 
+import "math"
+
 // CoordinateThresholdBuilderOptions contains options used to make a RectangularCoordinateThreshold.
 type CoordinateThresholdBuilderOptions struct {
 	minimumX float64
@@ -45,11 +47,25 @@ func (e *CoordinateThresholdBuilderOptions) WithMaximumY(yMax float64) *Coordina
 }
 
 // Build uses the builder options to create a power.
-func (e *CoordinateThresholdBuilderOptions) Build() *RectangularCoordinateThreshold {
+func (e *CoordinateThresholdBuilderOptions) Build() CoordinateThreshold {
+	if !e.isRangeSet() {
+		return &NullCoordinateThreshold{}
+	}
+
 	return &RectangularCoordinateThreshold{
 		minimumX: e.minimumX,
 		maximumX: e.maximumX,
 		minimumY: e.minimumY,
 		maximumY: e.maximumY,
 	}
+}
+
+// isRangeSet returns a boolean value if no range was set for this threshold.
+func (e *CoordinateThresholdBuilderOptions) isRangeSet() bool {
+	for _, boundary := range []float64{e.minimumX, e.maximumX, e.minimumY, e.maximumY} {
+		if math.Abs(boundary) >= 1e-6 {
+			return true
+		}
+	}
+	return false
 }

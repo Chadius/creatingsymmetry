@@ -11,14 +11,6 @@ type CoordinateFilterTests struct {
 
 var _ = Suite(&CoordinateFilterTests{})
 
-func (suite *CoordinateFilterTests) TestCreateFilterWithBoundaries(checker *C) {
-	filter := imageoutput.CoordinateFilterBuilder().WithMinimumX(-1e-5).WithMaximumX(2e1).WithMinimumY(-6e6).WithMaximumY(5e2).Build()
-	checker.Assert(filter.MinimumX(), Equals, -1e-5)
-	checker.Assert(filter.MaximumX(), Equals, 2e1)
-	checker.Assert(filter.MinimumY(), Equals, -6e6)
-	checker.Assert(filter.MaximumY(), Equals, 5e2)
-}
-
 func (suite *CoordinateFilterTests) TestFilterMarksCoordinateCollection(checker *C) {
 	coordinates := []*imageoutput.MappedCoordinate{
 		imageoutput.NewMappedCoordinateUsingTransformedCoordinates(-10, 20),

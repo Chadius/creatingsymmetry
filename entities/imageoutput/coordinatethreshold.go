@@ -1,13 +1,23 @@
 package imageoutput
 
-import "math"
-
 //go:generate go run github.com/maxbrunsfeld/counterfeiter/v6 -generate
 
 //counterfeiter:generate . CoordinateThreshold
 // CoordinateThreshold looks at a CoordinateCollection and determines which coordinates will be kept.
 type CoordinateThreshold interface {
 	FilterAndMarkMappedCoordinateCollection(collection *CoordinateCollection)
+}
+
+// NullCoordinateThreshold is a default object where all coordinates with rational coordinates satisfy the filter.
+type NullCoordinateThreshold struct{}
+
+// FilterAndMarkMappedCoordinateCollection marks comparable coordinates as satisfying the filter.
+func (c *NullCoordinateThreshold) FilterAndMarkMappedCoordinateCollection(collection *CoordinateCollection) {
+	for _, coordinateToFilter := range *collection.Coordinates() {
+		if coordinateToFilter.CanBeCompared() {
+			coordinateToFilter.MarkAsSatisfyingFilter()
+		}
+	}
 }
 
 // RectangularCoordinateThreshold defines a rectangular range in which coordinates will be kept.
@@ -45,11 +55,6 @@ func (c *RectangularCoordinateThreshold) filterAndMarkMappedCoordinate(coordinat
 		return
 	}
 
-	if !c.isRangeSet() {
-		coordinate.MarkAsSatisfyingFilter()
-		return
-	}
-
 	if coordinate.TransformedX() < c.MinimumX() {
 		return
 	}
@@ -71,17 +76,7 @@ func (c *RectangularCoordinateThreshold) filterAndMarkMappedCoordinate(coordinat
 // FilterAndMarkMappedCoordinateCollection checks all coordinates against the filter.
 //   Then it marks each coordinate if it satisfied the filter.
 func (c *RectangularCoordinateThreshold) FilterAndMarkMappedCoordinateCollection(collection *CoordinateCollection) {
-	for _, coordinateToFiler := range *collection.Coordinates() {
-		c.filterAndMarkMappedCoordinate(coordinateToFiler)
+	for _, coordinateToFilter := range *collection.Coordinates() {
+		c.filterAndMarkMappedCoordinate(coordinateToFilter)
 	}
-}
-
-// isRangeSet returns a boolean value if no range was set for this threshold.
-func (c *RectangularCoordinateThreshold) isRangeSet() bool {
-	for _, boundary := range []float64{c.MinimumX(), c.MaximumX(), c.MinimumY(), c.MaximumY()} {
-		if math.Abs(boundary) >= 1e-6 {
-			return true
-		}
-	}
-	return false
 }
