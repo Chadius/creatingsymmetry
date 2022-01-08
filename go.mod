@@ -3,10 +3,8 @@ module github.com/Chadius/creating-symmetry
 go 1.15
 
 require (
-	github.com/onsi/ginkgo v1.15.0
-	github.com/onsi/gomega v1.10.5
-	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
-	golang.org/x/tools v0.1.6 // indirect
-	gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405
-	gopkg.in/yaml.v2 v2.3.0
+	github.com/maxbrunsfeld/counterfeiter/v6 v6.4.1 // indirect
+	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
+	gopkg.in/check.v1 v1.0.0-20200902074654-038fdea0a05b
+	gopkg.in/yaml.v2 v2.4.0
 )

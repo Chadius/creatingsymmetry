@@ -3,7 +3,7 @@ package transformer_test
 import (
 	"github.com/Chadius/creating-symmetry/entities/command"
 	"github.com/Chadius/creating-symmetry/entities/formula"
-	"github.com/Chadius/creating-symmetry/entities/imageoutput"
+	"github.com/Chadius/creating-symmetry/entities/imageoutput/imageoutputfakes"
 	transformerEntity "github.com/Chadius/creating-symmetry/entities/transformer"
 	. "gopkg.in/check.v1"
 	"image"
@@ -15,26 +15,7 @@ func Test(t *testing.T) { TestingT(t) }
 
 type FormulaTests struct {
 	sourceImage             image.Image
-	mockCoordinateThreshold MockCoordinateThreshold
-	mockEyedropper          MockEyedropper
 	commandShouldBeAFormula *command.CreateSymmetryPattern
-}
-
-type MockCoordinateThreshold struct {
-	MockWasCalled bool
-}
-
-func (m *MockCoordinateThreshold) FilterAndMarkMappedCoordinateCollection(collection *imageoutput.CoordinateCollection) {
-	m.MockWasCalled = true
-}
-
-type MockEyedropper struct {
-	MockWasCalled bool
-}
-
-func (m *MockEyedropper) ConvertCoordinatesToColors(collection *imageoutput.CoordinateCollection) *[]color.Color {
-	m.MockWasCalled = true
-	return &[]color.Color{}
 }
 
 var _ = Suite(&FormulaTests{})
@@ -83,12 +64,12 @@ func (suite *FormulaTests) SetUpTest(checker *C) {
 		Eyedropper:          nil,
 		Formula:             rosetteFormula,
 	}
-
-	suite.mockCoordinateThreshold = MockCoordinateThreshold{}
-	suite.mockEyedropper = MockEyedropper{}
 }
 
 func (suite *FormulaTests) TestTransformerCallsThresholdAndEyedropper(checker *C) {
+	mockCoordinateThreshold := imageoutputfakes.FakeCoordinateThreshold{}
+	mockEyedropper := imageoutputfakes.FakeEyedropper{}
+	mockEyedropper.ConvertCoordinatesToColorsReturns(&[]color.Color{})
 	transformer := transformerEntity.FormulaTransformer{}
 
 	transformer.Transform(&transformerEntity.Settings{
@@ -98,17 +79,20 @@ func (suite *FormulaTests) TestTransformerCallsThresholdAndEyedropper(checker *C
 		PatternViewportYMax: 1,
 		InputImage:          suite.sourceImage,
 		Formula:             suite.commandShouldBeAFormula,
-		CoordinateThreshold: &suite.mockCoordinateThreshold,
-		Eyedropper:          &suite.mockEyedropper,
+		CoordinateThreshold: &mockCoordinateThreshold,
+		Eyedropper:          &mockEyedropper,
 		OutputWidth:         1,
 		OutputHeight:        1,
 	})
 
-	checker.Assert(suite.mockCoordinateThreshold.MockWasCalled, Equals, true)
-	checker.Assert(suite.mockEyedropper.MockWasCalled, Equals, true)
+	checker.Assert(mockCoordinateThreshold.FilterAndMarkMappedCoordinateCollectionCallCount(), Equals, 1)
+	checker.Assert(mockEyedropper.ConvertCoordinatesToColorsCallCount(), Not(Equals), 0)
 }
 
 func (suite *FormulaTests) TestTransformerOutputsToImageOfGivenSize(checker *C) {
+	mockCoordinateThreshold := imageoutputfakes.FakeCoordinateThreshold{}
+	mockEyedropper := imageoutputfakes.FakeEyedropper{}
+	mockEyedropper.ConvertCoordinatesToColorsReturns(&[]color.Color{})
 	transformer := transformerEntity.FormulaTransformer{}
 
 	outputImage := transformer.Transform(&transformerEntity.Settings{
@@ -118,8 +102,8 @@ func (suite *FormulaTests) TestTransformerOutputsToImageOfGivenSize(checker *C) 
 		PatternViewportYMax: 1,
 		InputImage:          suite.sourceImage,
 		Formula:             suite.commandShouldBeAFormula,
-		CoordinateThreshold: &suite.mockCoordinateThreshold,
-		Eyedropper:          &suite.mockEyedropper,
+		CoordinateThreshold: &mockCoordinateThreshold,
+		Eyedropper:          &mockEyedropper,
 		OutputWidth:         3,
 		OutputHeight:        1,
 	})

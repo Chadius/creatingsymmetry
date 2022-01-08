@@ -6,6 +6,9 @@ import (
 	"image/color"
 )
 
+//go:generate go run github.com/maxbrunsfeld/counterfeiter/v6 -generate
+
+//counterfeiter:generate . Eyedropper
 // Eyedropper uses a set of coordinates to choose colors from a source image.
 type Eyedropper interface {
 	ConvertCoordinatesToColors(collection *CoordinateCollection) *[]color.Color

@@ -2,6 +2,9 @@ package imageoutput
 
 import "math"
 
+//go:generate go run github.com/maxbrunsfeld/counterfeiter/v6 -generate
+
+//counterfeiter:generate . CoordinateThreshold
 // CoordinateThreshold looks at a CoordinateCollection and determines which coordinates will be kept.
 type CoordinateThreshold interface {
 	FilterAndMarkMappedCoordinateCollection(collection *CoordinateCollection)
