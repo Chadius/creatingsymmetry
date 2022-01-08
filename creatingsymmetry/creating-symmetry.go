@@ -65,7 +65,7 @@ func transformImage(sourceImage image.Image, wallpaperCommand *command.CreateSym
 			WithRightSide(wallpaperCommand.Eyedropper.RightSide).
 			WithTopSide(wallpaperCommand.Eyedropper.TopSide).
 			WithBottomSide(wallpaperCommand.Eyedropper.BottomSide).
-			WithImage(&sourceImage).
+			WithImage(sourceImage).
 			Build()
 	} else {
 		eyedropper = imageoutput.EyedropperBuilder().
@@ -73,7 +73,7 @@ func transformImage(sourceImage image.Image, wallpaperCommand *command.CreateSym
 			WithRightSide(sourceImage.Bounds().Max.X).
 			WithTopSide(sourceImage.Bounds().Min.Y).
 			WithBottomSide(sourceImage.Bounds().Max.Y).
-			WithImage(&sourceImage).
+			WithImage(sourceImage).
 			Build()
 	}
 

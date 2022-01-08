@@ -8,7 +8,7 @@ type EyedropperBuilderOptions struct {
 	rightSide   int
 	bottomSide  int
 	topSide     int
-	sourceImage *image.Image
+	sourceImage image.Image
 }
 
 // EyedropperBuilder creates a EyedropperBuilderOptions with default values.
@@ -48,8 +48,8 @@ func (e *EyedropperBuilderOptions) WithBottomSide(yMax int) *EyedropperBuilderOp
 	return e
 }
 
-// WithImage sets the bottom boundary.
-func (e *EyedropperBuilderOptions) WithImage(sourceImage *image.Image) *EyedropperBuilderOptions {
+// WithImage sets the source image.
+func (e *EyedropperBuilderOptions) WithImage(sourceImage image.Image) *EyedropperBuilderOptions {
 	e.sourceImage = sourceImage
 	return e
 }

@@ -20,7 +20,7 @@ type RectangularEyedropper struct {
 	rightBoundary  int
 	topBoundary    int
 	bottomBoundary int
-	sourceImage    *image.Image
+	sourceImage    image.Image
 }
 
 // LeftSide returns the left side of the boundary.
@@ -44,7 +44,7 @@ func (e *RectangularEyedropper) BottomSide() int {
 }
 
 //Image returns the source image
-func (e *RectangularEyedropper) Image() *image.Image {
+func (e *RectangularEyedropper) Image() image.Image {
 	return e.sourceImage
 }
 
@@ -60,7 +60,7 @@ func (e *RectangularEyedropper) ConvertCoordinatesToColors(collection *Coordinat
 		var newColor color.NRGBA
 		if coordinate.HasMappedCoordinate() {
 			mappedCoordinateX, mappedCoordinateY := coordinate.MappedCoordinate()
-			sourceColorR, sourceColorG, sourceColorB, sourceColorA := (*e.Image()).At(int(mappedCoordinateX), int(mappedCoordinateY)).RGBA()
+			sourceColorR, sourceColorG, sourceColorB, sourceColorA := (e.Image()).At(int(mappedCoordinateX), int(mappedCoordinateY)).RGBA()
 			newColor = color.NRGBA{
 				R: uint8(sourceColorR >> 8),
 				G: uint8(sourceColorG >> 8),

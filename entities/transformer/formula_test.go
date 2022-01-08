@@ -1,6 +1,7 @@
 package transformer_test
 
 import (
+	creatingsymmetryfakes "github.com/Chadius/creating-symmetry/creating-symmetryfakes"
 	"github.com/Chadius/creating-symmetry/entities/command"
 	"github.com/Chadius/creating-symmetry/entities/formula"
 	"github.com/Chadius/creating-symmetry/entities/imageoutput/imageoutputfakes"
@@ -20,33 +21,51 @@ type FormulaTests struct {
 
 var _ = Suite(&FormulaTests{})
 
+func generate2x2ImageWithRedGreenBlueBlackPixels() image.Image {
+	return &creatingsymmetryfakes.FakeImage{
+		AtStub: func(x int, y int) color.Color {
+			if x == 0 && y == 0 {
+				return color.NRGBA{
+					R: uint8(255),
+					G: 0,
+					B: 0,
+					A: uint8(255),
+				}
+			} else if x == 1 && y == 0 {
+				return color.NRGBA{
+					R: 0,
+					G: uint8(255),
+					B: 0,
+					A: uint8(255),
+				}
+			} else if x == 0 && y == 1 {
+				return color.NRGBA{
+					R: 0,
+					G: 0,
+					B: uint8(255),
+					A: uint8(255),
+				}
+			} else if x == 1 && y == 1 {
+				return color.NRGBA{
+					R: 0,
+					G: 0,
+					B: 0,
+					A: uint8(255),
+				}
+			} else {
+				return color.NRGBA{
+					R: 0,
+					G: 0,
+					B: 0,
+					A: 0,
+				}
+			}
+		},
+	}
+}
+
 func (suite *FormulaTests) SetUpTest(checker *C) {
-	sourceColors := image.NewNRGBA(image.Rect(0, 0, 2, 2))
-	sourceColors.Set(0, 0, color.NRGBA{
-		R: uint8(255),
-		G: 0,
-		B: 0,
-		A: uint8(255),
-	})
-	sourceColors.Set(1, 0, color.NRGBA{
-		R: 0,
-		G: uint8(255),
-		B: 0,
-		A: uint8(255),
-	})
-	sourceColors.Set(0, 1, color.NRGBA{
-		R: 0,
-		G: 0,
-		B: uint8(255),
-		A: uint8(255),
-	})
-	sourceColors.Set(1, 1, color.NRGBA{
-		R: 0,
-		G: 0,
-		B: 0,
-		A: uint8(255),
-	})
-	suite.sourceImage = sourceColors.SubImage(image.Rect(0, 0, 2, 2))
+	suite.sourceImage = generate2x2ImageWithRedGreenBlueBlackPixels()
 
 	rosetteFormula, _ := formula.NewBuilder().
 		Rosette().
