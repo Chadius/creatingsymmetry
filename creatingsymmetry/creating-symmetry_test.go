@@ -46,7 +46,8 @@ output_height: 1
 
 	var output bytes.Buffer
 
-	err := creatingsymmetry.ApplyFormulaToTransformImage(inputImageDataByteStream, formulaDataByteStream, outputSettingsDataByteStream, &output)
+	transformer := creatingsymmetry.FileTransformer{}
+	err := transformer.ApplyFormulaToTransformImage(inputImageDataByteStream, formulaDataByteStream, outputSettingsDataByteStream, &output)
 
 	checker.Assert(err, IsNil)
 

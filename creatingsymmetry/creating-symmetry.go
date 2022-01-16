@@ -11,7 +11,17 @@ import (
 	"log"
 )
 
-func ApplyFormulaToTransformImage(inputImageDataByteStream, formulaDataByteStream, outputSettingsDataByteStream io.Reader, output io.Writer) error {
+//go:generate go run github.com/maxbrunsfeld/counterfeiter/v6 -generate
+
+//counterfeiter:generate . TransformerStrategy
+// TransformerStrategy shapes the expected messages and the expected responses when running the rules.
+type TransformerStrategy interface {
+	ApplyFormulaToTransformImage(inputImageDataByteStream, formulaDataByteStream, outputSettingsDataByteStream io.Reader, output io.Writer) error
+}
+
+type FileTransformer struct{}
+
+func (f *FileTransformer) ApplyFormulaToTransformImage(inputImageDataByteStream, formulaDataByteStream, outputSettingsDataByteStream io.Reader, output io.Writer) error {
 	wallpaperCommand := readWallpaperCommand(formulaDataByteStream)
 	sourceImage := readSourceImage(inputImageDataByteStream)
 	outputSettings := readOutputSettings(outputSettingsDataByteStream)

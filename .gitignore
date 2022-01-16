@@ -1,4 +1,4 @@
 exampleImage/*
 ../image-transform-cli/data/formula.yml
 /out
-bin/
+_bin/
