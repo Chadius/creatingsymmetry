@@ -9,7 +9,8 @@ help:
 test: ## Test all files
 	go test -v ./...
 lint: ## Lint and format all the files
-	golint ./...
-	gofmt -w ./..
+	for d in $$(go list -f {{.Dir}} ./...); do \
+		gofmt -w $${d}/*.go; \
+	done
 delete-merged-branches: ## Delete all local branches merged to main, unless they start with dev
 	git branch --merged | grep -i -v -E "main|master|dev"| xargs git branch -d
