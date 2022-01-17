@@ -1,8 +1,8 @@
-package creatingsymmetry_test
+package creating_symmetry_test
 
 import (
 	"bytes"
-	"github.com/Chadius/creating-symmetry/creatingsymmetry"
+	"github.com/Chadius/creating-symmetry"
 	. "gopkg.in/check.v1"
 	"image"
 	"image/color"
@@ -46,7 +46,7 @@ output_height: 1
 
 	var output bytes.Buffer
 
-	transformer := creatingsymmetry.FileTransformer{}
+	transformer := creating_symmetry.FileTransformer{}
 	err := transformer.ApplyFormulaToTransformImage(inputImageDataByteStream, formulaDataByteStream, outputSettingsDataByteStream, &output)
 
 	checker.Assert(err, IsNil)

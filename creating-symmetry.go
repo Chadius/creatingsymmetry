@@ -1,4 +1,4 @@
-package creatingsymmetry
+package creating_symmetry
 
 import (
 	"github.com/Chadius/creating-symmetry/entities/command"
