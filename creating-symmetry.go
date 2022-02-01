@@ -8,7 +8,6 @@ import (
 	"image/png"
 	"io"
 	"io/ioutil"
-	"log"
 )
 
 //go:generate go run github.com/maxbrunsfeld/counterfeiter/v6 -generate
@@ -22,42 +21,51 @@ type TransformerStrategy interface {
 type FileTransformer struct{}
 
 func (f *FileTransformer) ApplyFormulaToTransformImage(inputImageDataByteStream, formulaDataByteStream, outputSettingsDataByteStream io.Reader, output io.Writer) error {
-	wallpaperCommand := readWallpaperCommand(formulaDataByteStream)
-	sourceImage := readSourceImage(inputImageDataByteStream)
-	outputSettings := readOutputSettings(outputSettingsDataByteStream)
+	wallpaperCommand, wallpaperErr := readWallpaperCommand(formulaDataByteStream)
+	if wallpaperErr != nil {
+		return wallpaperErr
+	}
+	sourceImage, sourceImageErr := readSourceImage(inputImageDataByteStream)
+	if sourceImageErr != nil {
+		return sourceImageErr
+	}
+	outputSettings, outputSettingsErr := readOutputSettings(outputSettingsDataByteStream)
+	if outputSettingsErr != nil {
+		return outputSettingsErr
+	}
 	outputImage := transformImage(sourceImage, wallpaperCommand, outputSettings)
 	png.Encode(output, outputImage)
 	return nil
 }
 
-func readSourceImage(input io.Reader) image.Image {
+func readSourceImage(input io.Reader) (image.Image, error) {
 	colorSourceImage, _, err := image.Decode(input)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	return colorSourceImage
+	return colorSourceImage, nil
 }
 
-func readWallpaperCommand(input io.Reader) *command.CreateSymmetryPattern {
+func readWallpaperCommand(input io.Reader) (*command.CreateSymmetryPattern, error) {
 	createWallpaperYAML, err := ioutil.ReadAll(input)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	wallpaperCommand, err := command.NewCreateWallpaperCommandFromYAML(createWallpaperYAML)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	return wallpaperCommand
+	return wallpaperCommand, nil
 }
 
-func readOutputSettings(input io.Reader) *command.OutputSettings {
+func readOutputSettings(input io.Reader) (*command.OutputSettings, error) {
 	outputSettingsYAML, err := ioutil.ReadAll(input)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	outputSettings := command.NewOutputSettingsBuilder().WithYAML(outputSettingsYAML).Build()
-	return outputSettings
+	return outputSettings, nil
 }
 
 func transformImage(sourceImage image.Image, wallpaperCommand *command.CreateSymmetryPattern, outputSettings *command.OutputSettings) *image.NRGBA {
