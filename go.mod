@@ -1,4 +1,4 @@
-module github.com/Chadius/creating-symmetry
+module github.com/chadius/creatingsymmetry
 
 go 1.15
 

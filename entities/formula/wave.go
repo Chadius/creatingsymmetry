@@ -2,8 +2,8 @@ package formula
 
 import (
 	"encoding/json"
-	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
-	"github.com/Chadius/creating-symmetry/entities/utility"
+	"github.com/chadius/creatingsymmetry/entities/formula/coefficient"
+	"github.com/chadius/creatingsymmetry/entities/utility"
 	"gopkg.in/yaml.v2"
 )
 

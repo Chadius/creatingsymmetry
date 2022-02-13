@@ -1,11 +1,11 @@
 package transformer_test
 
 import (
-	creatingsymmetryfakes "github.com/Chadius/creating-symmetry/creating-symmetryfakes"
-	"github.com/Chadius/creating-symmetry/entities/command"
-	"github.com/Chadius/creating-symmetry/entities/formula"
-	"github.com/Chadius/creating-symmetry/entities/imageoutput/imageoutputfakes"
-	transformerEntity "github.com/Chadius/creating-symmetry/entities/transformer"
+	"github.com/chadius/creatingsymmetry/creatingsymmetryfakes"
+	"github.com/chadius/creatingsymmetry/entities/command"
+	"github.com/chadius/creatingsymmetry/entities/formula"
+	"github.com/chadius/creatingsymmetry/entities/imageoutput/imageoutputfakes"
+	transformerEntity "github.com/chadius/creatingsymmetry/entities/transformer"
 	. "gopkg.in/check.v1"
 	"image"
 	"image/color"

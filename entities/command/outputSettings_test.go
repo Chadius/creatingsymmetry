@@ -1,7 +1,7 @@
 package command_test
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/command"
+	"github.com/chadius/creatingsymmetry/entities/command"
 	. "gopkg.in/check.v1"
 )
 

@@ -1,7 +1,7 @@
 package imageoutput_test
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/imageoutput"
+	"github.com/chadius/creatingsymmetry/entities/imageoutput"
 	. "gopkg.in/check.v1"
 	"math"
 )

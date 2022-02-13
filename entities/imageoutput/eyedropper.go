@@ -1,7 +1,7 @@
 package imageoutput
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/mathutility"
+	"github.com/chadius/creatingsymmetry/entities/mathutility"
 	"image"
 	"image/color"
 )

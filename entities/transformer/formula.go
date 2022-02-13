@@ -1,9 +1,9 @@
 package transformer
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/formula"
-	"github.com/Chadius/creating-symmetry/entities/imageoutput"
-	"github.com/Chadius/creating-symmetry/entities/mathutility"
+	"github.com/chadius/creatingsymmetry/entities/formula"
+	"github.com/chadius/creatingsymmetry/entities/imageoutput"
+	"github.com/chadius/creatingsymmetry/entities/mathutility"
 	"image"
 )
 

@@ -3,7 +3,7 @@ package formula
 import (
 	"errors"
 	"fmt"
-	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/chadius/creatingsymmetry/entities/formula/coefficient"
 	"math"
 )
 

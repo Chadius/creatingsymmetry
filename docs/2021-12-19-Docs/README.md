@@ -19,7 +19,7 @@ I assume you're comfortable with [Go](https://golang.org/), YAML and a command l
 This program is written in [Go](https://golang.org/), so download that first.
 
 Once that is done, you can use go to get this project for you:
-`go get https://github.com/Chadius/creating-symmetry/`
+`go get https://github.com/chadius/creatingsymmetry/`
 
 You will need a source image. [A rainbow stripe pattern is included](example/rainbow_stripe.png) in this repository and used throughout these docs.
 

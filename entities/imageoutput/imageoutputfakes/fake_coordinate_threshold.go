@@ -4,7 +4,7 @@ package imageoutputfakes
 import (
 	"sync"
 
-	"github.com/Chadius/creating-symmetry/entities/imageoutput"
+	"github.com/chadius/creatingsymmetry/entities/imageoutput"
 )
 
 type FakeCoordinateThreshold struct {

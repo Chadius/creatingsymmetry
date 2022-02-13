@@ -1,7 +1,7 @@
 package formula_test
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/formula"
+	"github.com/chadius/creatingsymmetry/entities/formula"
 	. "gopkg.in/check.v1"
 	"testing"
 )

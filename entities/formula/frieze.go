@@ -1,7 +1,7 @@
 package formula
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/chadius/creatingsymmetry/entities/formula/coefficient"
 	"math/cmplx"
 )
 

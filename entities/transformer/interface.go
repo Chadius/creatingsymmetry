@@ -1,8 +1,8 @@
 package transformer
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/command"
-	"github.com/Chadius/creating-symmetry/entities/imageoutput"
+	"github.com/chadius/creatingsymmetry/entities/command"
+	"github.com/chadius/creatingsymmetry/entities/imageoutput"
 	"image"
 )
 

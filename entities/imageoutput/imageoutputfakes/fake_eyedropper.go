@@ -5,7 +5,7 @@ import (
 	"image/color"
 	"sync"
 
-	"github.com/Chadius/creating-symmetry/entities/imageoutput"
+	"github.com/chadius/creatingsymmetry/entities/imageoutput"
 )
 
 type FakeEyedropper struct {

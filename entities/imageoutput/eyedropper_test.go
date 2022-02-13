@@ -1,8 +1,8 @@
 package imageoutput_test
 
 import (
-	creatingsymmetryfakes "github.com/Chadius/creating-symmetry/creating-symmetryfakes"
-	"github.com/Chadius/creating-symmetry/entities/imageoutput"
+	creatingsymmetryfakes "github.com/chadius/creatingsymmetry/creatingsymmetryfakes"
+	"github.com/chadius/creatingsymmetry/entities/imageoutput"
 	. "gopkg.in/check.v1"
 	"image"
 	"image/color"

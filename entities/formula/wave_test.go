@@ -1,9 +1,9 @@
 package formula_test
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/formula"
-	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
-	"github.com/Chadius/creating-symmetry/entities/utility"
+	"github.com/chadius/creatingsymmetry/entities/formula"
+	"github.com/chadius/creatingsymmetry/entities/formula/coefficient"
+	"github.com/chadius/creatingsymmetry/entities/utility"
 	. "gopkg.in/check.v1"
 	"math"
 	"math/cmplx"

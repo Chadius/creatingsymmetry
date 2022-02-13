@@ -1,7 +1,7 @@
 package mathutility_test
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/mathutility"
+	"github.com/chadius/creatingsymmetry/entities/mathutility"
 	. "gopkg.in/check.v1"
 	"math/cmplx"
 	"testing"

@@ -1,9 +1,9 @@
 package creatingsymmetry
 
 import (
-	"github.com/Chadius/creating-symmetry/entities/command"
-	"github.com/Chadius/creating-symmetry/entities/imageoutput"
-	"github.com/Chadius/creating-symmetry/entities/transformer"
+	"github.com/chadius/creatingsymmetry/entities/command"
+	"github.com/chadius/creatingsymmetry/entities/imageoutput"
+	"github.com/chadius/creatingsymmetry/entities/transformer"
 	"image"
 	"image/png"
 	"io"

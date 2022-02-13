@@ -2,7 +2,7 @@ package creatingsymmetry_test
 
 import (
 	"bytes"
-	creatingsymmetry "github.com/Chadius/creating-symmetry"
+	"github.com/chadius/creatingsymmetry"
 	. "gopkg.in/check.v1"
 	"image"
 	"image/color"

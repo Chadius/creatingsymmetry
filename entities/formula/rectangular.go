@@ -2,7 +2,7 @@ package formula
 
 import (
 	"errors"
-	"github.com/Chadius/creating-symmetry/entities/formula/coefficient"
+	"github.com/chadius/creatingsymmetry/entities/formula/coefficient"
 )
 
 // Rectangular formulas will transform points by returning the same coordinates.
